@@ -1,6 +1,6 @@
 # AGENTS.md
 
-**Release date:** 2026-04-29 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
+**Release date:** 2026-04-30 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
 
 ## 1. Canonical status
 
@@ -199,12 +199,12 @@ Create specialized documents only when they improve clarity and prevent baseline
 
 - `/docs/decisions.md`: major architectural and design decisions, including rationale, alternatives considered, and consequences.
 - `/docs/adr/`: individual architecture decision records when decisions are numerous or require lifecycle tracking.
-- `/docs/workflow.md`: development workflow, branching, review expectations, CI validation, release process, documentation update process, and human or agent collaboration rules.
+- `/docs/workflow.md`: development workflow, branching, review expectations, CI validation, release readiness, documentation update process, and human or agent collaboration rules.
 - `/docs/implementation-notes.md`: language-specific, framework-specific, runtime-specific, module-specific, or integration-specific implementation guidance.
 - `/docs/operations.md`: deployment, runtime operations, monitoring, incident response, backup, recovery, and production support procedures.
 - `/docs/security.md`: threat model, security assumptions, secrets handling, authentication, authorization, vulnerability management, and secure development rules.
 - `/docs/testing.md`: test strategy, test taxonomy, required test commands, fixtures, coverage expectations, and validation rules.
-- `/docs/release.md`: versioning, changelog, release process, artifact publication, migration notes, and compatibility policy.
+- `/docs/release.md`: versioning, changelog, release publication process, artifact publication, migration notes, and compatibility policy.
 
 ### 9.4 Responsibility boundaries
 
@@ -215,12 +215,12 @@ Use these boundaries:
 - `architecture.md` explains how the system is structured.
 - `decisions.md` or `adr/` explains why important choices were made.
 - `engineering-rules.md` defines how code should be written and maintained.
-- `workflow.md` defines how repository changes are made, validated, reviewed, and released.
+- `workflow.md` defines how repository changes are made, validated, reviewed, merged, and prepared for release.
 - `implementation-notes.md` captures technology-specific implementation detail.
 - `operations.md` captures how the system is run after it exists.
 - `security.md` captures security-specific constraints and procedures.
 - `testing.md` captures validation strategy and commands.
-- `release.md` captures publication and versioning rules.
+- `release.md` captures versioning, compatibility, migration, changelog, and release publication rules.
 
 Do not mix unrelated responsibilities when separating them improves clarity and maintainability.
 
@@ -237,7 +237,8 @@ Use these placement rules:
 - Put current system structure in `/docs/architecture.md`. It may reference requirements and decision outcomes, but it must not own requirements or major decision rationale.
 - Put significant decision rationale in `/docs/decisions.md` or `/docs/adr/`.
 - Put implementation-independent engineering rules in `/docs/engineering-rules.md`.
-- Put substantial change-process, review, validation, release, and collaboration workflow in `/docs/workflow.md`.
+- Put substantial change-process, review, validation, merge, release readiness, and collaboration workflow in `/docs/workflow.md`.
+- Put versioning, changelog, release publication, artifact publication, migration, and compatibility policy in `/docs/release.md`.
 - Put language-specific, framework-specific, runtime-specific, module-specific, or integration-specific guidance in `/docs/implementation-notes.md`.
 
 For small repositories, `/docs/decisions.md` is sufficient.

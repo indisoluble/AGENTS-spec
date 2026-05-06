@@ -1,25 +1,61 @@
 # AGENTS.md Specification
 
-## 1. What this repository is
-This repository provides the agent-facing files used to establish a repo-local development contract in another repository.
+This repository provides a reusable instruction framework for making AI coding agents operate against explicit, version-controlled project rules.
 
-## 2. What problem it solves
-It keeps agent behavior and project rules inside the destination repository so they remain reviewable, versioned, and portable across tools and IDEs.
+It is intended for projects that use AI coding assistants such as GitHub Copilot, ChatGPT, Codex-style agents, or other IDE-integrated tools.
 
-## 3. What this repository contains
-This repository contains `AGENTS.md`, `.github/copilot-instructions.md`, and `README.md`.
+The purpose is to replace repeated, informal prompting with a repository-local development contract that is reviewable, maintainable, and portable across tools.
 
-## 4. What gets copied to the destination repository
-The files intended for reuse in the destination repository are `AGENTS.md` and `.github/copilot-instructions.md`.
+## 1. What this repository provides
 
-## 5. How to use it
-Copy the two agent-facing files into the destination repository, preserve their metadata, and use them as-is or adapt them to the target project as needed.
+This repository contains the files needed to add an agent-facing development contract to another repository:
 
-## 6. Canonical source of truth
-`AGENTS.md` is the canonical agent contract, and `.github/copilot-instructions.md` is a minimal compatibility bridge.
+- `AGENTS.md`
+- `.github/copilot-instructions.md`
 
-## 7. Bootstrap behavior when documentation is missing
-No documentation is required in advance; if documentation is missing or insufficient, agents should bootstrap it incrementally according to `AGENTS.md`.
+`AGENTS.md` is the canonical operating contract for coding agents. It defines how agents should inspect context, plan changes, modify code, update documentation, validate work, and preserve small, reviewable diffs.
 
-## 8. Portability and tool compatibility
-This setup is designed to work with normal development workflows, remain especially compatible with VS Code and GitHub Copilot, and stay broadly portable across other IDEs and coding agents.
+`.github/copilot-instructions.md` is a GitHub Copilot compatibility bridge. It directs Copilot back to `AGENTS.md` so the project does not maintain a second, competing instruction source.
+
+Together, these files make agent guidance part of the repository itself instead of leaving it in prompts, chat history, IDE state, or tool-specific configuration.
+
+## 2. What a project gains from this
+
+A destination project gains:
+
+- a single, version-controlled source of truth for agent instructions;
+- more consistent agent behavior across tools and sessions;
+- clearer rules for code, documentation, testing, and validation;
+- visible project guidance that can be reviewed through normal Git workflows;
+- documentation bootstrap rules for projects with missing or incomplete documentation;
+- reduced risk of instruction drift across prompts, tools, and contributors.
+
+## 3. How to use it
+
+Copy these files into the destination repository:
+
+- `AGENTS.md`
+- `.github/copilot-instructions.md`
+
+Then review and adapt `AGENTS.md` to the target project’s architecture, workflow, documentation rules, coding standards, and review expectations.
+
+A typical adoption flow is:
+
+1. Copy `AGENTS.md` to the repository root.
+2. Copy `.github/copilot-instructions.md` to `.github/copilot-instructions.md`.
+3. Adapt `AGENTS.md` for the destination project.
+4. Commit both files so the agent contract becomes part of the project history.
+
+Once committed, coding agents can use these files as stable project context before proposing or applying changes.
+
+## 4. Documentation bootstrap behavior
+
+A destination project does not need complete documentation before adopting this setup.
+
+If documentation is missing or insufficient, agents should bootstrap it incrementally according to the rules in `AGENTS.md`. This allows the same setup to work for new projects, existing projects with limited documentation, and mature projects whose documentation needs restructuring or normalization.
+
+## 5. Portability and tool compatibility
+
+This setup is designed for normal repository-based development workflows.
+
+It is especially compatible with VS Code and GitHub Copilot, while remaining broadly portable across other IDEs, coding agents, and AI-assisted development tools.

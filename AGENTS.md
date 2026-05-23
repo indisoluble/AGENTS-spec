@@ -26,6 +26,8 @@ A task is **trivial** only when local, mechanical, low-risk, and not changing be
 
 A **behaviorally complete change** includes the code, tests, configuration, documentation, and validation updates needed for the requested behavior to work without unstated follow-up work.
 
+**Tests as Documentation** means automated tests that both verify behavior and communicate the expected contract through their name, setup, action, and assertions.
+
 A **documentation normalization pass** checks only affected documents and direct cross-references unless the user explicitly asks for repository-wide cleanup.
 
 Documentation work is **significant** when it creates a new baseline document, changes a document's primary responsibility, moves content between documents, or changes project-level requirements, architecture, workflow, or engineering rules.
@@ -125,6 +127,7 @@ When changing code:
 - Avoid broad changes to generated files, vendored files, or formatting-only output unless directly required.
 - Update lock files when dependency changes require it; do not update them incidentally.
 - Add or update tests when behavior changes, defects are fixed, or edge cases are clarified.
+- When adding or updating tests, prefer Tests as Documentation; unit tests should usually follow a clear Given/When/Then structure around public behavior and observable results.
 - Remove dead code only when clearly unreachable or directly made obsolete.
 - Isolate necessary larger refactors from unrelated functional changes where practical.
 
@@ -214,6 +217,7 @@ Prefer designs that are clear, maintainable, and consistent with documented arch
 
 - Keep implementations simple; fix root causes; avoid unnecessary indirection, abstraction, configurability, and parallel implementations.
 - Prefer explicit boundaries, descriptive names, small public interfaces, visible side effects, and encapsulated boundary conditions and edge cases.
+- Prefer automated tests that document behavior without replacing required project documentation.
 - Avoid hidden coupling and logical dependencies between unrelated modules; follow the Law of Demeter where it materially reduces coupling.
 - Prefer value objects or explicit domain structures over primitive-heavy designs when appropriate.
 - Favor immutability where practical.

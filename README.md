@@ -8,27 +8,26 @@ The purpose is to replace repeated, informal prompting with a repository-local d
 
 ## 1. What this repository provides
 
-This repository contains the files needed to add an agent-facing development contract to another repository:
+This repository contains 2 files:
 
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
 
-`AGENTS.md` is the canonical operating contract for coding agents. It defines how agents should inspect context, plan changes, modify code, update documentation, validate work, and preserve small, reviewable diffs.
+`AGENTS.md` is the canonical operating contract for coding agents. It defines how agents should inspect context, plan changes, modify code, update documentation, check work, and preserve small, reviewable diffs.
 
-`.github/copilot-instructions.md` is a GitHub Copilot compatibility bridge. It directs Copilot back to `AGENTS.md` so the project does not maintain a second, competing instruction source.
+`.github/copilot-instructions.md` is a GitHub Copilot compatibility bridge. It points Copilot back to `AGENTS.md` so the project does not maintain a second, competing instruction source.
 
-Together, these files make agent guidance part of the repository itself instead of leaving it in prompts, chat history, IDE state, or tool-specific configuration.
+## 2. Intended use and customization
 
-## 2. What a project gains from this
+`AGENTS.md` is a drop-in canonical baseline for repository-local agent behavior.
 
-A destination project gains:
+It is intended to be copied into a repository as-is and treated as the repository's agent contract. `AGENTS.md` guides agent behavior; it does not replace project-specific documentation or guarantee identical behavior across all tools, IDEs, models, or sessions.
 
-- a single, version-controlled source of truth for agent instructions;
-- more consistent agent behavior across tools and sessions;
-- clearer rules for code, documentation, testing, and validation;
-- visible project guidance that can be reviewed through normal Git workflows;
-- documentation bootstrap rules for projects with missing or incomplete documentation;
-- reduced risk of instruction drift across prompts, tools, and contributors.
+Most repositories should not edit `AGENTS.md` during normal adoption. Instead, keep `AGENTS.md` generic and put project-specific facts in focused repository documentation.
+
+For documentation placement, baseline documents, and specialized documents, use the documentation map and placement rules defined in `AGENTS.md`.
+
+Edit `AGENTS.md` directly only when the repository needs to change agent behavior or repository-wide agent policy.
 
 ## 3. How to use it
 
@@ -37,25 +36,36 @@ Copy these files into the destination repository:
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
 
-Then review and adapt `AGENTS.md` to the target project’s architecture, workflow, documentation rules, coding standards, and review expectations.
+Then commit both files so the agent contract becomes part of the project history.
 
-A typical adoption flow is:
+No direct edits to `AGENTS.md` are required for normal adoption.
 
-1. Copy `AGENTS.md` to the repository root.
-2. Copy `.github/copilot-instructions.md` to `.github/copilot-instructions.md`.
-3. Adapt `AGENTS.md` for the destination project.
-4. Commit both files so the agent contract becomes part of the project history.
+## 4. What changes after adding `AGENTS.md`
 
-Once committed, coding agents can use these files as stable project context before proposing or applying changes.
+Adding `AGENTS.md` gives coding agents an explicit repository-local operating contract.
 
-## 4. Documentation bootstrap behavior
+After adding it, agents should be expected to:
+
+- inspect relevant repository context before non-trivial work;
+- plan before making non-trivial changes;
+- keep changes small, coherent, and reviewable;
+- avoid unrelated refactors, formatting churn, dependency upgrades, file moves, and cleanup;
+- preserve protected contract files unless explicitly asked to change them;
+- keep code, tests, configuration, and documentation synchronized;
+- update relevant documentation when behavior, interfaces, architecture, configuration, operations, workflow, or constraints change;
+- prefer tests that both verify behavior and communicate expected behavior;
+- disclose material assumptions, conflicts, missing context, risks, and unresolved follow-up items.
+
+## 5. Documentation bootstrap behavior
 
 A destination project does not need complete documentation before adopting this setup.
 
 If documentation is missing or insufficient, agents should bootstrap it incrementally according to the rules in `AGENTS.md`. This allows the same setup to work for new projects, existing projects with limited documentation, and mature projects whose documentation needs restructuring or normalization.
 
-## 5. Portability and tool compatibility
+## 6. Tool compatibility
 
-This setup is designed for normal repository-based development workflows.
+`AGENTS.md` is the canonical agent contract for the repository, but different coding agents discover and apply repository instructions differently. Some tools can read `AGENTS.md` directly. Others use tool-specific instruction files or configuration.
 
-It is especially compatible with VS Code and GitHub Copilot, while remaining broadly portable across other IDEs, coding agents, and AI-assisted development tools.
+This repository includes `.github/copilot-instructions.md` as a GitHub Copilot bridge. When adding support for another tool, prefer a small bridge file that refers to `AGENTS.md` rather than duplicating the contract.
+
+This keeps `AGENTS.md` as the single source of truth while allowing tool-specific instruction discovery.

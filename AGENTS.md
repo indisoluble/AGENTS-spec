@@ -1,6 +1,6 @@
 # AGENTS.md
 
-**Release date:** 2026-05-01 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
+**Release date:** 2026-05-23 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
 
 ## 1. Canonical status
 

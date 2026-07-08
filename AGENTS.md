@@ -1,14 +1,34 @@
 # AGENTS.md
 
-**Release date:** 2026-06-06 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
+**Release date:** 2026-07-08 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
 
 ## 1. Canonical status
 
-This file is the canonical repository agent contract for planning, implementation, refactoring, review, validation, and documentation work. When repository instruction sources overlap or conflict, `AGENTS.md` governs.
+This file is the canonical repository agent contract for planning, implementation, refactoring, review, validation, and documentation work. When repository instruction sources overlap or conflict, `AGENTS.md` governs agent behavior.
 
 `.github/copilot-instructions.md` is only a compatibility bridge to `AGENTS.md`; it must not become an independent policy source.
 
-## 2. Protected contract files
+## 2. Operational protocol
+
+Use this protocol for every task, scaling depth to task complexity:
+
+1. Classify the task as trivial or non-trivial.
+2. Identify protected files, affected files, relevant docs, and applicable validation.
+3. Inspect the required repository context.
+4. Identify material assumptions, conflicts, missing context, and risks.
+5. For non-trivial work, form a concise implementation plan before editing.
+6. Apply the smallest coherent change.
+7. Keep code, tests, configuration, and documentation synchronized when required.
+8. Validate with relevant available checks.
+9. Report changes, validation, assumptions, risks, and unresolved follow-up items.
+
+For trivial tasks, collapse these steps proportionally and avoid elaborate plans.
+
+Planning in this contract means selecting an appropriate implementation approach before editing. It does not require use of a tool-specific Plan mode unless the user explicitly asks for it or the current tool workflow requires it.
+
+When a tool-specific Plan mode is used, treat its output as the planning artifact for this contract, then continue according to the user's instruction and the tool's approval model.
+
+## 3. Protected contract files
 
 `AGENTS.md` and `.github/copilot-instructions.md` are protected contract files.
 
@@ -18,7 +38,7 @@ When one protected file is explicitly requested, do not modify the other unless 
 
 If a protected-file change appears useful but was not explicitly requested, propose it separately instead of applying it.
 
-## 3. Terminology and task classification
+## 4. Terminology and task classification
 
 A task is **non-trivial** if it involves any of: behavior changes; public APIs, interfaces, schemas, protocols, or data formats; security, authentication, authorization, secrets, permissions, or privacy; concurrency, async behavior, lifecycle, cleanup, error handling, tests, CI, build, packaging, deployment, runtime configuration, or dependencies; more than one logical file, component, or documentation area; documentation that changes meaning; unclear requirements, missing context, or material risk.
 
@@ -40,13 +60,31 @@ An **example** illustrates one valid use or implementation. Do not treat example
 
 Single-source-of-truth rules allow intentional duplication required for generated files, migrations, compatibility layers, test fixtures, snapshots, examples, external protocol boundaries, or concise documentation summaries. Preserve intentional duplication unless the task requires changing it.
 
-## 4. Purpose and scope
+## 5. Purpose and scope
 
 This contract keeps project rules repository-local, reviewable, versioned, and portable across tools and IDEs. Treat repository files as authoritative for project behavior, constraints, rules, and documentation structure. Do not make hidden, personal, remote, or tool-specific configuration the source of truth.
 
-This file governs agent behavior. Project behavior belongs in project documentation, source code, tests, configuration, and executable behavior.
+This file governs repository-wide agent behavior. Project behavior belongs in project documentation, source code, tests, configuration, and executable behavior.
 
-## 5. Repository source precedence and conflicts
+Do not use this file for reusable task workflows, slash commands, MCP server configuration, local personal preferences, product-specific automation, or language-specific implementation detail unless the rule is repository-wide, tool-neutral, and part of the agent contract.
+
+Language-specific or framework-specific rules belong in repository documentation, usually `/docs/implementation-notes.md` or a more specific `/docs` document. Do not place detailed language-specific rules in `AGENTS.md` unless this repository itself is language-specific and the rule is part of the agent contract.
+
+## 6. Instruction layering and tool-specific files
+
+Keep repository-wide agent policy in `AGENTS.md`.
+
+Tool-specific instruction files, including `.github/copilot-instructions.md`, should be compatibility bridges or tool-specific adapters. They must not duplicate, redefine, or drift from repository-wide policy in `AGENTS.md`.
+
+Path-specific instruction files may be used for local conventions when a tool supports them, but they must not contradict this contract. If a path-specific instruction appears to conflict with `AGENTS.md`, state the conflict and follow `AGENTS.md` for agent behavior unless the user explicitly directs otherwise.
+
+Personal, organization, IDE, or tool-global instructions may add preferences, but they must not override repository-local project facts, protected-file rules, validation requirements, or explicit user instructions for the current task.
+
+If multiple instruction sources are combined by a tool and their application order is unclear, preserve the intent of this contract, avoid duplicating policy, and state material uncertainty when it affects the work.
+
+When instruction application is uncertain, use the current tool's diagnostics or explicitly state which repository instruction sources were inspected before starting non-trivial work.
+
+## 7. Repository source precedence and conflicts
 
 When repository sources disagree, identify the conflict, decide which source is authoritative for the current task, and state the basis when the conflict materially affects the work. Do not silently reconcile conflicts.
 
@@ -64,44 +102,33 @@ External tool limits, environment constraints, legal obligations, safety constra
 
 If implementation conflicts with intended documentation, state the conflict and make the smallest task-appropriate correction.
 
-## 6. Default posture
+## 8. Default posture
 
-### 6.1 Hard constraints
+### 8.1 Hard constraints
 
 - Inspect relevant context and plan before non-trivial work.
 - Make small, coherent, reviewable, behaviorally complete changes.
 - Keep code, tests, configuration, and documentation synchronized.
 - State material assumptions, uncertainties, missing context, and conflicts.
-- Follow protected-file rules in section 2.
+- Follow protected-file rules in section 3.
 - Do not treat undocumented rules outside the repository as source of truth.
-- Enforce single source of truth for shared values, logic, schemas, rules, requirements, and definitions, subject to section 3 exceptions.
+- Enforce single source of truth for shared values, logic, schemas, rules, requirements, and definitions, subject to section 4 exceptions.
 - Reuse or extract shared definitions before duplicating values or logic.
 - Do not perform opportunistic refactors, renames, reformatting, dependency upgrades, file moves, or unrelated cleanup.
 - Do not hide material changes in unrelated files.
 - Do not defer required documentation updates when behavior, interfaces, architecture, configuration, operations, workflow, or constraints change.
+- Do not leave code, tests, configuration, or documentation knowingly inconsistent when the current task changes behavior, interfaces, architecture, configuration, operations, workflow, or constraints.
 - Do not preserve a current pattern merely because it exists if the current task explicitly requires a better design and the required contract updates are included.
 
-### 6.2 Preferred style
+### 8.2 Preferred style
 
-Prefer simple, explicit, maintainable solutions consistent with repository conventions. Detailed engineering preferences are in section 14.
+Prefer simple, explicit, maintainable solutions consistent with repository conventions. Detailed engineering preferences are in section 16.
 
-## 7. Planning and context
+## 9. Planning and context
 
-Use this workflow, scaling depth to task complexity:
+### 9.1 Planning workflow
 
-1. Classify the task as trivial or non-trivial.
-2. Identify protected files, affected files, relevant docs, and applicable validation.
-3. Inspect required repository context.
-4. Identify assumptions, conflicts, missing context, and material risks.
-5. Plan before editing when non-trivial.
-6. Apply the smallest coherent change.
-7. Update code, tests, configuration, and docs together when required.
-8. Validate with relevant available checks.
-9. Report changes, validation, assumptions, risks, and unresolved follow-up items.
-
-For trivial tasks, collapse the workflow to applicable steps and avoid elaborate plans.
-
-### 7.1 Proportional reading model
+Use the operational protocol in section 2 for all tasks, scaling depth to task complexity.
 
 For non-trivial work, always consult:
 
@@ -114,7 +141,7 @@ Then use the table of contents and affected files to select task-relevant canoni
 
 `README.md` should be consulted when the task affects first-run guidance, user-facing overview, quick-start behavior, public positioning, or documentation navigation. It is not mandatory context for every internal code change.
 
-### 7.2 Deep-read triggers
+### 9.2 Deep-read triggers
 
 Read the relevant canonical project documents when the task touches their domain:
 
@@ -131,17 +158,21 @@ If missing context still permits a safe, reversible, local change, state the ass
 
 If documentation is missing, incomplete, or contradictory, treat it as documentation debt and improve it within the current task when directly relevant.
 
-## 8. Execution paths
+## 10. Execution paths
 
-### 8.1 Tools that can modify repository files
+### 10.1 Tools that can modify repository files
 
-Apply the smallest coherent change directly; keep it reviewable; preserve conventions unless the task requires changing them; update relevant docs in the same change cycle; avoid unnecessary churn; follow section 2. Do not ask for permission to make clearly scoped edits unless the user, tool, or environment requires confirmation.
+Apply the smallest coherent change directly; keep it reviewable; preserve conventions unless the task requires changing them; update relevant docs in the same change cycle; avoid unnecessary churn; follow section 3.
 
-### 8.2 Tools that cannot modify repository files
+Do not ask for permission to make clearly scoped edits unless the user, tool, or environment requires confirmation.
+
+Tool approval prompts, sandbox limits, file-edit confirmations, terminal confirmations, and security boundaries are controlled by the current tool or environment. This contract does not override them.
+
+### 10.2 Tools that cannot modify repository files
 
 Provide exact file-level edits, focused snippets, or a concrete patch with paths and replacement locations. Keep edits practical to review. Preserve the same planning, code-quality, validation, documentation, and protected-file obligations as tools that can modify files. Do not stop at abstract recommendations when a concrete edit can be described.
 
-## 9. Code change discipline
+## 11. Code change discipline
 
 Code changes must be minimal, coherent, and behaviorally complete.
 
@@ -155,7 +186,7 @@ When changing code:
 - Keep related code, tests, configuration, and docs in one coherent change set.
 - Change one behavioral concern at a time unless inseparable.
 - Fix root causes rather than symptoms.
-- Keep business rules, domain rules, schemas, constants, and shared logic authoritative in one place, subject to section 3 exceptions.
+- Keep business rules, domain rules, schemas, constants, and shared logic authoritative in one place, subject to section 4 exceptions.
 - Preserve or improve error handling, logging, resource lifecycle, concurrency behavior, and security properties.
 - Avoid broad changes to generated files, vendored files, or formatting-only output unless directly required.
 - Update lock files when dependency changes require it; do not update them incidentally.
@@ -166,7 +197,7 @@ When changing code:
 
 Do not make code appear cleaner by moving complexity to undocumented conventions, hidden coupling, duplicated logic, or implicit behavior.
 
-## 10. Documentation synchronization and normalization
+## 12. Documentation synchronization and normalization
 
 Documentation is part of the change. When behavior, interfaces, architecture, configuration, operations, workflows, or constraints change, update relevant documentation in the same change cycle.
 
@@ -176,11 +207,11 @@ Avoid duplicating long-form content. Prefer links and concise summaries. Preserv
 
 After significant documentation creation or refactoring, normalize only affected docs and direct cross-references unless the user asks for broader cleanup. Within scope, reconcile with `README.md` and relevant `/docs` cross-references; check consistency with `AGENTS.md`; remove contradictions and obsolete placeholders; reduce unnecessary duplication; keep `README.md` concise; move long-form detail into focused docs; and verify accurate names, links, cross-references, document responsibilities, and separation of requirements, architecture, rules, and workflow guidance.
 
-## 11. Bootstrap workflow for under-documented repositories
+## 13. Bootstrap workflow for under-documented repositories
 
 Use this section only when baseline documentation is insufficient or the user asks to bootstrap, reorganize, or expand documentation.
 
-Bootstrap incrementally. Establish section 12 baseline docs before specialized docs. Add `/docs/table-of-contents.md` when the documentation set is no longer trivial. Add specialized docs only when baseline docs would otherwise become overloaded.
+Bootstrap incrementally. Establish section 14 baseline docs before specialized docs. Add `/docs/table-of-contents.md` when the documentation set is no longer trivial. Add specialized docs only when baseline docs would otherwise become overloaded.
 
 Bootstrap rules:
 
@@ -196,7 +227,7 @@ For existing repositories with little documentation, derive docs from observable
 
 A documentation normalization pass is mandatory after bootstrapping or substantially reorganizing documentation.
 
-## 12. Documentation map and placement
+## 14. Documentation map and placement
 
 `README.md` is the concise entry point: what the project is, how to get started, and where deeper docs live. It must not become the authoritative home for requirements, architecture, decisions, engineering rules, workflow rules, operations, or implementation notes.
 
@@ -222,7 +253,7 @@ This section governs documentation placement only. Source code, tests, configura
 
 When content no longer fits a document's role, move it to a more appropriate file.
 
-## 13. Output and validation expectations
+## 15. Output and validation expectations
 
 When presenting analysis, plans, proposed changes, applied changes, validation results, or unresolved items, include review-relevant assumptions, uncertainties, affected files, approach, validation, documentation impact, risks, trade-offs, and follow-up items.
 
@@ -242,7 +273,7 @@ Validate with relevant available checks: tests, linters, type checks, formatters
 
 If validation cannot be run, say so. If validation fails, report it and do not present the change as fully validated. Do not invent validation results.
 
-## 14. Code and engineering preferences
+## 16. Code and engineering preferences
 
 These preferences guide code, design, refactoring, and maintainability only when relevant to the requested task. They do not authorize unrelated refactoring, redesign, renaming, reformatting, dependency changes, or architectural changes.
 
@@ -260,12 +291,14 @@ Prefer designs that are clear, maintainable, and consistent with documented arch
 - Keep configuration at explicit composition, initialization, or boundary layers rather than burying configurable values in low-level implementation code.
 - Separate concurrent, asynchronous, or multi-threaded code from ordinary sequential logic when practical.
 - Favor existing repository patterns unless those patterns are themselves the problem.
-- Preserve single source of truth for domain rules, schemas, constants, and shared logic, subject to section 3 exceptions.
+- Preserve single source of truth for domain rules, schemas, constants, and shared logic, subject to section 4 exceptions.
 
 When a current pattern is the problem, improve it directly within the task scope instead of preserving it artificially. Such changes must identify the affected invariant or pattern, preserve required behavior, update tests, update canonical documentation, and state the rationale.
 
-Language-specific or framework-specific rules belong in repository documentation, usually `/docs/implementation-notes.md` or a more specific `/docs` document. Do not place detailed language-specific rules in `AGENTS.md` unless this repository itself is language-specific and the rule is part of the agent contract.
+## 17. Tool and IDE caveat
 
-## 15. Tool and IDE caveat
+This contract guides agent and chat workflows. Some tools, editor features, hosted agents, repository integrations, or review surfaces may not apply repository instructions uniformly.
 
-This contract guides agent and chat workflows. Some tools or editor features may not apply repository instructions uniformly. When that happens, preserve the intent of this contract as closely as the tool allows.
+When that happens, preserve the intent of this contract as closely as the tool allows. Do not compensate by duplicating repository-wide policy into multiple tool-specific files unless the user explicitly asks for that trade-off.
+
+If a tool cannot modify files, provide concrete edits. If a tool cannot run validation, state that limitation. If a tool cannot confirm which instruction files were loaded, state the uncertainty when it materially affects the task.

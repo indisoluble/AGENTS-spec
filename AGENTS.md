@@ -1,304 +1,197 @@
 # AGENTS.md
-
-**Release date:** 2026-07-08 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
+**Release date:** 2026-07-26 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
 
 ## 1. Canonical status
-
-This file is the canonical repository agent contract for planning, implementation, refactoring, review, validation, and documentation work. When repository instruction sources overlap or conflict, `AGENTS.md` governs agent behavior.
-
-`.github/copilot-instructions.md` is only a compatibility bridge to `AGENTS.md`; it must not become an independent policy source.
+`AGENTS.md` is the canonical repository agent contract for planning, implementation, refactoring, review, validation, and documentation; it governs agent behavior when repository instructions overlap or conflict. `.github/copilot-instructions.md` is its compatibility bridge only, never an independent policy source.
 
 ## 2. Operational protocol
-
-Use this protocol for every task, scaling depth to task complexity:
-
+Use this protocol for every task, scaling it to complexity; for trivial tasks, collapse it without elaborate plans. Planning selects an approach before editing; use a tool-specific Plan mode only if the user explicitly asks or the current tool workflow requires it. Its output is this contract's planning artifact; then follow user instructions and the tool approval model.
 1. Classify the task as trivial or non-trivial.
-2. Identify protected files, affected files, relevant docs, and applicable validation.
+2. Identify protected files, affected artifacts, relevant documentation, and applicable validation.
 3. Inspect the required repository context.
 4. Identify material assumptions, conflicts, missing context, and risks.
-5. For non-trivial work, form a concise implementation plan before editing.
-6. Apply the smallest coherent change.
-7. Keep code, tests, configuration, and documentation synchronized when required.
-8. Validate with relevant available checks.
-9. Report changes, validation, assumptions, risks, and unresolved follow-up items.
-
-For trivial tasks, collapse these steps proportionally and avoid elaborate plans.
-
-Planning in this contract means selecting an appropriate implementation approach before editing. It does not require use of a tool-specific Plan mode unless the user explicitly asks for it or the current tool workflow requires it.
-
-When a tool-specific Plan mode is used, treat its output as the planning artifact for this contract, then continue according to the user's instruction and the tool's approval model.
+5. Before non-trivial edits, form and state a concise implementation plan; if section 9.3 is active, use its increment sequence.
+6. Outside planning-only workflow, apply the smallest coherent, behaviorally complete change authorized by the request or selected increment.
+7. Keep affected artifacts synchronized when required.
+8. Run relevant available validation.
+9. Report the outcome as section 15 requires.
 
 ## 3. Protected contract files
-
-`AGENTS.md` and `.github/copilot-instructions.md` are protected contract files.
-
-Modify them only when the user explicitly asks to change `AGENTS.md`, `.github/copilot-instructions.md`, the repository agent contract, the Copilot bridge, or to apply prior recommendations specifically about those files.
-
-When one protected file is explicitly requested, do not modify the other unless required or explicitly included. Do not bundle protected-file changes with unrelated code, documentation, formatting, dependency, cleanup, or maintenance work.
-
-If a protected-file change appears useful but was not explicitly requested, propose it separately instead of applying it.
+`AGENTS.md` and `.github/copilot-instructions.md` are protected. Modify either only when the user explicitly asks to change that file, contract, or bridge, or to apply prior recommendations specific to it.
+If only one is requested, do not modify the other unless required or explicitly included. Do not bundle protected-file changes with unrelated code, documentation, formatting, dependencies, cleanup, or maintenance; propose unrequested changes separately.
 
 ## 4. Terminology and task classification
-
-A task is **non-trivial** if it involves any of: behavior changes; public APIs, interfaces, schemas, protocols, or data formats; security, authentication, authorization, secrets, permissions, or privacy; concurrency, async behavior, lifecycle, cleanup, error handling, tests, CI, build, packaging, deployment, runtime configuration, or dependencies; more than one logical file, component, or documentation area; documentation that changes meaning; unclear requirements, missing context, or material risk.
-
-A task is **trivial** only when local, mechanical, low-risk, and not changing behavior, interfaces, configuration, dependencies, tests, documentation meaning, or repository structure.
-
-A **behaviorally complete change** includes the code, tests, configuration, documentation, and validation updates needed for the requested behavior to work without unstated follow-up work.
-
-**Tests as Documentation** means automated tests that both verify behavior and communicate the expected contract through their name, setup, action, and assertions.
-
-A **documentation normalization pass** checks only affected documents and direct cross-references unless the user explicitly asks for repository-wide cleanup.
-
-Documentation work is **significant** when it creates a new baseline document, changes a document's primary responsibility, moves content between documents, or changes project-level requirements, architecture, workflow, or engineering rules.
-
-A **design invariant** is a documented constraint that must remain true unless the current task explicitly changes that contract and updates all affected code, tests, configuration, and documentation.
-
-A **current pattern** is a documented implementation shape or convention that should be followed by default, but may be changed when the change is scoped, justified, tested, documented, and compatible with higher-level requirements.
-
-An **example** illustrates one valid use or implementation. Do not treat examples as exclusive unless the surrounding documentation says they are required.
-
-Single-source-of-truth rules allow intentional duplication required for generated files, migrations, compatibility layers, test fixtures, snapshots, examples, external protocol boundaries, or concise documentation summaries. Preserve intentional duplication unless the task requires changing it.
+- **Affected artifacts**: affected code, tests, configuration, and documentation. A **behaviorally complete change** includes all of them and required validation for requested behavior, with no unstated follow-up.
+- A task is **non-trivial** if it involves changes to behavior or documentation meaning; public APIs, interfaces, schemas, protocols, or data formats; security, authentication, authorization, secrets, permissions, privacy, concurrency, async behavior, lifecycle, cleanup, error handling, tests, CI, build, packaging, deployment, runtime configuration, or dependencies; multiple logical files, components, or documentation areas; or unclear requirements, missing context, or material risk.
+- A task is **trivial** only if local, mechanical, low-risk, and changing no behavior, interface, configuration, dependency, test, documentation meaning, or repository structure.
+- A **reviewable change/increment** is one unit a reviewer can understand and verify: intent, rationale, resulting behavior, risks, and validation. Judge size—lines, files, components—and tracing burden; interacting concerns, modules, control flow, state transitions, concurrency, migrations, or new abstractions reduce reviewability. Line count alone is insufficient.
+- A change's **decision basis** is the user request and any most-specific relevant repository requirements, invariants, principles, conventions, current patterns, tests, configuration, or observable constraints.
+- **Tests as Documentation** are automated tests that verify and communicate the expected contract through their name, setup, action, and assertions.
+- A **documentation normalization pass** covers affected documents and direct cross-references only, unless the user explicitly requests repository-wide cleanup. Documentation is **significant** if it creates a baseline document, changes a document's primary responsibility, moves content, or changes project-level requirements, architecture, workflow, or engineering rules.
+- A **design invariant** is a documented constraint that must hold unless the task explicitly changes its contract and updates all affected artifacts. A **current pattern** is a documented implementation shape or convention that should be followed by default; it may change when scoped, justified, tested, documented, and compatible with higher-level requirements.
+- An **example** illustrates one valid use or implementation. Do not treat it as exclusive unless surrounding documentation makes it required.
+- **Single Source of Truth** gives each shared value, logic, schema, rule, requirement, or definition one role-appropriate canonical owner. Code and documentation must reuse, reference, derive, generate, or extract from it, not maintain parallel authorities. Duplicate only when required for generated files, migrations, compatibility layers, test fixtures, snapshots, examples, external protocol boundaries, or concise documentation summaries; preserve intentional duplication unless the task requires changing it.
 
 ## 5. Purpose and scope
-
-This contract keeps project rules repository-local, reviewable, versioned, and portable across tools and IDEs. Treat repository files as authoritative for project behavior, constraints, rules, and documentation structure. Do not make hidden, personal, remote, or tool-specific configuration the source of truth.
-
-This file governs repository-wide agent behavior. Project behavior belongs in project documentation, source code, tests, configuration, and executable behavior.
-
-Do not use this file for reusable task workflows, slash commands, MCP server configuration, local personal preferences, product-specific automation, or language-specific implementation detail unless the rule is repository-wide, tool-neutral, and part of the agent contract.
-
-Language-specific or framework-specific rules belong in repository documentation, usually `/docs/implementation-notes.md` or a more specific `/docs` document. Do not place detailed language-specific rules in `AGENTS.md` unless this repository itself is language-specific and the rule is part of the agent contract.
+This portable, repository-local, reviewable, versioned contract governs repository-wide agent behavior across tools and IDEs. Repository files—not hidden, personal, remote, or tool-specific settings—are authoritative for project behavior, constraints, rules, and documentation structure. Put project behavior in documentation, source, tests, configuration, and executable behavior.
+Exclude reusable task workflows, slash commands, MCP server configuration, local personal preferences, product-specific automation, and language/framework detail unless repository-wide, tool-neutral, and contractual. Put language/framework rules in repository documentation, usually `/docs/implementation-notes.md` or a more specific owner; include them here only for language-specific repositories.
 
 ## 6. Instruction layering and tool-specific files
-
-Keep repository-wide agent policy in `AGENTS.md`.
-
-Tool-specific instruction files, including `.github/copilot-instructions.md`, should be compatibility bridges or tool-specific adapters. They must not duplicate, redefine, or drift from repository-wide policy in `AGENTS.md`.
-
-Path-specific instruction files may be used for local conventions when a tool supports them, but they must not contradict this contract. If a path-specific instruction appears to conflict with `AGENTS.md`, state the conflict and follow `AGENTS.md` for agent behavior unless the user explicitly directs otherwise.
-
-Personal, organization, IDE, or tool-global instructions may add preferences, but they must not override repository-local project facts, protected-file rules, validation requirements, or explicit user instructions for the current task.
-
-If multiple instruction sources are combined by a tool and their application order is unclear, preserve the intent of this contract, avoid duplicating policy, and state material uncertainty when it affects the work.
-
-When instruction application is uncertain, use the current tool's diagnostics or explicitly state which repository instruction sources were inspected before starting non-trivial work.
+- Keep repository-wide policy in `AGENTS.md`; tool-specific instructions, including `.github/copilot-instructions.md`, should be bridges or adapters and must not duplicate, redefine, or drift from it.
+- Path-specific instructions may add local conventions where supported but must not contradict this contract; state conflicts and follow `AGENTS.md` unless the user explicitly directs otherwise. Personal, organization, IDE, or tool-global instructions may add preferences but must not override repository-local facts, protected-file rules, validation requirements, or explicit task instructions.
+- If a tool combines sources in an unclear order, preserve this contract's intent, avoid duplication, and state material uncertainty. Use available diagnostics or explicitly list repository instruction sources inspected before non-trivial work.
 
 ## 7. Repository source precedence and conflicts
-
-When repository sources disagree, identify the conflict, decide which source is authoritative for the current task, and state the basis when the conflict materially affects the work. Do not silently reconcile conflicts.
-
-This order applies unless the user request or task context clearly indicates otherwise:
-
-1. Explicit user request, for current task scope and outcome.
+When repository sources disagree, identify the conflict and source governing the task; state the basis if material and never reconcile silently. Tool or environment limits, legal or safety obligations, and explicit user instructions may add constraints. If implementation conflicts with intended documentation, state it and make the smallest task-appropriate correction. Unless request or context clearly indicates otherwise, use:
+1. Explicit user request, for current scope and outcome.
 2. `AGENTS.md`, for agent behavior and contract rules.
-3. Security, licensing, CI, deployment, and package metadata, for their domains.
+3. Security, licensing, CI, deployment, and package metadata, within their domains.
 4. Tests and executable behavior, for current implemented behavior.
-5. Architecture, requirements, decisions, and engineering docs, for intended behavior.
+5. Architecture, requirements, decisions, and engineering documents, for intended behavior.
 6. `README.md`, for entry-point guidance and overview.
 7. Comments, examples, snippets, and informal notes, as supporting evidence only.
-
-External tool limits, environment constraints, legal obligations, safety constraints, and explicit user instructions may impose additional constraints.
-
-If implementation conflicts with intended documentation, state the conflict and make the smallest task-appropriate correction.
 
 ## 8. Default posture
 
 ### 8.1 Hard constraints
-
-- Inspect relevant context and plan before non-trivial work.
+- Inspect relevant context and plan before non-trivial work; follow sections 2 and 9.
 - Make small, coherent, reviewable, behaviorally complete changes.
-- Keep code, tests, configuration, and documentation synchronized.
-- State material assumptions, uncertainties, missing context, and conflicts.
-- Follow protected-file rules in section 3.
-- Do not treat undocumented rules outside the repository as source of truth.
-- Enforce single source of truth for shared values, logic, schemas, rules, requirements, and definitions, subject to section 4 exceptions.
+- Keep affected artifacts synchronized.
+- State material assumptions, uncertainties, missing context, conflicts, and risks.
+- Follow section 3's protected-file rules.
+- Do not treat undocumented rules outside the repository as project truth.
+- Enforce Single Source of Truth across code and documentation as defined in section 4.
 - Reuse or extract shared definitions before duplicating values or logic.
 - Do not perform opportunistic refactors, renames, reformatting, dependency upgrades, file moves, or unrelated cleanup.
 - Do not hide material changes in unrelated files.
-- Do not defer required documentation updates when behavior, interfaces, architecture, configuration, operations, workflow, or constraints change.
-- Do not leave code, tests, configuration, or documentation knowingly inconsistent when the current task changes behavior, interfaces, architecture, configuration, operations, workflow, or constraints.
-- Do not preserve a current pattern merely because it exists if the current task explicitly requires a better design and the required contract updates are included.
+- Do not defer documentation required by section 12.
+- Do not knowingly leave affected artifacts inconsistent.
+- Do not preserve a current pattern merely because it exists when the task explicitly requires a better design and includes section 16's required updates.
 
 ### 8.2 Preferred style
-
-Prefer simple, explicit, maintainable solutions consistent with repository conventions. Detailed engineering preferences are in section 16.
+Prefer simple, explicit, maintainable solutions consistent with repository conventions; apply section 16 only within task scope.
 
 ## 9. Planning and context
 
 ### 9.1 Planning workflow
-
-Use the operational protocol in section 2 for all tasks, scaling depth to task complexity.
-
-For non-trivial work, always consult:
-
-- `AGENTS.md`
-- `docs/table-of-contents.md` when it exists
-- directly affected files
-- adjacent tests, configuration, scripts, or operational docs that materially affect the task
-
-Then use the table of contents and affected files to select task-relevant canonical documents. Do not read the entire baseline documentation set by default unless the task affects project scope, requirements, architecture, repository-wide engineering rules, documentation structure, or multiple cross-cutting areas.
-
-`README.md` should be consulted when the task affects first-run guidance, user-facing overview, quick-start behavior, public positioning, or documentation navigation. It is not mandatory context for every internal code change.
+Use section 2 for every task. For non-trivial work, always consult `AGENTS.md`; `/docs/table-of-contents.md` if present; affected files; and materially relevant adjacent tests, configuration, scripts, or operational documentation. Use these to select canonical documents. Do not read the full baseline by default unless the task affects project scope, requirements, architecture, repository-wide engineering rules, documentation structure, or multiple cross-cutting areas.
+`README.md` should be consulted for first-run guidance, user-facing overview, quick-start behavior, public positioning, or documentation navigation; it is not mandatory for every internal code change.
 
 ### 9.2 Deep-read triggers
+If missing context permits a safe, reversible, local change, state minimal safe assumptions and proceed. If it affects public behavior, data integrity, security, irreversible operations, external compatibility, production operations, or user intent, stop and ask unless best effort was requested. Treat directly relevant missing, incomplete, or contradictory documentation as debt and improve it within the task. Read each affected domain's canonical documents:
+- Scope, goals, non-goals, or supported behavior: project brief and requirements.
+- Public behavior, compatibility, protocols, configuration semantics, or operational expectations: requirements and affected topic document.
+- Architecture, data flow, boundaries, placement, concurrency, lifecycle, or ownership: architecture and engineering rules.
+- Repository-wide coding, Single Source of Truth, testing, or maintainability: engineering rules and implementation notes.
+- Tests, taxonomy, fixtures, QA commands, coverage, or validation: testing documentation.
+- CI, release readiness, workflow dependencies, or automation: workflow and release documentation.
+- Deployment, hardening, containers, or operations: relevant Docker, operations, troubleshooting, or security documentation.
+- Documentation restructuring, baseline creation, or duplicate-topic cleanup: table of contents and affected canonical owners.
 
-Read the relevant canonical project documents when the task touches their domain:
-
-- Product scope, goals, non-goals, or supported behavior: project brief and requirements.
-- Public behavior, compatibility, protocol behavior, configuration semantics, or operational expectations: requirements plus the affected topic document.
-- Architecture, data flow, module boundaries, file placement, concurrency, lifecycle, or ownership boundaries: architecture and engineering rules.
-- Repository-wide coding standards, source-of-truth rules, test expectations, or maintainability constraints: engineering rules and implementation notes.
-- Tests, test taxonomy, fixtures, QA commands, coverage, or validation: testing docs.
-- CI, release readiness, workflow dependencies, or automation behavior: workflow and release docs.
-- Deployment, runtime hardening, container behavior, or operations: Docker, operations, troubleshooting, security, or other relevant operational docs.
-- Documentation restructuring, new baseline docs, or duplicate-topic cleanup: table of contents plus affected canonical owners.
-
-If missing context still permits a safe, reversible, local change, state the assumption and proceed with the smallest safe assumption set. If missing context affects public behavior, data integrity, security, irreversible operations, external compatibility, production operations, or user intent, stop and ask unless the user requested best-effort work.
-
-If documentation is missing, incomplete, or contradictory, treat it as documentation debt and improve it within the current task when directly relevant.
+### 9.3 Plan-mode reviewable increments
+When Plan mode or equivalent review-before-implementation workflow is active or selected, present every non-trivial outcome before implementation as the smallest ordered sequence of independently reviewable increments (section 4). Use one increment only if the whole outcome is reviewable; never merge verifiable behaviors, rollout stages, or compatibility phases for a shared goal.
+State end state, key risks/trade-offs. For each: goal, behavior, files/components, validation, docs impact, dependencies, working state/compatibility. Prefer functional, validated, behaviorally complete increments remaining buildable/startable/usable through documented workflow; preserve unaffected behavior/compatibility where practical; isolate breaking steps.
+- Present all increments and await selection.
+- After planning permits edits, implement only the increment the user selects.
+- For an unavoidable non-working increment, state why, what remains usable/testable, minimized scope/duration, and restoring increment.
+- If no division avoids an invalid, unsafe, or misleading state, change nothing; explain, give staging/atomic options and trade-offs, and ask for direction.
+After each, sync affected artifacts; validate/report; leave commit-ready; never commit without authorization.
+Otherwise it imposes no decomposition, approval checkpoint, or per-turn boundary; follow section 2 unless the user requests staging.
 
 ## 10. Execution paths
+Section 15 applies; section 9.3 only during its workflow.
 
 ### 10.1 Tools that can modify repository files
-
-Apply the smallest coherent change directly; keep it reviewable; preserve conventions unless the task requires changing them; update relevant docs in the same change cycle; avoid unnecessary churn; follow section 3.
-
-Do not ask for permission to make clearly scoped edits unless the user, tool, or environment requires confirmation.
-
-Tool approval prompts, sandbox limits, file-edit confirmations, terminal confirmations, and security boundaries are controlled by the current tool or environment. This contract does not override them.
+Outside planning-only workflow, apply the smallest coherent, reviewable change; preserve conventions unless the task changes them; sync relevant documentation; avoid churn; follow section 3.
+Do not ask permission for clearly scoped edits unless the user, tool, environment, or active workflow requires it. The tool or environment controls approvals, sandbox limits, confirmations, and security boundaries; this contract does not override them.
 
 ### 10.2 Tools that cannot modify repository files
-
-Provide exact file-level edits, focused snippets, or a concrete patch with paths and replacement locations. Keep edits practical to review. Preserve the same planning, code-quality, validation, documentation, and protected-file obligations as tools that can modify files. Do not stop at abstract recommendations when a concrete edit can be described.
+Outside planning-only workflow, provide exact file edits, focused snippets, or a concrete patch with paths and replacement locations. Keep them reviewable and preserve all planning, quality, validation, documentation, rationale, and protected-file obligations; do not stop at abstractions when concrete edits are possible.
 
 ## 11. Code change discipline
+Code changes must be minimal, coherent, and behaviorally complete. Before editing, inspect relevant implementation, nearby conventions, callers, callees, tests, configuration, documentation, and the smallest safe option. Do not make code appear cleaner by moving complexity into undocumented conventions, hidden coupling, duplication, or implicit behavior.
 
-Code changes must be minimal, coherent, and behaviorally complete.
-
-Before changing code, inspect relevant implementation, nearby conventions, callers, callees, tests, configuration, documentation, and the smallest safe change.
-
-When changing code:
-
-- Preserve public behavior, APIs, file structure, naming, and conventions unless the task requires changing them.
+- Preserve public behavior, APIs, file structure, naming, and conventions unless the task requires change.
 - Do not perform opportunistic rewrites, renames, formatting sweeps, dependency upgrades, or architectural refactors.
-- Do not introduce parallel implementations when an existing one can be corrected or extended.
-- Keep related code, tests, configuration, and docs in one coherent change set.
-- Change one behavioral concern at a time unless inseparable.
+- Do not introduce a parallel implementation when an existing one can be corrected or extended.
+- Keep related affected artifacts in one coherent change.
+- Change one behavioral concern at a time unless concerns are inseparable.
 - Fix root causes rather than symptoms.
-- Keep business rules, domain rules, schemas, constants, and shared logic authoritative in one place, subject to section 4 exceptions.
+- Apply Single Source of Truth (sections 4 and 8) to business and domain rules, schemas, constants, and shared logic.
 - Preserve or improve error handling, logging, resource lifecycle, concurrency behavior, and security properties.
-- Avoid broad changes to generated files, vendored files, or formatting-only output unless directly required.
+- Avoid broad generated-file, vendored-file, or formatting-only changes unless directly required.
 - Update lock files when dependency changes require it; do not update them incidentally.
 - Add or update tests when behavior changes, defects are fixed, or edge cases are clarified.
-- When adding or updating tests, prefer Tests as Documentation; unit tests should usually follow a clear Given/When/Then structure around public behavior and observable results.
+- Prefer Tests as Documentation; unit tests should usually use clear Given/When/Then around public behavior and observable results.
 - Remove dead code only when clearly unreachable or directly made obsolete.
 - Isolate necessary larger refactors from unrelated functional changes where practical.
 
-Do not make code appear cleaner by moving complexity to undocumented conventions, hidden coupling, duplicated logic, or implicit behavior.
-
 ## 12. Documentation synchronization and normalization
-
-Documentation is part of the change. When behavior, interfaces, architecture, configuration, operations, workflows, or constraints change, update relevant documentation in the same change cycle.
-
-Treat stale, missing, duplicated, or contradictory documentation as a defect. When docs and implementation disagree, inspect implementation and tests, decide which source is authoritative for the task, update the incorrect or stale source, and state remaining uncertainty.
-
-Avoid duplicating long-form content. Prefer links and concise summaries. Preserve concise summaries that intentionally repeat canonical facts for readability.
-
-After significant documentation creation or refactoring, normalize only affected docs and direct cross-references unless the user asks for broader cleanup. Within scope, reconcile with `README.md` and relevant `/docs` cross-references; check consistency with `AGENTS.md`; remove contradictions and obsolete placeholders; reduce unnecessary duplication; keep `README.md` concise; move long-form detail into focused docs; and verify accurate names, links, cross-references, document responsibilities, and separation of requirements, architecture, rules, and workflow guidance.
+Documentation is part of the change. Update it in the same cycle as changed behavior, interfaces, architecture, configuration, operations, workflows, or constraints.
+Document every new repository-wide or reusable rationale, principle, convention, or pattern canonically in the same change. If scope or tool limits prevent it, give the exact edit and report it as follow-up; never establish repository policy through implementation alone.
+Treat stale, missing, duplicated, or contradictory documentation as a defect. When it conflicts with implementation, inspect implementation and tests, determine authority, correct the wrong source, and state remaining uncertainty.
+Apply Single Source of Truth: avoid duplicated long-form content; prefer links and concise summaries; preserve concise summaries that intentionally repeat canonical facts for readability.
+After significant documentation creation or refactoring, run section 4's normalization pass. Within scope, reconcile `README.md` and relevant `/docs` cross-references; check consistency with `AGENTS.md`; remove contradictions and obsolete placeholders; reduce unnecessary duplication; keep `README.md` concise; move long-form detail to focused documents; verify names, links, cross-references, document roles, and separation of requirements, architecture, rules, and workflow guidance.
 
 ## 13. Bootstrap workflow for under-documented repositories
+Use only for insufficient baseline documentation or user-requested bootstrapping, reorganization, or expansion. Establish section 14's baseline first; add its table of contents for a non-trivial set and specialized documents only to prevent overload. In sparse repositories, derive documentation from observable code, configuration, tests, scripts, and comments; distinguish confirmed facts from inferred intent. In empty ones, keep claims narrow and invent no architecture, requirements, workflows, or rules. Normalization is mandatory after bootstrapping or substantial reorganization.
 
-Use this section only when baseline documentation is insufficient or the user asks to bootstrap, reorganize, or expand documentation.
-
-Bootstrap incrementally. Establish section 14 baseline docs before specialized docs. Add `/docs/table-of-contents.md` when the documentation set is no longer trivial. Add specialized docs only when baseline docs would otherwise become overloaded.
-
-Bootstrap rules:
-
-- Create or refactor one document at a time.
-- Keep each step small and reviewable.
-- Move content beyond `README.md` into focused `/docs` files.
-- Prefer useful minimal docs over speculative comprehensive docs.
-- Mark unknowns explicitly; do not invent project facts.
-- Do not create specialized docs without enough content.
-- After creating or substantially refactoring one document, stop for human review before continuing unless explicitly instructed to continue.
-
-For existing repositories with little documentation, derive docs from observable code, configuration, tests, scripts, and comments; distinguish confirmed facts from inferred intent. For empty repositories, keep project-specific claims narrow and avoid inventing architecture, requirements, workflows, or rules.
-
-A documentation normalization pass is mandatory after bootstrapping or substantially reorganizing documentation.
+- Create or refactor one document per small, reviewable step; move non-entry-point content from `README.md` into focused `/docs` files.
+- Prefer useful minimal documentation to speculative completeness; mark unknowns explicitly, never invent project facts, and create specialized documents only with enough content.
+- After creating or substantially refactoring a document, stop for human review unless explicitly authorized to continue.
 
 ## 14. Documentation map and placement
-
-`README.md` is the concise entry point: what the project is, how to get started, and where deeper docs live. It must not become the authoritative home for requirements, architecture, decisions, engineering rules, workflow rules, operations, or implementation notes.
-
-Baseline `/docs` documents:
+`README.md` is the concise entry point for project identity, setup, and deeper links; it must not own requirements, architecture, decisions, engineering or workflow rules, operations, or implementation notes. This section places documentation only; non-documentation files must follow current architecture, repository conventions, and relevant architecture or implementation documents. Move outgrown content to an appropriate owner. Baseline `/docs` documents:
 
 - `/docs/project-brief.md`: purpose, scope, goals, non-goals, users or operators, high-level capabilities.
-- `/docs/requirements.md`: functional, operational, quality, compatibility, security, performance, reliability, and constraint requirements.
-- `/docs/architecture.md`: system structure, runtime model, boundaries, data flows, integrations, deployment-relevant architecture.
-- `/docs/engineering-rules.md`: repository-specific engineering principles, coding standards, testing expectations, design constraints, naming rules, maintainability rules.
-- `/docs/table-of-contents.md`: documentation navigation index when the set is no longer trivial.
+- `/docs/requirements.md`: functional, operational, quality, compatibility, security, performance, reliability, and constraints.
+- `/docs/architecture.md`: system structure, runtime model, boundaries, data flows, integrations, deployment architecture.
+- `/docs/engineering-rules.md`: repository-specific engineering principles, coding standards, testing expectations, design constraints, naming rules, and maintainability rules.
+- `/docs/table-of-contents.md`: navigation index when the documentation set is non-trivial.
 
 Specialized documents:
 
 - `/docs/decisions.md` or `/docs/adr/`: decisions, rationale, alternatives, consequences.
-- `/docs/workflow.md`: development workflow, branching, review, CI, release readiness, collaboration rules.
-- `/docs/implementation-notes.md`: language-, framework-, runtime-, module-, or integration-specific guidance.
+- `/docs/workflow.md`: development workflow, branching, review, CI, release readiness, and collaboration rules.
+- `/docs/implementation-notes.md`: language, framework, runtime, module, or integration guidance.
 - `/docs/operations.md`: deployment, runtime operations, monitoring, incidents, backup, recovery, production support.
 - `/docs/security.md`: threat model, assumptions, secrets, authentication, authorization, vulnerability management.
 - `/docs/testing.md`: test strategy, taxonomy, commands, fixtures, coverage expectations, validation rules.
 - `/docs/release.md`: versioning, changelog, publication, migrations, compatibility policy.
 
-This section governs documentation placement only. Source code, tests, configuration, scripts, generated files, runtime assets, and other non-documentation files must follow current architecture, repository conventions, and relevant architecture or implementation docs.
-
-When content no longer fits a document's role, move it to a more appropriate file.
-
 ## 15. Output and validation expectations
-
-When presenting analysis, plans, proposed changes, applied changes, validation results, or unresolved items, include review-relevant assumptions, uncertainties, affected files, approach, validation, documentation impact, risks, trade-offs, and follow-up items.
-
-When producing file content for copying, provide complete file content unless the user asks for a patch or excerpt.
-
-Use this response shape when it improves reviewability:
+When reporting analysis, plans, proposed or applied changes, validation, or unresolved items, include review-relevant assumptions, uncertainties, affected files, approach, decision basis, documentation status and impact, validation, risks, trade-offs, and follow-up.
+For each coherent proposed or applied change, give its decision basis (section 4). Distinguish documented rules from implementation evidence or inference; never invent documentary support. Related edits may share one basis.
+For documented support, link only the most specific canonical locations; restate only if applicability is ambiguous, sources conflict, or the user asks. If links are unavailable, give exact path and heading.
+For an unsupported material choice, label its rationale, principle, convention, or pattern as new; state where documented, give section 12's exact proposed edit, or explain why it is intentionally local and needs no canonical rule.
+For trivial tasks, be brief but retain outcome and validation status. Run relevant available tests, linters, type checks, formatters, builds, documentation-link checks, example commands, or manual inspection. Format only touched files; avoid repository-wide churn unless requested or required. Report unavailable or failed validation; never claim full validation after failure or invent results.
+Provide complete copyable file content unless a patch or excerpt was requested. When helpful for review, use:
 
 - Summary: what changed, was concluded, or is proposed.
-- Files changed or affected: paths and purpose of material changes.
-- Validation: checks run, checks not run, failures, and manual inspection.
+- Files changed or affected: paths and purposes.
+- Rationale and documentation basis: canonical links; new bases and documentation status.
+- Validation: checks run, omitted, or failed, and manual inspection.
 - Assumptions and risks: material assumptions, uncertainties, conflicts, or trade-offs.
 - Follow-up: unresolved items only; do not invent future work.
 
-For trivial tasks, use a shorter response that still states material outcome and validation status when relevant.
-
-Validate with relevant available checks: tests, linters, type checks, formatters, builds, documentation link checks, example commands, or manual inspection. Format only touched files when supported; avoid repository-wide formatting churn unless requested or required.
-
-If validation cannot be run, say so. If validation fails, report it and do not present the change as fully validated. Do not invent validation results.
-
 ## 16. Code and engineering preferences
+Apply these preferences only when relevant to requested code, design, refactoring, or maintainability; they authorize no unrelated refactoring, redesign, renaming, reformatting, dependency or architecture changes. Prefer clear, maintainable designs consistent with documented architecture, rules, and established repository conventions.
 
-These preferences guide code, design, refactoring, and maintainability only when relevant to the requested task. They do not authorize unrelated refactoring, redesign, renaming, reformatting, dependency changes, or architectural changes.
-
-Prefer designs that are clear, maintainable, and consistent with documented architecture, rules, and established project conventions.
-
-- Keep implementations simple; fix root causes; avoid unnecessary indirection, abstraction, configurability, and parallel implementations.
+- Keep implementations simple; fix root causes; avoid unnecessary indirection, abstraction, configurability, or parallel implementations.
 - Prefer explicit boundaries, descriptive names, small public interfaces, visible side effects, and encapsulated boundary conditions and edge cases.
+- Prefer Locality of Behaviour: make a unit's behavior apparent from it and its immediate context. Keep behavior-controlling declarations or calls near affected code without needless inlining; balance locality with separation of concerns and Single Source of Truth.
 - Prefer automated tests that document behavior without replacing required project documentation.
-- Avoid hidden coupling and logical dependencies between unrelated modules; follow the Law of Demeter where it materially reduces coupling.
-- Prefer value objects or explicit domain structures over primitive-heavy designs when appropriate.
+- Avoid hidden coupling and logical dependencies between unrelated modules; follow the Law of Demeter when it materially reduces coupling.
+- Prefer value objects or explicit domain structures to primitive-heavy designs when appropriate.
 - Favor immutability where practical.
 - Prefer dependency injection when it improves separation, clarity, or testability.
 - Prefer protocols or interfaces over inheritance-heavy designs when appropriate.
 - Prefer polymorphism over complex conditional dispatch when it makes the design clearer.
 - Keep configuration at explicit composition, initialization, or boundary layers rather than burying configurable values in low-level implementation code.
 - Separate concurrent, asynchronous, or multi-threaded code from ordinary sequential logic when practical.
-- Favor existing repository patterns unless those patterns are themselves the problem.
-- Preserve single source of truth for domain rules, schemas, constants, and shared logic, subject to section 4 exceptions.
-
-When a current pattern is the problem, improve it directly within the task scope instead of preserving it artificially. Such changes must identify the affected invariant or pattern, preserve required behavior, update tests, update canonical documentation, and state the rationale.
+- Favor existing repository patterns unless they are the problem.
+- If a current pattern is the problem, improve it within task scope. Such changes must identify the affected invariant or pattern, preserve required behavior, update tests and canonical documentation, and state the rationale.
 
 ## 17. Tool and IDE caveat
-
-This contract guides agent and chat workflows. Some tools, editor features, hosted agents, repository integrations, or review surfaces may not apply repository instructions uniformly.
-
-When that happens, preserve the intent of this contract as closely as the tool allows. Do not compensate by duplicating repository-wide policy into multiple tool-specific files unless the user explicitly asks for that trade-off.
-
-If a tool cannot modify files, provide concrete edits. If a tool cannot run validation, state that limitation. If a tool cannot confirm which instruction files were loaded, state the uncertainty when it materially affects the task.
+This contract guides agent and chat workflows; tools, editors, hosted agents, integrations, or review surfaces may apply it unevenly. Preserve its intent; do not duplicate policy in tool-specific files unless the user explicitly requests that trade-off.
+If a tool cannot edit, follow section 10.2; cannot validate, follow section 15; cannot confirm loaded instructions, state material uncertainty.

@@ -13,7 +13,7 @@ This repository contains 2 contract files:
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
 
-`AGENTS.md` is the canonical operating contract for coding agents. It defines how agents should inspect context, classify tasks, plan changes, modify code, update documentation, validate work, and preserve small, reviewable diffs.
+`AGENTS.md` is the canonical operating contract for coding agents. It defines how agents should inspect context, classify tasks, plan changes, modify code, update documentation, validate work, and deliver coherent, reviewable changes whose decision basis and documentation status are traceable.
 
 `.github/copilot-instructions.md` is a GitHub Copilot compatibility bridge. It points Copilot-compatible surfaces back to the repository-root `AGENTS.md` so the project does not maintain a second, competing instruction source.
 
@@ -49,7 +49,10 @@ After adding it, agents should be expected to:
 - classify tasks as trivial or non-trivial;
 - inspect relevant repository context before non-trivial work;
 - plan proportionally before non-trivial edits;
-- keep changes small, coherent, and reviewable;
+- when Plan mode or an equivalent review-before-implementation workflow is active, present non-trivial outcomes as ordered reviewable increments and implement only the selected increment;
+- keep changes small, coherent, reviewable, and behaviorally complete;
+- make each coherent change traceable to its decision basis and documentation status;
+- preserve Single Source of Truth across code and documentation;
 - avoid unrelated refactors, formatting churn, dependency upgrades, file moves, and cleanup;
 - preserve protected contract files unless explicitly asked to change them;
 - keep code, tests, configuration, and documentation synchronized;
@@ -71,7 +74,7 @@ This keeps `AGENTS.md` as the single source of truth while allowing tool-specifi
 
 Some tools provide explicit planning modes, approval modes, autonomous modes, hooks, custom agents, skills, or other workflow mechanisms.
 
-`AGENTS.md` does not require a specific product mode. Its planning rules mean that agents should choose an appropriate implementation approach before non-trivial edits. If a user explicitly invokes a tool-specific Plan mode, that plan can satisfy the planning requirement.
+`AGENTS.md` does not require a specific product mode. Its ordinary planning rules mean that agents should choose an appropriate implementation approach before non-trivial edits. When a user invokes Plan mode, or the current workflow provides an equivalent review-before-implementation stage, non-trivial outcomes must be presented as ordered reviewable increments before implementation; once edits are permitted, only the selected increment is implemented.
 
 Tool approval prompts, sandbox limits, file-edit confirmations, terminal confirmations, and security boundaries are controlled by the current tool or environment. `AGENTS.md` does not override them.
 

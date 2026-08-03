@@ -28,7 +28,7 @@ It is intended to be copied into a repository as-is and treated as the repositor
 
 Most repositories should not edit `AGENTS.md` during normal adoption. Instead, keep `AGENTS.md` generic and put project-specific facts in focused repository documentation.
 
-For documentation placement, baseline documents, and specialized documents, use the documentation map and placement rules defined in `AGENTS.md`.
+For documentation progression, role ownership, and placement, use the documentation rules defined in `AGENTS.md`.
 
 Edit `AGENTS.md` directly only when the repository needs to change agent behavior or repository-wide agent policy.
 
@@ -57,11 +57,13 @@ After adding it, agents should be expected to:
 - keep changes small, coherent, reviewable, and behaviorally complete;
 - make each coherent change traceable to its decision basis and documentation status;
 - consult relevant decision and technical-debt records when existing trade-offs, consequences, or future-change constraints affect the task;
-- add entries to `/docs/technical-debt.md` only after explicit direction, and update or remove affected entries when scoped work changes or resolves them;
+- add technical-debt entries only after explicit direction, and update or remove affected entries when scoped work changes or resolves them;
 - preserve Single Source of Truth across code and documentation;
+- write project documentation primarily for humans, with a clear entry path and progressive disclosure;
+- keep requirements behavioral, architecture conceptual, and source-level mechanics in focused implementation or code-adjacent references;
 - avoid unrelated refactors, formatting churn, dependency upgrades, file moves, and cleanup;
 - preserve protected contract files unless explicitly asked to change them;
-- keep code, tests, configuration, and documentation synchronized;
+- keep code, tests, configuration, and documentation synchronized by replacing, consolidating, relocating, or removing affected material rather than only appending;
 - update relevant documentation when behavior, interfaces, architecture, configuration, operations, workflow, or constraints change;
 - prefer tests that both verify behavior and communicate expected behavior;
 - disclose material assumptions, conflicts, missing context, risks, validation status, and unresolved follow-up items.
@@ -88,7 +90,7 @@ Tool approval prompts, sandbox limits, file-edit confirmations, terminal confirm
 
 A destination project does not need complete documentation before adopting this setup.
 
-If documentation is missing or insufficient, agents should bootstrap it incrementally according to the rules in `AGENTS.md`. This allows the same setup to work for new projects, existing projects with limited documentation, and mature projects whose documentation needs restructuring or normalization.
+If documentation is missing or insufficient, agents should bootstrap the smallest useful human entry path and canonical owners incrementally according to `AGENTS.md`, using the repository's own organization. This allows the same setup to work for new projects, existing projects with limited documentation, and mature projects whose documentation needs restructuring or normalization.
 
 ## 8. Cross-tool portability budget
 

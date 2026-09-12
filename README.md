@@ -46,37 +46,22 @@ No direct edits to `AGENTS.md` are required for normal adoption.
 
 ## 4. What changes after adding `AGENTS.md`
 
-Adding `AGENTS.md` gives coding agents an explicit repository-local operating contract.
+`AGENTS.md` encourages a consistent way of working:
 
-After adding it, agents should be expected to:
+- **Understand before acting.** Read relevant project context and plan in proportion to the task.
+- **Respect the requested scope.** Distinguish analysis from implementation, avoid unrelated changes, and respect protected files and review checkpoints.
+- **Deliver reviewable changes.** Keep changes small and complete; use selected increments when a review-before-implementation workflow is active.
+- **Keep project knowledge consistent.** Synchronize code, tests, configuration, and documentation written for people, with one authoritative owner for each shared fact or rule.
+- **Explain decisions.** Connect changes to project requirements, established decisions, and documented trade-offs.
+- **Verify and report.** Run relevant checks, favor tests that explain behavior, and disclose results, material uncertainties, risks, and remaining work.
 
-- classify tasks as trivial or non-trivial;
-- inspect relevant repository context before non-trivial work;
-- plan proportionally before non-trivial edits;
-- when Plan mode or an equivalent review-before-implementation workflow is active, present non-trivial outcomes as ordered reviewable increments and implement only the selected increment;
-- keep changes small, coherent, reviewable, and behaviorally complete;
-- make each coherent change traceable to its decision basis and documentation status;
-- consult relevant decision and technical-debt records when existing trade-offs, consequences, or future-change constraints affect the task;
-- add technical-debt entries only after explicit direction, and update or remove affected entries when scoped work changes or resolves them;
-- preserve Single Source of Truth across code and documentation;
-- write project documentation primarily for humans, with a clear entry path and progressive disclosure;
-- keep requirements behavioral, architecture conceptual, and source-level mechanics in focused implementation or code-adjacent references;
-- avoid unrelated refactors, formatting churn, dependency upgrades, file moves, and cleanup;
-- preserve protected contract files unless explicitly asked to change them;
-- keep code, tests, configuration, and documentation synchronized by replacing, consolidating, relocating, or removing affected material rather than only appending;
-- update relevant documentation when behavior, interfaces, architecture, configuration, operations, workflow, or constraints change;
-- prefer tests that both verify behavior and communicate expected behavior;
-- disclose material assumptions, conflicts, missing context, risks, validation status, and unresolved follow-up items.
+This overview is not exhaustive. [`AGENTS.md`](AGENTS.md) defines the full rules and exceptions. The [contract organization](#5-contract-organization) and [portability budget](#8-cross-tool-portability-budget) guide future contract updates.
 
-## 5. Tool-specific instruction files
+## 5. Contract organization
 
-`AGENTS.md` is the canonical source for repository-wide agent behavior.
+Tool-specific files provide discovery or imports for the canonical `AGENTS.md` contract. When adding support for another tool, use a thin bridge or narrow adapter following the contract's rules for tool-specific files.
 
-Tool-specific instruction files should be thin compatibility bridges or narrow adapters. They should not duplicate, redefine, or drift from the repository-wide policy in `AGENTS.md`.
-
-This repository includes `CLAUDE.md` as a Claude Code import bridge and `.github/copilot-instructions.md` as a GitHub Copilot bridge. When adding support for another tool, prefer a small bridge or adapter that loads or refers to `AGENTS.md` rather than copying the full contract.
-
-This keeps `AGENTS.md` as the single source of truth while allowing tool-specific instruction discovery.
+Some repetition inside `AGENTS.md` is intentional: a rule may recur where an agent must apply it, keeping its conditions visible without relying entirely on cross-references. Shorter wording is not assumed to provide equivalent guidance. Repository-wide agent instructions, conditions, exceptions, illustrative examples, and decision-relevant rationale remain together in `AGENTS.md`; explanations useful only to human developers maintaining the contract belong in this README.
 
 ## 6. Tool-specific modes and approvals
 
@@ -84,13 +69,19 @@ Some tools provide explicit planning modes, approval modes, autonomous modes, ho
 
 `AGENTS.md` does not require a specific product mode. Its ordinary planning rules mean that agents should choose an appropriate implementation approach before non-trivial edits. When a user invokes Plan mode, or the current workflow provides an equivalent review-before-implementation stage, non-trivial outcomes must be presented as ordered reviewable increments before implementation; once edits are permitted, only the selected increment is implemented.
 
+Analysis or review alone does not authorize repository edits. For requested changes that cannot be applied in the current environment, agents provide exact proposed edits or a focused patch. Documentation work governed by the contract's bootstrap and reorganization workflow also retains its human review checkpoint unless continuation was explicitly authorized.
+
+A selected increment's execution brief can also be used with sustained execution tools such as [Codex Goal mode](https://learn.chatgpt.com/use-cases/follow-goals). It states the outcome, scope, prerequisites, required artifacts, acceptance checks, and review or stop conditions. The agent should carry that increment through implementation, validation, and scoped corrections, reporting completion only after verifying every acceptance criterion. Existing review checkpoints still apply, and unselected increments remain outside the run's scope.
+
 Tool approval prompts, sandbox limits, file-edit confirmations, terminal confirmations, and security boundaries are controlled by the current tool or environment. `AGENTS.md` does not override them.
 
-## 7. Documentation bootstrap behavior
+## 7. Documentation bootstrap and reorganization
 
 A destination project does not need complete documentation before adopting this setup.
 
-If documentation is missing or insufficient, agents should bootstrap the smallest useful human entry path and canonical owners incrementally according to `AGENTS.md`, using the repository's own organization. This allows the same setup to work for new projects, existing projects with limited documentation, and mature projects whose documentation needs restructuring or normalization.
+When documentation is insufficient, misplaced, or wrongly layered, agents use the bootstrap and reorganization workflow in `AGENTS.md`. They establish or reorganize the smallest useful human entry path and canonical owners using the repository's names and structure.
+
+Existing documentation is moved or refactored one document per reviewable step, with affected references repaired in that step. Creation or substantial refactoring is followed by human review unless continuation was explicitly authorized. Work covers affected documents and direct references unless repository-wide work is requested. The full workflow and ownership rules remain in `AGENTS.md`.
 
 ## 8. Cross-tool portability budget
 
@@ -99,19 +90,18 @@ If documentation is missing or insufficient, agents should bootstrap the smalles
 The maintained portability targets are:
 
 - fewer than 200 lines, adapting [Claude Code's recommendation that each `CLAUDE.md` target under 200 lines](https://code.claude.com/docs/en/memory#write-effective-instructions) to the imported contract;
-- fewer than 24 KB (24,000 UTF-8 bytes), a conservative project budget below [Codex's default 32 KiB aggregate project-instruction limit](https://developers.openai.com/codex/agent-configuration/agents-md).
+- fewer than 24 KB (24,000 UTF-8 bytes), a conservative project budget below [Codex's default 32 KiB aggregate project-instruction limit](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
 
 The 24 KB target is not a documented Claude Code limit. These are documentation-only maintenance targets, not requirements of the `AGENTS.md` format or universal compatibility guarantees. They are maintained through review rather than automated enforcement. Current vendor documentation remains authoritative because tools may change how they discover, combine, limit, and apply repository instructions.
 
 ## 9. Tool compatibility
 
-Different coding agents discover and apply repository instructions differently. Some tools can read `AGENTS.md` directly. Others use tool-specific instruction files, settings, chat modes, skills, hooks, or configuration.
+Instruction loading, setup, and limits depend on the product and interface. Consult the provider's current documentation:
 
-This repository is designed around a conservative rule:
-
-- keep repository-wide agent behavior in `AGENTS.md`;
-- keep tool-specific bridges small;
-- avoid duplicating policy across instruction files;
-- preserve the intent of `AGENTS.md` when a tool cannot apply every instruction uniformly.
+| Provider | Official guidance |
+|---|---|
+| OpenAI | [Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md) · [ChatGPT projects](https://learn.chatgpt.com/docs/projects) |
+| Anthropic | [Claude Code](https://code.claude.com/docs/en/memory#agentsmd) · [Claude projects](https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects) |
+| GitHub | [Copilot support](https://docs.github.com/en/copilot/reference/custom-instructions-support) |
 
 When instruction application is uncertain, use the current tool's diagnostics or ask the agent to state which repository instruction sources it used before starting non-trivial work.

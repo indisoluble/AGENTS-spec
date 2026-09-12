@@ -1,6 +1,6 @@
 # Copilot repository instructions
 
-**Release date:** 2026-08-03 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
+**Release date:** 2026-09-12 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
 
 This repository uses `AGENTS.md` as its canonical agent contract.
 

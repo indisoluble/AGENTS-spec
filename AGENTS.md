@@ -1,15 +1,16 @@
 # AGENTS.md
-**Release date:** 2026-08-03 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
+**Release date:** 2026-09-12 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
 
 ## 1. Canonical status
 `AGENTS.md` is the canonical contract for repository-wide agent behavior. Path-specific instructions follow the current tool's scope and precedence. `CLAUDE.md` and `.github/copilot-instructions.md` are compatibility bridges, never independent policy sources.
 
 ## 2. Operational protocol
-Scale this protocol to task complexity; do not over-plan trivial work. Select an approach before editing. Use a tool-specific review-before-implementation mode only when requested or workflow-required; its output is this contract's planning artifact. Follow task instructions and the tool's approval model.
+Analysis or review alone does not authorize repository edits. Plan proportionally before editing; do not over-plan trivial work. Use review-before-implementation mode only when requested or workflow-required; its output is this contract's plan. Follow task instructions and tool approvals.
+Proceed within authorization. Under section 9.3, present increments and await selection. Under section 13, pause after creating or substantially refactoring a document unless explicitly authorized to continue.
 1. Classify the task as trivial or non-trivial.
 2. Identify protected files, affected artifacts, relevant documentation, and applicable validation.
 3. Inspect required context; identify material assumptions, conflicts, missing context, and risks.
-4. Before non-trivial edits, state a concise implementation plan; if section 9.3 is active, use its increment sequence.
+4. Before non-trivial edits, state a concise plan with verifiable completion criteria; if section 9.3 is active, use its increment sequence.
 5. Outside planning-only workflow, apply the smallest coherent, behaviorally complete change authorized by the request or selected increment.
 6. Synchronize affected artifacts when required.
 7. Run relevant available validation.
@@ -20,7 +21,7 @@ Scale this protocol to task complexity; do not over-plan trivial work. Select an
 If only one is requested, change the others only when required or explicitly included. Keep protected-file changes separate from unrelated code, documentation, formatting, dependency, cleanup, or maintenance; propose unrequested work separately.
 
 ## 4. Terminology and task classification
-- **Affected artifacts** are code, tests, configuration, and documentation affected by the task. A **behaviorally complete change** includes all required artifacts and validation for the requested behavior, with no unstated follow-up.
+- **Affected artifacts** are code, tests, configuration, and documentation affected by the task. A **behaviorally complete change** includes all required artifacts and validation for the requested behavior, with no unstated follow-up. For example, renaming a public configuration key includes its implementation, relevant tests, and user instructions in the same increment.
 - A task is **non-trivial** if it changes behavior or documentation meaning; interfaces, schemas, protocols, or data formats; security, authentication, authorization, secrets, permissions, privacy, concurrency, async behavior, lifecycle, cleanup, error handling, tests, CI, build, packaging, deployment, runtime configuration, or dependencies; spans multiple logical areas; or has unclear requirements, missing context, or material risk.
 - A task is **trivial** only if local, mechanical, low-risk, and changing no behavior, interface, configuration, dependency, test, documentation meaning, or repository structure.
 - A **reviewable change/increment** is one unit whose intent, rationale, resulting behavior, risks, and validation a reviewer can understand and verify. Judge size and tracing burden; interacting concerns, control flow, state, concurrency, migrations, or new abstractions reduce reviewability. Line count alone is insufficient.
@@ -29,7 +30,7 @@ If only one is requested, change the others only when required or explicitly inc
 - **Single Source of Truth** gives each shared value, logic, schema, rule, requirement, rationale, invariant, procedure, convention, or implementation explanation one role-appropriate canonical owner. Semantic duplication includes the same meaning in different words. Reuse, reference, derive, generate, or extract from that owner instead of maintaining parallel authorities. Other documents may give concise context and link to the canonical detail. Duplicate only when required for generated files, migrations, compatibility layers, test fixtures, snapshots, illustrative examples, external protocol boundaries, or necessary summaries; preserve intentional duplication unless changing it is in scope.
 
 ## 5. Purpose and scope
-This portable, repository-local, reviewable, versioned contract governs repository-wide agent behavior across tools and IDEs. Repository files—not hidden, personal, remote, or tool settings—are authoritative for project behavior, constraints, rules, and documentation structure.
+This contract governs repository-wide agent behavior. Repository files—not hidden, personal, remote, or tool settings—are authoritative for project behavior, constraints, rules, and documentation structure.
 Keep it repository-wide and tool-neutral. Put project behavior in documentation, source, tests, configuration, and executable behavior; put language or framework rules in a focused implementation owner. Include workflows, commands, tool configuration, personal preferences, product automation, or implementation detail here only when repository-wide, tool-neutral, and contractual.
 
 ## 6. Instruction layering and tool-specific files
@@ -80,18 +81,19 @@ If missing context permits a safe, reversible, local change, state minimal safe 
 - Documentation restructuring, baseline creation, or duplicate-topic cleanup: navigation and affected canonical owners.
 
 ### 9.3 Review-before-implementation increments
-When a review-before-implementation workflow is active, present each non-trivial outcome as the smallest ordered sequence of independently reviewable increments (section 4). Use one when the whole outcome is reviewable; do not merge separable behaviors, rollout stages, or compatibility phases merely because they share a goal.
-State the end state and key risks or trade-offs. For each increment, state goal, behavior, files or components, validation, documentation impact, dependencies, and working state or compatibility. Prefer functional, validated, behaviorally complete increments that remain buildable and usable; preserve unaffected compatibility where practical and isolate breaking steps.
+For non-trivial work in review-before-implementation, use the smallest ordered sequence of independently reviewable increments (section 4), or one if sufficient. Keep separable behaviors, rollout stages, and compatibility phases distinct.
+State the end state and key risks or trade-offs. Each increment's execution brief needs a stable ID, outcome, scope and exclusions, artifacts and steps, context references, prerequisites, dependencies, starting and resulting state, compatibility, acceptance criteria with verification commands or checks and expected results, documentation impact, and review and stop conditions. Include or link context for independent execution; resolve material unknowns under section 9.2 before execution.
+Prefer functional, validated, behaviorally complete increments that remain buildable and usable; preserve unaffected compatibility where practical and isolate breaking steps.
 - Present all increments and await selection.
-- Once planning permits edits, implement only the selected increment.
+- Once planning permits edits, carry only the selected increment through implementation, validation, and scoped corrections.
 - For an unavoidable non-working increment, state why, what remains usable or testable, its minimized scope and duration, and the restoring increment.
 - If no division avoids an invalid, unsafe, or misleading state, change nothing; give staging or atomic options and trade-offs, then request direction.
-After each, synchronize artifacts, validate and report, leave it commit-ready, and never commit without authorization.
-Outside this workflow, section 9.3 adds no decomposition requirements, approval checkpoints, or implementation boundaries; follow section 2 unless staging is requested.
+Verify all acceptance criteria and synchronize artifacts before reporting completion; give evidence, leave it commit-ready, and never commit without authorization. If blocked, report unmet criteria; never weaken criteria to declare success.
+Outside this workflow, add no decomposition requirements, approval checkpoints, or implementation boundaries; follow section 2 unless staging is requested.
 
 ## 10. Execution paths
-- When files can be modified outside planning-only workflow, make the smallest authorized, coherent, behaviorally complete change; preserve conventions unless in scope, synchronize documentation, and avoid churn. Proceed unless further authorization is required; obey approval, sandbox, confirmation, and security boundaries.
-- When files cannot be modified, provide exact edits, focused snippets, or a concrete patch with paths and locations. Preserve planning, quality, validation, documentation, rationale, and protected-file obligations.
+- When requested changes can be applied outside planning-only workflow, make the smallest authorized, coherent, behaviorally complete change; preserve conventions unless in scope, synchronize documentation, and avoid churn. Proceed within approval, sandbox, confirmation, and security boundaries.
+- If the environment prevents requested edits, give exact edits, focused snippets, or a concrete patch with paths and locations; preserve planning, quality, validation, documentation, rationale, and protected-file obligations.
 
 ## 11. Code change discipline
 Keep code changes minimal, coherent, and behaviorally complete. Inspect relevant implementation, conventions, callers and callees, tests, configuration, documentation, and the smallest safe option. Do not shift complexity into undocumented conventions, hidden coupling, duplication, or implicit behavior.
@@ -118,17 +120,19 @@ Keep code changes minimal, coherent, and behaviorally complete. Inspect relevant
 - Canonically document each new repository-wide or reusable rationale, principle, convention, or pattern in the same change. If scope or tool limits prevent it, give the exact edit and follow-up; implementation alone never establishes repository policy.
 - A normalization pass covers affected documents and direct cross-references unless explicitly scoped repository-wide. Run it after creating a baseline, changing a document's responsibility, moving content, or changing project-level requirements, architecture, workflow, or engineering rules. Apply section 14, remove contradictions, placeholders, and needless duplication, and verify names, links, and ownership.
 
-## 13. Bootstrap workflow for under-documented repositories
-Use only when documentation is insufficient or bootstrapping, reorganization, or expansion is explicitly requested.
+## 13. Documentation bootstrap and reorganization
+Use for insufficient, misplaced, or wrongly layered documentation, or explicitly requested bootstrapping, reorganization, or expansion. Limit work to affected documents and direct cross-references unless explicitly scoped repository-wide.
 - Establish the smallest useful human entry path and canonical owners needed for the project and task. Follow section 14 and repository conventions; add navigation for a non-trivial set and specialized documents only when justified.
 - Derive facts from observable code, configuration, tests, scripts, and comments; distinguish them from inferred intent. In empty repositories, mark unknowns, keep claims narrow, and invent no architecture, requirements, workflows, or rules.
-- Prefer useful minimums over speculative completeness. Create or refactor one document per reviewable step; move excessive entry-point or high-level detail to the appropriate owner.
+- Prefer useful minimums over speculative completeness. Create, move, or refactor one document per reviewable step; relocate misplaced or excessive entry-point or high-level detail to its appropriate owner. Repair affected references in the same step.
 - After creating or substantially refactoring a document, pause for human review unless explicitly authorized to continue. Apply section 12 after bootstrapping or substantial reorganization.
 
 ## 14. Documentation progression and ownership
 Use repository-specific names and structure. Documentation and navigation should normally progress from (1) purpose and capabilities, through (2) system overview and mental model, (3) stable behavior, requirements, architecture, and decisions, (4) implementation references, then (5) operations and troubleshooting. Small projects may combine compatible roles under clear headings; split them when abstraction levels blur or the entry path becomes hard to follow.
 
-`README.md` or an equivalent entry point stays concise and provides identity, initial setup, and navigation. It may summarize facts needed for orientation but links to the detailed owners below:
+`README.md` or an equivalent entry point stays concise and provides identity, initial setup, and navigation. It may summarize facts needed for orientation but links to their detailed owners. For example, it mentions CSV export and links to the format reference; quoting rules stay there.
+
+Detailed owners:
 
 - **Overview or project brief**: purpose, scope, capabilities, users or operators, goals, non-goals, and a concise system model.
 - **Requirements**: externally observable behavior, quality attributes, compatibility, security, reliability, performance, and constraints.
@@ -142,7 +146,7 @@ Use repository-specific names and structure. Documentation and navigation should
 Use focused owners for workflow, testing strategy, security, release, and technical debt when warranted. Private helper names, constructor sequencing, caching mechanics, property-forwarding chains, exhaustive algorithm branches, and similar details belong in implementation or code-adjacent references, not requirements or architecture, unless intentionally contractual.
 
 ## 15. Output and validation expectations
-Reports of analysis, plans, proposed or applied changes, validation, or unresolved items include as applicable:
+Report as applicable:
 
 - Outcome or proposal and approach.
 - Affected paths and purposes.
@@ -154,7 +158,7 @@ Reports of analysis, plans, proposed or applied changes, validation, or unresolv
 For each coherent proposal or change, give its decision basis (section 4); related edits may share one. Distinguish documented rules from implementation evidence or inference; never invent support. Link the most specific canonical sources, restating them only for ambiguity, conflict, or an explicit request; if linking is unavailable, give the path and heading.
 For an unsupported material choice, identify the new rationale, principle, convention, or pattern and its owner; otherwise give section 12's proposed edit or explain why the choice is intentionally local.
 For trivial tasks, briefly report outcome and validation. Run relevant available tests, linters, type checks, formatters, builds, documentation-link checks, examples, or manual inspection. Format only touched files and avoid repository-wide churn. Report unavailable or failed validation; never invent results or claim full validation after failure.
-After edits, report paths and purposes; provide full content only on request. If editing was impossible, provide copyable content, a concrete patch, or exact edits.
+After edits, report paths and purposes; provide full content only on request. If the environment prevented requested changes, provide copyable content, a concrete patch, or exact edits.
 
 ## 16. Code and engineering preferences
 A **design invariant** is a documented constraint that holds unless the task changes its contract and all affected artifacts. A **current pattern** is a documented implementation shape followed by default; it may change when scoped, justified, tested, documented, and compatible with higher-level requirements.
@@ -173,5 +177,5 @@ Apply these preferences only to requested code, design, refactoring, or maintain
 - Favor existing repository patterns unless they are the problem. Improve a problematic pattern only within scope; identify the affected invariant or pattern, preserve required behavior, update tests and canonical documentation, and state the rationale.
 
 ## 17. Tool and IDE caveat
-Tools, editors, hosted agents, integrations, or review surfaces may apply `AGENTS.md` unevenly. Preserve its intent; do not duplicate policy in tool-specific files unless requested.
-If a tool cannot edit, give exact edits. If it cannot validate or confirm loaded instructions, report the limitation and material uncertainty.
+Tools may apply `AGENTS.md` unevenly. Preserve its intent; do not duplicate policy in tool-specific files unless requested.
+If a tool cannot apply requested changes, give exact edits. If it cannot validate or confirm loaded instructions, report the limitation and material uncertainty.

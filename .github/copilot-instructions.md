@@ -1,11 +1,9 @@
-# Copilot repository instructions
+# GitHub Copilot bridge
 
-**Release date:** 2026-09-12 - **Canonical source:** https://github.com/indisoluble/AGENTS-spec
+**Release date:** 2026-09-24 - **Upstream source:** https://github.com/indisoluble/AGENTS-spec
 
-This repository uses `AGENTS.md` as its canonical agent contract.
+Before planning, editing, refactoring, reviewing, validating, or updating documentation, read and follow the repository-root [AGENTS.md](../AGENTS.md).
 
-Before planning, editing, refactoring, reviewing, validating, or updating documentation, consult the repository-root `AGENTS.md` and follow it as the authoritative source for repository workflow, constraints, documentation rules, and engineering preferences.
+AGENTS.md is the canonical repository-wide contract; this file only directs Copilot to it. Apply the contract within the tool's actual instruction hierarchy and permissions.
 
-Apply repository instruction precedence and conflict handling as defined in `AGENTS.md`. Do not treat this bridge as an independent or competing policy source.
-
-This file is a GitHub Copilot compatibility bridge only. Do not duplicate policy here. Change it only when explicitly asked to update the Copilot bridge or when synchronization with the canonical contract requires it.
+If you cannot access AGENTS.md, report that limitation before continuing. Do not claim to have read or applied instructions you could not access.

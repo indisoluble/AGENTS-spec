@@ -1,107 +1,67 @@
 # AGENTS.md Specification
 
-This repository provides a reusable instruction framework for making AI coding agents operate against explicit, version-controlled project rules.
+A ready-to-use [AGENTS.md](AGENTS.md) that gives coding agents a consistent way to work in new or established repositories.
 
-It is intended for projects that use AI coding assistants such as GitHub Copilot, Claude Code, ChatGPT, Codex-style agents, or other IDE-integrated tools.
+Its primary aim is to prevent unconstrained token use: investigations that keep expanding, detailed planning for distant work, or unexpectedly heavy effort within a single step.
 
-The purpose is to replace repeated, informal prompting with a repository-local development contract that is reviewable, maintainable, portable across tools, and optimized for agent consumption.
+Describe the outcome you want. The agent selects a **small, useful step**, completes the necessary analysis, work, documentation, and checks, then uses the results to decide what follows. Later detail develops as evidence becomes available. The agent can continue within your authorization, but must ask for direction before undertaking substantially more work or investigation than expected.
 
-## 1. What this repository provides
+Effort control is best effort. These instructions provide no token meter, hard quota, or guarantee of savings.
 
-This repository contains one canonical contract and two compatibility bridges:
+## Get started
 
-- `AGENTS.md`
-- `CLAUDE.md`
-- `.github/copilot-instructions.md`
+1. **Review existing instructions, then copy [AGENTS.md](AGENTS.md) into your repository root.** A person responsible for adoption must validate which existing practices, conventions, and workflows will persist and which will be replaced. Preserve useful project facts found only in the old files—such as build commands or system constraints—in appropriate project documentation after checking their accuracy. Retained operating rules belong in authoritative instruction files: use compatible additions or an explicitly authorized contract adaptation, following the [instruction-file rules](README-powerusers.md#instruction-files-and-external-actions).
+2. **Add the bridge for your tool, if applicable.** Use the supplied files at the paths below, applying the same human review and fact-preservation precautions before replacing existing copies.
 
-`AGENTS.md` is the canonical operating contract for coding agents. It defines how agents should inspect context, classify tasks, plan changes, modify code, update documentation, validate work, and deliver coherent, reviewable changes whose decision basis and documentation status are traceable.
+   | Tool | Files to use |
+   | --- | --- |
+   | Codex | Root `AGENTS.md` |
+   | Claude Code | Root `AGENTS.md` and [CLAUDE.md](CLAUDE.md) |
+   | GitHub Copilot | Root `AGENTS.md` and [.github/copilot-instructions.md](.github/copilot-instructions.md) |
 
-`CLAUDE.md` is a Claude Code compatibility bridge. Its native `@AGENTS.md` import loads the canonical contract without duplicating it.
+3. **Keep the files in version control and check adoption.** Ask your tool which repository instructions it loaded and check available instruction diagnostics. Then try the [worked adoption check](README-powerusers.md#worked-adoption-check): it combines a loading check with a small assessment task. Finding a file alone does not show that the agent follows it.
 
-`.github/copilot-instructions.md` is a GitHub Copilot compatibility bridge. It points Copilot-compatible surfaces back to the repository-root `AGENTS.md` so the project does not maintain a second, competing instruction source.
+The supplied contract normally needs no project-specific customization. Keep project facts, build commands, and architecture in your project's documentation and code. The bridges direct the tool to the contract.
 
-## 2. Intended use and customization
+Loading depends on the interface and settings. For verification, troubleshooting, and use with ChatGPT or Claude Projects, see [tool compatibility](README-powerusers.md#tool-compatibility).
 
-`AGENTS.md` is a drop-in canonical baseline for repository-local agent behavior.
+## Try a first task
 
-It is intended to be copied into a repository as-is and treated as the repository's agent contract. `AGENTS.md` guides agent behavior; it does not replace project-specific documentation, executable behavior, tests, configuration, or human review.
+Ask for the result you need:
 
-Most repositories should not edit `AGENTS.md` during normal adoption. Instead, keep `AGENTS.md` generic and put project-specific facts in focused repository documentation.
+> Fix the incorrect setup command in the README.
 
-For documentation progression, role ownership, and placement, use the documentation rules defined in `AGENTS.md`.
+For this one-step task, the agent inspects the relevant project files, makes the correction, checks it, and reports the completed task. For example, if the documented command disagreed with the project's package configuration and the corrected command ran successfully, a brief report could be:
 
-Edit `AGENTS.md` directly only when the repository needs to change agent behavior or repository-wide agent policy.
+> Corrected the setup command in `README.md` to match the package configuration. Ran the corrected command successfully.
 
-## 3. How to use it
+That is an illustration, not a required response template. If a check fails or cannot run, the agent must say so. Disclosure alone does not establish completion: acceptance conditions still need sufficient evidence, and a specifically required check cannot be bypassed. See [validation and unavailable checks](README-powerusers.md#assess-the-result). You do not need to repeat these responsibilities in your request.
 
-Copy these files into the destination repository:
+For a larger objective, use the same approach:
 
-- `AGENTS.md`
-- `CLAUDE.md`
-- `.github/copilot-instructions.md`
+> Add CSV imports that report invalid rows and continue processing valid rows.
 
-Then commit all three files so the agent contract becomes part of the project history.
+The agent chooses the next small, useful step—called an **increment**—from your request and the project context. It works through Plan–Do–Study–Act (PDSA): plan the step, do the work, assess the result, and use what it learned to decide what follows. Later work stays at outline level until it needs more detail. The [worked example](README-powerusers.md#from-a-request-to-a-result) shows this process from request to report.
 
-No direct edits to `AGENTS.md` are required for normal adoption.
+Further increments can proceed under existing authorization. The agent combines unreported work into a report at task completion, at a handoff, or when asking for your input. While continuing, it must not draft or output routine progress reports unless requested or otherwise required.
 
-## 4. What changes after adding `AGENTS.md`
+Disclosures affecting authorization or the next decision come before the affected work; other disclosures join the next consolidated report unless an earlier time is specified. The agent pauses when the contract, your instructions, or the tool's rules require direction, including before unexpectedly greater work. It uses your effort expectations where supplied and otherwise establishes them without a routine announcement. You can request status updates or [extra review checkpoints](README-powerusers.md#optional-controls-you-can-add) if you want to follow individual increments.
 
-`AGENTS.md` encourages a consistent way of working:
+## What to expect
 
-- **Understand before acting.** Read relevant project context and plan in proportion to the task.
-- **Respect the requested scope.** Distinguish analysis from implementation, avoid unrelated changes, and respect protected files and review checkpoints.
-- **Deliver reviewable changes.** Keep changes small and complete; use selected increments when a review-before-implementation workflow is active.
-- **Keep project knowledge consistent.** Synchronize code, tests, configuration, and documentation written for people, with one authoritative owner for each shared fact or rule.
-- **Explain decisions.** Connect changes to project requirements, established decisions, and documented trade-offs.
-- **Verify and report.** Run relevant checks, favor tests that explain behavior, and disclose results, material uncertainties, risks, and remaining work.
+- **Focused progress.** The agent selects each step using your objective, relevant project evidence, and earlier findings. Unrelated cleanup and speculative features stay outside the task.
+- **Complete work within each step.** Small scope still receives the necessary reasoning and validation. Affected code, tests, configuration, and documentation stay consistent. A required stop can leave a step unfinished; it cannot be reported as complete.
+- **Decisions and consolidated results.** Consequential unresolved questions come to you. Reports identify completed work, checks, material assumptions, and unfinished work; one report can cover several increments.
+- **Bounded investigations.** Routine code, test, and configuration inspection and all reading of existing project documentation are context gathering. Documentation reading remains exempt from inquiry framing even when answering a blocking question. Other inquiry into material uncertainty blocking the next decision requires the question, scope, objective, needed evidence, and an effort limit before it starts. The agent stops that inquiry when it obtains the evidence or reaches the limit; missing required evidence means incomplete work. Existing scope and authority can permit another bounded attempt, subject to requester limits, checkpoints, and reassessment of materially greater effort. All work, including context gathering, remains subject to scope and growth limits. See [investigation examples](README-powerusers.md#when-an-investigation-is-needed).
+- **Project knowledge that develops with the work.** Adoption includes architecture documentation organized around arc42, a set of topics for explaining a software system, along with clearly expressed requirements and records of significant decisions. These practices support quality and preserve knowledge for later steps. You can limit or defer proposed documentation improvements. Installation does not authorize a project-wide audit or rewrite.
+- **Continue in a new conversation.** You can resume unfinished work without the previous chat when the necessary context and project files are available. When code, tests, and permanent documentation lack that context, the agent maintains a concise [continuation record](README-powerusers.md#continue-unfinished-work), with separate task entries when needed. Before resuming in a new conversation, it compares available task context, including the record if present, with current project state and instructions and reports material differences or missing context. The record and the new conversation do not themselves grant permission, reset effort limits, or clear pending checkpoints.
 
-This overview is not exhaustive. [`AGENTS.md`](AGENTS.md) defines the full rules and exceptions. The [contract organization](#5-contract-organization) and [portability budget](#8-cross-tool-portability-budget) guide future contract updates.
+This is an opinionated engineering baseline. Your instructions take priority within the tool's actual instruction hierarchy and permissions. You remain responsible for reviewing and accepting the work.
 
-## 5. Contract organization
+Instruction files cannot guarantee compliance. The tool's controls govern permissions and approvals.
 
-Tool-specific files provide discovery or imports for the canonical `AGENTS.md` contract. When adding support for another tool, use a thin bridge or narrow adapter following the contract's rules for tool-specific files.
+## Get more from it
 
-Some repetition inside `AGENTS.md` is intentional: a rule may recur where an agent must apply it, keeping its conditions visible without relying entirely on cross-references. Shorter wording is not assumed to provide equivalent guidance. Repository-wide agent instructions, conditions, exceptions, illustrative examples, and decision-relevant rationale remain together in `AGENTS.md`; explanations useful only to human developers maintaining the contract belong in this README.
-
-## 6. Tool-specific modes and approvals
-
-Some tools provide explicit planning modes, approval modes, autonomous modes, hooks, custom agents, skills, or other workflow mechanisms.
-
-`AGENTS.md` does not require a specific product mode. Its ordinary planning rules mean that agents should choose an appropriate implementation approach before non-trivial edits. When a user invokes Plan mode, or the current workflow provides an equivalent review-before-implementation stage, non-trivial outcomes must be presented as ordered reviewable increments before implementation; once edits are permitted, only the selected increment is implemented.
-
-Analysis or review alone does not authorize repository edits. For requested changes that cannot be applied in the current environment, agents provide exact proposed edits or a focused patch. Documentation work governed by the contract's bootstrap and reorganization workflow also retains its human review checkpoint unless continuation was explicitly authorized.
-
-A selected increment's execution brief can also be used with sustained execution tools such as [Codex Goal mode](https://learn.chatgpt.com/use-cases/follow-goals). It states the outcome, scope, prerequisites, required artifacts, acceptance checks, and review or stop conditions. The agent should carry that increment through implementation, validation, and scoped corrections, reporting completion only after verifying every acceptance criterion. Existing review checkpoints still apply, and unselected increments remain outside the run's scope.
-
-Tool approval prompts, sandbox limits, file-edit confirmations, terminal confirmations, and security boundaries are controlled by the current tool or environment. `AGENTS.md` does not override them.
-
-## 7. Documentation bootstrap and reorganization
-
-A destination project does not need complete documentation before adopting this setup.
-
-When documentation is insufficient, misplaced, or wrongly layered, agents use the bootstrap and reorganization workflow in `AGENTS.md`. They establish or reorganize the smallest useful human entry path and canonical owners using the repository's names and structure.
-
-Existing documentation is moved or refactored one document per reviewable step, with affected references repaired in that step. Creation or substantial refactoring is followed by human review unless continuation was explicitly authorized. Work covers affected documents and direct references unless repository-wide work is requested. The full workflow and ownership rules remain in `AGENTS.md`.
-
-## 8. Cross-tool portability budget
-
-`AGENTS.md` is intentionally concise and tool-neutral for use across multiple commercial coding-agent products rather than optimized for a single vendor.
-
-The maintained portability targets are:
-
-- fewer than 200 lines, adapting [Claude Code's recommendation that each `CLAUDE.md` target under 200 lines](https://code.claude.com/docs/en/memory#write-effective-instructions) to the imported contract;
-- fewer than 24 KB (24,000 UTF-8 bytes), a conservative project budget below [Codex's default 32 KiB aggregate project-instruction limit](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
-
-The 24 KB target is not a documented Claude Code limit. These are documentation-only maintenance targets, not requirements of the `AGENTS.md` format or universal compatibility guarantees. They are maintained through review rather than automated enforcement. Current vendor documentation remains authoritative because tools may change how they discover, combine, limit, and apply repository instructions.
-
-## 9. Tool compatibility
-
-Instruction loading, setup, and limits depend on the product and interface. Consult the provider's current documentation:
-
-| Provider | Official guidance |
-|---|---|
-| OpenAI | [Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md) · [ChatGPT projects](https://learn.chatgpt.com/docs/projects) |
-| Anthropic | [Claude Code](https://code.claude.com/docs/en/memory#agentsmd) · [Claude projects](https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects) |
-| GitHub | [Copilot support](https://docs.github.com/en/copilot/reference/custom-instructions-support) |
-
-When instruction application is uncertain, use the current tool's diagnostics or ask the agent to state which repository instruction sources it used before starting non-trivial work.
+- **[Getting more from AGENTS.md](README-powerusers.md)** — practical examples, when the agent pauses, existing-project alignment, and continuing unfinished work. No technical background is required to follow the collaboration guidance.
+- **[The design of AGENTS.md](README-maintainers.md)** — design reasons, engineering choices, sources, constraints, and trade-offs that inform changes to the contract.
+- **[AGENTS.md](AGENTS.md)** — the complete operating rules, conditions, and exceptions.

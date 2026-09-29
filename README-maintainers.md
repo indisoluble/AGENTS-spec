@@ -1,27 +1,28 @@
-# Maintaining AGENTS-spec
+# The design of AGENTS.md
 
-This guide explains the current design of [AGENTS.md](AGENTS.md), the reasons behind its choices, and how to review changes. For evaluation, setup, and everyday use, start with [README.md](README.md).
+[AGENTS.md](AGENTS.md) is a reusable, opinionated contract for collaboration with coding agents. This document explains its attributes, the choices behind them, and the principles on which they rest. These explanations provide a technical foundation for understanding the contract and for informed repairs, improvements, or redesign.
 
-For a proposed edit, use [Maintaining the design](#maintaining-the-design) and the rationale for the affected rule. For size changes, also check [portability](#keeping-the-contract-portable). For tool integration, see [the bridges](#why-the-bridges-differ).
+For installation and a first task, start with [README.md](README.md). For practical examples and fuller usage guidance, see [Getting more from AGENTS.md](README-powerusers.md).
 
-## File responsibilities
+- [Design goals and the PDSA cycle](#why-it-is-built-this-way)
+- [Collaboration and effort control](#collaboration-and-effort-control)
+- [Engineering methods](#engineering-methods-quality-within-a-small-increment)
+- [Documentation methods](#documentation-as-input-and-output)
+- [Principles and source boundaries](#principles-and-reference-boundaries)
+- [Continuation](#continuation-design), [bridges](#why-the-bridges-differ), and [portability](#keeping-the-contract-portable)
+- [Assessing design changes](#assessing-design-changes)
 
-| File | Maintained responsibility |
-| --- | --- |
-| [AGENTS.md](AGENTS.md) | The self-contained operating contract: definitions, workflow, requirements, conditions, and exceptions. |
-| [README.md](README.md) | Purpose, adoption, setup, everyday collaboration, continuation, and compatibility checks with their evidence dates. |
-| [README-maintainers.md](README-maintainers.md) | Current design rationale, source assignments, trade-offs, portability criteria, and maintenance guidance. |
-| [CLAUDE.md](CLAUDE.md) and [.github/copilot-instructions.md](.github/copilot-instructions.md) | Discovering and applying the contract, with permitted non-policy titles and provenance. |
+## The contract and its boundaries
 
-Project facts, build commands, requirements, and architecture belong in the adopting project's documentation and code. The generic contract supplies collaboration policy. Keeping the two READMEs at the root provides separate reading routes without another folder; adopting projects retain the contract's flexible documentation layout.
+The operating rules, definitions, conditions, and exceptions are self-contained in `AGENTS.md`. Its companion bridges allow tools to discover and apply the same local contract. The technical explanations here describe that design; the agent does not need to read this guide to obtain additional operating obligations.
 
-Summaries, examples, and review checklists derive from their linked owners. Update the owner first, then check affected summaries and direct references across all five files. Operating behavior belongs in `AGENTS.md`; a README clarification must not silently change it. Practical adoption procedures belong in `README.md`, and their rationale belongs here. Neither README supplies hidden rules required for ordinary agent work.
+The contract supplies collaboration policy. Project facts, build commands, requirements, and architecture come from the adopting project's documentation and code. This separation permits reuse across new and established projects without embedding a particular application's design in the generic instructions.
 
-Both READMEs describe what applies now and why. Include background only when it is necessary to explain a current decision. Temporary editing records may hold working history; move their useful current rationale to its owner before retiring them. Keep revision narratives, obsolete alternatives, draft measurements, and package fingerprints out of these guides. Dates identifying the scope and age of external evidence remain useful.
+Requester instructions take priority within the tool's actual hierarchy and permissions. Directory instructions follow the tool's scope and precedence rules. The contract cannot supply capabilities, enforce permissions, or override native approval controls. Its protection of instruction files and its authorization rules for external actions keep those limits explicit.
 
 ## Why it is built this way
 
-The contract aims to control effort through intentionally small, complete increments. A bounded task can still be large; small increments make results and unexpected growth visible while preserving the reasoning and validation needed for each result. Total consumption may remain substantial. This is a best-effort collaboration mechanism, with no token quota or guarantee of savings; the [adopter guide](README.md#small-complete-steps-toward-the-objective) explains usage visibility.
+The contract aims to control effort through intentionally small, complete increments. A bounded task can still be large; small increments make results and unexpected growth visible while preserving the reasoning and validation needed for each result. Total consumption may remain substantial. This is a best-effort collaboration mechanism, with no token quota or guarantee of savings; the [usage explanation](README-powerusers.md#understanding-token-use) explains usage visibility.
 
 Established methods give recurring tasks a defined approach, especially while an empty or poorly documented project has few facts to constrain exploration. They cannot supply missing requirements or requester authority. PDSA organizes work and learning; Simple Design guides implementation; focused engineering and documentation references address distinct concerns. The contract defines their scope, strength, and collaboration boundaries. It does not attempt to supply a complete product-development process, branching strategy, workflow engine, or framework tutorial.
 
@@ -41,10 +42,12 @@ These distinctions prevent useful learning from being mistaken for completed wor
 | --- | --- | --- |
 | Task objective | What overall outcome was requested? | Develop an import tool. |
 | Increment objective | What bounded outcome is sought now? | Determine whether one candidate preserves a quoted field containing a comma. |
-| Acceptance conditions | What establishes completion? | Report an evidenced answer for the agreed sample, including its limits. |
+| Acceptance conditions | What establishes completion? | Report an evidenced answer for a relevant sample, including its limits. |
 | Prediction | What result is expected from the approach? | The quoted field remains intact. |
 | Validation | Does the evidence establish acceptance? | Check the sample, observed output, and reported conclusion. |
-| Investigation effort limit | When must inquiry stop despite incomplete evidence? | After the agreed single experiment. |
+| Investigation effort limit | When must inquiry stop despite incomplete evidence? | After the focused experiment stated for this inquiry. |
+
+The agent establishes the increment and its acceptance conditions from the request and relevant project evidence. Before a blocking inquiry, it states the question, scope, objective, effort limit, and needed evidence. These are standing responsibilities under [Plan](AGENTS.md#1-plan--define-the-next-increment); the requester need not prescribe them for each task. Consequential unresolved intent or constraints still require requester involvement.
 
 If the parser splits the field, the observation can complete that investigation while disproving its prediction. An implementation required to preserve the field remains incomplete if it splits it. Revising a prediction changes neither requirements nor acceptance conditions.
 
@@ -70,17 +73,19 @@ Listing a method creates no separate deliverable for every increment. Existing r
 
 ## Collaboration and effort control
 
+The requester supplies the objective, permission, and relevant constraints; the agent organizes authorized work into small, complete increments. This allocation makes decomposition, validation, effort assessment, and appropriate consultation part of the contract's default behavior. A requester can select a particular step or impose extra review points without needing to manage the process for ordinary use.
+
 The [four effort factors](AGENTS.md#51-scope-effort-and-requester-interaction)—scope, uncertainty, consequence, and reversibility—make the concerns behind a decision explicit without a numeric score or task-classification scheme. Scope includes affected behavior, artifacts, dependencies, and system boundaries. Few changed lines can affect many callers or an irreversible migration. A narrow, understood, low-impact, reversible change can instead use brief inspection, action, validation, and reporting.
 
 Planning depth follows the next decision at the current abstraction level. Architecture analysis may examine boundaries and alternatives deeply without specifying every future API or function. Detail follows uncertainty, risk, reversibility, and proximity to execution. Explicit authorization can cover broader analysis; provisional later detail does not prohibit it.
 
-The material-growth checkpoint makes an unexpected increase in effort available for requester review before the additional work proceeds, even when the desired outcome and broad authorization remain unchanged. It therefore controls something a scope boundary alone cannot. Ordinary increments can continue under existing authorization, subject to applicable checkpoints. The [adopter examples](README.md#what-working-with-the-agent-looks-like) distinguish expected local work from material growth.
+The material-growth checkpoint makes an unexpected increase in effort available for requester review before the additional work proceeds, even when the desired outcome and broad authorization remain unchanged. It therefore controls something a scope boundary alone cannot. Ordinary increments can continue under existing authorization, subject to applicable checkpoints. The [usage examples](README-powerusers.md#when-the-work-grows-unexpectedly) distinguish expected local work from material growth.
 
 The [requirement keywords](AGENTS.md#terms-and-requirement-keywords) distinguish obligations, strong defaults with justified exceptions, and permissions. This matters particularly for requester involvement: required escalation of unresolved intent or permission, agreement on consequential constraints, and recommended consultation about unsettled choices have different strengths. A SHOULD exception cannot bypass a MUST checkpoint; a routine local choice cannot invent a consequential constraint.
 
 Completeness applies within an increment's scope. An increment can deliver evidence, enabling infrastructure, or migration groundwork as well as functionality. When a stage cannot stand alone, the explanation of what remains usable or testable and how to undo it makes the commitment assessable. Reversibility and recovery reduce the cost of a mistaken approach; they do not authorize destructive effects.
 
-Reporting exposes results, assumptions, uncertainty, and recovery options, but cannot retroactively authorize a consequential choice. Native tool permissions and approval controls govern enforceable boundaries. The contract's reporting defaults support review without requiring a full-file dump or diff for every task; [README.md](README.md#what-working-with-the-agent-looks-like) owns the practical explanation.
+Reporting exposes results, assumptions, uncertainty, and recovery options, but cannot retroactively authorize a consequential choice. Native tool permissions and approval controls govern enforceable boundaries. The contract's reporting defaults support review without requiring a full-file dump or diff for every task; [the usage guide](README-powerusers.md#read-the-result) explains what a requester sees at a handoff.
 
 ## Engineering methods: quality within a small increment
 
@@ -206,7 +211,7 @@ The root path `.agent-continuation-context.md` makes unfinished context discover
 
 Required startup lookup finds retained context even when a new session does not know it exists. Conditional creation and maintenance avoid an extra artifact when permanent records already suffice. The once-per-session notice exposes context without requiring a reply or authorizing resumption. Reconciliation matters because abrupt interruption can leave the record stale.
 
-Current reality belongs in code, checks, and current-system documents; lasting rationale belongs with decisions; the work record holds otherwise missing task intent and direction. This separation prevents proposals from masquerading as implementation or creating competing permanent facts. [README.md](README.md#continuing-unfinished-work) owns the practical lifecycle explanation, with links to the contract's contents, collision-handling, maintenance, and retirement rules.
+Current reality belongs in code, checks, and current-system documents; lasting rationale belongs with decisions; the work record holds otherwise missing task intent and direction. This separation prevents proposals from masquerading as implementation or creating competing permanent facts. The [usage guide](README-powerusers.md#continue-unfinished-work) explains how this lifecycle works when resuming a task, including collisions, stale records, and retirement.
 
 ## Why the bridges differ
 
@@ -214,7 +219,7 @@ Both bridges apply the same local contract through their tool's instruction mech
 
 [Copilot support](https://docs.github.com/en/copilot/reference/custom-instructions-support) varies by interface. A Markdown link identifies a file but is not a universal import mechanism. The supplied bridge explicitly requests reading the contract before planning, editing, refactoring, reviewing, validating, or updating documentation; application within the actual hierarchy and permissions; and access-failure reporting without a false claim of compliance. Those provisions explain its additional text.
 
-Discovery, inclusion, precedence, and application are distinct. [VS Code's conflict guidance](https://code.visualstudio.com/docs/agent-customization/custom-instructions#resolve-conflicting-instructions), its [instruction settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#custom-instructions-settings), and [GitHub.com's precedence guidance](https://docs.github.com/en/copilot/concepts/prompting/response-customization#precedence-of-custom-instructions) describe different aspects. File order or a link alone cannot establish all four. Use the [adoption checks and recorded evidence dates](README.md#checking-adoption) for verification; exact settings and support belong to the provider's documentation and the actual environment.
+Discovery, inclusion, precedence, and application are distinct. [VS Code's conflict guidance](https://code.visualstudio.com/docs/agent-customization/custom-instructions#resolve-conflicting-instructions), its [instruction settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#custom-instructions-settings), and [GitHub.com's precedence guidance](https://docs.github.com/en/copilot/concepts/prompting/response-customization#precedence-of-custom-instructions) describe different aspects. File order or a link alone cannot establish all four. The [adoption checks](README-powerusers.md#check-adoption) and [recorded evidence dates](README-powerusers.md#evidence-dates) qualify the integration guidance; exact settings and support depend on the provider's documentation and the actual environment.
 
 The Copilot title and header identify the associated release and upstream origin. Its release date and source URL match `AGENTS.md`. Metadata adds no policy authority, and the adopted local contract remains canonical. Permitting provenance does not require a header on the one-line Claude import. Minimality preserves each bridge's loading and application role.
 
@@ -227,7 +232,7 @@ The entire `AGENTS.md` is assessed against two distinct criteria:
 
 Check the actual file after edits. Automated counts can help; automated enforcement is not required. Line count depends on wrapping and Markdown layout, so preserve useful spacing and headings. Neither criterion establishes clarity, adherence, or compatibility. They concern standing instruction size, not the reasoning or work allowed for a task. Vendor changes can prompt a review but do not automatically change the project policy.
 
-Neither README has a numeric length limit. Its content should serve its stated responsibility. Operational meaning remains self-contained in `AGENTS.md`; extra prose belongs here only when it explains a current decision or helps maintain it.
+The byte constraint and line-count signal concern the contract itself. Operational meaning remains self-contained in `AGENTS.md`; moving necessary conditions out of it would undermine portability even if the resulting file were smaller.
 
 ### Current wording trade-offs
 
@@ -239,27 +244,23 @@ Compact instructions reduce standing text while increasing the risk that readers
 | Broad knowledge-ownership and permitted-copy categories | Ensure readers can recognize facts, schemas, requirements, rationale, invariants, procedures, conventions, tests, and examples under the appropriate rule. |
 | Concise definitions, architecture topics, record fields, and reports | Preserve distinguishing meaning and conditions; matching a name or keyword alone is insufficient. |
 | Duties connected across sections | Preserve when knowledge is read, created, and updated; keep consequential conditions visible where the rule is applied. |
-| Source links without per-rule numeric locators | Maintain the [exact assignments](#principles-and-reference-boundaries) and narrow consultation limits. |
+| Source links without per-rule numeric locators | The [exact assignments](#principles-and-reference-boundaries) preserve attribution; narrow consultation limits prevent the links from becoming open-ended research. |
 
 These are interpretation risks, not additional operating rules or measured agent outcomes. Do not meet the byte budget by removing essential conditions or transferring them into a README.
 
-## Maintaining the design
+## Assessing design changes
 
-A review needs both a standalone reading and a clause comparison. Read `AGENTS.md` without either README to check that the workflow is usable, then compare affected clauses with the version being edited for strength, trigger, scope, exception, and meaning. The contract remains the source of detailed patterns, fields, and obligations.
+The design can be assessed at two levels: whether the contract works as a self-contained set of instructions, and whether a proposed change preserves or deliberately alters the meaning of its clauses. A standalone reading tests the first; comparison of strength, trigger, scope, exception, and meaning tests the second. The detailed patterns, fields, and obligations remain in `AGENTS.md`.
 
-| Review scenario | Distinction that must remain clear |
+| Scenario | Design distinction to assess |
 | --- | --- |
-| Ordinary authorized change | A complete increment includes its affected artifacts and checks; finishing it grants no additional permission or automatic documentation artifact. |
+| Ordinary authorized change | The agent selects a small increment and establishes its checks. Completion grants no additional permission or automatic documentation artifact; another increment can proceed under existing authorization unless a checkpoint requires a pause. |
 | Investigation contradicts its prediction | An evidenced answer can complete the investigation while disproving the prediction; unmet implementation behavior remains incomplete. |
-| Investigation reaches its effort limit | Stop with missing evidence and uncertainty visible; a stopping condition is not proof of completion. |
-| Documentation-only work | Applicable methods and validation still apply without requiring code or unit tests for their own sake. |
-| Unexpected material growth in any phase | Explain the increase and wait for direction before the additional work, even within broad authorization. |
-| Resuming recorded work | Reconcile current evidence and authority; discovery and notification supply no permission to resume. |
+| Investigation reaches its effort limit | Inquiry stops with missing evidence and uncertainty visible; a stopping condition does not establish completion. |
+| Documentation-only work | Applicable methods and validation apply without requiring code or unit tests for their own sake. |
+| Unexpected material growth in any phase | Direction is required before the additional work, even within broad authorization. |
+| Resuming recorded work | Current evidence and authority are reconciled; discovery and notification supply no permission to resume. |
 
-Review the relevant rules in [engineering](AGENTS.md#2-do--perform-the-authorized-work), [validation](AGENTS.md#3-study--assess-completion-and-learning), [knowledge retention](AGENTS.md#4-act--use-the-findings-and-determine-what-follows), and [shared policy](AGENTS.md#5-rules-throughout-the-cycle), together with their dependencies. Preserve method conditions, appropriate-test recommendations, required validation, documentation scope, and requester authority. An explanation or shorter checklist cannot substitute for the actual clauses.
+The relevant dependencies span [engineering](AGENTS.md#2-do--perform-the-authorized-work), [validation](AGENTS.md#3-study--assess-completion-and-learning), [knowledge retention](AGENTS.md#4-act--use-the-findings-and-determine-what-follows), and [shared policy](AGENTS.md#5-rules-throughout-the-cycle). Method conditions, appropriate-test recommendations, required validation, documentation scope, and requester authority all contribute to the resulting behavior.
 
-Changes to protected instruction files follow [their authorization rule](AGENTS.md#53-instructions-contract-files-and-external-actions), including file-specific recommendations and necessary companion edits. Identify substantive policy changes explicitly. Keep this guide accurate about the resulting design and its rationale; describe a remaining trade-off where it matters without accumulating the sequence of edits that produced it. Textual review does not establish equivalent agent behavior or token savings.
-
-Use restrained language and plain Markdown with descriptive headings, tables where useful, and direct links. Introduce terms before use, keep conditions and exceptions with their rules, and retain repetition only where it makes them correctly usable. Examples should resolve a consequential ambiguity or show a relationship that remains hard to follow.
-
-Finish by checking affected summaries and links across all five files, measuring the contract against the [portability criteria](#keeping-the-contract-portable), and verifying the intended package paths and contents. Maintain evidence dates where they qualify external claims; measure current files during review instead of maintaining size snapshots or remaining-space claims in either README.
+Changes to protected instruction files follow [their authorization rule](AGENTS.md#53-instructions-contract-files-and-external-actions), including file-specific recommendations and necessary companion edits. Substantive policy changes need explicit identification. An explanation or review checklist cannot substitute for the actual clauses, and a shorter contract does not by itself establish equivalent agent behavior or token savings.

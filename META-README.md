@@ -50,7 +50,7 @@ Avoid copying full procedures, source-assignment tables, or detailed lifecycle a
 
 ## Make a documentation change
 
-1. **Establish the intended change and its owner.** Distinguish an editorial clarification from a change to operating behavior. If behavior would change, identify it explicitly and follow the [contract-file authorization rule](AGENTS.md#53-instructions-contract-files-and-external-actions); do not enact it indirectly in a README.
+1. **Establish the intended change and its owner.** Distinguish an editorial clarification from a change to operating behavior. Apply the [contract-file authorization rule](AGENTS.md#53-instructions-contract-files-and-external-actions) whenever `AGENTS.md` or a bridge would be edited, including for editorial changes. Identify behavior changes explicitly; do not enact them indirectly in a README.
 2. **Update the authoritative content first.** Preserve the strength, trigger, scope, exception, and meaning of the rules being explained. For a clarification, use the relevant contract clauses and current rationale.
 3. **Trace the affected dependencies.** Check summaries, examples, cross-references, and bridge explanations that derive from the changed content. Update only the relevant dependents; avoid creating a duplicate detailed owner.
 4. **Check the reader's path.** Keep installation and a useful first task available in the basic guide. Keep practical depth in the power-user guide and construction details in the technical guide. Move editorial instructions here.

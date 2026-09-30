@@ -12,6 +12,7 @@ PDSA and the supporting engineering and documentation practices serve that goal.
 | Understand how the agent selects the next step | [Plan the next useful increment](#plan-the-next-useful-increment) |
 | See how findings affect the broader approach | [Use results to shape what follows](#use-results-to-shape-what-follows) |
 | Understand when the agent asks, pauses, or continues | [Control effort and decisions](#control-effort-and-decisions) |
+| Change instruction files or authorize commits and publishing | [Instruction files and external actions](#instruction-files-and-external-actions) |
 | Understand what bounds a blocking investigation | [How investigation limits work](#how-investigation-limits-work) |
 | Specify a particular step or add review points | [Optional controls you can add](#optional-controls-you-can-add) |
 | Assess what was delivered | [Read the result](#read-the-result) |
@@ -153,6 +154,12 @@ The contract uses the requirement keywords defined by [RFC 2119](https://www.rfc
 
 An exception to recommended consultation cannot bypass mandatory involvement or authorization limits. Missing answers do not grant broader permission. Reporting a consequential choice afterward makes it reviewable but does not supply advance authorization.
 
+### Instruction files and external actions
+
+Edits to `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` require an explicit request concerning the file or its instructions. Asking the agent to apply recommendations specific to that file qualifies. Necessary companion edits to the other listed files may accompany that request; edits to these files stay separate from unrelated work. This condition also applies to editorial changes.
+
+Commits, publishing, and other external actions require authorization, which may already be part of your request. Permission to implement a change does not by itself authorize every external action that might follow. See the [instruction-file and external-action rules](AGENTS.md#53-instructions-contract-files-and-external-actions).
+
 ### Optional controls you can add
 
 You can tailor the collaboration by selecting a particular increment, specifying your own investigation limit, or reserving an extra decision for yourself. These are optional requester controls; establishing and stating a limit before a blocking investigation is already mandatory for the agent.
@@ -221,7 +228,7 @@ You can adopt the contract before documentation is complete. Architecture follow
 
 For known coverage gaps, the agent must propose improvements and should make them within authorized scope. You may defer, limit, or decline them; material gaps remain visible. Empty headings and invented project facts do not establish coverage.
 
-An ADR is appropriate for a significant lasting choice, such as a parser selected to meet a memory constraint. Routine local choices normally need none. Proposed, accepted, and superseded decisions remain distinguishable, with useful history and replacement links.
+A significant lasting choice within the authorized scope, such as selecting a parser to meet a memory constraint, requires an [ADR](AGENTS.md#41-record-significant-decisions-and-technical-debt) in or linked from arc42's decision section. Routine local choices normally need none. Proposed, accepted, and superseded decisions remain distinguishable, with useful history and replacement links.
 
 The agent may record current, task-relevant, evidenced technical debt in the architecture's risks and debt section. It explains what was recorded, why, where, and any uncertainty. A deferred feature, rejected alternative, or different preference alone is not debt; recording debt does not authorize a fix.
 

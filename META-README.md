@@ -62,6 +62,8 @@ When headings or paths change, inspect incoming references throughout the reposi
 
 ## Preserve meaning and evidence
 
+- Preserve the primary purpose in each guide's framing: preventing unconstrained token consumption, including unexpectedly heavy use within one increment, through intentionally small, complete steps. Explain progressive detail, bounded inquiry, material-growth reassessment, and visible results as supporting controls. PDSA organizes work and learning; engineering and documentation practices support quality and retained knowledge. Their prominence must not obscure why the contract combines them. The contract's introduction owns the purpose; the technical guide owns its rationale, and the practical guide develops its use.
+- Keep adequate analysis, coherent completeness, and necessary validation explicit alongside effort control. Small scope must not imply shallow reasoning or omission of relevant dependencies. Inquiry may pause with missing evidence; neither the limit nor useful learning establishes completion. Explain token visibility and the absence of quotas or guarantees after introducing the positive purpose; a remaining caveat about tokens does not preserve that purpose by itself.
 - Keep `MUST`, `SHOULD`, and `MAY` distinct when explaining the contract. A strong recommendation has justified exceptions; a mandatory checkpoint does not become optional through paraphrase.
 - Preserve the distinction between task and increment completion, acceptance conditions and predictions, and investigation stopping limits and successful completion.
 - Explain investigation limits as allowances the agent must establish and state before investigating blocking uncertainty, together with the question, scope, objective, and needed evidence. The contract supplies no universal value, unit, or formula. Keep the trigger, timing, and agent responsibility explicit; do not imply that a limit is only needed when the requester asks for one, or that every limit needs requester approval. Concrete bounds in examples illustrate the rule without creating defaults. The detailed practical explanation belongs in `README-powerusers.md`; summaries elsewhere should link to it.
@@ -80,7 +82,7 @@ The READMEs describe the current contract and its use. Include background only w
 
 Use plain Markdown, descriptive headings, direct links, and tables where they aid comparison. Introduce a term before using it and explain methods where they illuminate a practical action or design choice.
 
-The basic guide should lead with recognizable benefits and an actionable starting point. Keep claims truthful and conditions proportionate. A newcomer should be able to understand the offering, install it, and begin a useful task using that guide alone.
+The basic guide should lead with the primary benefit sought: controlled token consumption through small, complete increments that preserve necessary depth and quality. Explain how visible results support requester direction, then provide an actionable starting point. Keep claims truthful and conditions proportionate. A newcomer should be able to understand the offering, install it, and begin a useful task using that guide alone.
 
 Explain default behavior before optional controls. Lead with ordinary outcome-oriented requests and show the agent selecting increments, establishing checks, and applying the contract's consultation rules. Place requester-selected steps, requester-supplied investigation limits, and extra review checkpoints in a clearly optional context; distinguish those choices from the agent's mandatory framing of a blocking inquiry. Review the combined impression of headings and examples: accurate individual sentences do not compensate for a reading path that teaches the requester to manage the agent's workflow.
 
@@ -96,6 +98,7 @@ There is no numeric length limit for the READMEs. Judge length by purpose, neces
 
 Before delivering a documentation change, verify:
 
+- **Purpose and emphasis:** each guide identifies token-consumption control as the driving goal and connects the methods to it. The reading path explains small commitments, sufficient depth, complete results, and requester visibility before developing supporting practices or limitations. It introduces no new quota, automatic accounting duty, or mandatory pause after every increment.
 - **Basic use:** purpose, files, placement, essential replacement precautions, adoption checks, and a useful first task are understandable from `README.md`.
 - **Default responsibilities:** the examples work with an ordinary request for an outcome; the agent supplies the process. Optional requester controls are clearly distinguished from required consultation and the ability to continue under existing authorization.
 - **Investigation limits:** the explanation identifies who states the limit and when, provides a concrete illustrative bound, and distinguishes obtaining the evidence from exhausting the allowance. Incomplete work is reported when acceptance conditions remain unmet; no arbitrary default, automatic completion claim, or blanket approval checkpoint is introduced.

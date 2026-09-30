@@ -1,11 +1,13 @@
 # Getting more from AGENTS.md
 
-Once you have followed [Get started](README.md#get-started), this guide explains how the agent organizes work, when it involves you, and how you can tailor the collaboration. It is for anyone who wants fuller explanations and examples; the collaboration guidance assumes no technical background.
+Once you have followed [Get started](README.md#get-started), this guide explains how the agent aims to keep token consumption under control through small, complete increments, while preserving the analysis and validation each result needs. It covers how work proceeds, when the agent involves you, and how you can steer the collaboration. No technical background is required to follow that guidance.
 
-The methods appear where they help explain what you experience. Their deeper rationale is in [The design of AGENTS.md](README-maintainers.md), and [AGENTS.md](AGENTS.md) defines the actual rules and exceptions.
+PDSA and the supporting engineering and documentation practices serve that goal. The methods appear where they help explain what you experience. Their deeper rationale is in [The design of AGENTS.md](README-maintainers.md), and [AGENTS.md](AGENTS.md) defines the actual rules and exceptions.
 
 | What you want to do | Where to start |
 | --- | --- |
+| Keep effort manageable while preserving analysis depth | [Control effort while preserving depth](#control-effort-while-preserving-depth) |
+| Understand what progress reports reveal about consumption | [Understanding token use](#understanding-token-use) |
 | Understand how work proceeds from your request | [PDSA starts with your request](#pdsa-starts-with-your-request) |
 | Understand how the agent selects the next step | [Plan the next useful increment](#plan-the-next-useful-increment) |
 | See how findings affect the broader approach | [Use results to shape what follows](#use-results-to-shape-what-follows) |
@@ -17,6 +19,22 @@ The methods appear where they help explain what you experience. Their deeper rat
 | Adopt the expectations in an existing project | [Bring an existing project into alignment](#bring-an-existing-project-into-alignment) |
 | Pick up unfinished work | [Continue unfinished work](#continue-unfinished-work) |
 | Check instruction loading | [Tool compatibility](#tool-compatibility) |
+
+## Control effort while preserving depth
+
+The contract's primary aim is to prevent unconstrained token consumption, including unexpectedly heavy use within one increment. It does this by limiting how much work the agent takes on at once, developing later detail progressively, and requiring reassessment and requester direction before undertaking materially greater work than expected. Each increment seeks a useful result or evidence toward your larger objective.
+
+A small scope still receives the depth of analysis it needs. For example, deciding an application's storage approach may require careful examination of requirements, alternatives, and risks. It does not require designing every future data structure and function at the same time. Relevant dependencies and consequences remain part of the current analysis; unrelated questions and distant implementation details can wait until they affect a decision.
+
+Completeness is assessed against the agreed scope and acceptance conditions. A smaller step must still include the reasoning, affected artifacts, and validation needed for its result. If a blocking investigation exhausts its stated allowance without the necessary evidence, the agent reports it as incomplete. Further authorized investigation can develop that evidence, subject to the [stopping and interaction rules](#how-investigation-limits-work); reaching a limit never makes an unsupported conclusion adequate.
+
+### Understanding token use
+
+Small, complete increments are intended to make effort manageable and results reviewable as useful work accumulates. Total consumption may still be substantial. Progress reports help you assess what that effort produced and steer subsequent work; existing authorization can cover further increments, so a report does not itself require a pause. The [interaction rules](#control-effort-and-decisions) explain when direction is required and how you can add review points.
+
+The contract has no token meter, hard quota, or required token total in every report. For figures, use data your tool or provider exposes and check which activity or period it covers before attributing it to an increment. You can ask the agent to include usage figures it can actually access. Without measurements, exact consumption remains unknown; the reported work provides a qualitative view.
+
+Correctness, completeness, consistency, and validation take priority over saving tokens. The controls aim to prevent unnecessary expansion of work while preserving the quality required within its scope; they do not guarantee a particular cost or measured saving.
 
 ## PDSA starts with your request
 
@@ -32,6 +50,8 @@ The **task objective** is the overall outcome you want. An **increment** is a de
 | **Act** | It uses the findings to retain, revise, or discard the approach within scope, preserves useful learning, and reports the outcome. It finishes, seeks direction, or returns to Plan with the new knowledge. | Is the task fulfilled? If work remains, how should the approach develop and what direction is needed? |
 
 The overall objective guides successive cycles. The agent develops the next step in detail and revisits the outline of later work as evidence changes. A complete sequence of increments does not need to be settled beforehand.
+
+This connects learning to effort control: each result informs what work is worth undertaking next, and retained findings inform later decisions. Small increments bound the commitment; PDSA provides the reasoning and feedback that guide successive commitments.
 
 These phases can overlap or repeat. Tests may be planned before implementation and written during it; documentation changes as facts and decisions become established. Routine work needs no worksheet, formal experiment, or separate report for each phase.
 
@@ -144,14 +164,6 @@ For example, if you want to review a proposal before implementation and check ea
 This request adds specific checkpoints. Without that instruction, the agent still chooses small increments, validates them, reports results, and observes every required checkpoint; it can also continue under existing authorization when no checkpoint requires a pause.
 
 You may instead identify the exact behavior to address next, or place a tighter limit on an investigation. The agent remains responsible for a coherent approach and adequate validation within the resulting scope. The precise interaction conditions are in [AGENTS.md §5.1](AGENTS.md#51-scope-effort-and-requester-interaction).
-
-### Understanding token use
-
-Small, complete increments give you opportunities to review cumulative effort and steer subsequent work. They are a best-effort control mechanism; total consumption may still be substantial.
-
-The contract has no token meter, hard quota, or required token total in every report. For figures, use data your tool or provider exposes and check which activity or period it covers before attributing it to an increment. You can ask the agent to include usage figures it can actually access. Without measurements, exact consumption remains unknown; the reported work provides a qualitative view.
-
-Correctness, completeness, consistency, and validation take priority over saving tokens.
 
 ## Read the result
 

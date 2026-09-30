@@ -1,6 +1,6 @@
 # The design of AGENTS.md
 
-[AGENTS.md](AGENTS.md) is a reusable, opinionated contract for collaboration with coding agents. This document explains its attributes, the choices behind them, and the principles on which they rest. These explanations provide a technical foundation for understanding the contract and for informed repairs, improvements, or redesign.
+[AGENTS.md](AGENTS.md) is a reusable, opinionated contract whose primary aim is to prevent unconstrained token consumption through intentionally small, complete steps toward a task objective. Necessary reasoning, work, and validation remain requirements within each step. This document explains that design, its supporting engineering practices, and their trade-offs, providing a technical foundation for repairs, improvements, or redesign.
 
 For installation and a first task, start with [README.md](README.md). For practical examples and fuller usage guidance, see [Getting more from AGENTS.md](README-powerusers.md).
 
@@ -22,9 +22,15 @@ Requester instructions take priority within the tool's actual hierarchy and perm
 
 ## Why it is built this way
 
-The contract aims to control effort through intentionally small, complete increments. A bounded task can still be large; small increments make results and unexpected growth visible while preserving the reasoning and validation needed for each result. Total consumption may remain substantial. This is a best-effort collaboration mechanism, with no token quota or guarantee of savings; the [usage explanation](README-powerusers.md#understanding-token-use) explains usage visibility.
+Preventing unconstrained token consumption is the driving goal, including avoiding sudden heavy use within a single increment. The mechanism is intentionally small, complete commitments toward a larger objective, with progressive detail, bounded investigation, and requester direction before undertaking materially greater work than expected. A bounded objective alone can still permit a large amount of work; deliberate smallness aims to keep each commitment manageable and its results assessable.
 
-Established methods give recurring tasks a defined approach, especially while an empty or poorly documented project has few facts to constrain exploration. They cannot supply missing requirements or requester authority. PDSA organizes work and learning; Simple Design guides implementation; focused engineering and documentation references address distinct concerns. The contract defines their scope, strength, and collaboration boundaries. It does not attempt to supply a complete product-development process, branching strategy, workflow engine, or framework tutorial.
+Adequate analysis and validation are constraints on how that goal is pursued. The agent reasons sufficiently for the current decision and preserves completeness within the increment's scope. Later details remain provisional until needed. Narrowing a commitment does not excuse shallow analysis, omission of relevant dependencies, or an incomplete implementation presented as finished. An investigation that exhausts its allowance without meeting acceptance conditions remains incomplete; further work follows the existing authorization and interaction rules. The [practical explanation](README-powerusers.md#control-effort-while-preserving-depth) develops this relationship between scope, depth, and completeness.
+
+The motivating risk is especially visible in a new or poorly documented project: fewer requirements, interfaces, accepted decisions, and established conventions constrain speculative planning, investigation, or autonomous design. Established methods give recurring tasks a defined approach while project knowledge develops. They cannot supply missing requirements or requester authority.
+
+PDSA organizes the learning that informs subsequent commitments. Simple Design and the engineering techniques guide quality within the current scope; requirements and validation establish what a complete result needs. Canonical documentation, decision records, and continuation context retain established knowledge for later work. These practices support the primary goal by structuring work and preserving its results; none independently establishes token savings. The contract defines their scope, strength, and collaboration boundaries. It does not attempt to supply a complete product-development process, branching strategy, workflow engine, or framework tutorial.
+
+Reports expose results and uncertainty so the requester can assess effort and steer subsequent work. Total consumption may remain substantial, and ordinary increments can continue under existing authorization. This is a best-effort collaboration mechanism, with no token quota, guaranteed pause after each increment, or guarantee of savings; the [usage explanation](README-powerusers.md#understanding-token-use) distinguishes progress visibility from consumption measurements.
 
 ### PDSA: learning through small increments
 
@@ -81,7 +87,7 @@ Listing a method creates no separate deliverable for every increment. Existing r
 
 ## Collaboration and effort control
 
-The requester supplies the objective, permission, and relevant constraints; the agent organizes authorized work into small, complete increments. This allocation makes decomposition, validation, effort assessment, and appropriate consultation part of the contract's default behavior. A requester can select a particular step or impose extra review points without needing to manage the process for ordinary use.
+To pursue the token-control goal, the requester supplies the objective, permission, and relevant constraints; the agent organizes authorized work into small, complete increments. This allocation makes decomposition, validation, effort assessment, and appropriate consultation part of the contract's default behavior. A requester can select a particular step or impose extra review points without needing to manage the process for ordinary use.
 
 The [four effort factors](AGENTS.md#51-scope-effort-and-requester-interaction)—scope, uncertainty, consequence, and reversibility—make the concerns behind a decision explicit without a numeric score or task-classification scheme. Scope includes affected behavior, artifacts, dependencies, and system boundaries. Few changed lines can affect many callers or an irreversible migration. A narrow, understood, low-impact, reversible change can instead use brief inspection, action, validation, and reporting.
 
@@ -264,6 +270,7 @@ The design can be assessed at two levels: whether the contract works as a self-c
 
 | Scenario | Design distinction to assess |
 | --- | --- |
+| Broad objective, including a new project | The agent limits its next commitment and keeps later detail provisional. Necessary depth, affected dependencies, and validation remain within scope; the breadth of the goal does not justify an unconstrained first increment. |
 | Ordinary authorized change | The agent selects a small increment and establishes its checks. Completion grants no additional permission or automatic documentation artifact; another increment can proceed under existing authorization unless a checkpoint requires a pause. |
 | Selecting and revisiting work | Increment selection belongs to Plan from the first request. Study and Act inform later planning toward the overall objective; later detail remains provisional and revisions stay within authorization. |
 | Investigation contradicts its prediction | An evidenced answer can complete the investigation while disproving the prediction; unmet implementation behavior remains incomplete. |

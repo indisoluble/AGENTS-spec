@@ -1,8 +1,10 @@
 # AGENTS.md Specification
 
-A ready-made [AGENTS.md](AGENTS.md) for working with coding agents in new or established projects. Give your agent standing instructions for planning, implementation, validation, and documentation, so you can spend less time repeating how you want work handled.
+A ready-made [AGENTS.md](AGENTS.md) for working with coding agents in new or established projects. Its primary aim is to prevent unconstrained token consumption through **small, complete steps toward your objective**. Each step receives the analysis, implementation or investigation, documentation, and validation its scope needs.
 
-Describe the outcome you want. From that request, the agent plans the next **small, complete step**, performs it, studies the result, and uses what it learns to decide what follows. This repeating Plan–Do–Study–Act (PDSA) workflow aims to keep effort manageable while giving each step the reasoning and validation it needs.
+Describe the outcome you want. The agent chooses the next useful step, works through it, and reports the result so you can assess progress and steer what follows. The aim is to keep each commitment manageable, including avoiding unexpectedly heavy effort within a single step. Analysis goes as deep as the current decision requires; later detail develops as evidence becomes available.
+
+Plan–Do–Study–Act (PDSA) connects that planning, work, assessment, and learning. The engineering and documentation practices support complete results and preserve knowledge for subsequent steps. These are standing instructions, so you need not repeat the process in every request.
 
 ## Get started
 

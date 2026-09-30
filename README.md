@@ -42,6 +42,7 @@ Further increments can proceed under existing authorization. The agent pauses wh
 - **Focused progress.** Planning and learning stay connected: the agent chooses the next useful step in light of your objective and what earlier work established.
 - **Coherent results.** Affected tests and documentation stay consistent with changes. Unrelated cleanup and speculative features stay outside the task.
 - **Visible decisions.** The agent brings consequential unresolved questions to you and reports checks, assumptions, and unfinished work.
+- **Bounded investigations.** Before investigating an uncertainty that blocks progress, the agent must state what it will investigate, the evidence needed, and an effort limit. It stops that inquiry when it obtains the evidence or reaches the stated limit. See [how investigation limits work](README-powerusers.md#how-investigation-limits-work).
 - **Project knowledge that develops with the work.** Adoption includes architecture documentation aligned with arc42, clearly expressed requirements, and records of significant decisions. You can limit or defer proposed documentation improvements. Installing the contract does not authorize a project-wide audit or rewrite.
 
 This is an opinionated engineering baseline. Your instructions take priority within the tool's actual instruction hierarchy and permissions. You remain responsible for reviewing and accepting the work.

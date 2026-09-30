@@ -30,6 +30,12 @@ Established methods give recurring tasks a defined approach, especially while an
 
 The [Deming Institute's Plan–Do–Study–Act account](https://deming.org/explore/pdsa/) connects an approach and its expected result with observation and the next decision. Its contribution here is learning as work progresses: evidence can change the approach and later detail without changing the agreed outcome or granting more authority.
 
+The contract's [workflow overview](AGENTS.md#workflow-overview) starts PDSA with the request. Plan includes establishing the overall objective and permitted work, inspecting relevant context, and selecting the next small increment. Any outline of the broader approach belongs to that planning; the detail of later work remains provisional under [§1.2](AGENTS.md#12-bound-the-work-and-choose-an-approach).
+
+Study assesses completion and what the observations establish about the approach. Act uses those findings to retain, revise, or discard the approach within authorization, then finishes, seeks direction, or returns to Plan. The overall objective therefore informs successive cycles, while their results can reshape later planning. Choosing an increment and reconsidering the broader approach are part of this workflow.
+
+Increment size and PDSA contribute different controls. Small increments bound the work undertaken at once. Predictions, observations, and retained learning help determine whether the approach remains suitable and what to do next. Checking that a change passes its tests alone does not fulfill that learning role; the implications of the findings still inform Act and subsequent planning.
+
 The contract presents terms and a workflow overview before the four phases. This gives readers a route from the request through work, assessment, reporting, and the next decision. Methods appear near their principal contribution, while their triggers and the shared rules apply throughout. Tests can be planned before implementation; decisions and documentation are maintained as facts become established. Phase placement does not postpone those duties or require worksheets, separate phase reports, or a formal experiment for routine work.
 
 PDSA's Plan phase and a tool's Plan mode have different roles. The former organizes reasoning; the latter has the tool's own proposal and approval procedures. Neither supplies wider authorization.
@@ -59,7 +65,7 @@ This map explains the methods' connections. Their operational definitions and co
 
 | Method or convention | Contribution and boundary |
 | --- | --- |
-| [PDSA](AGENTS.md#workflow-overview) | Organizes every work type proportionally. Repetition of the cycle grants no additional authority. |
+| [PDSA](AGENTS.md#workflow-overview) | Organizes work from the request through increment selection, execution, learning, and subsequent planning. It applies proportionally to every work type; repetition grants no additional authority. |
 | [EARS](AGENTS.md#13-express-new-or-revised-system-requirements-with-ears) | Makes new or revised in-scope system requirements explicit; they guide implementation and validation. |
 | [Simple Design and engineering techniques](AGENTS.md#2-do--perform-the-authorized-work) | Guide code and design choices using current requirements and the techniques' benefit/cost conditions. |
 | [Given/When/Then](AGENTS.md#31-use-unit-tests-and-other-evidence) | A SHOULD default for understandable unit tests, with no prescribed labels or framework. It does not replace broader validation. |
@@ -77,7 +83,7 @@ The requester supplies the objective, permission, and relevant constraints; the 
 
 The [four effort factors](AGENTS.md#51-scope-effort-and-requester-interaction)—scope, uncertainty, consequence, and reversibility—make the concerns behind a decision explicit without a numeric score or task-classification scheme. Scope includes affected behavior, artifacts, dependencies, and system boundaries. Few changed lines can affect many callers or an irreversible migration. A narrow, understood, low-impact, reversible change can instead use brief inspection, action, validation, and reporting.
 
-Planning depth follows the next decision at the current abstraction level. Architecture analysis may examine boundaries and alternatives deeply without specifying every future API or function. Detail follows uncertainty, risk, reversibility, and proximity to execution. Explicit authorization can cover broader analysis; provisional later detail does not prohibit it.
+Planning depth follows the next decision at the current abstraction level. Architecture analysis may examine boundaries and alternatives deeply without specifying every future API or function. A bounded investigation or documentation increment can establish evidence for such a decision through Plan, Do, Study, and Act. Detail follows uncertainty, risk, reversibility, and proximity to execution. Explicit authorization can cover broader analysis; provisional later detail does not prohibit it.
 
 The material-growth checkpoint makes an unexpected increase in effort available for requester review before the additional work proceeds, even when the desired outcome and broad authorization remain unchanged. It therefore controls something a scope boundary alone cannot. Ordinary increments can continue under existing authorization, subject to applicable checkpoints. The [usage examples](README-powerusers.md#when-the-work-grows-unexpectedly) distinguish expected local work from material growth.
 
@@ -169,16 +175,18 @@ New guides require an explicitly requested or agreed need; simple or low-level s
 
 ## A connected example: developing an import tool
 
-Suppose the agreed input format has a header and quoted fields. A requirements increment can settle malformed-row handling using EARS and record known system boundaries in the architecture description. A separate parser investigation can answer the quoted-comma question above. These are possible increments, each with its own complete result; they are not a prescribed sequence.
+Suppose the requested import capability uses an agreed format with a header and quoted fields. In Plan, the agent reads the relevant requirements, architecture, decisions, code, and tests. It chooses the next useful increment from that context. Unsettled malformed-row behavior may require requester input and a requirements increment expressed with EARS; uncertainty about the reader may lead to a parser investigation.
 
-For an implementation increment, suppose the requester authorizes rejecting mismatched rows, reporting their line numbers, and continuing with valid rows using the existing parser:
+An investigation that disproves the reader's suitability changes the basis of the next Plan. One that supports its use can justify an implementation step, within the limits of its evidence and the existing authorization. These are possible developments of the approach, selected as evidence and decisions establish what is needed.
+
+Suppose the available evidence supports the existing parser, and authorization covers rejecting mismatched rows, reporting their line numbers, and continuing with valid rows. The next cycle could be:
 
 | Phase | Application |
 | --- | --- |
-| Plan | Read the relevant requirements, code, tests, architecture, and decisions. Establish acceptance checks for rejection, diagnostics, and continued processing. Predict that validation at the existing row boundary will suffice. |
+| Plan | Use the current context and evidence to select field-count validation as the next increment. Establish acceptance checks for rejection, diagnostics, and continued processing. Predict that validation at the existing row boundary will suffice. |
 | Do | Add scoped validation using Simple Design and project conventions. Write relevant tests and update affected documentation at its owner. Record an ADR only if a significant lasting choice arises. |
 | Study | Run relevant available checks, including a valid row after a rejection. Assess acceptance separately from whether the predicted local approach sufficed; disclose failures or missing checks. |
-| Act | Report results, paths, evidence, and unfinished work. Retain material findings and otherwise missing continuation context. Distinguish this completed behavior from the larger import objective, then finish, seek required direction, or plan another authorized increment. |
+| Act | Use the evidence to retain or revise the approach toward the import objective. Report results, paths, checks, and unfinished work, and retain material findings and otherwise missing continuation context. Finish, seek required direction, or return to Plan to select the next authorized increment. |
 
 A necessary shared-parser redesign triggers the material-growth checkpoint when discovered; it does not wait for Act. A requested how-to guide may be another increment, using Diátaxis and linking to the maintained format rules. No example step automatically requires an ADR, guide, work record, or new approval solely because an increment ends.
 
@@ -255,6 +263,7 @@ The design can be assessed at two levels: whether the contract works as a self-c
 | Scenario | Design distinction to assess |
 | --- | --- |
 | Ordinary authorized change | The agent selects a small increment and establishes its checks. Completion grants no additional permission or automatic documentation artifact; another increment can proceed under existing authorization unless a checkpoint requires a pause. |
+| Selecting and revisiting work | Increment selection belongs to Plan from the first request. Study and Act inform later planning toward the overall objective; later detail remains provisional and revisions stay within authorization. |
 | Investigation contradicts its prediction | An evidenced answer can complete the investigation while disproving the prediction; unmet implementation behavior remains incomplete. |
 | Investigation reaches its effort limit | Inquiry stops with missing evidence and uncertainty visible; a stopping condition does not establish completion. |
 | Documentation-only work | Applicable methods and validation apply without requiring code or unit tests for their own sake. |

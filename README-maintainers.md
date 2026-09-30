@@ -1,107 +1,94 @@
 # The design of AGENTS.md
 
-[AGENTS.md](AGENTS.md) is a reusable, opinionated contract whose primary aim is to prevent unconstrained token consumption through intentionally small, complete steps toward a task objective. Necessary reasoning, work, and validation remain requirements within each step. This document explains that design, its supporting engineering practices, and their trade-offs, providing a technical foundation for repairs, improvements, or redesign.
+[AGENTS.md](AGENTS.md) is a reusable, opinionated contract whose primary aim is to prevent unconstrained token consumption through small, complete steps toward a task objective. Necessary reasoning, work, and validation remain requirements within each step. This guide explains the design choices, their trade-offs, and the constraints that inform repairs, improvements, or redesign.
 
-For installation and a first task, start with [README.md](README.md). For practical examples and fuller usage guidance, see [Getting more from AGENTS.md](README-powerusers.md).
+For adoption, use [README.md](README.md). For practical guidance, use [Getting more from AGENTS.md](README-powerusers.md). Here, start with the design goals and example, or go directly to the area a proposed change affects:
 
-- [Design goals and the PDSA cycle](#why-it-is-built-this-way)
-- [Collaboration and effort control](#collaboration-and-effort-control)
-- [Engineering methods](#engineering-methods-quality-within-a-small-increment)
-- [Documentation methods](#documentation-as-input-and-output)
-- [Principles and source boundaries](#principles-and-reference-boundaries)
-- [Continuation](#continuation-design), [bridges](#why-the-bridges-differ), and [portability](#keeping-the-contract-portable)
-- [Assessing design changes](#assessing-design-changes)
+- [Workflow choices](#workflow-design-choices): scope, learning, investigation, and requester control.
+- [Engineering choices](#engineering-choices) and [documentation choices](#documentation-choices): methods, reasons, and conditions.
+- [Continuation](#continuation-design), [bridges](#why-the-bridges-differ), and [portability](#keeping-the-contract-portable): retaining context and applying the contract across tools.
+- [Method selection](#choosing-or-replacing-methods), [design review](#assessing-design-changes), and [source assignments](#principles-and-reference-boundaries): constraints and evidence for evolution.
 
-## The contract and its boundaries
+## Design goals and boundaries
 
-The operating rules, definitions, conditions, and exceptions are self-contained in `AGENTS.md`. Its companion bridges allow tools to discover and apply the same local contract. The technical explanations here describe that design; the agent does not need to read this guide to obtain additional operating obligations.
+The motivating risk is especially visible in a new or poorly documented project. Without established requirements, interfaces, decisions, and conventions, planning and autonomous design have fewer constraints. Even a bounded objective can permit a large amount of work. The contract therefore limits each commitment and requires reassessment before unexpectedly greater effort, including sudden heavy use within one increment.
 
-The contract supplies collaboration policy. Project facts, build commands, requirements, and architecture come from the adopting project's documentation and code. This separation permits reuse across new and established projects without embedding a particular application's design in the generic instructions.
+Its controls work together: small increments limit the immediate commitment; progressive detail defers distant decisions; bounded investigations limit inquiry; PDSA connects findings to subsequent choices. Engineering practices support quality within each step, while documentation and continuation context retain knowledge for later work. Adequate analysis, completeness, and validation constrain every effort-saving choice.
 
-Requester instructions take priority within the tool's actual hierarchy and permissions. Directory instructions follow the tool's scope and precedence rules. The contract cannot supply capabilities, enforce permissions, or override native approval controls. Its protection of instruction files and its authorization rules for external actions keep those limits explicit.
+Reports make results and uncertainty assessable so the requester can steer further work. These mechanisms are best effort: total consumption may remain substantial, and there is no token quota, guaranteed pause after each increment, or guarantee of savings. The [practical explanation](README-powerusers.md#understanding-token-use) distinguishes progress visibility from consumption measurement.
 
-## Why it is built this way
+The contract is self-contained. Guides explain it and bridges help tools apply it; neither supplies hidden operating duties. Project facts, build commands, requirements, and architecture come from the adopting project's code and documentation. This separation supports reuse without embedding an application's design in generic instructions.
 
-Preventing unconstrained token consumption is the driving goal, including avoiding sudden heavy use within a single increment. The mechanism is intentionally small, complete commitments toward a larger objective, with progressive detail, bounded investigation, and requester direction before undertaking materially greater work than expected. A bounded objective alone can still permit a large amount of work; deliberate smallness aims to keep each commitment manageable and its results assessable.
+Requester instructions take priority within the tool's actual hierarchy and permissions. Directory instructions follow that tool's scope and precedence rules. The contract cannot supply capabilities, enforce permissions, or override native approvals. Its protection of instruction files and its authorization rules for external actions keep those limits explicit. It also does not supply a complete product-development process, branching strategy, workflow engine, or framework tutorial. Established methods cannot invent missing requirements or requester authority.
 
-Adequate analysis and validation are constraints on how that goal is pursued. The agent reasons sufficiently for the current decision and preserves completeness within the increment's scope. Later details remain provisional until needed. Narrowing a commitment does not excuse shallow analysis, omission of relevant dependencies, or an incomplete implementation presented as finished. An investigation that exhausts its allowance without meeting acceptance conditions remains incomplete; further work follows the existing authorization and interaction rules. The [practical explanation](README-powerusers.md#control-effort-while-preserving-depth) develops this relationship between scope, depth, and completeness.
+## How the design works in a task
 
-The motivating risk is especially visible in a new or poorly documented project: fewer requirements, interfaces, accepted decisions, and established conventions constrain speculative planning, investigation, or autonomous design. Established methods give recurring tasks a defined approach while project knowledge develops. They cannot supply missing requirements or requester authority.
+Consider a request to add CSV imports that report invalid rows and continue with valid rows. The **task objective** is that overall outcome. An **increment** is the next deliberately small, bounded step toward it, normally useful, understandable, reviewable, and verifiable on its own.
 
-PDSA organizes the learning that informs subsequent commitments. Simple Design and the engineering techniques guide quality within the current scope; requirements and validation establish what a complete result needs. Canonical documentation, decision records, and continuation context retain established knowledge for later work. These practices support the primary goal by structuring work and preserving its results; none independently establishes token savings. The contract defines their scope, strength, and collaboration boundaries. It does not attempt to supply a complete product-development process, branching strategy, workflow engine, or framework tutorial.
+Assume the input format, malformed-row behavior, and line-number convention are agreed, and evidence supports the existing reader. The agent could select field-count validation as the next increment:
 
-Reports expose results and uncertainty so the requester can assess effort and steer subsequent work. Total consumption may remain substantial, and ordinary increments can continue under existing authorization. This is a best-effort collaboration mechanism, with no token quota, guaranteed pause after each increment, or guarantee of savings; the [usage explanation](README-powerusers.md#understanding-token-use) distinguishes progress visibility from consumption measurements.
+1. **Plan:** inspect the relevant project context and select the step. Define **acceptance conditions**—reject mismatched rows, report their line numbers, and continue processing—and a **prediction** that the existing row boundary will support the approach. Later work remains at outline level.
+2. **Do:** implement the validation using current project conventions and Simple Design. Add relevant tests and update affected documentation at its authoritative location. Record an ADR if a significant lasting choice arises.
+3. **Study:** check acceptance, including a valid row after a rejection. Separately assess whether the predicted local approach sufficed, and disclose failed or missing checks.
+4. **Act:** use the evidence to retain or revise the approach. Preserve material findings and otherwise missing continuation context, report the result and unfinished work, then finish, seek required direction, or plan the next authorized increment.
 
-### PDSA: learning through small increments
+The example connects the design's parts. Requirements provide the intended behavior; implementation and checks establish what exists; findings inform subsequent planning; records preserve useful knowledge. If malformed-row behavior were unsettled, requester input and requirements work might come first. If the reader's suitability were uncertain, a bounded investigation might be the next increment instead. Selection belongs to Plan from the initial request.
 
-The [Deming Institute's Plan–Do–Study–Act account](https://deming.org/explore/pdsa/) connects an approach and its expected result with observation and the next decision. Its contribution here is learning as work progresses: evidence can change the approach and later detail without changing the agreed outcome or granting more authority.
+A discovery that requires an unexpectedly larger shared-parser redesign triggers reassessment immediately, in whichever phase it occurs. A requested operator guide could be another increment, shaped by its reader's need. Neither a completed step nor a named method automatically creates an ADR, guide, work record, or fresh approval requirement.
 
-The contract's [workflow overview](AGENTS.md#workflow-overview) starts PDSA with the request. Plan includes establishing the overall objective and permitted work, inspecting relevant context, and selecting the next small increment. Any outline of the broader approach belongs to that planning; the detail of later work remains provisional under [§1.2](AGENTS.md#12-bound-the-work-and-choose-an-approach).
+The [practical walkthrough](README-powerusers.md#from-a-request-to-a-result) shows the user-facing interaction. The following sections explain the reasons and boundaries behind it.
 
-Study assesses completion and what the observations establish about the approach. Act uses those findings to retain, revise, or discard the approach within authorization, then finishes, seeks direction, or returns to Plan. The overall objective therefore informs successive cycles, while their results can reshape later planning. Choosing an increment and reconsidering the broader approach are part of this workflow.
+## Workflow design choices
 
-Increment size and PDSA contribute different controls. Small increments bound the work undertaken at once. Predictions, observations, and retained learning help determine whether the approach remains suitable and what to do next. Checking that a change passes its tests alone does not fulfill that learning role; the implications of the findings still inform Act and subsequent planning.
+### Small commitments with sufficient depth
 
-The contract presents terms and a workflow overview before the four phases. This gives readers a route from the request through work, assessment, reporting, and the next decision. Methods appear near their principal contribution, while their triggers and the shared rules apply throughout. Tests can be planned before implementation; decisions and documentation are maintained as facts become established. Phase placement does not postpone those duties or require worksheets, separate phase reports, or a formal experiment for routine work.
+The requester supplies goals, permission, and relevant constraints. The agent supplies decomposition, acceptance conditions, validation, effort assessment, and recognition of required consultation. These standing responsibilities let an ordinary outcome-oriented request start useful work. A requester may still select a step or add review points.
 
-PDSA's Plan phase and a tool's Plan mode have different roles. The former organizes reasoning; the latter has the tool's own proposal and approval procedures. Neither supplies wider authorization.
+The [four effort factors](AGENTS.md#51-scope-effort-and-requester-interaction)—scope, uncertainty, consequence, and reversibility—expose the concerns behind a decision without a numeric score or task-classification scheme. Scope includes affected behavior, artifacts, dependencies, and system boundaries. A few changed lines can affect many callers or an irreversible migration; a narrow, understood, low-impact, reversible change can use brief inspection, action, validation, and reporting.
 
-### Objectives, acceptance, predictions, and stopping
+Depth follows the next decision at the current abstraction level. Architecture analysis may need careful examination of boundaries, alternatives, and risks without specifying every future API or function. Later detail follows uncertainty, consequence, risk, reversibility, and proximity to execution. Explicit authorization can cover broader analysis; keeping later detail provisional does not prohibit it.
 
-These distinctions prevent useful learning from being mistaken for completed work:
+Completeness is assessed within the increment's scope. Evidence, enabling infrastructure, or migration groundwork can be useful results as well as functionality. Before a step that cannot stand alone, the agent explains why, what remains usable or testable, and how to undo it. Recovery reduces the cost of a mistaken approach; it grants no permission for destructive effects. A small scope cannot excuse shallow reasoning, omitted dependencies, or incomplete work presented as finished.
 
-| Concept | Question answered | Parser-investigation example |
-| --- | --- | --- |
-| Task objective | What overall outcome was requested? | Develop an import tool. |
-| Increment objective | What bounded outcome is sought now? | Determine whether one candidate preserves a quoted field containing a comma. |
-| Acceptance conditions | What establishes completion? | Report an evidenced answer for a relevant sample, including its limits. |
-| Prediction | What result is expected from the approach? | The quoted field remains intact. |
-| Validation | Does the evidence establish acceptance? | Check the sample, observed output, and reported conclusion. |
-| Investigation effort limit | What stated effort allowance requires inquiry to stop even with incomplete evidence? | One execution attempt using the existing test setup and inspection of any output, stated before the inquiry begins. |
+### Learning throughout the work
 
-The agent establishes the increment and its acceptance conditions from the request and relevant project evidence. [§1.2](AGENTS.md#12-bound-the-work-and-choose-an-approach) makes it mandatory to establish and state the question, scope, objective, effort limit, and needed evidence **before investigating blocking uncertainty**. These are standing responsibilities under Plan; the requester need not prescribe them for each task. Stating a limit does not itself require requester approval, although consequential unresolved intent or constraints still require requester involvement.
+The [Deming Institute's PDSA account](https://deming.org/explore/pdsa/) connects an approach and expected result with observation and the next decision. Small increments bound commitments; PDSA's contribution is learning which approach remains suitable and what to do next. Passing tests alone does not establish that learning role: the implications still inform Act and subsequent planning.
 
-An investigation effort limit bounds the effort available for a particular blocking inquiry independently of whether it obtains an answer. Stating it in advance makes that boundary visible before work consumes the allowance. The contract specifies no default amount, unit, or selection formula, leaving the concrete bound to the inquiry's framing under the applicable scope, effort, and interaction rules. The example above is illustrative. This flexibility requires judgment; it supplies no automatically enforced timeout or token quota. The [practical explanation](README-powerusers.md#how-investigation-limits-work) shows how a stated bound differs from an evidence target.
+The contract's [workflow overview](AGENTS.md#workflow-overview) starts with the request. Plan includes context gathering, the overall objective and permitted work, outlining an approach, and selecting the next increment. Study assesses completion and observations; Act uses those findings to retain, revise, or discard the approach within authorization. Results can reshape later detail without changing the agreed outcome or granting more authority.
 
-If the parser splits the field, the observation can complete that investigation while disproving its prediction. An implementation required to preserve the field remains incomplete if it splits it. Revising a prediction changes neither requirements nor acceptance conditions.
+Terms and a workflow overview precede the contract's four phases. Methods appear near their principal contribution, but their triggers and the shared rules apply throughout. Tests can be planned before implementation; decisions and documentation are maintained as facts emerge. Phases can overlap or repeat, and routine work needs no worksheet, formal experiment, or separate phase reports.
 
-If the stated limit is reached while acceptance conditions remain unmet, the agent stops and reports the incomplete investigation, missing evidence, and uncertainty. Obtaining the needed evidence also ends the blocking inquiry; contrary results do not authorize attempts merely to make the prediction true. Neither reaching the limit nor obtaining a negative finding grants additional permission. Any need for broader research or a wider design decision must be explained under [§5.1](AGENTS.md#51-scope-effort-and-requester-interaction), and material growth requires requester direction before the additional work. A successful sample supports only the conclusion justified by that sample. The [Study rules](AGENTS.md#3-study--assess-completion-and-learning) apply this separation to implementation, investigation, and documentation.
+PDSA's Plan phase organizes reasoning. A tool's Plan mode has its own proposal and approval procedures. Neither expands authorization. These distinctions let the workflow apply proportionally to implementation, investigation, and documentation without inventing separate mandatory deliverables.
 
-### When each method applies
+### Completion, predictions, and bounded investigation
 
-This map explains the methods' connections. Their operational definitions and conditions remain in the linked contract sections.
+**Acceptance conditions** define the observable result needed to complete the increment. **Validation** checks them. A **prediction** states the expected result of the approach; comparison with observations informs whether to retain or revise that approach. Revising a prediction changes neither requirements nor acceptance conditions.
 
-| Method or convention | Contribution and boundary |
-| --- | --- |
-| [PDSA](AGENTS.md#workflow-overview) | Organizes work from the request through increment selection, execution, learning, and subsequent planning. It applies proportionally to every work type; repetition grants no additional authority. |
-| [EARS](AGENTS.md#13-express-new-or-revised-system-requirements-with-ears) | Makes new or revised in-scope system requirements explicit; they guide implementation and validation. |
-| [Simple Design and engineering techniques](AGENTS.md#2-do--perform-the-authorized-work) | Guide code and design choices using current requirements and the techniques' benefit/cost conditions. |
-| [Given/When/Then](AGENTS.md#31-use-unit-tests-and-other-evidence) | A SHOULD default for understandable unit tests, with no prescribed labels or framework. It does not replace broader validation. |
-| [Diátaxis](AGENTS.md#24-write-guides-and-supporting-documentation) | Shapes in-scope guides around reader needs; new guides need an explicitly requested or agreed purpose. |
-| [ADRs](AGENTS.md#41-record-significant-decisions-and-technical-debt) | Preserve significant lasting choices in scope and their reasons; routine local choices normally need none. |
-| [arc42](AGENTS.md#42-maintain-architectural-knowledge-with-arc42) | Carries architectural knowledge into later decisions, with applicable known content and visible unknowns. |
-| [DRY](AGENTS.md#52-maintain-canonical-knowledge-and-consistent-artifacts) | Maintains canonical knowledge across code and documentation throughout the cycle. |
-| [Continuation record](AGENTS.md#43-retain-context-for-unfinished-work) | Carries unfinished task context that permanent artifacts do not capture. Maintenance depends on that need; startup lookup is required. |
+This separation allows an investigation to succeed by disproving an assumption. Evidence that a reader splits a quoted comma can answer a question about its behavior, while an implementation required to preserve that field remains incomplete. A successful sample also supports only the conclusion justified by that sample. The [practical investigation example](README-powerusers.md#when-an-investigation-is-needed) develops both outcomes.
 
-Listing a method creates no separate deliverable for every increment. Existing requirements, architecture, decisions, code, and tests inform Plan; affected artifacts stay current during work; Study checks completion; Act uses and retains findings before the next authorized step.
+An **investigation effort limit** bounds inquiry even when it has not obtained the needed evidence. [AGENTS.md §1.2](AGENTS.md#12-bound-the-work-and-choose-an-approach) requires the agent to establish and state the question, scope, objective, limit, and needed evidence before investigating blocking uncertainty. This makes the commitment visible before consuming it; the requester need not prescribe the allowance or approve every limit. Consequential unresolved intent or constraints still require involvement.
 
-## Collaboration and effort control
+No default amount, unit, or selection formula is prescribed. Choosing a useful bound therefore requires judgment and provides no automatically enforced timeout or token quota. The one-attempt allowance in the practical example is illustrative.
 
-To pursue the token-control goal, the requester supplies the objective, permission, and relevant constraints; the agent organizes authorized work into small, complete increments. This allocation makes decomposition, validation, effort assessment, and appropriate consultation part of the contract's default behavior. A requester can select a particular step or impose extra review points without needing to manage the process for ordinary use.
+Obtaining the evidence or reaching the limit ends the inquiry. If acceptance conditions remain unmet, the report identifies incomplete work, missing evidence, and uncertainty. Neither a negative finding nor an exhausted allowance authorizes extra attempts. Broader research or a wider design decision must be explained; materially greater effort requires direction before it proceeds. The [Study rules](AGENTS.md#3-study--assess-completion-and-learning) preserve the distinction between learning and completion across all work types.
 
-The [four effort factors](AGENTS.md#51-scope-effort-and-requester-interaction)—scope, uncertainty, consequence, and reversibility—make the concerns behind a decision explicit without a numeric score or task-classification scheme. Scope includes affected behavior, artifacts, dependencies, and system boundaries. Few changed lines can affect many callers or an irreversible migration. A narrow, understood, low-impact, reversible change can instead use brief inspection, action, validation, and reporting.
+### Authorization and requester decisions
 
-Planning depth follows the next decision at the current abstraction level. Architecture analysis may examine boundaries and alternatives deeply without specifying every future API or function. A bounded investigation or documentation increment can establish evidence for such a decision through Plan, Do, Study, and Act. Detail follows uncertainty, risk, reversibility, and proximity to execution. Explicit authorization can cover broader analysis; provisional later detail does not prohibit it.
+An increment limits work undertaken at once; a report makes its result visible; a checkpoint reserves a decision for the requester. Ordinary increments can continue under existing authorization. Their completion supplies no additional permission and creates no automatic pause.
 
-The material-growth checkpoint makes an unexpected increase in effort available for requester review before the additional work proceeds, even when the desired outcome and broad authorization remain unchanged. It therefore controls something a scope boundary alone cannot. Ordinary increments can continue under existing authorization, subject to applicable checkpoints. The [usage examples](README-powerusers.md#when-the-work-grows-unexpectedly) distinguish expected local work from material growth.
+The material-growth checkpoint addresses a separate problem: authorized work can turn out to require unexpectedly greater effort. The agent must explain that increase and await direction before taking it on, even when the outcome and broad authorization are unchanged. This gives the requester control that a scope boundary alone cannot provide. See the [two practical growth cases](README-powerusers.md#when-the-work-grows-unexpectedly).
 
-The [requirement keywords](AGENTS.md#terms-and-requirement-keywords) distinguish obligations, strong defaults with justified exceptions, and permissions. This matters particularly for requester involvement: required escalation of unresolved intent or permission, agreement on consequential constraints, and recommended consultation about unsettled choices have different strengths. A SHOULD exception cannot bypass a MUST checkpoint; a routine local choice cannot invent a consequential constraint.
+The [requirement keywords](AGENTS.md#terms-and-requirement-keywords) preserve distinct strengths:
 
-Completeness applies within an increment's scope. An increment can deliver evidence, enabling infrastructure, or migration groundwork as well as functionality. When a stage cannot stand alone, the explanation of what remains usable or testable and how to undo it makes the commitment assessable. Reversibility and recovery reduce the cost of a mistaken approach; they do not authorize destructive effects.
+- Material unresolved intent or permission must be escalated; missing consequential constraints must be agreed as needed.
+- Asking before an unsettled consequential choice is a strong recommendation with justified exceptions.
+- Easily reversible routine details may be chosen within agreed limits; material assumptions remain visible.
 
-Reporting exposes results, assumptions, uncertainty, and recovery options, but cannot retroactively authorize a consequential choice. Native tool permissions and approval controls govern enforceable boundaries. The contract's reporting defaults support review without requiring a full-file dump or diff for every task; [the usage guide](README-powerusers.md#read-the-result) explains what a requester sees at a handoff.
+A SHOULD exception cannot bypass a MUST checkpoint or invent a consequential constraint. Reporting a consequential choice without prior direction exposes reasons, effects, uncertainty, and revision or reversal options; it cannot retroactively authorize the choice. Native permissions and approval controls remain the enforceable boundaries.
 
-## Engineering methods: quality within a small increment
+The reporting defaults support review without demanding a full-file dump or diff for every task. The [usage guide](README-powerusers.md#assess-the-result) explains the handoff and its proportional treatment of small changes.
+
+## Engineering choices
 
 ### Simple Design: choosing what the current solution needs
 
@@ -123,6 +110,8 @@ Clear responsibilities, limited coupling, visible side effects, and explicit res
 
 The dead-code condition matters because registration, reflection, or external callers may make apparently unused code reachable. Clear unreachability or direct obsolescence from the authorized change is needed for removal *as dead code*. Explicitly authorized removal of live functionality is a different case.
 
+### Validation and test evidence
+
 Relevant available checks against acceptance conditions are mandatory before claiming completion. Appropriate tests for behavior changes, defect repairs, and clarified edge cases are a SHOULD default with justified exceptions. Validation covers affected behavior, risk, and hard operational limits for every work type; passing tests cannot replace a missing requirement or necessary check. Failed, unavailable, and omitted checks stay visible.
 
 [Given/When/Then](https://martinfowler.com/bliki/GivenWhenThen.html) makes a unit test's starting conditions, action, and expected result understandable. For a quoted field containing a comma, those parts are the sample, the parser call, and the intact-field assertion. The contract requires neither literal labels nor a testing framework, and prohibits weakening tests merely to pass.
@@ -131,15 +120,27 @@ Relevant available checks against acceptance conditions are mandatory before cla
 
 These techniques support Simple Design when their benefits justify their costs. Their selection grants no authority for unrelated restructuring or new dependencies.
 
-| Technique and account | Design reason and boundary |
-| --- | --- |
-| Gross's [Locality of Behaviour](https://htmx.org/essays/locality-of-behaviour/) | Make behavior understandable near its implementation while balancing separate responsibilities and canonical ownership. A clear invocation can expose intent without inlining everything or adopting htmx. |
-| The [Law of Demeter](https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/general-formulation.html) | Reduce knowledge of other components' internals through direct collaborators. Clarity and interface costs matter; there is no blanket ban on chained access or requirement for an aspect-oriented solution. |
-| Fowler's [Value Object](https://martinfowler.com/bliki/ValueObject.html) | Express domain meaning and validation through values equal by contents, with practical immutability. Preserve required identity and state changes; neither wrapping every primitive nor adopting Domain-Driven Design is required. |
-| The [inheritance extract](https://media.pragprog.com/titles/tpp20/inheritance-tax.pdf) | Prefer interfaces, protocols, and composition when they reduce coupling; use polymorphism for complex conditional dispatch when clearer. Keep abstractions justified and allow suitable inheritance. |
-| Fowler's [dependency injection](https://martinfowler.com/articles/injection.html), “Separating Configuration from Use” | Separate assembly from use when this improves separation, clarity, or testing. Supplying a clock as a parameter can suffice. Configuration normally stays at assembly, initialization, or external-system boundaries; no container or new dependency is required. |
+**Gross's [Locality of Behaviour](https://htmx.org/essays/locality-of-behaviour/)**
 
-## Documentation as input and output
+Make behavior understandable near its implementation while balancing separate responsibilities and canonical ownership. A clear invocation can expose intent without inlining everything or adopting htmx.
+
+**The [Law of Demeter](https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/general-formulation.html)**
+
+Reduce knowledge of other components' internals through direct collaborators. Clarity and interface costs matter; there is no blanket ban on chained access or requirement for an aspect-oriented solution.
+
+**Fowler's [Value Object](https://martinfowler.com/bliki/ValueObject.html)**
+
+Express domain meaning and validation through values equal by contents, with practical immutability. Preserve required identity and state changes; neither wrapping every primitive nor adopting Domain-Driven Design is required.
+
+**The [inheritance extract](https://media.pragprog.com/titles/tpp20/inheritance-tax.pdf)**
+
+Prefer interfaces, protocols, and composition when they reduce coupling; use polymorphism for complex conditional dispatch when clearer. Keep abstractions justified and allow suitable inheritance.
+
+**Fowler's [dependency injection](https://martinfowler.com/articles/injection.html), “Separating Configuration from Use”**
+
+Separate assembly from use when this improves separation, clarity, or testing. Supplying a clock as a parameter can suffice. Configuration normally stays at assembly, initialization, or external-system boundaries; no container or new dependency is required.
+
+## Documentation choices
 
 Requirements describe intended behavior, accepted decisions retain choices and reasons, architecture describes boundaries and guarantees, and schemas and package metadata declare their own constraints. Code, tests, and execution provide evidence of implemented behavior. Their roles explain why executable behavior does not automatically overrule a requirement. Conflicts need visible evidence, inference, and an identified governing source; personal or external instructions cannot supply project facts.
 
@@ -181,50 +182,6 @@ Permission to record evidenced, task-relevant debt makes concerns visible withou
 
 New guides require an explicitly requested or agreed need; simple or low-level software may need none. Affected existing guides stay current. [Applying Diátaxis incrementally](https://diataxis.fr/how-to-use-diataxis/) avoids empty categories and a four-document requirement. Comments, docstrings, and generated API documentation instead follow suitable language and tool conventions, with requester choices recommended when a new convention materially affects public documentation or maintenance.
 
-## A connected example: developing an import tool
-
-Suppose the requested import capability uses an agreed format with a header and quoted fields. In Plan, the agent reads the relevant requirements, architecture, decisions, code, and tests. It chooses the next useful increment from that context. Unsettled malformed-row behavior may require requester input and a requirements increment expressed with EARS; uncertainty about the reader may lead to a parser investigation.
-
-An investigation that disproves the reader's suitability changes the basis of the next Plan. One that supports its use can justify an implementation step, within the limits of its evidence and the existing authorization. These are possible developments of the approach, selected as evidence and decisions establish what is needed.
-
-Suppose the available evidence supports the existing parser, and authorization covers rejecting mismatched rows, reporting their line numbers, and continuing with valid rows. The next cycle could be:
-
-| Phase | Application |
-| --- | --- |
-| Plan | Use the current context and evidence to select field-count validation as the next increment. Establish acceptance checks for rejection, diagnostics, and continued processing. Predict that validation at the existing row boundary will suffice. |
-| Do | Add scoped validation using Simple Design and project conventions. Write relevant tests and update affected documentation at its owner. Record an ADR only if a significant lasting choice arises. |
-| Study | Run relevant available checks, including a valid row after a rejection. Assess acceptance separately from whether the predicted local approach sufficed; disclose failures or missing checks. |
-| Act | Use the evidence to retain or revise the approach toward the import objective. Report results, paths, checks, and unfinished work, and retain material findings and otherwise missing continuation context. Finish, seek required direction, or return to Plan to select the next authorized increment. |
-
-A necessary shared-parser redesign triggers the material-growth checkpoint when discovered; it does not wait for Act. A requested how-to guide may be another increment, using Diátaxis and linking to the maintained format rules. No example step automatically requires an ADR, guide, work record, or new approval solely because an increment ends.
-
-## Principles and reference boundaries
-
-The accounts linked in this guide provide freely accessible interpretive material for the named practices. Their role is to clarify those practices within the contract's conditions. The design draws on specific accounts rather than requiring whole frameworks or access to a paid book. The [Pragmatic Programmer book](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/) is paid; its assigned public tips and extracts are freely available.
-
-The method set was selected for recognized practices, freely accessible material sufficient to interpret their assigned roles, and distinct responsibilities. PDSA and Simple Design were judged sufficient for the agreed design alongside the focused engineering references, documentation conventions, and explicit collaboration rules. Additional umbrella frameworks were not needed to supply those responsibilities.
-
-These selection criteria remain constraints on future additions or replacements unless explicitly revised. A proposed method change should explain the need it addresses, the accessibility of its required interpretive material, and any overlap or expansion of obligations. Changing a selection criterion is itself a design decision to identify explicitly; these constraints on the contract's evolution add no operating duties to ordinary project tasks.
-
-The exact [public-tip assignments](https://pragprog.com/tips/) are maintained here because the contract's links do not carry per-rule tip numbers:
-
-| Concern | Assigned tips |
-| --- | --- |
-| Documentation synchronization | 13 |
-| Components, boundaries, and coupling | 17, 44–45, 47–48 |
-| Failures and contracts | 36–37 |
-| Resources and mutation scope | 40–41 |
-| Root causes | 65 |
-| Attack surface | 72 |
-| Naming | 74 |
-| Regression checks | 94 |
-
-The coupling assignment excludes tip 46. The DRY, inheritance, and shared-state extracts linked above supply fuller accounts for their respective concerns. Attribution identifies supporting material, without claiming that one source states the contract's combined preservation duties verbatim.
-
-[RFC 2119](https://www.rfc-editor.org/rfc/rfc2119.html) and [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174.html) supply requirement-keyword semantics. They concern the strength of agent obligations, while EARS expresses system requirements and ADRs record choices and reasons. Supporting explanations include [IHI's testing-changes guidance](https://www.ihi.org/library/model-for-improvement/testing-changes) and [arc42's debt FAQ](https://faq.arc42.org/questions/C-11-1/); they add no operating obligations.
-
-Under [source-consultation rules](AGENTS.md#54-consult-linked-sources-only-when-needed), material ambiguities can justify reading enough of a linked source to resolve the point, with the ambiguity, source, and answer reported. Clear rules need no principle research, and broader inquiry requires direction. Technical research for a task follows that task's scope and investigation limits. This distinction prevents an explanatory link from becoming an open-ended research assignment or importing stronger source rhetoric as policy.
-
 ## Continuation design
 
 The root path `.agent-continuation-context.md` makes unfinished context discoverable without an index link or broad search. Its descriptive name and leading dot reduce accidental collisions; “continuation context” describes information useful throughout unfinished work. The name and format are local conventions applying retained learning and canonical ownership.
@@ -242,6 +199,12 @@ Both bridges apply the same local contract through their tool's instruction mech
 Discovery, inclusion, precedence, and application are distinct. [VS Code's conflict guidance](https://code.visualstudio.com/docs/agent-customization/custom-instructions#resolve-conflicting-instructions), its [instruction settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#custom-instructions-settings), and [GitHub.com's precedence guidance](https://docs.github.com/en/copilot/concepts/prompting/response-customization#precedence-of-custom-instructions) describe different aspects. File order or a link alone cannot establish all four. The [adoption checks](README-powerusers.md#check-adoption) and [recorded evidence dates](README-powerusers.md#evidence-dates) qualify the integration guidance; exact settings and support depend on the provider's documentation and the actual environment.
 
 The Copilot title and header identify the associated release and upstream origin. Its release date and source URL match `AGENTS.md`. Metadata adds no policy authority, and the adopted local contract remains canonical. Permitting provenance does not require a header on the one-line Claude import. Minimality preserves each bridge's loading and application role.
+
+## Choosing or replacing methods
+
+The method set was selected for recognized practices, freely accessible material sufficient to interpret their assigned roles, and distinct responsibilities. PDSA and Simple Design were judged sufficient for the agreed design alongside the focused engineering references, documentation conventions, and explicit collaboration rules. Additional umbrella frameworks were not needed to supply those responsibilities.
+
+These selection criteria remain constraints on future additions or replacements unless explicitly revised. A proposed method change should explain the need it addresses, the accessibility of its required interpretive material, and any overlap or expansion of obligations. Changing a selection criterion is itself a design decision to identify explicitly; these constraints on the contract's evolution add no operating duties to ordinary project tasks.
 
 ## Keeping the contract portable
 
@@ -289,3 +252,26 @@ The design can be assessed at two levels: whether the contract works as a self-c
 The relevant dependencies span [engineering](AGENTS.md#2-do--perform-the-authorized-work), [validation](AGENTS.md#3-study--assess-completion-and-learning), [knowledge retention](AGENTS.md#4-act--use-the-findings-and-determine-what-follows), and [shared policy](AGENTS.md#5-rules-throughout-the-cycle). Method conditions, appropriate-test recommendations, required validation, documentation scope, and requester authority all contribute to the resulting behavior.
 
 Changes to protected instruction files follow [their authorization rule](AGENTS.md#53-instructions-contract-files-and-external-actions), including file-specific recommendations and necessary companion edits. Substantive policy changes need explicit identification. An explanation or review checklist cannot substitute for the actual clauses, and a shorter contract does not by itself establish equivalent agent behavior or token savings.
+
+## Principles and reference boundaries
+
+The accounts linked in this guide provide freely accessible interpretive material for the named practices. Their role is to clarify those practices within the contract's conditions. The design draws on specific accounts rather than requiring whole frameworks or access to a paid book. The [Pragmatic Programmer book](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/) is paid; its assigned public tips and extracts are freely available.
+
+The exact [public-tip assignments](https://pragprog.com/tips/) are maintained here because the contract's links do not carry per-rule tip numbers:
+
+| Concern | Assigned tips |
+| --- | --- |
+| Documentation synchronization | 13 |
+| Components, boundaries, and coupling | 17, 44–45, 47–48 |
+| Failures and contracts | 36–37 |
+| Resources and mutation scope | 40–41 |
+| Root causes | 65 |
+| Attack surface | 72 |
+| Naming | 74 |
+| Regression checks | 94 |
+
+The coupling assignment excludes tip 46. The DRY, inheritance, and shared-state extracts linked above supply fuller accounts for their respective concerns. Attribution identifies supporting material, without claiming that one source states the contract's combined preservation duties verbatim.
+
+[RFC 2119](https://www.rfc-editor.org/rfc/rfc2119.html) and [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174.html) supply requirement-keyword semantics. They concern the strength of agent obligations, while EARS expresses system requirements and ADRs record choices and reasons. Supporting explanations include [IHI's testing-changes guidance](https://www.ihi.org/library/model-for-improvement/testing-changes) and [arc42's debt FAQ](https://faq.arc42.org/questions/C-11-1/); they add no operating obligations.
+
+Under [source-consultation rules](AGENTS.md#54-consult-linked-sources-only-when-needed), material ambiguities can justify reading enough of a linked source to resolve the point, with the ambiguity, source, and answer reported. Clear rules need no principle research, and broader inquiry requires direction. Technical research for a task follows that task's scope and investigation limits. This distinction prevents an explanatory link from becoming an open-ended research assignment or importing stronger source rhetoric as policy.

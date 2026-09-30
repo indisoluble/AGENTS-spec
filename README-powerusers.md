@@ -10,6 +10,7 @@ The methods appear where they help explain what you experience. Their deeper rat
 | Understand how the agent selects the next step | [Plan the next useful increment](#plan-the-next-useful-increment) |
 | See how findings affect the broader approach | [Use results to shape what follows](#use-results-to-shape-what-follows) |
 | Understand when the agent asks, pauses, or continues | [Control effort and decisions](#control-effort-and-decisions) |
+| Understand what bounds a blocking investigation | [How investigation limits work](#how-investigation-limits-work) |
 | Specify a particular step or add review points | [Optional controls you can add](#optional-controls-you-can-add) |
 | Assess what was delivered | [Read the result](#read-the-result) |
 | Understand implementation and documentation choices | [Understand implementation choices](#understand-implementation-choices) and [Use requirements and documentation](#use-requirements-and-documentation) |
@@ -58,7 +59,7 @@ Suppose the project has an existing reader, and the required input format includ
 
 | Phase | Example |
 | --- | --- |
-| **Plan** | Establish whether the reader preserves a quoted field containing a comma. Define the question, scope, objective, effort limit, and evidence needed. Predict that the existing reader will preserve the field. |
+| **Plan** | Determine whether the reader preserves a quoted comma in one sample, to assess its suitability for the import approach. Scope: the existing reader and test setup. State the effort limit before starting: one execution attempt and inspection of any output. Evidence needed: the parsed fields for that sample. Predict that the quoted field remains intact. |
 | **Do** | Run the stated experiment and capture the resulting fields. |
 | **Study** | Observe that the reader splits the quoted field. Check whether the evidence answers the investigation question and recognize that the prediction was disproved. |
 | **Act** | Revise the assumption that the reader already supports the required input, retain the finding, and report its effect on the approach to imports. Determine whether direction is needed before returning to Plan. |
@@ -75,7 +76,7 @@ In the quoted-field example above, an evidenced answer can complete the investig
 
 Changing a prediction does not change your requirements or acceptance conditions. A successful sample also supports only the conclusion justified by that sample.
 
-Before investigating blocking uncertainty, the agent states the question, scope, objective, effort limit, and evidence needed. Framing this inquiry is its responsibility; you can supply additional limits, and unresolved consequential constraints still require your involvement. It stops the inquiry when it has the evidence or reaches the limit. If the limit arrives first, it reports incomplete work, missing evidence, and uncertainty. A negative finding supplies no permission for more attempts merely to obtain the predicted result.
+A negative finding supplies no permission for more attempts merely to obtain the predicted result. An inquiry also has a stated effort limit that can require stopping while its acceptance conditions remain unmet; see [how investigation limits work](#how-investigation-limits-work).
 
 Completing an increment, reaching an investigation limit, and waiting for requester approval are different events. The agent determines what can follow under existing authorization and the applicable checkpoints; the end of an increment does not automatically require a new instruction from you.
 
@@ -88,6 +89,23 @@ The agent applies the contract's effort controls and consultation rules as stand
 An increment bounds the work undertaken at once. A report makes its result visible. An approval checkpoint reserves a decision for you before work continues. These serve different purposes: reporting a completed step does not itself create a requirement to wait.
 
 The agent finishes when the task objective is fulfilled. Otherwise, it can proceed to another increment under existing authorization, or seek direction when needed. Completing an increment supplies no additional permission and does not remove permission already granted. Your conditions, the contract's checkpoints, and the tool's rules still apply. Your instructions take priority within the tool's actual hierarchy and permissions.
+
+### How investigation limits work
+
+An **investigation effort limit** caps the effort spent answering a particular question that blocks the next decision. Before investigating that blocking uncertainty, the agent **must establish and state the question, scope, objective, effort limit, and evidence needed**, as required by [AGENTS.md §1.2](AGENTS.md#12-bound-the-work-and-choose-an-approach). This is part of its standing responsibility for framing the inquiry; you do not need to request it or supply the limit yourself.
+
+The contract prescribes no universal value, measurement unit, or formula for choosing the limit. A limit could bound specified checks or experiment attempts, or use a time allowance where elapsed time can be tracked. These are possible forms, not required defaults. The limit must be stated for the particular inquiry; there is no hidden value to assume if the agent omits it.
+
+In the [quoted-field example](#use-results-to-shape-what-follows), the stated allowance is one execution attempt using the existing test setup and inspection of any output. That is an illustrative bound, not a one-attempt rule for all investigations:
+
+| What happens | What it means |
+| --- | --- |
+| The output answers whether the sample's quoted field was preserved. | The agent stops the inquiry with an evidenced answer, including the limits of that evidence. A result that disproves the prediction can still complete the investigation. |
+| The attempt fails to produce the needed output. | The allowance is exhausted while the acceptance conditions remain unmet. The agent stops and reports the incomplete investigation, missing evidence, and remaining uncertainty. Repairing the test environment or running further experiments would be additional work. |
+
+The bound applies to that inquiry. Reaching it alone establishes neither completion of the investigation nor completion of the overall task. Under the [Study and stopping rules](AGENTS.md#3-study--assess-completion-and-learning), needed evidence and the effort limit are distinct reasons to stop; any remaining uncertainty stays visible.
+
+You can supply a tighter limit or an extra approval checkpoint. The requirement to state a limit does not itself require your approval of every limit. The agent must still involve you over consequential unresolved constraints, explain any need for broader research or a wider design decision, and apply the [interaction rules](AGENTS.md#51-scope-effort-and-requester-interaction). In particular, unexpected material growth requires direction before the additional work proceeds.
 
 ### When the work grows unexpectedly
 
@@ -117,7 +135,7 @@ An exception to recommended consultation cannot bypass mandatory involvement or 
 
 ### Optional controls you can add
 
-You can tailor the collaboration by selecting a particular increment, adding an investigation limit, or reserving an extra decision for yourself. These are optional controls on top of the agent's standing responsibilities.
+You can tailor the collaboration by selecting a particular increment, specifying your own investigation limit, or reserving an extra decision for yourself. These are optional requester controls; establishing and stating a limit before a blocking investigation is already mandatory for the agent.
 
 For example, if you want to review a proposal before implementation and check each result before work continues:
 

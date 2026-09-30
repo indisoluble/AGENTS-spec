@@ -65,6 +65,7 @@ When headings or paths change, inspect incoming references throughout the reposi
 - Keep `MUST`, `SHOULD`, and `MAY` distinct when explaining the contract. A strong recommendation has justified exceptions; a mandatory checkpoint does not become optional through paraphrase.
 - Preserve the distinction between task and increment completion, acceptance conditions and predictions, and investigation stopping limits and successful completion.
 - Keep the agent responsible for decomposition, establishing acceptance conditions, bounding blocking inquiries, validation, effort assessment, and recognizing when requester involvement is needed. Do not imply that a requester must repeat these standing instructions in each prompt.
+- Present PDSA as starting with the request. Place context gathering, outlining the approach, and increment selection within Plan, and connect Study and Act to subsequent planning. Do not imply that the agent first fixes a complete sequence of increments outside PDSA or that the contract requires a separate hierarchy of outer and inner cycles.
 - Distinguish an increment, a report, and an approval checkpoint. Do not imply that every increment requires fresh approval or that a completed increment grants permission.
 - Keep documentation coverage expectations separate from permission to audit, backfill, or reorganize an entire project.
 - Do not turn a mentioned method into a mandatory deliverable for every task. Preserve the conditions on tests, ADRs, guides, continuation records, and engineering techniques.
@@ -82,6 +83,8 @@ The basic guide should lead with recognizable benefits and an actionable startin
 
 Explain default behavior before optional controls. Lead with ordinary outcome-oriented requests and show the agent selecting increments, establishing checks, and applying the contract's consultation rules. Place requester-selected steps, explicit investigation limits, and extra review checkpoints in a clearly optional context. Review the combined impression of headings and examples: accurate individual sentences do not compensate for a reading path that teaches the requester to manage the agent's workflow.
 
+Introduce the complete PDSA workflow before developing its individual activities. Show increment selection as part of Plan and include a practical example in which findings influence the next Plan or the broader approach. Describe effort factors as assessments under the contract; do not invent numerical scores or imply that all future increments must be measured and settled before work starts.
+
 The power-user guide should answer the questions that arise afterward. Use realistic examples and concise references to relevant standards and principles. Link deeper design rationale instead of requiring technical background to follow the practical guidance.
 
 The technical guide should explain what the contract is and why it is constructed that way. Its analysis should be sufficient to inform changes to `AGENTS.md`; it should not require readers to switch roles into editing the surrounding documentation.
@@ -94,6 +97,7 @@ Before delivering a documentation change, verify:
 
 - **Basic use:** purpose, files, placement, essential replacement precautions, adoption checks, and a useful first task are understandable from `README.md`.
 - **Default responsibilities:** the examples work with an ordinary request for an outcome; the agent supplies the process. Optional requester controls are clearly distinguished from required consultation and the ability to continue under existing authorization.
+- **Workflow continuity:** the reading order places planning inside PDSA from the request onward. Examples connect the overall objective, selection of the next increment, observed results, and subsequent planning without introducing an unsupported process hierarchy.
 - **Practical depth:** necessary detailed usage guidance remains available and discoverable; method references support the explanations.
 - **Technical depth:** attributes, rationale, sources, constraints, and trade-offs remain sufficient to assess changes to the contract.
 - **Editorial separation:** the three reader-facing guides stay focused on `AGENTS.md`; instructions for keeping the READMEs synchronized remain here.

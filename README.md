@@ -2,7 +2,7 @@
 
 A ready-made [AGENTS.md](AGENTS.md) for working with coding agents in new or established projects. Give your agent standing instructions for planning, implementation, validation, and documentation, so you can spend less time repeating how you want work handled.
 
-Describe the outcome you want. The contract directs the agent to organize the work into **small, complete steps**, establish how to check each result, and involve you when direction is needed. This aims to keep effort manageable while giving each step the reasoning and validation it needs.
+Describe the outcome you want. From that request, the agent plans the next **small, complete step**, performs it, studies the result, and uses what it learns to decide what follows. This repeating Plan–Do–Study–Act (PDSA) workflow aims to keep effort manageable while giving each step the reasoning and validation it needs.
 
 ## Get started
 
@@ -33,13 +33,13 @@ You can also give it a larger objective:
 
 > Add CSV imports that report invalid rows and continue processing valid rows.
 
-The agent uses your request and the project context to choose the next small, useful increment and establish its acceptance conditions. It asks about consequential gaps in the intended behavior, performs authorized work, validates the result, and reports progress. You do not need to prescribe the steps or repeat the workflow.
+During Plan, the agent considers your overall objective and project context, chooses the next small, useful increment, and establishes its acceptance conditions. Later work stays at outline level. Results from Do and Study inform Act and the next Plan, so findings can reshape the approach as work progresses. The agent asks about consequential gaps, validates authorized work, and reports progress. You do not need to prescribe the steps or repeat the workflow.
 
 Further increments can proceed under existing authorization. The agent pauses when the contract, your instructions, or the tool's rules require direction—for example, before taking on unexpectedly greater work. A pause after every increment is optional; you can request [additional review checkpoints](README-powerusers.md#optional-controls-you-can-add).
 
 ## What to expect
 
-- **Focused progress.** The agent chooses and plans the next useful step, performs the work, checks the result, and uses what it learns to decide what follows.
+- **Focused progress.** Planning and learning stay connected: the agent chooses the next useful step in light of your objective and what earlier work established.
 - **Coherent results.** Affected tests and documentation stay consistent with changes. Unrelated cleanup and speculative features stay outside the task.
 - **Visible decisions.** The agent brings consequential unresolved questions to you and reports checks, assumptions, and unfinished work.
 - **Project knowledge that develops with the work.** Adoption includes architecture documentation aligned with arc42, clearly expressed requirements, and records of significant decisions. You can limit or defer proposed documentation improvements. Installing the contract does not authorize a project-wide audit or rewrite.

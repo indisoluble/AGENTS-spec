@@ -6,8 +6,9 @@ The methods appear where they help explain what you experience. Their deeper rat
 
 | What you want to do | Where to start |
 | --- | --- |
-| Understand how the agent breaks down a larger goal | [From your goal to an increment](#from-your-goal-to-an-increment) |
-| Understand how a step proceeds | [Follow an increment](#follow-an-increment) |
+| Understand how work proceeds from your request | [PDSA starts with your request](#pdsa-starts-with-your-request) |
+| Understand how the agent selects the next step | [Plan the next useful increment](#plan-the-next-useful-increment) |
+| See how findings affect the broader approach | [Use results to shape what follows](#use-results-to-shape-what-follows) |
 | Understand when the agent asks, pauses, or continues | [Control effort and decisions](#control-effort-and-decisions) |
 | Specify a particular step or add review points | [Optional controls you can add](#optional-controls-you-can-add) |
 | Assess what was delivered | [Read the result](#read-the-result) |
@@ -16,48 +17,61 @@ The methods appear where they help explain what you experience. Their deeper rat
 | Pick up unfinished work | [Continue unfinished work](#continue-unfinished-work) |
 | Check instruction loading | [Tool compatibility](#tool-compatibility) |
 
-## From your goal to an increment
+## PDSA starts with your request
 
-Start with the outcome you want and the constraints that matter to you. The agent is responsible for selecting the next small, useful increment within your authorization and establishing how to assess it. You do not need to decompose the task or specify a stopping condition for every step.
+Start with the outcome you want and the constraints that matter to you. The contract applies [PDSA—Plan–Do–Study–Act](https://deming.org/explore/pdsa/) from that request onward, for implementation, investigation, and documentation. Understanding the objective, considering the approach, and selecting the next useful step all belong to Plan.
 
 The **task objective** is the overall outcome you want. An **increment** is a deliberately small step toward it, normally useful, understandable, reviewable, and verifiable on its own. Its **increment objective** describes the result sought in that step.
 
-For example:
-
-> Add CSV imports that report invalid rows and continue processing valid rows.
-
-In a project whose existing reader already parses CSV rows, the agent might identify field-count validation as the next useful increment. It reads the relevant requirements and implementation, establishes checks for rejecting mismatched rows and continuing with valid ones, then performs and validates the authorized work. If handling a particular kind of invalid row requires a consequential decision that the request and project evidence do not settle, it asks you.
-
-You supplied the intended behavior. The agent chose a bounded step and its checks. Another increment might investigate whether the reader preserves quoted fields; the agent also frames and bounds that investigation under the contract's rules.
-
-The smallest useful next increment is the default, including in planning or approval workflows. The agent develops enough detail to carry out that step; later work stays at outline level until evidence and your direction justify more detail. Acceptance conditions come from the request and project context, with consequential unresolved constraints brought to you.
-
-Completeness applies within the chosen scope. A code change includes the affected tests, configuration, and documentation needed for its result. An investigation includes the evidence and conclusion needed for the relevant decision. Either can be complete without fulfilling the overall task. Small increments do not justify incomplete implementation or inadequate checking.
-
-A straightforward, authorized correction can proceed without a separate planning exchange. If a step cannot stand alone, the agent must first explain why, what remains usable or testable, and how to undo it. When no safe step is possible, it presents alternatives and seeks direction.
-
-See the contract's [increment rules](AGENTS.md#12-bound-the-work-and-choose-an-approach).
-
-## Follow an increment
-
-The contract applies [PDSA—Plan–Do–Study–Act](https://deming.org/explore/pdsa/) to implementation, investigation, and documentation. Its practical purpose is to connect an approach with observed results and the next decision.
-
 | Phase | What happens | What you can assess |
 | --- | --- | --- |
-| **Plan** | The agent reads relevant project context, establishes the task and increment objectives, and identifies scope, acceptance conditions, an approach, and a prediction. On resumption, it reconciles retained context with current evidence. | Is this the intended next step, with a meaningful way to check it? |
+| **Plan** | The agent understands the overall objective and permitted work, reads relevant context, and selects the next useful increment. It defines that step's objective, scope, acceptance conditions, approach, and prediction, keeping later work at outline level. On resumption, it reconciles retained context with current evidence. | Does this step address the objective and current knowledge, with a meaningful way to assess it? |
 | **Do** | It performs the authorized work, keeps affected artifacts consistent, and records significant choices as they arise. | Are the changes or investigation focused on the agreed result? |
-| **Study** | It validates the result against acceptance conditions, compares observations with the prediction, and identifies missing checks or uncertainty. | What is complete, and what was learned about the approach? |
-| **Act** | It uses the findings to retain, revise, or discard the approach within scope, preserves useful learning, and reports the outcome. | Is the task finished, is direction needed, or can another authorized increment begin? |
+| **Study** | It validates the result against acceptance conditions, compares observations with the prediction, and identifies what the evidence establishes about the approach, including uncertainty or missing checks. | What is complete, and what does the result imply for further work? |
+| **Act** | It uses the findings to retain, revise, or discard the approach within scope, preserves useful learning, and reports the outcome. It finishes, seeks direction, or returns to Plan with the new knowledge. | Is the task fulfilled? If work remains, how should the approach develop and what direction is needed? |
+
+The overall objective guides successive cycles. The agent develops the next step in detail and revisits the outline of later work as evidence changes. A complete sequence of increments does not need to be settled beforehand.
 
 These phases can overlap or repeat. Tests may be planned before implementation and written during it; documentation changes as facts and decisions become established. Routine work needs no worksheet, formal experiment, or separate report for each phase.
 
 PDSA's Plan phase is part of the reasoning process. A tool's Plan mode has its own proposal and approval procedures. Entering a mode does not expand what you have authorized.
 
+### Plan the next useful increment
+
+Within Plan, the agent is responsible for selecting the smallest useful next increment within your authorization and establishing how to assess it. This default also applies in planning or approval workflows. You do not need to decompose the task or specify a stopping condition for every step.
+
+The agent reasons enough for the next decision at the current level of discussion, whether that concerns architecture, an investigation, a document, or a local change. Acceptance conditions come from the request and project context, with consequential unresolved intent or constraints brought to you. Later detail develops in response to findings and your direction.
+
+An increment can produce evidence for a decision as well as an implementation. Completeness applies within its scope: a code change includes affected tests, configuration, and documentation needed for its result; an investigation includes the evidence and conclusion needed for the relevant decision. Either can be complete while the overall task remains unfinished.
+
+A straightforward, authorized correction can proceed without a separate planning exchange. If a step cannot stand alone, the agent must first explain why, what remains usable or testable, and how to undo it. When no safe step is possible, it presents alternatives and seeks direction. Small increments do not justify incomplete implementation or inadequate checking.
+
+See the contract's [workflow overview](AGENTS.md#workflow-overview) and [increment rules](AGENTS.md#12-bound-the-work-and-choose-an-approach).
+
+### Use results to shape what follows
+
+For example, you might ask:
+
+> Add CSV imports that report invalid rows and continue processing valid rows.
+
+Suppose the project has an existing reader, and the required input format includes quoted fields. While considering the approach in Plan, the agent finds that the reader's handling of quoted commas is uncertain. That uncertainty can make a focused investigation the next useful increment:
+
+| Phase | Example |
+| --- | --- |
+| **Plan** | Establish whether the reader preserves a quoted field containing a comma. Define the question, scope, objective, effort limit, and evidence needed. Predict that the existing reader will preserve the field. |
+| **Do** | Run the stated experiment and capture the resulting fields. |
+| **Study** | Observe that the reader splits the quoted field. Check whether the evidence answers the investigation question and recognize that the prediction was disproved. |
+| **Act** | Revise the assumption that the reader already supports the required input, retain the finding, and report its effect on the approach to imports. Determine whether direction is needed before returning to Plan. |
+
+The next Plan now addresses the parser limitation in light of current evidence and authorization. Had the evidence supported the original assumption, a useful next increment might instead have been row validation. The chosen next step emerges from what was learned.
+
+If the discovery means completion needs materially more work or investigation than expected, the agent must explain that increase and wait for direction before the additional work. That checkpoint applies as soon as its condition arises, in any phase. Updating the approach supplies no permission to change your objective or expand the work.
+
 ### Completion and learning are different
 
 **Acceptance conditions** are the observable criteria for completing the increment. A **prediction** is the expected result of the chosen approach. **Validation** checks the acceptance conditions; comparing observations with the prediction helps assess the approach.
 
-Suppose you ask whether a parser preserves a quoted field containing a comma. The agent uses the relevant context to define a focused experiment and predicts that the field will remain intact. If the experiment shows the parser splitting that field, an evidenced answer can complete the investigation while disproving the prediction. An implementation required to preserve the field would still be incomplete if it split it. A request to investigate alone does not authorize changing the parser.
+In the quoted-field example above, an evidenced answer can complete the investigation while disproving its prediction. An implementation required to preserve the field would still be incomplete if it split it. If you had requested only the investigation, that request alone would not authorize changing the parser.
 
 Changing a prediction does not change your requirements or acceptance conditions. A successful sample also supports only the conclusion justified by that sample.
 

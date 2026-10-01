@@ -17,7 +17,18 @@ Keep the three reader-facing guides and this editorial file at the repository ro
 
 The ordinary reading path starts at `README.md` and branches into practical use or technical understanding. Keep editorial navigation out of that path; contributors can discover this root file directly. “Power users” means readers seeking practical depth, without requiring technical expertise. The maintainer guide documents the contract itself; it is not a contributor onboarding manual.
 
-Provider documentation owns claims about provider behavior. Method references clarify their assigned practices. `AGENTS.md` remains authoritative for the combined collaboration policy; neither a guide nor an external source may silently strengthen, weaken, or extend it. Design constraints in the technical guide inform changes to the artifact and add no hidden duties to ordinary agent tasks.
+### Check the source for each kind of statement
+
+When editing a guide, check each statement against the relevant source:
+
+| Statement being edited | Source to check |
+| --- | --- |
+| What an agent is required or permitted to do under this contract | [AGENTS.md](AGENTS.md). Preserve its rule strengths, conditions, and exceptions. |
+| How a tool discovers or applies instructions | The tool's official documentation, such as the documentation for OpenAI Codex, Anthropic Claude Code, or GitHub Copilot. [Tool compatibility](README-powerusers.md#tool-compatibility) links to these sources and records when they were checked. |
+| What a method used by the contract means | The external explanations linked from `AGENTS.md` and `README-maintainers.md`, for example those covering PDSA, Simple Design, EARS, and arc42. The technical guide explains their [roles and source boundaries](README-maintainers.md#principles-and-reference-boundaries). |
+| The reasons and constraints for changing `AGENTS.md` | The [design rationale](README-maintainers.md#design-goals-and-boundaries), [method-selection criteria](README-maintainers.md#choosing-or-replacing-methods), and [portability constraints](README-maintainers.md#keeping-the-contract-portable) in the technical guide. These guide evolution of the contract; they add no duties to ordinary project tasks performed under it. |
+
+Use external method sources to explain the practices adopted in `AGENTS.md`; do not import additional requirements from them or silently change the contract through a guide. When describing tool behavior, preserve the [instruction hierarchy and permission boundaries](AGENTS.md#53-instructions-contract-files-and-external-actions) under which the contract operates.
 
 ### Summaries and overlap
 

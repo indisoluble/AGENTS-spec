@@ -26,12 +26,25 @@ You might ask:
 
 That is the **task objective**: the overall outcome you want. The agent selects an **increment**, a deliberately small step toward it, normally useful, understandable, reviewable, and verifiable on its own. You do not need to break the task down first.
 
-Suppose the project already has a suitable CSV reader and agreed rules for invalid rows and line numbers. The next useful increment could be rejecting rows whose field count differs from the header. The agent uses [PDSA—Plan–Do–Study–Act](https://deming.org/explore/pdsa/) from your request onward:
+The agent uses [PDSA—Plan–Do–Study–Act](https://deming.org/explore/pdsa/) from your request onward. Plan defines the next useful step; Do carries it out; Study checks the result and the approach; Act uses those findings to decide what follows.
 
-1. **Plan the step.** Read the relevant requirements, code, tests, architecture, and decisions. Select field-count validation as the increment's objective and define its scope. Establish **acceptance conditions**: reject mismatched rows, report their line numbers, and continue with valid rows. State a **prediction** about the approach: validation at the existing row boundary will suffice.
-2. **Do the work.** Add that validation, the relevant tests, and updates to affected documentation. Keep the changes focused on the agreed behavior. Record significant lasting choices if any arise.
-3. **Study the result.** Run relevant available checks against the acceptance conditions. This is **validation**. Separately, compare the observations with the prediction: did the existing row boundary support the change, or did the approach need revision? Report failed or missing checks.
-4. **Act on what was learned.** Retain, revise, or discard the approach within authorization. Preserve useful findings and report what is complete. If the task remains unfinished, use the findings to plan the next authorized increment or seek direction when required.
+### Plan: choose the next increment
+
+Choosing the first increment is part of Plan. The agent establishes your objective and permitted work, then inspects the relevant requirements, code, tests, configuration, architecture, and decisions. It needs to understand what is agreed, what already works, what is missing, and whether uncertainty blocks the next decision.
+
+For this example, suppose that inspection finds agreed rules for invalid rows and line numbers, with tests supporting the existing reader's handling of the required CSV format. Field-count validation is missing. The existing row-processing code gives access to the fields, header, and line number, suggesting that this rule can be added locally.
+
+That evidence supports a small, useful increment: reject rows whose field count differs from the header, report them, and continue processing. This addresses one missing behavior and can be checked independently of the remaining invalid-row rules. Its scope includes the affected implementation, tests, and documentation.
+
+The agent defines **acceptance conditions**: reject mismatched rows, report their line numbers, and continue with valid rows, including a valid row after a rejection. Its **prediction** is that validation at the existing row boundary will suffice. The objective, scope, conditions, and approach can be refined together as the context becomes clear; later work stays at outline level.
+
+Different findings can lead to a different first step. If the intended invalid-row behavior is unsettled, the agent brings consequential questions to you and develops the relevant requirements within authorization. If the reader's suitability is uncertain, a [bounded investigation](#when-an-investigation-is-needed) may supply the evidence needed before selecting an implementation step.
+
+### Do, Study, and Act: complete the step and use its findings
+
+- **Do the work.** Add that validation, the relevant tests, and updates to affected documentation. Keep the changes focused on the agreed behavior. Record significant lasting choices if any arise.
+- **Study the result.** Run relevant available checks against the acceptance conditions. This is **validation**. Separately, compare the observations with the prediction: did the existing row boundary support the change, or did the approach need revision? Report failed, unavailable, or omitted checks.
+- **Act on what was learned.** Retain, revise, or discard the approach within authorization. Preserve useful findings and report what is complete. If the task remains unfinished, use the findings to plan the next authorized increment or seek direction when required.
 
 A report for this illustrative step could look like this, assuming the named files exist and the checks succeeded:
 
@@ -53,7 +66,9 @@ A small increment limits how much the agent takes on at once. It still needs eno
 
 For example, choosing a storage approach may require careful examination of requirements, alternatives, dependencies, and risks. It need not include designing every future data structure and function. The agent develops the next decision at the current level of discussion—architecture, an investigation, a document, or a local change—and keeps later detail at outline level until needed.
 
-The agent selects the smallest useful next increment within your authorization, including in planning or approval workflows. It defines the step's objective, acceptance conditions, approach, and prediction using your request and the project context. Consequential unresolved intent or constraints come back to you. These are standing responsibilities, so you need not prescribe a step or stopping condition for every request.
+The agent selects the smallest useful next increment within your authorization, including in planning or approval workflows. During Plan, it considers which unmet behavior or blocking question can usefully be addressed next and which dependencies are needed for a complete result. It assesses the [scope, uncertainty, consequences, and reversibility](AGENTS.md#51-scope-effort-and-requester-interaction) of that decision. These criteria guide judgment; the contract prescribes no fixed sequence or ranking formula.
+
+Consequential unresolved intent or constraints come back to you. Selecting and defining the step—its objective, acceptance conditions, approach, and prediction—are standing agent responsibilities, so you need not prescribe a step or stopping condition for every request.
 
 An increment can deliver evidence for a decision as well as an implementation. A code change includes the affected tests, configuration, and documentation needed for its result; an investigation includes the evidence and conclusion needed for its decision. Either can be complete while the overall task remains unfinished.
 

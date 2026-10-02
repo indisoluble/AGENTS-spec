@@ -15,7 +15,7 @@ The motivating risk is especially visible in a new or poorly documented project.
 
 Its controls work together: small increments limit the immediate commitment; progressive detail defers distant decisions; bounded investigations limit inquiry; PDSA connects findings to subsequent choices. Engineering practices support quality within each step, while documentation and continuation context retain knowledge for later work. Adequate analysis, completeness, and validation constrain every effort-saving choice.
 
-Reports make results and uncertainty assessable so the requester can steer further work. These mechanisms are best effort: total consumption may remain substantial, and there is no token quota, guaranteed pause after each increment, or guarantee of savings. The [practical explanation](README-powerusers.md#understanding-token-use) distinguishes progress visibility from consumption measurement.
+Reports consolidate unreported work at task completion, handoff, or when seeking requester input. Routine progress reports are suppressed unless requested or otherwise required, reducing narration while authorized work continues. These mechanisms are best effort: total consumption may remain substantial. The design requires no pause after every increment and provides no token quota or guarantee of savings. The [practical explanation](README-powerusers.md#understanding-token-use) distinguishes reported results from consumption measurement.
 
 The contract is self-contained. Guides explain it and bridges help tools apply it; neither supplies hidden operating duties. Project facts, build commands, requirements, and architecture come from the adopting project's code and documentation. This separation supports reuse without embedding an application's design in generic instructions.
 
@@ -33,14 +33,14 @@ Consider a request to add CSV imports that report invalid rows and continue with
 
    Define **acceptance conditions**—reject mismatched rows, report their line numbers, and continue with valid rows, including one after a rejection—and a **prediction** that the existing row boundary will support the approach. Selection, scope, conditions, and approach can be refined together as context becomes clear. Later work remains at outline level.
 2. **Do:** implement the validation using current project conventions and Simple Design. Add relevant tests and update affected documentation at its authoritative location. Record an ADR if a significant lasting choice arises.
-3. **Study:** check acceptance, including a valid row after a rejection. Separately assess whether the predicted local approach sufficed, and disclose failed, unavailable, or omitted checks.
-4. **Act:** use the evidence to retain, revise, or discard the approach within authorization. Preserve material findings and otherwise missing continuation context, report the result and unfinished work, then finish, seek required direction, or plan the next authorized increment.
+3. **Study:** check acceptance before completing the increment, including a valid row after a rejection. Separately assess whether the predicted local approach sufficed. Failed, unavailable, or omitted checks remain subject to disclosure under the reporting rules.
+4. **Act:** use the evidence to retain, revise, or discard the approach within authorization. Preserve material findings and otherwise missing continuation context, then finish, seek required direction, or plan the next authorized increment. Continuing to another increment does not require drafting or emitting a routine report; reporting follows [§4.4](AGENTS.md#44-report-the-result-and-choose-the-next-step).
 
 The initial choice therefore depends on what Plan establishes. Unsettled consequential requirements need requester input; uncertainty about the reader may call for a bounded investigation before implementation. The agent is responsible for choosing and defining the next increment, within the contract's consultation and authorization rules.
 
 The example connects the design's parts. Requirements provide intended behavior; inspection and existing checks establish the starting point; Study supplies new evidence; Act uses it to inform subsequent Plan phases. Records preserve material findings and lasting choices. The supported local validation approach may help plan another rule, while evidence of wider parser limitations changes the basis for that next decision.
 
-A discovery that requires an unexpectedly larger shared-parser redesign triggers reassessment immediately, in whichever phase it occurs. A requested operator guide could be another increment, shaped by its reader's need. Neither a completed step nor a named method automatically creates an ADR, guide, work record, or fresh approval requirement.
+The field-count result can therefore inform another authorized validation increment before any routine chat report is produced. At task completion, a handoff, or when seeking requester input, the agent consolidates unreported work. Required disclosures still apply: a discovery that requires an unexpectedly larger shared-parser redesign triggers explanation and reassessment immediately, in whichever phase it occurs. The agent then waits for requester direction before the added work. A requested operator guide could be another increment, shaped by its reader's need. Neither a completed step nor a named method automatically creates an ADR, guide, work record, or fresh approval requirement.
 
 The [practical walkthrough](README-powerusers.md#from-a-request-to-a-result) shows the user-facing interaction. The following sections explain the reasons and boundaries behind it.
 
@@ -52,7 +52,7 @@ The requester supplies goals, permission, and relevant constraints. The agent su
 
 Within Plan, increment selection connects the requested outcome and permission with current behavior, relevant dependencies, and available evidence. The agent looks for the smallest useful result that can be completed within scope, including the affected artifacts and checks. When blocking uncertainty prevents a sound implementation choice, obtaining bounded evidence can itself be the useful result.
 
-The [four effort factors](AGENTS.md#51-scope-effort-and-requester-interaction)—scope, uncertainty, consequence, and reversibility—guide that judgment. Scope includes affected behavior, artifacts, dependencies, and system boundaries. A few changed lines can affect many callers or an irreversible migration; a narrow, understood, low-impact, reversible change can use brief inspection, action, validation, and reporting.
+The [four effort factors](AGENTS.md#51-scope-effort-and-requester-interaction)—scope, uncertainty, consequence, and reversibility—guide that judgment. Scope includes affected behavior, artifacts, dependencies, and system boundaries. A few changed lines can affect many callers or an irreversible migration; a narrow, understood, low-impact, reversible change can use brief inspection, action, and validation. Reporting follows its own triggers and remains proportionate.
 
 These criteria constrain selection without prescribing a numeric score, an exhaustive comparison of possible increments, or a uniquely correct sequence. Requiring a complete ranking or detailed backlog before starting would expand the initial planning commitment. The design instead calls for enough reasoning to support the next useful step and uses its evidence to refine later work. This contributes to the token-control goal while preserving the analysis and validation needed for a complete result.
 
@@ -84,7 +84,7 @@ Obtaining the evidence or reaching the limit ends the inquiry. If acceptance con
 
 ### Authorization and requester decisions
 
-An increment limits work undertaken at once; a report makes its result visible; a checkpoint reserves a decision for the requester. Ordinary increments can continue under existing authorization. Their completion supplies no additional permission and creates no automatic pause.
+An increment limits work undertaken at once; a report can summarize several increments; a checkpoint reserves a decision for the requester. Ordinary increments can continue under existing authorization without routine reports. Their completion supplies no additional permission and creates no automatic pause.
 
 The material-growth checkpoint addresses a separate problem: authorized work can turn out to require unexpectedly greater effort. The agent must explain that increase and await direction before taking it on, even when the outcome and broad authorization are unchanged. This gives the requester control that a scope boundary alone cannot provide. See the [two practical growth cases](README-powerusers.md#when-the-work-grows-unexpectedly).
 
@@ -96,7 +96,15 @@ The [requirement keywords](AGENTS.md#terms-and-requirement-keywords) preserve di
 
 A SHOULD exception cannot bypass a MUST checkpoint or invent a consequential constraint. Reporting a consequential choice without prior direction exposes reasons, effects, uncertainty, and revision or reversal options; it cannot retroactively authorize the choice. Native permissions and approval controls remain the enforceable boundaries.
 
-The reporting defaults support review without demanding a full-file dump or diff for every task. The [usage guide](README-powerusers.md#assess-the-result) explains the handoff and its proportional treatment of small changes.
+### Reporting and continued execution
+
+Completing an increment and reporting to the requester serve different purposes. PDSA requires the work to be assessed and its findings used, even when no chat report follows. [AGENTS.md §4.4](AGENTS.md#44-report-the-result-and-choose-the-next-step) consolidates unreported work at task completion, handoff, or when seeking requester input. It prohibits drafting or outputting routine progress reports at other times unless requested or required.
+
+Suppressing drafting as well as output avoids preparing reports merely to hold them back from chat. Material findings, decisions, affected documentation, and necessary continuation context still have their existing owners and maintenance triggers. No separate reporting log or record is required for every increment. Required disclosures, tool instructions, and requester-selected reporting remain applicable.
+
+The trade-off is less routine visibility during autonomous work and a consolidated account at the next reporting occasion. Reporting alone reserves no time for review and creates no approval checkpoint. Scope limits, bounded investigations, and mandatory reassessment for material growth continue to control the work; fewer reports establish no measured token saving.
+
+Reports remain proportionate and follow the contract's requirements for content, file delivery, and blocked-edit fallbacks. The [usage guide](README-powerusers.md#assess-the-result) explains what the requester receives.
 
 ## Engineering choices
 
@@ -122,7 +130,7 @@ The dead-code condition matters because registration, reflection, or external ca
 
 ### Validation and test evidence
 
-Relevant available checks against acceptance conditions are mandatory before claiming completion. Appropriate tests for behavior changes, defect repairs, and clarified edge cases are a SHOULD default with justified exceptions. Validation covers affected behavior, risk, and hard operational limits for every work type; passing tests cannot replace a missing requirement or necessary check. Failed, unavailable, and omitted checks stay visible.
+Relevant available checks against acceptance conditions are mandatory before completing each increment, independently of whether a report is produced then. Appropriate tests for behavior changes, defect repairs, and clarified edge cases are a SHOULD default with justified exceptions. Validation covers affected behavior, risk, and hard operational limits for every work type; passing tests cannot replace a missing requirement or necessary check. Failed, unavailable, and omitted checks must be disclosed under §4.4; any need for requester involvement still follows §5.1.
 
 [Given/When/Then](https://martinfowler.com/bliki/GivenWhenThen.html) makes a unit test's starting conditions, action, and expected result understandable. For a quoted field containing a comma, those parts are the sample, the parser call, and the intact-field assertion. The contract requires neither literal labels nor a testing framework, and prohibits weakening tests merely to pass.
 
@@ -250,7 +258,9 @@ The design can be assessed at two levels: whether the contract works as a self-c
 | Scenario | Design distinction to assess |
 | --- | --- |
 | Broad objective, including a new project | The agent limits its next commitment and keeps later detail provisional. Necessary depth, affected dependencies, and validation remain within scope; the breadth of the goal does not justify an unconstrained first increment. |
-| Ordinary authorized change | The agent selects a small increment and establishes its checks. Completion grants no additional permission or automatic documentation artifact; another increment can proceed under existing authorization unless a checkpoint requires a pause. |
+| Ordinary authorized change | The agent selects a small increment and completes its checks before completing the increment, even without a chat report. Completion grants no additional permission or automatic documentation artifact; another increment can proceed under existing authorization unless a checkpoint requires a pause. |
+| Continued execution and reporting | Several increments can complete without routine report drafting or output. At task completion, handoff, or when seeking input, the agent consolidates unreported work. Required findings and records are maintained throughout. |
+| Requested or required disclosures | Requested reports and other disclosure duties remain applicable. Suppressing routine reports cannot postpone required questions, disclosures, or growth reassessments, and reporting alone creates no approval checkpoint. |
 | Selecting and revisiting work | Plan connects the requested outcome, permission, relevant context, and evidence to a useful next increment from the first request. Assess whether that connection is understandable, including when missing evidence or consequential constraints change the next step. Study and Act inform later planning; later detail remains provisional and revisions stay within authorization. |
 | Investigation contradicts its prediction | An evidenced answer can complete the investigation while disproving the prediction; unmet implementation behavior remains incomplete. |
 | Blocking uncertainty requires investigation | Before starting, the agent must state the question, scope, objective, effort limit, and needed evidence. No universal limit or requester-defined allowance is assumed. |

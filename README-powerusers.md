@@ -43,18 +43,20 @@ Different findings can lead to a different first step. If the intended invalid-r
 ### Do, Study, and Act: complete the step and use its findings
 
 - **Do the work.** Add that validation, the relevant tests, and updates to affected documentation. Keep the changes focused on the agreed behavior. Record significant lasting choices if any arise.
-- **Study the result.** Run relevant available checks against the acceptance conditions. This is **validation**. Separately, compare the observations with the prediction: did the existing row boundary support the change, or did the approach need revision? Report failed, unavailable, or omitted checks.
-- **Act on what was learned.** Retain, revise, or discard the approach within authorization. Preserve useful findings and report what is complete. If the task remains unfinished, use the findings to plan the next authorized increment or seek direction when required.
+- **Study the result.** Run relevant available checks against the acceptance conditions before completing the increment. This is **validation**. Separately, compare the observations with the prediction: did the existing row boundary support the change, or did the approach need revision? Disclose failed, unavailable, or omitted checks under the [reporting rules](#assess-the-result).
+- **Act on what was learned.** Retain, revise, or discard the approach within authorization and preserve useful findings. If the task remains unfinished, use the findings to plan the next authorized increment or seek direction when required. A routine transition to another increment needs no progress report.
 
-A report for this illustrative step could look like this, assuming the named files exist and the checks succeeded:
+After field-count validation is complete, the agent can use its findings to select another authorized increment. Suppose that later step adds an agreed check for missing required values. Each increment gets its own validation and assessment, but the agent does not draft or post a routine report between them unless requested or otherwise required.
 
-> Added field-count validation in `src/importer.py`, regression checks in `tests/test_importer.py`, and updated `docs/import-format.md`.
+If you ask for status after those two increments, a consolidated report could look like this, assuming the named files exist and the checks succeeded:
+
+> Added field-count and required-value validation in `src/importer.py`, regression checks in `tests/test_importer.py`, and updated `docs/import-format.md`.
 >
-> Checks passed for valid rows, mismatched rows, reported line numbers, and a valid row following a rejected row. The change worked at the existing row boundary, supporting that approach for this validation rule.
+> Checks passed for valid rows, mismatched field counts, missing required values, reported line numbers, and a valid row following a rejection. Both changes worked at the existing row boundary, supporting that approach for these rules.
 >
-> Field-count validation is complete. Other agreed invalid-row rules remain to be implemented toward the CSV-import objective.
+> These two validation rules are complete. Other agreed invalid-row rules remain to be implemented toward the CSV-import objective.
 
-The report distinguishes this step from the whole task. It also explains what the result established about the approach. The agent then selects the next step using that evidence; it does not need to settle a complete sequence in advance. If the work instead reveals an unexpectedly larger effort, the [pause rule](#when-the-work-grows-unexpectedly) applies when that discovery occurs.
+This requested report combines work not previously reported and distinguishes it from the whole task. The agent also consolidates results at task completion, a handoff, or when seeking your input. Selection of later work uses the findings as they become available; it does not wait for a chat report or require a complete sequence in advance. If the work reveals unexpectedly greater effort, the [pause rule](#when-the-work-grows-unexpectedly) applies at that discovery.
 
 The phase labels explain the reasoning, not a required report format. Phases can overlap or repeat: tests may be planned before implementation, and documentation changes as facts become established. Routine work needs no worksheet, formal experiment, or separate phase reports. PDSA also applies to investigations and documentation-only work.
 
@@ -85,10 +87,10 @@ Three events have different purposes:
 | Event | Purpose |
 | --- | --- |
 | Completing an increment | Establish that one bounded result meets its acceptance conditions. |
-| Reporting a result | Make progress, evidence, and uncertainty visible. |
+| Reporting a result | Consolidate unreported work at task completion, handoff, or when seeking your input; provide other requested or required disclosures. |
 | Reaching an approval checkpoint | Reserve a decision for you before the relevant work continues. |
 
-Your conditions, the contract's checkpoints, and the tool's rules all apply. Your instructions take priority within the tool's actual hierarchy and permissions.
+A completed increment can lead directly to the next one without a chat report. A requested or required report does not itself create an approval checkpoint. Your conditions, the contract's checkpoints, and the tool's rules all apply; your instructions take priority within the tool's actual hierarchy and permissions.
 
 ### When the agent asks you
 
@@ -112,7 +114,7 @@ For the field-count increment:
 
 | Finding | Expected response |
 | --- | --- |
-| Another malformed row fits the agreed rule and expected local checks. | Complete the regression case within the increment and report it. |
+| Another malformed row fits the agreed rule and expected local checks. | Complete and validate the regression case within the increment; include it in the next report when reporting is due. |
 | Rejecting rows requires redesigning a shared parser and investigating other callers. | Explain the larger effort and unfinished result, propose a next step, and wait for direction. |
 
 This assessment considers scope, uncertainty, consequences, and reversibility. There is no numerical threshold based on changed lines or token count. The checkpoint applies in every phase, and splitting the work cannot excuse incomplete or inadequately checked results.
@@ -125,7 +127,7 @@ Commits, publishing, and other external actions require authorization, which may
 
 ### Optional controls you can add
 
-You can select a particular increment, supply an investigation limit, or add review checkpoints. For example:
+You can select a particular increment, supply an investigation limit, request status updates, or add review checkpoints. Asking for updates does not by itself require approval before every next increment. To add those pauses, for example:
 
 > Propose the first increment and wait for my approval before editing. After implementing and checking it, wait for my review before starting another increment.
 
@@ -167,9 +169,11 @@ See [framing an inquiry](AGENTS.md#12-bound-the-work-and-choose-an-approach) and
 
 ## Assess the result
 
-At a handoff, the report explains what was completed, why, where to review it, what was checked, and what remains uncertain or unfinished. Material assumptions, decisions, conflicts, risks, and justified departures from strong recommendations stay visible. Completion of the increment remains distinct from completion of the overall task.
+The agent must consolidate unreported work into a report at task completion, at a handoff, or when seeking your input. While continuing, it must not draft or output routine progress reports unless you request them or another applicable rule requires them. It still makes required disclosures, such as reporting a blocking tool limitation or explaining a need for unexpectedly greater work.
 
-Before claiming completion, the agent must run relevant available checks against acceptance conditions and disclose failed, unavailable, or omitted checks. Passing tests cannot substitute for an unimplemented requirement or a necessary performance or operational check.
+The report explains what was completed, why, where to review it, what was checked, and what remains uncertain or unfinished. Material assumptions, decisions, conflicts, risks, and justified departures from strong recommendations stay visible. One report can cover several increments while distinguishing their completion from fulfillment of the overall task.
+
+Before completing each increment, the agent must run relevant available checks against its acceptance conditions, whether or not it reports at that point. Failed, unavailable, or omitted checks must be disclosed under the reporting rules. Passing tests cannot substitute for an unimplemented requirement or a necessary performance or operational check. Required findings and records are maintained as work proceeds; they are not deferred until the next chat report.
 
 Appropriate tests are a strong default for behavior changes, defect repairs, and clarified edge cases. Unit tests should use [Given/When/Then](https://martinfowler.com/bliki/GivenWhenThen.html): the starting situation, action, and expected result. Neither literal labels nor a particular framework are required. Tests must not be weakened merely to pass.
 
@@ -181,7 +185,7 @@ Reports should fit the work. Small mechanical changes normally need only a conci
 
 ### Understanding token use
 
-Progress reports show what the effort produced and let you steer subsequent work. They provide a qualitative view, not a token measurement. Total consumption can remain substantial even when increments are small and complete.
+Reports summarize what the effort produced when reporting is due. They provide a qualitative view, not a token measurement or a guaranteed review opportunity between increments. While the agent continues, suppressing routine report drafting and output avoids spending tokens on those summaries. Required reasoning, validation, records, and disclosures still happen; total consumption can remain substantial even when increments are small and complete.
 
 The contract has no token meter, hard quota, or required token total in every report. For figures, use data your tool or provider exposes and check which activity or period it covers before attributing it to an increment. You can ask the agent to include usage figures it can actually access; without measurements, exact consumption remains unknown.
 
@@ -248,7 +252,7 @@ For example:
 
 > Assess how this project's documentation aligns with AGENTS.md.
 
-This authorizes assessment. The agent chooses a useful first assessment increment and reports its findings; edits need further permission even without an explicit “wait before editing.” A request that already authorizes improvements can cover subsequent implementation increments, subject to the consultation and reassessment rules.
+This authorizes assessment. The agent chooses a useful first assessment increment and can continue through further authorized assessment increments without routine progress reports. It consolidates findings at completion, handoff, or when seeking your input. Edits need further permission even without an explicit “wait before editing.” A request that already authorizes improvements can cover subsequent implementation increments, subject to the consultation and reassessment rules.
 
 An empty project can develop documentation and implementation through useful authorized work. Coverage expectations alone grant no permission for a repository-wide audit or reorganization.
 

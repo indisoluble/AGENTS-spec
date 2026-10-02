@@ -2,7 +2,7 @@
 
 A ready-made [AGENTS.md](AGENTS.md) for working with coding agents in new or established projects. Its primary aim is to prevent unconstrained token consumption through **small, complete steps toward your objective**, including avoiding unexpectedly heavy effort within a single step.
 
-Describe the outcome you want. The agent chooses a useful next step, does the work, checks it, and reports the result. You can assess progress and steer what follows. Each step still receives the analysis, implementation or investigation, documentation, and validation it needs; later detail develops as evidence becomes available.
+Describe the outcome you want. The agent works in small, complete steps, checks each result, and continues within your authorization. Each step receives the analysis, implementation or investigation, documentation, and validation it needs; later detail develops as evidence becomes available.
 
 ## Get started
 
@@ -27,7 +27,7 @@ Ask for the result you need:
 
 > Fix the incorrect setup command in the README.
 
-The agent inspects the relevant project files, makes the correction, checks it, and reports the result. For example, if the documented command disagreed with the project's package configuration and the corrected command ran successfully, a brief report could be:
+For this one-step task, the agent inspects the relevant project files, makes the correction, checks it, and reports the completed task. For example, if the documented command disagreed with the project's package configuration and the corrected command ran successfully, a brief report could be:
 
 > Corrected the setup command in `README.md` to match the package configuration. Ran the corrected command successfully.
 
@@ -39,13 +39,15 @@ For a larger objective, use the same approach:
 
 The agent chooses the next small, useful step—called an **increment**—from your request and the project context. It works through Plan–Do–Study–Act (PDSA): plan the step, do the work, assess the result, and use what it learned to decide what follows. Later work stays at outline level until it needs more detail. The [worked example](README-powerusers.md#from-a-request-to-a-result) shows this process from request to report.
 
-Further increments can proceed under existing authorization. The agent pauses when the contract, your instructions, or the tool's rules require direction, including before unexpectedly greater work. You can request [extra review checkpoints](README-powerusers.md#optional-controls-you-can-add) if you want to review every increment.
+Further increments can proceed under existing authorization. The agent combines unreported work into a report at task completion, at a handoff, or when asking for your input. While continuing, it must not draft or output routine progress reports unless requested or otherwise required.
+
+Required disclosures still apply, and the agent pauses when the contract, your instructions, or the tool's rules require direction, including before unexpectedly greater work. You can request status updates or [extra review checkpoints](README-powerusers.md#optional-controls-you-can-add) if you want to follow individual increments.
 
 ## What to expect
 
 - **Focused progress.** The agent selects each step using your objective, relevant project evidence, and earlier findings. Unrelated cleanup and speculative features stay outside the task.
 - **Complete work within each step.** Small scope still receives the necessary reasoning and validation. Affected code, tests, configuration, and documentation stay consistent.
-- **Visible decisions and results.** Consequential unresolved questions come to you. Reports identify checks, material assumptions, and unfinished work so you can steer subsequent effort.
+- **Decisions and consolidated results.** Consequential unresolved questions come to you. Reports identify completed work, checks, material assumptions, and unfinished work; one report can cover several increments.
 - **Bounded investigations.** Before investigating uncertainty that blocks the next decision, the agent must state the question, scope, objective, needed evidence, and an effort limit. It stops that inquiry when it obtains the evidence or reaches the limit; missing evidence still means incomplete work. See [investigation examples](README-powerusers.md#when-an-investigation-is-needed).
 - **Project knowledge that develops with the work.** Adoption includes architecture documentation organized around arc42 topics, clearly expressed requirements, and records of significant decisions. These engineering and documentation practices support quality and preserve knowledge for later steps. You can limit or defer proposed documentation improvements. Installation does not authorize a project-wide audit or rewrite.
 

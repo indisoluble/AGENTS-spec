@@ -50,9 +50,9 @@ Keep current descriptions and useful lasting rationale in their owners. Revision
 
 ## Reader paths
 
-- **Basic guide:** explain the primary benefit sought, give actionable installation steps and a useful first task, then show essential expectations and further reading. A newcomer should be able to adopt the contract using this guide alone.
-- **Practical guide:** begin with an ordinary outcome-oriented request and show how the agent handles it. Then explain situations the user may encounter. Put detailed reference material where readers can find it without making it a prerequisite for the first example.
-- **Technical guide:** connect design problems with chosen approaches, reasons, trade-offs, and implications for future changes. Keep sufficient method and source detail available for assessing the contract. Keep instructions for maintaining the READMEs here.
+- **[README.md](README.md) — basic guide:** explain the primary benefit sought, give actionable installation steps and a useful first task, then show essential expectations and further reading. A newcomer should be able to adopt the contract using this guide alone.
+- **[README-powerusers.md](README-powerusers.md) — practical guide:** begin with an ordinary outcome-oriented request and show how the agent handles it. Then explain situations the user may encounter. Put detailed reference material where readers can find it without making it a prerequisite for the first example.
+- **[README-maintainers.md](README-maintainers.md) — technical guide:** connect design problems with chosen approaches, reasons, trade-offs, and implications for future changes. Keep sufficient method and source detail available for assessing the contract. Keep instructions for maintaining the READMEs here.
 
 Use plain Markdown only, descriptive headings, direct links, and tables for comparisons. Introduce terms before depending on them; explain methods where they clarify an action or design choice. Present default behavior before optional requester controls.
 

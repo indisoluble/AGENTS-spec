@@ -114,7 +114,7 @@ In Do, Diátaxis shapes in-scope guides for readers; DRY (§5.2) governs their k
 
 For implementation, investigation, and documentation, validation checks results against acceptance conditions; comparing observations with the prediction assesses the approach. Revising a prediction changes neither requirements nor acceptance conditions. Implementation missing required in-scope behavior remains incomplete despite useful learning.
 
-- Before claiming completion, MUST run relevant available checks against acceptance conditions and report failed, unavailable, or omitted checks.
+- Before completing an increment, MUST run relevant available checks against acceptance conditions. MUST disclose failed, unavailable, or omitted checks under §4.4.
 - MUST cover affected behavior, risk, and hard performance/operational limits. Passing tests MUST NOT replace requirements or necessary checks. Token/context savings MUST NOT justify inadequate reasoning, implementation, or validation.
 
 A parser splitting a quoted comma disproves predicted preservation but can meet an investigation's acceptance conditions requiring an evidenced answer about preservation.
@@ -131,7 +131,7 @@ Tests may be planned in Plan and written in Do; their results join other Study e
 
 ## 4. Act — use the findings and determine what follows
 
-Use Study findings to retain, revise, or discard the approach within authorized scope, report the outcome, and decide what follows. Records below retain relevant learning and supply decisions, rationale, and architectural context to Plan; maintain them whenever triggered, in any phase.
+Use Study findings to retain, revise, or discard the approach within authorized scope. Maintain records in any phase when triggered, retaining learning for Plan.
 
 - Material findings MUST be recorded even for discarded approaches and moved to appropriate permanent records.
 
@@ -176,12 +176,13 @@ arc42 organizes architecture, linking requirements and decisions to inform later
 
 ### 4.4 Report the result and choose the next step
 
-- MUST report changes/reasons, paths, relevant decisions/canonical links, checks run/omitted, material assumptions/conflicts/risks/choices, and unfinished work. MUST explain material SHOULD exceptions and distinguish evidence from inference and increment completion from fulfillment of the task objective.
-- Reporting SHOULD fit the work; small mechanical changes usually need only outcome/checks, without invented risks, follow-up, or mandatory templates.
-- Displayed edits MUST default to changed portions with context; contents/diffs MAY be omitted. New files/extensive rewrites SHOULD have full-file links when available and chat explanations. MAY show full copyable contents on request or as needed for blocked edits.
-- MUST report tool limits blocking edits, checks, or instruction loading and, where possible, supply blocked edits as focused patches/exact changes with paths and application context.
+- At task completion, handoff, or when seeking requester input, MUST consolidate unreported work into a report. Otherwise MUST NOT draft/output routine progress reports unless requested or required.
+- Reports MUST cover changes/reasons, paths, relevant decisions/canonical links, checks run/omitted, material assumptions/conflicts/risks/choices, and unfinished work; explain material SHOULD exceptions; distinguish evidence/inference and increment/task completion.
+- Reports SHOULD fit the work; small mechanical changes usually need only outcome/checks, without invented risks, follow-up, or mandatory templates.
+- Displayed edits MUST default to changed portions with context; contents/diffs MAY be omitted. For new files/extensive rewrites, SHOULD link full files when available and explain in chat. MAY show full copyable contents on request or as needed for blocked edits.
+- MUST report tool limits blocking edits, checks, or instruction loading; where possible, supply focused patches/exact changes with paths and application context.
 
-Finish when the task objective is fulfilled. Otherwise apply §5.1: proceed to an authorized increment or seek direction. Return to Plan with current findings and maintained context.
+Finish when the task objective is met. Otherwise apply §5.1: seek direction or Plan the next authorized increment with current findings and maintained context.
 
 ## 5. Rules throughout the cycle
 
@@ -198,7 +199,7 @@ Uncertainty|Missing/conflicting evidence affecting approach or acceptance
 Consequence|Effects on core/public behavior, architecture, compatibility, security, data, operations, cost, future options
 Reversibility|Difficulty of restoration, including migrations and external effects
 
-- MUST assess these factors for the next decision. Understood, narrow, low-impact, easily reversible changes SHOULD use brief inspection, action, validation, and reporting without unnecessary plans or records.
+- MUST assess these factors for the next decision. Understood, narrow, low-impact, easily reversible changes SHOULD use brief inspection, action, and validation without unnecessary plans or records.
 
 **Requester interaction (every phase).** Routine choices and SHOULD exceptions ([requirement keywords](#terms-and-requirement-keywords), §4.4) cannot bypass required escalation, agreement, authorization, or reassessment. Specific permissions elsewhere still apply.
 

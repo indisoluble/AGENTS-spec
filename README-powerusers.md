@@ -44,9 +44,9 @@ Different findings can lead to a different first step. If the intended invalid-r
 
 - **Do the work.** Add that validation, the relevant tests, and updates to affected documentation. Keep the changes focused on the agreed behavior. Record significant lasting choices if any arise.
 - **Study the result.** Run relevant available checks against the acceptance conditions before completing the increment. This is **validation**. Separately, compare the observations with the prediction: did the existing row boundary support the change, or did the approach need revision? Disclose failed, unavailable, or omitted checks under the [reporting rules](#assess-the-result).
-- **Act on what was learned.** Retain, revise, or discard the approach within authorization and preserve useful findings. If the task remains unfinished, use the findings to plan the next authorized increment or seek direction when required. A routine transition to another increment needs no progress report.
+- **Act on what was learned.** Retain, revise, or discard the approach within authorization and preserve useful findings. If the task remains unfinished, use the findings to plan the next authorized increment or seek direction when required.
 
-After field-count validation is complete, the agent can use its findings to select another authorized increment. Suppose that later step adds an agreed check for missing required values. Each increment gets its own validation and assessment, but the agent does not draft or post a routine report between them unless requested or otherwise required.
+After checking this increment, the agent can proceed to another within existing authorization unless a checkpoint requires your direction. Routine progress reports are neither drafted nor posted unless requested or otherwise required; [reporting and approval checkpoints](#when-the-agent-pauses-or-continues) have separate triggers. Suppose the findings support adding an agreed check for missing required values next. That increment receives its own validation and assessment.
 
 If you ask for status after those two increments, a consolidated report could look like this, assuming the named files exist and the checks succeeded:
 
@@ -56,11 +56,11 @@ If you ask for status after those two increments, a consolidated report could lo
 >
 > These two validation rules are complete. Other agreed invalid-row rules remain to be implemented toward the CSV-import objective.
 
-This requested report combines work not previously reported and distinguishes it from the whole task. The agent also consolidates results at task completion, a handoff, or when seeking your input. Selection of later work uses the findings as they become available; it does not wait for a chat report or require a complete sequence in advance. If the work reveals unexpectedly greater effort, the [pause rule](#when-the-work-grows-unexpectedly) applies at that discovery.
+The report distinguishes two completed rules from the unfinished task. Findings guide the next choice as they become available; the agent needs no complete sequence in advance. If the work reveals unexpectedly greater effort, the [pause rule](#when-the-work-grows-unexpectedly) applies at that discovery.
 
 The phase labels explain the reasoning, not a required report format. Phases can overlap or repeat: tests may be planned before implementation, and documentation changes as facts become established. Routine work needs no worksheet, formal experiment, or separate phase reports. PDSA also applies to investigations and documentation-only work.
 
-PDSA's Plan phase is part of this reasoning process. A tool's Plan mode has its own proposal and approval procedures; entering it grants no additional authorization. On resumption, the agent first [reconciles retained context with current evidence](#continue-unfinished-work).
+PDSA's Plan phase is part of this reasoning process. A tool's Plan mode has its own proposal and approval procedures; entering it grants no additional authorization. On resumption, the agent first [compares saved context with current files, checks, and instructions](#continue-unfinished-work).
 
 ## Keep work small and complete
 
@@ -87,8 +87,10 @@ Three events have different purposes:
 | Event | Purpose |
 | --- | --- |
 | Completing an increment | Establish that one bounded result meets its acceptance conditions. |
-| Reporting a result | Consolidate unreported work at task completion, handoff, or when seeking your input; provide other requested or required disclosures. |
+| Reporting a result | Show what the work produced, its checks, and what remains; one report can cover several increments. |
 | Reaching an approval checkpoint | Reserve a decision for you before the relevant work continues. |
+
+At task completion, handoff, or when seeking your input, the agent must combine unreported work into a report. At other times it must not draft or post routine progress reports unless you request them or another applicable rule requires them. Other required disclosures still follow their own triggers.
 
 A completed increment can lead directly to the next one without a chat report. A requested or required report does not itself create an approval checkpoint. Your conditions, the contract's checkpoints, and the tool's rules all apply; your instructions take priority within the tool's actual hierarchy and permissions.
 
@@ -96,13 +98,13 @@ A completed increment can lead directly to the next one without a chat report. A
 
 A **material** issue significantly affects correctness, scope, risk, or whether to proceed. The contract distinguishes required involvement from recommended consultation and routine choices:
 
-| Situation | What the agent does |
+| Situation you may encounter | What the agent does |
 | --- | --- |
-| Material unresolved intent or permission | Must bring the question to you. |
-| Missing consequential constraints in requirements, architecture, or conventions | Must agree them with you as needed. |
-| An unsettled consequential choice | Should ask first: this is a strong recommendation with justified exceptions. |
-| Routine local choices within agreed limits | May choose easily reversible details, such as a private helper name; material assumptions remain visible. |
-| Unexpectedly greater work or investigation | Must reassess and wait for direction before the additional work. |
+| An unanswered question could significantly change the intended result or permitted work. For example, should an imported duplicate replace the existing record? | Must bring the question to you. |
+| A missing constraint could significantly change the design or checks. For example, the import must fit a deployment's memory budget, but that budget is unsettled. | Must agree the consequential constraint with you as needed. |
+| Within agreed constraints and permission, an unresolved choice has significant consequences. For example, two suitable approaches have substantially different maintenance costs. | Should ask first: this is a strong recommendation with justified exceptions. |
+| A local choice stays within agreed limits, such as naming a private helper. | May choose easily reversible details; material assumptions remain visible. |
+| New evidence shows that completion needs materially more work or investigation than expected. For example, a local validation change needs a shared-parser redesign. | Must reassess and wait for direction before the additional work, even if the outcome is already authorized. |
 
 These strengths follow [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119.html) and [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174.html). Exceptions to a recommendation require weighing consequences and justifying the departure; material departures must be explained. They cannot bypass required involvement or authorization limits. Missing answers grant no broader permission, and reporting a consequential choice afterward cannot supply advance authorization.
 
@@ -169,9 +171,17 @@ See [framing an inquiry](AGENTS.md#12-bound-the-work-and-choose-an-approach) and
 
 ## Assess the result
 
-The agent must consolidate unreported work into a report at task completion, at a handoff, or when seeking your input. While continuing, it must not draft or output routine progress reports unless you request them or another applicable rule requires them. It still makes required disclosures, such as reporting a blocking tool limitation or explaining a need for unexpectedly greater work.
+When you receive a report under the [reporting and checkpoint rules](#when-the-agent-pauses-or-continues), use it to answer these questions:
 
-The report explains what was completed, why, where to review it, what was checked, and what remains uncertain or unfinished. Material assumptions, decisions, conflicts, risks, and justified departures from strong recommendations stay visible. One report can cover several increments while distinguishing their completion from fulfillment of the overall task.
+| Question | What to look for |
+| --- | --- |
+| What was completed, and why? | The outcome and reasons, distinguishing completed increments from completion of the whole task. |
+| Where can I review it? | Affected paths and relevant links to decisions and authoritative project information. |
+| What evidence supports the result? | Checks performed and disclosure of failed, unavailable, or omitted checks. |
+| What could affect my decision? | Material assumptions, conflicts, risks, choices, and explained departures from strong recommendations. |
+| What remains? | Unfinished work, missing evidence, and uncertainty. |
+
+One report can cover several increments. Required disclosures, such as a blocking tool limitation or unexpectedly greater work, still follow their own triggers; consolidating results does not defer them. Small reports need no separate field for every question.
 
 Before completing each increment, the agent must run relevant available checks against its acceptance conditions, whether or not it reports at that point. Failed, unavailable, or omitted checks must be disclosed under the reporting rules. Passing tests cannot substitute for an unimplemented requirement or a necessary performance or operational check. Required findings and records are maintained as work proceeds; they are not deferred until the next chat report.
 
@@ -211,7 +221,7 @@ New or revised in-scope system requirements use [EARS](https://alistairmavin.com
 
 > If an input row has a different number of fields from the header, then the importer shall reject that row and report its line number.
 
-The project must also settle whether processing continues with later rows. The wording pattern expresses a decision; it cannot make that decision for you. Adoption does not automatically convert every existing requirement.
+The project must also settle whether processing continues with later rows. In the [worked example](#from-a-request-to-a-result), that behavior is agreed: processing continues. Acceptance checks therefore cover rejecting the mismatched row, reporting its line number, and successfully processing a valid row after it. The wording pattern expresses a decision; it cannot make that decision for you. Adoption does not automatically convert every existing requirement.
 
 ### Let architectural knowledge grow with the project
 
@@ -219,9 +229,37 @@ The project must also settle whether processing continues with later rows. The w
 
 Names and folders remain flexible. The initial default is one architecture document in the existing documentation folder, or root `docs/` if there is none. For known coverage gaps, the agent must propose improvements and should make them within authorized scope. You may defer, limit, or decline them; material gaps remain visible.
 
+For the CSV project, suppose the command-line interface, parser, importer, and writer already exist and the following behavior has been verified. Part of `docs/architecture.md` could read:
+
+```markdown
+### CSV import
+
+- Context: The user supplies a CSV file through the import command.
+- Building blocks: The parser supplies fields and source line numbers to
+  the importer. The importer applies the agreed validation rules and
+  passes valid rows to the writer.
+- Runtime behavior: A rejected row produces an error with its source line
+  number; processing continues with later rows.
+- Constraint: Parsing preserves quoted commas in the required input format.
+- Requirements: See [import-format.md](import-format.md) for validation
+  rules and the source-line-number convention.
+```
+
+This excerpt explains responsibilities and behavior while linking to the detailed requirements. It is a fragment, not a complete architecture document or a required layout; other applicable topics still need coverage. Unverified behavior would need to be identified as such.
+
 ### Preserve significant choices and identify debt
 
 A significant lasting choice within the authorized scope requires an [Architecture Decision Record (ADR)](AGENTS.md#41-record-significant-decisions-and-technical-debt) in or linked from [arc42's decision section](https://docs.arc42.org/section-9/). Selecting a parser to meet a memory constraint is one possible example. The record retains context, reasons, consequences, and status. Routine local choices normally need none; proposed, accepted, and superseded decisions remain distinguishable, with useful history and replacement links.
+
+For example, suppose this CSV project has an agreed memory budget and required input sizes. Assume an evaluation has established that streaming meets its parsing and memory requirements, and the significant design choice has been accepted. A short ADR could read:
+
+> **Title:** Process CSV files as a stream  
+> **Status:** Accepted  
+> **Context:** Required files can exceed available memory. Evaluation against the agreed input sizes and memory budget supports incremental processing; the project records the requirements and evaluation evidence alongside this decision.  
+> **Decision:** Parse and validate rows incrementally to avoid holding the entire file in memory.  
+> **Consequences:** The implementation must manage parser state and buffers across rows. Accumulated errors and rules that need information from other rows require their own memory strategy; streaming alone does not bound all memory use.
+
+The assumptions above belong to this illustration. In a real record, link the actual requirements and evidence, preserve useful alternatives and history, and identify a proposal as proposed until accepted. The memory constraint and lasting implementation consequences explain why this example merits an ADR; an ordinary helper-name choice normally would not.
 
 The agent may record current, task-relevant, evidenced technical debt in the architecture's risks and debt section. It considers accepted requirements and trade-offs, flags uncertain classifications, and tells you what was recorded, why, where, and with what uncertainty. A deferred feature, rejected alternative, or different preference alone is not debt. Recording debt grants no permission to fix it; records must reflect in-scope changes or fixes.
 
@@ -276,6 +314,43 @@ When needed, the record remains concise and current, including at meaningful rev
 
 Code, tests, checks, and current-system documentation establish what exists. Architecture and ADRs retain lasting reasons. The continuation record holds otherwise missing task context, avoiding transcripts and detailed distant plans. This applies PDSA's retained learning and DRY's knowledge ownership.
 
+### Example: resuming after the project changes
+
+Suppose you authorized the agreed CSV row-validation work, including its tests and affected documentation, and then stopped the session after field-count validation. Required-value validation remains unfinished, and the agreed limits are not otherwise retained in permanent project files. A concise `.agent-continuation-context.md` could contain:
+
+```markdown
+# CSV import continuation
+
+- Task objective: Report invalid rows and continue processing valid rows.
+- Last increment: Field-count validation, complete at the recorded state.
+- Authorized work: Implement the agreed row-validation rules, tests, and
+  affected documentation. Shared-parser redesign is outside this request.
+- Direction and constraints: Preserve quoted-comma handling and use the
+  source-line-number convention in docs/import-format.md.
+- Recorded progress: Field-count validation is implemented. Checks passed
+  for valid rows, mismatched counts, reported line numbers, and a valid row
+  after rejection.
+- Remaining work: Required-value validation and the other agreed rules
+  in docs/import-format.md have not been implemented.
+- Current level: Row-validation behavior and its local implementation.
+- Open question on resumption: Does the current project still match this
+  recorded implementation and its checks?
+- Project sources: docs/import-format.md, src/importer.py, and
+  tests/test_importer.py define the rules and implemented behavior.
+- Candidate next increment: Reject missing required values, report their
+  line numbers, and continue with valid rows, using the agreed format rules.
+```
+
+These paths and results are illustrative, and the format is not prescribed. The candidate step preserves direction without granting permission to perform it.
+
+Before the next session, another developer changes the parser integration. You then ask:
+
+> Continue the CSV import work.
+
+The agent reads the record and mentions its path and summary once unless you have already acknowledged it that session. It compares the saved state with current files, checks, and instructions before choosing the next increment. Suppose the comparison reveals changed line-number handling and a relevant check now fails. The agent reports that difference: the earlier checks passed at the recorded state, but the changed code now fails the agreed line-number check.
+
+The finding changes the basis for the next step. If the issue can be addressed within the authorized validation work and expected effort, the agent can proceed with a small, complete increment and its checks. If it needs a parser redesign outside the request, or materially more work or investigation than expected, it explains the unfinished result and proposed next step, then waits for direction before that work. It updates the record as progress and permission change. Simply opening a session or finding a next step in the record would not have authorized resumption.
+
 ### Keeping context usable
 
 Relevant earlier context is reused; superseded copies are retired and links repaired. Competing records encountered during ordinary work are reported. If unrelated content occupies the fixed path, the agent preserves it and seeks direction.
@@ -310,6 +385,19 @@ Planning modes, permissions, approvals, and loading mechanisms belong to the too
 
 Instruction files cannot guarantee pauses or compliance. Review remains necessary, and native planning, approval, and security controls retain their own rules.
 
+#### Worked adoption check
+
+This example uses the supplied Claude Code bridge. For another interface, use its documented loading diagnostics before trying the same assessment task.
+
+1. **Check loading.** Confirm that root `CLAUDE.md` contains `@AGENTS.md` and that root `AGENTS.md` is present. Start a new Claude Code session in the repository, run `/context`, and look for `CLAUDE.md` under **Memory files**. Anthropic documents the [import mechanism](https://code.claude.com/docs/en/memory#import-additional-files) and this [loading check](https://code.claude.com/docs/en/memory#share-one-file-with-other-coding-tools). If the expected file is absent, investigate the applicable settings and loading guidance before assuming adoption.
+2. **Try an assessment.** In a project with a documented setup command and package configuration, ask:
+
+   > Assess whether the setup command in README.md agrees with the project's package configuration.
+
+3. **Inspect the result.** The agent should examine the relevant files, identify the evidence supporting agreement or a discrepancy, and disclose material uncertainty or unavailable checks. Assessment alone does not authorize edits. If your project has no such setup command, choose an equivalent existing instruction and its authoritative configuration.
+
+The diagnostic supplies evidence about loading; the task supplies a limited observation of behavior. Neither an agent's assurance nor one successful task establishes general compliance across tasks or interfaces.
+
 ### Evidence dates
 
 The project's recorded documentation-check dates are:
@@ -317,5 +405,6 @@ The project's recorded documentation-check dates are:
 - **2026-09-25:** Codex and Claude Code discovery and size guidance, plus Copilot and VS Code instruction guidance.
 - **2026-09-24:** Projects and Goal mode.
 - **2026-09-26:** Anthropic's line-count recommendation, discussed in the [portability rationale](README-maintainers.md#keeping-the-contract-portable).
+- **2026-10-03:** Claude Code import syntax and the `/context` loading diagnostic used in the worked adoption check. This documentation check does not refresh the other claims or earlier dates above.
 
 These identify the evidence supporting the guidance; they are not cross-tool conformance-test results.

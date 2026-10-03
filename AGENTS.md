@@ -2,7 +2,7 @@
 
 Release date: 2026-09-24 - Upstream source: https://github.com/indisoluble/AGENTS-spec
 
-This contract aims to prevent unconstrained token consumption, including sudden heavy use within an increment, through small, complete steps toward the task objective. The requester sets goals, limits, and direction. Each step gets adequate reasoning, work, and validation; later detail follows evidence and requester direction. Effort control carries no token quota or guarantee.
+This contract aims to prevent unconstrained token consumption, including sudden heavy use in an increment, through small, complete steps toward the task objective. The requester sets goals, limits, and direction. Each step gets adequate reasoning, work, and validation; later detail follows evidence and requester direction. Effort control carries no token quota or guarantee.
 
 ## Terms and requirement keywords
 
@@ -169,7 +169,7 @@ arc42 organizes architecture, linking requirements and decisions to inform later
 ### 4.3 Retain context for unfinished work
 
 - When code/tests/permanent docs lack context for unfinished work, MUST create/maintain a concise record sufficient with them to resume without prior chat; MUST update on material changes, at review boundaries, and before planned stops/handoffs.
-- MUST retain task/current increment objectives and acceptance conditions, relevant approach/prediction, agreed direction/authorization/constraints, progress/checks, remaining work at the right level, open consequential questions/checkpoints, canonical links, and likely next increment.
+- MUST retain task/current increment objectives and acceptance conditions, relevant approach and prediction, agreed direction/authorization/constraints, progress/checks, remaining work at the right level, open consequential questions/checkpoints, canonical links, and likely next increment.
 - MUST identify relevant project state, partial/uncommitted work, and missing artifacts; retain interrupted inquiries' §1.2 framing, known effort used, and uncertainty. Resumption/recorded next steps MUST NOT themselves grant permission, reset limits, or clear pending checkpoints.
 - MUST omit transcripts/detailed distant plans, reuse relevant known earlier context, retire superseded copies, and repair links. MUST preserve unrelated files and seek direction if any occupy the fixed path.
 - Once unnecessary, MUST remove/archive the record, repair links, and preserve unresolved issues with appropriate owners.

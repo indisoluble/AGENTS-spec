@@ -279,7 +279,7 @@ The agent may record current, task-relevant, evidenced technical debt in the arc
 
 [Diátaxis](https://diataxis.fr/) distinguishes four reader needs: tutorials teach through practice, how-to guides help complete a task, reference supplies facts and interfaces, and explanation develops understanding. “Show an operator how to correct rejected rows and retry an import” identifies a how-to need.
 
-New guides require an explicitly requested or agreed purpose. These methods do not require four documents, an ADR, or a new guide for every increment. Affected existing guides stay current. Comments, docstrings, and generated API documentation follow suitable language and tool conventions.
+New guides require an explicitly requested or agreed purpose. These methods do not require four documents, an ADR, or a new guide for every increment. Affected existing guides stay current. Comments, docstrings, and generated API documentation should follow suitable existing language and tool conventions.
 
 [DRY](https://media.pragprog.com/titles/tpp20/dry.pdf) keeps knowledge consistent through one authoritative owner. A guide can explain a retry setting and link to its definition; necessary copies need a clear source and update process. Similar-looking code may express different rules, so resemblance alone does not require abstraction.
 
@@ -287,7 +287,7 @@ See the [knowledge rules](AGENTS.md#52-maintain-canonical-knowledge-and-consiste
 
 ## Bring an existing project into alignment
 
-Installation establishes standing expectations for subsequent tasks. Alignment of existing documentation and code is work to request explicitly, even if the project previously had no `AGENTS.md`.
+Installation establishes standing expectations for subsequent tasks; it does not itself authorize a broader alignment project. The agent must keep affected documentation consistent during authorized work. Broader alignment, audits, backfills, or reorganizations need corresponding authorization, which may already be part of your request.
 
 You can request alignment as a broader goal. The agent identifies a small, useful area to address within that authorization, such as a component or architectural concern. You may name an area if you have a priority. Project requirements, accepted decisions, and implementation supply the evidence; the contract supplies collaboration policy.
 
@@ -328,7 +328,7 @@ The record stays concise while retaining the context needed alongside the projec
 | --- | --- |
 | Objectives and direction | Task and current increment objectives, acceptance conditions, agreed direction, authorization, and constraints. |
 | Work and evidence | Progress, checks, relevant project state, partial or uncommitted work, missing artifacts, and remaining work at the appropriate level. |
-| The next decision | Relevant approach or prediction, open consequential questions, pending checkpoints, and a likely next increment. |
+| The next decision | Relevant approach and prediction, open consequential questions, pending checkpoints, and a likely next increment. |
 | An interrupted investigation | Its question, scope, objective, effort limit, and needed evidence, together with known effort already used and uncertainty. |
 | Project sources | Links to authoritative project information that supplies the rest of the context. |
 
@@ -405,7 +405,7 @@ Use the [basic setup](README.md#get-started) to install the supplied files. Load
 | Tool | Instruction loading and setup |
 | --- | --- |
 | [OpenAI Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md) | Native `AGENTS.md` discovery, subject to override precedence and the combined instruction limit. |
-| [Claude Code](https://code.claude.com/docs/en/memory#agentsmd) | The supplied `CLAUDE.md` imports `AGENTS.md`; direct discovery is also available under documented conditions. |
+| [Claude Code](https://code.claude.com/docs/en/memory#agents-md) | The supplied `CLAUDE.md` imports `AGENTS.md`; direct discovery is also available under documented conditions. |
 | [GitHub Copilot](https://docs.github.com/en/copilot/reference/custom-instructions-support) | Native `AGENTS.md` support varies by feature. The supplied bridge explicitly directs discovery and application. |
 | [ChatGPT Projects](https://learn.chatgpt.com/docs/projects) | Project instructions and shared files or connected context; use the product's documented setup. |
 | [Claude Projects](https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects) | Project instructions and project knowledge; use the product's documented setup. |
@@ -416,7 +416,7 @@ The bridges keep operating policy in the local `AGENTS.md`. The Claude file impo
 
 Check whether the tool **finds the file**, **includes its instructions**, and **follows them during a task**. A listed file alone does not show application. Try a representative task and inspect both the result and available diagnostics.
 
-[VS Code's verification guidance](https://code.visualstudio.com/docs/agent-customization/custom-instructions#verify-your-instructions) illustrates discovery and application checks. A successful check in one interface does not establish compatibility with another.
+[VS Code's verification guidance](https://code.visualstudio.com/docs/agent-customization/custom-instructions#_verify-your-instructions) illustrates discovery and application checks. A successful check in one interface does not establish compatibility with another.
 
 If loading, scope, or precedence is uncertain, ask which repository instruction sources were loaded or consulted and what remains unconfirmed. Distinguish files merely inspected from confirmed loading. If a tool limitation blocks instruction loading, the agent must report that limitation rather than claim to have followed instructions it could not access.
 
@@ -433,7 +433,7 @@ This example uses the supplied Claude Code bridge. For another interface, use it
 
    > Assess whether the setup command in README.md agrees with the project's package configuration.
 
-3. **Inspect the result.** The agent should examine the relevant files, identify the evidence supporting agreement or a discrepancy, and disclose material uncertainty or unavailable checks. Assessment alone does not authorize edits. If your project has no such setup command, choose an equivalent existing instruction and its authoritative configuration.
+3. **Inspect the result.** The agent must examine the relevant files, identify the evidence supporting agreement or a discrepancy, and disclose material uncertainty or unavailable checks. Assessment alone does not authorize edits. If your project has no such setup command, choose an equivalent existing instruction and its authoritative configuration.
 
 The diagnostic supplies evidence about loading; the task supplies a limited observation of behavior. Neither an agent's assurance nor one successful task establishes general compliance across tasks or interfaces.
 

@@ -28,7 +28,9 @@ When editing a guide, check each statement against the relevant source:
 | What a method used by the contract means | The external explanations linked from `AGENTS.md` and `README-maintainers.md`, for example those covering PDSA, Simple Design, EARS, and arc42. The technical guide explains their [roles and source boundaries](README-maintainers.md#principles-and-reference-boundaries). |
 | The reasons and constraints for changing `AGENTS.md` | The [design rationale](README-maintainers.md#design-goals-and-boundaries), [method-selection criteria](README-maintainers.md#choosing-or-replacing-methods), and [portability constraints](README-maintainers.md#keeping-the-contract-portable) in the technical guide. These guide evolution of the contract; they add no duties to ordinary project tasks performed under it. |
 
-Use external method sources to explain the practices adopted in `AGENTS.md`; do not import additional requirements from them or silently change the contract through a guide. When describing tool behavior, preserve the [instruction hierarchy and permission boundaries](AGENTS.md#53-instructions-contract-files-and-external-actions) under which the contract operates.
+When updating a guide, use the linked articles to explain the methods adopted in `AGENTS.md`. If an article recommends additional practices, do not describe them as requirements unless `AGENTS.md` requires them. A guide explains the contract; changing the contract requires an explicit update to `AGENTS.md`.
+
+When explaining how an agent tool works, check its official documentation. Do not suggest that `AGENTS.md` overrides the tool’s higher-priority instructions, grants additional permissions, or bypasses required approvals. See [Instructions, contract files, and external actions](AGENTS.md#53-instructions-contract-files-and-external-actions).
 
 ### Summaries and overlap
 

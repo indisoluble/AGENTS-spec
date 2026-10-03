@@ -48,15 +48,15 @@ Different findings can lead to a different first step. If the intended invalid-r
 
 After checking this increment, the agent can proceed to another within existing authorization unless a checkpoint requires your direction. Routine progress reports are neither drafted nor posted unless requested or otherwise required; [reporting and approval checkpoints](#when-the-agent-pauses-or-continues) have separate triggers. Suppose the findings support adding an agreed check for missing required values next. That increment receives its own validation and assessment.
 
-If you ask for status after those two increments, a consolidated report could look like this, assuming the named files exist and the checks succeeded:
+The agent continues through the remaining agreed rules, selecting each next increment from the evidence and completing its checks. In this path, the work stays within authorization and expected effort, and no unresolved consequential question requires your direction. Once all agreed import behavior is implemented and validated, the task objective is fulfilled. A consolidated task-completion report could look like this, assuming the named files exist and the checks succeeded:
 
-> Added field-count and required-value validation in `src/importer.py`, regression checks in `tests/test_importer.py`, and updated `docs/import-format.md`.
+> Implemented field-count, required-value, and the remaining agreed row-validation rules in `src/importer.py`. Added regression coverage in `tests/test_importer.py` and updated `docs/import-format.md`.
 >
-> Checks passed for valid rows, mismatched field counts, missing required values, reported line numbers, and a valid row following a rejection. Both changes worked at the existing row boundary, supporting that approach for these rules.
+> Checks passed for all agreed import rules, including mismatched field counts, missing required values, reported line numbers, and valid rows following rejections, together with the required CSV-format checks. Field-count and required-value validation worked at the existing row boundary, supporting that approach for those rules.
 >
-> These two validation rules are complete. Other agreed invalid-row rules remain to be implemented toward the CSV-import objective.
+> The agreed CSV-import objective is complete.
 
-The report distinguishes two completed rules from the unfinished task. Findings guide the next choice as they become available; the agent needs no complete sequence in advance. If the work reveals unexpectedly greater effort, the [pause rule](#when-the-work-grows-unexpectedly) applies at that discovery.
+Each increment was completed and checked while the agent continued toward the overall objective; task completion triggers the consolidated report. You did not need to request status between increments or supervise their selection. Findings guided each next choice without a complete sequence planned in advance. If evidence instead reveals unexpectedly greater effort, the [pause rule](#when-the-work-grows-unexpectedly) applies at that discovery, as the alternative example below shows.
 
 The phase labels explain the reasoning, not a required report format. Phases can overlap or repeat: tests may be planned before implementation, and documentation changes as facts become established. Routine work needs no worksheet, formal experiment, or separate phase reports. PDSA also applies to investigations and documentation-only work.
 
@@ -121,6 +121,16 @@ For the field-count increment:
 
 This assessment considers scope, uncertainty, consequences, and reversibility. There is no numerical threshold based on changed lines or token count. The checkpoint applies in every phase, and splitting the work cannot excuse incomplete or inadequately checked results.
 
+For an alternative path through the CSV task, suppose field-count and required-value validation have been completed and checked. While planning another agreed rule, the agent discovers that the shared parser stops before the importer can handle the invalid row. Completing that rule needs changes to parser recovery and investigation of effects on other callers, substantially more work than the expected local validation change. Assuming the named files exist and the earlier checks succeeded, the agent could report:
+
+> Completed field-count and required-value validation in `src/importer.py`, added regression checks in `tests/test_importer.py`, and updated `docs/import-format.md`. Checks passed for those rules, their reported line numbers, and valid rows following their rejections.
+>
+> The overall CSV-import task is unfinished. The next rule cannot be implemented at the existing row boundary because the shared parser stops first. Parser-recovery changes affect other callers and need more investigation than expected.
+>
+> The smallest useful next step is a bounded assessment of the parser's recovery interface, its direct callers, and existing recovery tests, to identify the behavior and compatibility constraints a change must preserve. That assessment would produce an evidenced change proposal; it would not implement the redesign. Would you like to proceed with that assessment, or reconsider the remaining requirement?
+
+The new finding changes the commitment needed to finish the task. The report gives you the completed work, the evidence behind the larger effort, and a concrete next decision. The agent waits for direction before undertaking that additional work, even if the overall outcome was already authorized. If you authorize the investigation, it states its question, scope, objective, effort limit, and needed evidence [before starting](#when-an-investigation-is-needed).
+
 ### Instruction files and external actions
 
 Edits to `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` require an explicit request concerning the file or its instructions. Asking the agent to apply recommendations specific to that file qualifies. Necessary companion edits to the other listed files may accompany that request; edits to these files stay separate from unrelated work. This condition also applies to editorial changes.
@@ -129,11 +139,13 @@ Commits, publishing, and other external actions require authorization, which may
 
 ### Optional controls you can add
 
-You can select a particular increment, supply an investigation limit, request status updates, or add review checkpoints. Asking for updates does not by itself require approval before every next increment. To add those pauses, for example:
+You can select a particular increment, supply an investigation limit, request status updates, or add review checkpoints. Asking for updates does not by itself require approval before every next increment. An additional checkpoint can reflect a project dependency, such as a team's review of user-visible behavior:
 
-> Propose the first increment and wait for my approval before editing. After implementing and checking it, wait for my review before starting another increment.
+> Our team needs to review the import error messages before the importer is connected to the upload workflow. Implement and test the standalone validation and error reporting, then show representative results and wait for my confirmation before integration.
 
-That request adds specific pauses. You may instead name the exact behavior to address next or impose a tighter investigation limit. The agent remains responsible for a coherent approach, adequate validation, and every required checkpoint. Establishing and stating a limit before a blocking inquiry is already its duty, as the next section explains.
+The agent chooses and completes the increments needed for that reviewable result. Your request reserves the integration decision until the review is complete. Stating the checkpoint in advance lets the agent plan for the handoff without relying on an interruption during unfinished work.
+
+You may instead name the exact behavior to address next or impose a tighter investigation limit. The agent remains responsible for a coherent approach, adequate validation, and every required checkpoint. Establishing and stating a limit before a blocking inquiry is already its duty, as the next section explains.
 
 The full interaction conditions are in [AGENTS.md §5.1](AGENTS.md#51-scope-effort-and-requester-interaction).
 

@@ -27,9 +27,9 @@ Canonical owner|File/section owning a fact, rule, or explanation
 
 ## Workflow overview
 
-**Start with the request.** MUST apply [PDSA (Plan–Do–Study–Act)](https://deming.org/explore/pdsa/) proportionally to implementation, investigation, and documentation. In **Plan**, inspect relevant context, establish the task objective and permitted work, and define the next small increment. **Do** the work, **Study** its result, then **Act**: finish, pause for direction, or Plan another authorized increment. On resumption, first reconcile retained context with project state.
+**Start with the request.** MUST apply [PDSA](https://deming.org/explore/pdsa/) proportionally to implementation, investigation, and documentation: **Plan** the next small increment from context, objectives, and authorization; **Do** it; **Study** results; **Act** to finish, seek direction, or plan another authorized increment. On resumption, start with §1.1.
 
-Routine work needs no worksheet or formal experiment; no special tool mode is required. [Shared rules (§5)](#5-rules-throughout-the-cycle) govern scope, effort, and requester interaction in every phase.
+Routine work needs no worksheet, formal experiment, or special mode. [§5](#5-rules-throughout-the-cycle) applies throughout.
 
 ## 1. Plan — define the next increment
 
@@ -37,14 +37,13 @@ Use the request, project state, requirements, architecture, and decisions to def
 
 ### 1.1 Establish the starting context
 
-A **work record** at repository-root `.agent-continuation-context.md` supports resumption without chat history.
+A **work record** at repository-root `.agent-continuation-context.md` supports resuming unfinished work in a new conversation without prior chat.
 
-- **Session start.** MUST check for the work record, read it if present, and report competing records encountered.
-- Unless acknowledged by the requester this session, MUST mention an existing record's path and summarize it once early in chat. This MUST NOT require a reply or authorize resumption.
-- MUST identify task and increment objectives, permitted work, constraints, current abstraction level, and acceptance conditions. Analysis or review alone MUST NOT authorize edits.
-- MUST inspect relevant code/callers, tests, configuration, and canonical documents before choosing the approach and acceptance conditions. Requirements: intent; accepted decisions: choices/reasons; code/tests/execution: behavior; architecture: boundaries/guarantees; schemas/package metadata: constraints. Examples/notes govern only when labeled as rules. Personal, global, or external instructions MUST NOT count as project facts.
-- MUST report contradictions, distinguish evidence from inference, and explain the source to follow.
-- **Resuming recorded work.** MUST compare the record with files, checks, and instructions; distinguish completed, partial, unverified, and proposed work; and report material differences.
+- At session start, MUST check for the record and report competing records encountered. If present, MUST read it and, unless acknowledged by the requester this session, give its path and summary once early in chat. This notice MUST NOT require a reply or authorize resumption.
+- MUST identify task/increment objectives, permitted work, constraints, current abstraction level, and acceptance conditions. Analysis/review alone MUST NOT authorize edits.
+- Before choosing approach/acceptance conditions, MUST inspect relevant code/callers, tests, configuration, and canonical docs. Requirements: intent; accepted decisions: choices/reasons; code/tests/execution: behavior; architecture: boundaries/guarantees; schemas/package metadata: constraints. Examples/notes govern only when labeled as rules. Personal/global/external instructions MUST NOT count as project facts.
+- MUST report contradictions, distinguish evidence/inference, and explain the source to follow.
+- On resumption, MUST compare the record with files/checks/instructions; distinguish completed/partial/unverified/proposed work; report material differences/missing context.
 
 ### 1.2 Bound the work and choose an approach
 
@@ -112,14 +111,14 @@ In Do, Diátaxis shapes in-scope guides for readers; DRY (§5.2) governs their k
 
 ## 3. Study — assess completion and learning
 
-For implementation, investigation, and documentation, validation checks results against acceptance conditions; comparing observations with the prediction assesses the approach. Revising a prediction changes neither requirements nor acceptance conditions. Implementation missing required in-scope behavior remains incomplete despite useful learning.
+Validation checks results against acceptance conditions; observations against predictions assess the approach. Revising predictions changes no requirements or acceptance conditions. Useful learning cannot complete implementation missing required in-scope behavior.
 
 - Before completing an increment, MUST run relevant available checks against acceptance conditions. MUST disclose failed, unavailable, or omitted checks under §4.4.
 - MUST cover affected behavior, risk, and hard performance/operational limits. Passing tests MUST NOT replace requirements or necessary checks. Token/context savings MUST NOT justify inadequate reasoning, implementation, or validation.
 
 A parser splitting a quoted comma disproves predicted preservation but can meet an investigation's acceptance conditions requiring an evidenced answer about preservation.
 
-At the investigation effort limit, stop. If acceptance conditions remain unmet, report incomplete work, missing evidence, and uncertainty. A negative finding authorizes no further attempts to obtain the predicted result; scope, effort limits, and authorization still apply.
+At the investigation effort limit, stop. If acceptance conditions remain unmet, report incomplete work, missing evidence, and uncertainty. A negative finding authorizes no extra attempts to obtain the predicted result; §5.1 still applies.
 
 ### 3.1 Use unit tests and other evidence
 
@@ -169,10 +168,11 @@ arc42 organizes architecture, linking requirements and decisions to inform later
 
 ### 4.3 Retain context for unfinished work
 
-- When unfinished work needs context beyond code/tests/permanent docs, MUST maintain the concise/current work record (also at review boundaries/planned stops), reuse relevant known earlier context, retire superseded copies, and repair links.
-- MUST preserve unrelated files and seek direction if unrelated content occupies the fixed work-record path.
-- The record MUST omit transcripts/detailed distant plans and retain task/current increment objectives, agreed direction, authorization, constraints, progress/checks, remaining work at the right level, open consequential questions, canonical links, and likely next increment. A next step MUST NOT imply permission.
-- Once unnecessary, MUST remove or archive the record, update links, and preserve unresolved issues with appropriate owners.
+- When code/tests/permanent docs lack context for unfinished work, MUST create/maintain a concise record sufficient with them to resume without prior chat; MUST update on material changes, at review boundaries, and before planned stops/handoffs.
+- MUST retain task/current increment objectives and acceptance conditions, relevant approach/prediction, agreed direction/authorization/constraints, progress/checks, remaining work at the right level, open consequential questions/checkpoints, canonical links, and likely next increment.
+- MUST identify relevant project state, partial/uncommitted work, and missing artifacts; retain interrupted inquiries' §1.2 framing, known effort used, and uncertainty. Resumption/recorded next steps MUST NOT themselves grant permission, reset limits, or clear pending checkpoints.
+- MUST omit transcripts/detailed distant plans, reuse relevant known earlier context, retire superseded copies, and repair links. MUST preserve unrelated files and seek direction if any occupy the fixed path.
+- Once unnecessary, MUST remove/archive the record, repair links, and preserve unresolved issues with appropriate owners.
 
 ### 4.4 Report the result and choose the next step
 

@@ -302,7 +302,7 @@ For example:
 
 > Assess how this project's documentation aligns with AGENTS.md.
 
-This authorizes assessment. The agent chooses a useful first assessment increment and can continue through further authorized assessment increments without routine progress reports. It consolidates findings at completion, handoff, or when seeking your input. Edits need further permission even without an explicit “wait before editing.” A request that already authorizes improvements can cover subsequent implementation increments, subject to the consultation and reassessment rules.
+This authorizes assessment. The agent chooses a useful first assessment increment and can continue through further authorized assessment increments without routine progress reports. It consolidates findings at completion, handoff, or when seeking your input. An assessment request alone does not authorize edits. Separate authorization and the contract’s specific permissions and duties for maintaining records still apply. A request that already authorizes improvements can cover subsequent implementation increments, subject to the consultation and reassessment rules.
 
 An empty project can develop documentation and implementation through useful authorized work. Coverage expectations alone grant no permission for a repository-wide audit or reorganization.
 

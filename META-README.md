@@ -52,7 +52,7 @@ Keep current descriptions and useful lasting rationale in their owners. Revision
 
 - **[README.md](README.md) — basic guide:** explain the primary benefit sought, give actionable installation steps and a useful first task, then show essential expectations and further reading. A newcomer should be able to adopt the contract using this guide alone.
 - **[README-powerusers.md](README-powerusers.md) — practical guide:** begin with an ordinary outcome-oriented request and show how the agent handles it. Then explain situations the user may encounter. Put detailed reference material where readers can find it without making it a prerequisite for the first example.
-- **[README-maintainers.md](README-maintainers.md) — technical guide:** connect design problems with chosen approaches, reasons, trade-offs, and implications for future changes. Keep sufficient method and source detail available for assessing the contract. Keep instructions for maintaining the READMEs here.
+- **[README-maintainers.md](README-maintainers.md) — technical guide:** connect design problems with chosen approaches, reasons, trade-offs, and implications for future changes. Keep sufficient method and source detail available for assessing the contract. Keep instructions for maintaining the READMEs in `META-README.md`.
 
 Use plain Markdown only, descriptive headings, direct links, and tables for comparisons. Introduce terms before depending on them; explain methods where they clarify an action or design choice. Present default behavior before optional requester controls.
 
@@ -66,8 +66,22 @@ Use these editorial checks for the complete change. The technical guide's [desig
 
 1. **Purpose, coverage, and ownership.** Check that each guide fulfills its reader's purpose and preserves the contract's stated goal and limits. Confirm that necessary explanations remain available at the appropriate depth and that consolidation has not deleted unique knowledge. Keep editorial procedures here and design rationale in the technical guide.
 2. **Fidelity to the contract.** Compare affected claims with the authoritative clauses. Preserve the actor, rule strength, trigger, timing, scope, conditions, and exceptions, including relevant shared rules. Check both individual sentences and their combined implication. A paraphrase, heading, or example must not introduce an obligation, permission, exception, or procedural requirement.
-3. **Connected explanations.** Follow each walkthrough from its starting request through decisions, actions, evidence, and what follows. Can the reader understand how a choice was reached and what could change it? Keep distinctions made by the contract visible; do not imply an extra process merely to organize the explanation.
+3. **Connected explanations.** Follow each walkthrough from its starting request through decisions, actions, evidence, and what follows. Can the reader understand how a choice was reached and what could change it? Use the [reader comprehension questions](#reader-comprehension-questions) to review progression and, when testing substantial rewrites with readers, identify what they can explain without coaching. Keep distinctions made by the contract visible; do not imply an extra process merely to organize the explanation.
 4. **Examples and qualifications.** Identify assumed project facts, illustrative choices, expected outcomes, and observed results clearly. Keep conditions close enough to prevent examples from becoming apparent defaults or guarantees. Check alternative outcomes against the same rules as the successful path.
 5. **Sources and attribution.** Preserve primary-source links and exact attribution using the technical guide's [source assignments](README-maintainers.md#principles-and-reference-boundaries). Do not import a whole framework or stronger source rhetoric as policy. Retain original provider-check dates when moving guidance; record a new date only for a newly verified or changed claim. Editorial work does not refresh external evidence.
 6. **Evidence for claims.** Match claims about benefits, limits, and compatibility to the available evidence. Distinguish intended effects from demonstrated outcomes. Textual consistency does not establish measured comprehension, equivalent agent behavior, or token savings.
 7. **Links and delivery.** Check Markdown, relative paths, heading anchors, incoming links, and delivered file versions against the intended repository layout. Confirm that summaries agree with their owners. Apply artifact-specific criteria from their authoritative location when those artifacts change, and keep transient measurements and validation records out of the guides.
+
+### Reader comprehension questions
+
+Use these questions to assess whether the guides teach their intended responsibilities. They complement the technical guide's [design scenarios](README-maintainers.md#assessing-design-changes), which assess the contract's behavior and meaning. These are editorial checks, not extra operating duties for agents using the contract.
+
+| After reading | The reader should be able to explain |
+| --- | --- |
+| `README.md` | What the file is for, which files to install for their tool, how to check adoption, and what token control can and cannot promise. |
+| The practical walkthrough | Why the agent selected that increment, what would count as completion, and how the findings affect subsequent work. |
+| Interaction guidance | Why completing an increment, reporting a result, and requesting approval are separate events; when existing authorization permits continuation and when direction is required. |
+| Requirements and documentation guidance | Which requirements or records may be created or updated, what triggers them, and why examples do not prescribe a document for every step. |
+| Continuation guidance | When a work record is needed, what it preserves, why it is checked against current evidence, and why a recorded next step grants no permission. |
+
+For reader testing, give representative newcomers the relevant guide and ask them to carry out or explain these tasks in their own words. A junior developer familiar with Git and a coding agent should be able to follow basic adoption without first studying the contract's engineering methods. Record where a reader cannot find an answer separately from where an explanation is misunderstood. Keep test observations in working or review records, and distinguish observed comprehension from an editor's prediction; an editorial review alone does not establish usability.

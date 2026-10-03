@@ -1,8 +1,12 @@
 # AGENTS.md Specification
 
-A ready-made [AGENTS.md](AGENTS.md) for working with coding agents in new or established projects. Its primary aim is to prevent unconstrained token consumption through **small, complete steps toward your objective**, including avoiding unexpectedly heavy effort within a single step.
+A ready-to-use [AGENTS.md](AGENTS.md) that gives coding agents a consistent way to work in new or established repositories.
 
-Describe the outcome you want. The agent works in small, complete steps, checks each result, and continues within your authorization. Each step receives the analysis, implementation or investigation, documentation, and validation it needs; later detail develops as evidence becomes available.
+Its primary aim is to prevent unconstrained token use: investigations that keep expanding, detailed planning for distant work, or unexpectedly heavy effort within a single step.
+
+Describe the outcome you want. The agent selects a **small, useful step**, completes the necessary analysis, work, documentation, and checks, then uses the results to decide what follows. Later detail develops as evidence becomes available. The agent can continue within your authorization, but must ask for direction before undertaking substantially more work or investigation than expected.
+
+Effort control is best effort. These instructions provide no token meter, hard quota, or guarantee of savings.
 
 ## Get started
 
@@ -15,7 +19,7 @@ Describe the outcome you want. The agent works in small, complete steps, checks 
    | Claude Code | Root `AGENTS.md` and [CLAUDE.md](CLAUDE.md) |
    | GitHub Copilot | Root `AGENTS.md` and [.github/copilot-instructions.md](.github/copilot-instructions.md) |
 
-3. **Keep the files in version control and check adoption.** Ask your tool which repository instructions it loaded and check available instruction diagnostics. Then try a representative task: finding a file alone does not show that the agent follows it.
+3. **Keep the files in version control and check adoption.** Ask your tool which repository instructions it loaded and check available instruction diagnostics. Then try the [worked adoption check](README-powerusers.md#worked-adoption-check): it combines a loading check with a small assessment task. Finding a file alone does not show that the agent follows it.
 
 The supplied contract normally needs no project-specific customization. Keep project facts, build commands, and architecture in your project's documentation and code. The bridges direct the tool to the contract.
 
@@ -49,11 +53,12 @@ Required disclosures still apply, and the agent pauses when the contract, your i
 - **Complete work within each step.** Small scope still receives the necessary reasoning and validation. Affected code, tests, configuration, and documentation stay consistent.
 - **Decisions and consolidated results.** Consequential unresolved questions come to you. Reports identify completed work, checks, material assumptions, and unfinished work; one report can cover several increments.
 - **Bounded investigations.** Before investigating uncertainty that blocks the next decision, the agent must state the question, scope, objective, needed evidence, and an effort limit. It stops that inquiry when it obtains the evidence or reaches the limit; missing evidence still means incomplete work. See [investigation examples](README-powerusers.md#when-an-investigation-is-needed).
-- **Project knowledge that develops with the work.** Adoption includes architecture documentation organized around arc42 topics, clearly expressed requirements, and records of significant decisions. These engineering and documentation practices support quality and preserve knowledge for later steps. You can limit or defer proposed documentation improvements. Installation does not authorize a project-wide audit or rewrite.
+- **Project knowledge that develops with the work.** Adoption includes architecture documentation organized around arc42, a set of topics for explaining a software system, along with clearly expressed requirements and records of significant decisions. These practices support quality and preserve knowledge for later steps. You can limit or defer proposed documentation improvements. Installation does not authorize a project-wide audit or rewrite.
+- **Support for unfinished work.** When code, tests, and permanent documentation do not retain enough task context, the agent maintains a concise [continuation record](README-powerusers.md#continue-unfinished-work). Before resuming, it compares that record with the current project state and applicable instructions. The record itself grants no permission to continue.
 
 This is an opinionated engineering baseline. Your instructions take priority within the tool's actual instruction hierarchy and permissions. You remain responsible for reviewing and accepting the work.
 
-Effort control is best effort. The contract provides no token meter, hard quota, or guarantee of savings; instruction files cannot guarantee compliance. The tool's controls govern permissions and approvals.
+Instruction files cannot guarantee compliance. The tool's controls govern permissions and approvals.
 
 ## Get more from it
 

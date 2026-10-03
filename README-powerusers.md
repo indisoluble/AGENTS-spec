@@ -308,64 +308,91 @@ An empty project can develop documentation and implementation through useful aut
 
 ## Continue unfinished work
 
-Agents use **`.agent-continuation-context.md` at the repository root** when unfinished work needs context beyond code, tests, and permanent documentation. A task with no extra context needs no record merely to demonstrate compliance.
+**`.agent-continuation-context.md` at the repository root supports resuming the same unfinished task in a new conversation without the previous chat.** You might change devices, lose access to the old conversation, or simply choose a fresh one. The agent creates and maintains this work record when code, tests, and permanent documentation lack needed context. Together with those artifacts, it must preserve enough context for resumption. A task with no extra context needs no record merely to demonstrate compliance.
 
 ### Starting or resuming a session
 
-At session start, the agent must check the fixed path and read the record if present. Unless you have acknowledged it that session, it mentions the path and summarizes the record once early. That notice needs no reply and does not authorize resuming the task.
+When a record is needed, the agent updates it on material changes, at review boundaries, and before planned stops or handoffs. Keeping it current during the work prepares for a new conversation even when the original one becomes unexpectedly unavailable. You do not need to request a save after each increment.
 
-On resumption, the agent compares the record with current files, checks, and instructions. An interruption can leave it stale. Completed, partial, unverified, and proposed work remain distinguishable, and material differences are reported. A recorded next step supplies no permission.
+To continue in a new conversation, make the relevant project state, applicable instructions, and existing continuation record available to the new agent, then ask it to continue the task. If you are changing environments, account for relevant uncommitted changes and supporting artifacts. Use a suitable way to transfer or synchronize the work; the contract prescribes no particular mechanism. A record can identify a missing file or change, but its description cannot recreate that content.
+
+At session start, the agent must check the fixed path and read the record if present. Unless you have acknowledged it that session, it gives the path and a summary once early in chat. That notice needs no reply and does not authorize resuming the task.
+
+Before resuming, the agent compares the record with current files, checks, and instructions. An interruption can leave it stale. Completed, partial, unverified, and proposed work remain distinguishable, and material differences or missing context are reported. It can continue within the authorization supplied by your request and applicable instructions unless a checkpoint requires direction. Resumption or a recorded next step does not itself grant permission, reset effort limits, or clear pending checkpoints.
 
 ### What the record preserves
 
-When needed, the record remains concise and current, including at meaningful review boundaries and planned stops. It holds:
+The record stays concise while retaining the context needed alongside the project artifacts:
 
-- Task and current increment objectives, agreed direction, authorization, and constraints.
-- Progress, checks, remaining work at the appropriate level, and open consequential questions.
-- Links to authoritative project information and a likely next increment.
+| Context | What is preserved |
+| --- | --- |
+| Objectives and direction | Task and current increment objectives, acceptance conditions, agreed direction, authorization, and constraints. |
+| Work and evidence | Progress, checks, relevant project state, partial or uncommitted work, missing artifacts, and remaining work at the appropriate level. |
+| The next decision | Relevant approach or prediction, open consequential questions, pending checkpoints, and a likely next increment. |
+| An interrupted investigation | Its question, scope, objective, effort limit, and needed evidence, together with known effort already used and uncertainty. |
+| Project sources | Links to authoritative project information that supplies the rest of the context. |
+
+These are content requirements, not a prescribed layout. An interrupted investigation needs its framing and state; a task with no such investigation needs no invented allowance or usage figures. Known consumption and uncertainty are retained without assuming that a new conversation supplies a fresh allowance.
 
 Code, tests, checks, and current-system documentation establish what exists. Architecture and ADRs retain lasting reasons. The continuation record holds otherwise missing task context, avoiding transcripts and detailed distant plans. This applies PDSA's retained learning and DRY's knowledge ownership.
 
-### Example: resuming after the project changes
+### Example: starting a new conversation
 
-Suppose you authorized the agreed CSV row-validation work, including its tests and affected documentation, and then stopped the session after field-count validation. Required-value validation remains unfinished, and the agreed limits are not otherwise retained in permanent project files. A concise `.agent-continuation-context.md` could contain:
+Suppose you need to continue the CSV-import task on another device. Field-count validation has been completed and checked; required-value validation is planned but has not started, and other agreed rules remain unfinished. Authorization and task limits are not fully retained in permanent project files. Before the planned handoff, the agent updates `.agent-continuation-context.md`. Assuming the named files exist and the stated checks succeeded, a concise record could contain:
 
 ```markdown
 # CSV import continuation
 
 - Task objective: Report invalid rows and continue processing valid rows.
-- Last increment: Field-count validation, complete at the recorded state.
 - Authorized work: Implement the agreed row-validation rules, tests, and
   affected documentation. Shared-parser redesign is outside this request.
 - Direction and constraints: Preserve quoted-comma handling and use the
   source-line-number convention in docs/import-format.md.
-- Recorded progress: Field-count validation is implemented. Checks passed
-  for valid rows, mismatched counts, reported line numbers, and a valid row
-  after rejection.
+- Recorded project state: The field-count changes in src/importer.py,
+  tests/test_importer.py, and docs/import-format.md are saved in the working
+  tree but have not been committed.
+- Last increment: Field-count validation is complete at the recorded state.
+  Checks passed for valid rows, mismatched counts, reported line numbers,
+  and a valid row after rejection.
+- Current increment: Required-value validation is planned; no edits started.
+- Acceptance conditions: Reject missing required values, report their line
+  numbers, and process valid rows, including one immediately after rejection.
+- Approach and prediction: Validate at the existing row boundary. Its use
+  for field-count validation supports expecting it to suffice for this rule.
 - Remaining work: Required-value validation and the other agreed rules
   in docs/import-format.md have not been implemented.
 - Current level: Row-validation behavior and its local implementation.
-- Open question on resumption: Does the current project still match this
-  recorded implementation and its checks?
+- Open consequential questions or checkpoints: None recorded. The saved
+  state still needs comparison with current files, checks, and instructions.
 - Project sources: docs/import-format.md, src/importer.py, and
   tests/test_importer.py define the rules and implemented behavior.
-- Candidate next increment: Reject missing required values, report their
-  line numbers, and continue with valid rows, using the agreed format rules.
+- Candidate next increment: Implement and check the planned required-value
+  validation within the recorded scope.
 ```
 
-These paths and results are illustrative, and the format is not prescribed. The candidate step preserves direction without granting permission to perform it.
+These paths, state, and results are illustrative, and the format is not prescribed. The candidate step preserves direction without granting permission to perform it.
 
-Before the next session, another developer changes the parser integration. You then ask:
+You make the relevant working-tree changes, instructions, and record available in the other environment, start a new conversation without the old chat, and ask:
 
 > Continue the CSV import work.
 
-The agent reads the record and mentions its path and summary once unless you have already acknowledged it that session. It compares the saved state with current files, checks, and instructions before choosing the next increment. Suppose the comparison reveals changed line-number handling and a relevant check now fails. The agent reports that difference: the earlier checks passed at the recorded state, but the changed code now fails the agreed line-number check.
+The agent reads the record and gives its path and summary once unless you have already acknowledged it that session. Suppose reconciliation finds the expected files and supporting checks, with no material missing context or pending decision. Your continuation request covers the planned validation work, so the agent can choose the next increment, implement it, and validate its results against the acceptance conditions. Finding the record needs no separate approval exchange. The next choice follows the current evidence and request rather than treating the saved candidate as a fixed instruction.
 
-The finding changes the basis for the next step. If the issue can be addressed within the authorized validation work and expected effort, the agent can proceed with a small, complete increment and its checks. If it needs a parser redesign outside the request, or materially more work or investigation than expected, it explains the unfinished result and proposed next step, then waits for direction before that work. It updates the record as progress and permission change. Simply opening a session or finding a next step in the record would not have authorized resumption.
+### Example: resuming after the project changes
+
+Alternatively, suppose another developer changes the parser integration before the new conversation. Comparing the same record with the current project reveals changed line-number handling, and a relevant check now fails. The agent reports that difference: the earlier checks passed at the recorded state, but the changed code now fails the agreed line-number check. If recorded changes or evidence are missing in the new environment, it reports the material gap rather than treating the saved description as proof that they are present.
+
+The finding changes the basis for the next step. If the issue can be addressed within the authorized validation work and expected effort, the agent can proceed with a small, complete increment and its checks. If it needs a parser redesign outside the request, or materially more work or investigation than expected, it explains the unfinished result and proposed next step, then waits for direction before that work. It updates the record as material progress, evidence, or permission changes. Simply opening a session or finding a next step in the record would not have authorized resumption.
+
+### Example: an interrupted investigation
+
+Suppose a conversation ends with the reader's quoted-comma behavior still unknown, as in the [investigation example](#when-an-investigation-is-needed). The stated allowance was one execution attempt; that attempt produced no usable output, and no further investigation was authorized. The record preserves the inquiry's question, scope, objective, and needed evidence, the one-attempt limit, the attempt already used, and the remaining uncertainty.
+
+In a new conversation, those facts still apply. The agent can explain the evidence gap and the proposed next step, but changing conversations supplies no second attempt and clears no pending decision. Repairing the environment or running another experiment is additional work governed by the [interaction and growth rules](#when-the-agent-pauses-or-continues). If you authorize further investigation, the agent states its framing and effort limit before starting. If prior effort use is uncertain, that uncertainty remains visible; it is not treated as a fresh allowance.
 
 ### Keeping context usable
 
-Relevant earlier context is reused; superseded copies are retired and links repaired. Competing records encountered during ordinary work are reported. If unrelated content occupies the fixed path, the agent preserves it and seeks direction.
+Relevant known earlier context is reused; superseded copies are retired and links repaired. Competing records encountered during ordinary work are reported. If unrelated content occupies the fixed path, the agent preserves it and seeks direction.
 
 Lasting findings move to appropriate permanent records, linked from continuation context where useful. Once the extra context is unnecessary, the work record is removed or archived, affected links are updated, and unresolved issues retain suitable owners.
 

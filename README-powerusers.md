@@ -14,7 +14,7 @@ Read the first example for the overall process, then use the sections relevant t
 | What happens when it needs to investigate? | [Blocking investigations](#when-an-investigation-is-needed) |
 | How do I assess the work and its effort? | [Results](#assess-the-result) and [token use](#understanding-token-use) |
 | Why does it make these code or documentation changes? | [Implementation](#understand-implementation-choices) and [documentation](#use-requirements-and-documentation) |
-| How do I adopt this in an existing project or resume work? | [Alignment](#bring-an-existing-project-into-alignment) and [continuation](#continue-unfinished-work) |
+| How do I adopt this in an existing project? | [Alignment](#bring-an-existing-project-into-alignment) |
 | Is my tool loading the instructions? | [Compatibility and adoption checks](#tool-compatibility) |
 
 [AGENTS.md](AGENTS.md) defines the rules and exceptions. The [technical guide](README-maintainers.md) explains their design rationale.
@@ -37,9 +37,9 @@ For this example, suppose that inspection finds agreed rules for invalid rows an
 
 That evidence supports a small, useful increment: reject rows whose field count differs from the header, report them, and continue processing. This addresses one missing behavior and can be checked independently of the remaining invalid-row rules. Its scope includes the affected implementation, tests, and documentation.
 
-The agent defines **acceptance conditions**: reject mismatched rows, report their line numbers, and continue with valid rows, including a valid row after a rejection. Its **prediction** is that validation at the existing row boundary will suffice. The objective, scope, conditions, and approach can be refined together as the context becomes clear; later work stays at outline level.
+The agent defines **acceptance conditions**: reject mismatched rows, report their line numbers, and continue with valid rows, including a valid row after a rejection. Its **prediction** is that validation at the existing row boundary will suffice. The agent derives these conditions after inspection, from the agreed rules; they define completion of this increment and are not themselves new system requirements. The objective, scope, conditions, and approach can be refined together as the context becomes clear, without departing from your instructions or agreed requirements; later work stays at outline level.
 
-Different findings can lead to a different first step. If the intended invalid-row behavior is unsettled, the agent brings consequential questions to you and develops the relevant requirements within authorization. If the reader's suitability is uncertain, a [bounded investigation](#when-an-investigation-is-needed) may supply the evidence needed before selecting an implementation step.
+Different findings can lead to a different first step. If the intended invalid-row behavior is unsettled, the agent brings consequential questions to you and develops the relevant requirements within authorization. Behavior agreed that way, which the importer must keep providing after this task, is a new system requirement: it is expressed in EARS in its canonical owner, while the increment's acceptance conditions only define what completes the step. Where the rules are already canonical, as in this example, the agent checks against them without writing duplicates. If the reader's suitability is uncertain, a [bounded investigation](#when-an-investigation-is-needed) may supply the evidence needed before selecting an implementation step.
 
 ### Do, Study, and Act: complete the step and use its findings
 
@@ -61,7 +61,7 @@ Each increment was completed and checked while the agent continued toward the ov
 
 The phase labels explain the reasoning, not a required report format. Phases can overlap or repeat: tests may be planned before implementation, and documentation changes as facts become established. Routine work needs no worksheet, formal experiment, or separate phase reports. PDSA also applies to investigations and documentation-only work.
 
-PDSA's Plan phase is part of this reasoning process. A tool's Plan mode has its own proposal and approval procedures; entering it grants no additional authorization. When resuming in a new conversation, the agent first [compares available task context with current files, checks, and instructions](#continue-unfinished-work), using the record if present.
+PDSA's Plan phase is part of this reasoning process. A tool's Plan mode has its own proposal and approval procedures; entering it grants no additional authorization.
 
 ## Keep work small and complete
 
@@ -91,7 +91,7 @@ Three events have different purposes:
 | Reporting a result | Show what the work produced, its checks, and what remains; one report can cover several increments. |
 | Reaching an approval checkpoint | Reserve a decision for you before the relevant work continues. |
 
-At task completion, handoff, or when seeking your input, the agent must combine unreported work into a report. At other times it must not draft or post routine progress reports unless you request them or another applicable rule requires them. Disclosures affecting authorization or the next decision must precede the affected work. Other disclosures belong in the next consolidated report unless an earlier time is explicit, such as the early continuation notice or the report when a bounded inquiry stops.
+At task completion, handoff (stopping before task completion and passing unfinished work to you or another person or agent), or when seeking your input, the agent must combine unreported work into a report. At other times it must not draft or post routine progress reports unless you request them or another applicable rule requires them. Disclosures affecting authorization or the next decision must precede the affected work. Other disclosures belong in the next consolidated report unless an earlier time is explicit, such as the report when a bounded inquiry stops. A handoff report also passes on the task's effort baseline and that of any unfinished increment, including revisions you approved that still apply, so whoever continues keeps measuring growth from them instead of starting afresh; if they were not passed on, the next context recovers them from available task state or asks you before further work; this is continuity state for the task, not a project record.
 
 A completed increment can lead directly to the next one without a chat report. A requested or required report does not itself create an approval checkpoint. Your conditions, the contract's checkpoints, and the tool's rules all apply; your instructions take priority within the tool's actual hierarchy and permissions.
 
@@ -111,7 +111,7 @@ These strengths follow [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119.html) a
 
 ### When the work grows unexpectedly
 
-The agent establishes expected effort for the current increment and the cumulative task from your direction where supplied; otherwise it uses its own judgment without a routine announcement. These expectations can be qualitative, such as local row validation without shared-parser redesign. Only your direction can revise the task baseline. New increments, attempts, and conversations retain it, together with known cumulative effort and uncertainty; a revised estimate does not silently create a larger allowance.
+The agent establishes expected effort for the current increment and the cumulative task from your direction where supplied; otherwise it uses its own judgment without a routine announcement. These expectations can be qualitative, such as local row validation without shared-parser redesign. Once established, a baseline changes only by your direction. If you approve growth the agent disclosed, the affected baselines expand to include only that approved commitment, and any later growth is judged from there. New evidence can change the agent's current estimate, but growth is judged against the baselines, so a revised estimate does not silently create a larger allowance. New increments or attempts do not reset the task baseline, and a new increment's baseline cannot absorb growth already found unless you directed it. These baselines are working state for detecting material growth; establishing them requires no project record, worksheet, or chat report.
 
 If new evidence shows that completion needs materially more work or investigation than expected, the agent must explain what changed, what remains unfinished or uncertain, and the smallest useful complete next step. It then waits for your direction **before undertaking that additional effort**, even if broad authorization already covers the outcome.
 
@@ -132,36 +132,39 @@ For an alternative path through the CSV task, suppose field-count and required-v
 >
 > The smallest useful next step is a bounded assessment of the parser's recovery interface, its direct callers, and existing recovery tests, to identify the behavior and compatibility constraints a change must preserve. That assessment would produce an evidenced change proposal; it would not implement the redesign. Would you like to proceed with that assessment, or reconsider the remaining requirement?
 
-The new finding changes the commitment needed to finish the task. The report gives you the completed work, the evidence behind the larger effort, and a concrete next decision. The agent waits for direction before undertaking that additional work, even if the overall outcome was already authorized. If you authorize the investigation, it states its question, scope, objective, effort limit, and needed evidence [before starting](#when-an-investigation-is-needed).
+The new finding changes the commitment needed to finish the task. The report gives you the completed work, the evidence behind the larger effort, and a concrete next decision. The agent waits for direction before undertaking that additional work, even if the overall outcome was already authorized. If you authorize the assessment, inspecting the recovery interface, direct callers, and existing tests is context gathering, so that inspection needs no inquiry framing. If resolving the blocking uncertainty then calls for activity beyond that context, such as a bounded recovery experiment, the agent states its question, scope, objective, effort limit, and needed evidence [before that inquiry starts](#when-an-investigation-is-needed).
 
 ### Instruction files and external actions
 
-The special edit protection covers exactly three root-relative paths: `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md`. Edits require an explicit request concerning the file or its instructions. Asking the agent to apply recommendations specific to that file qualifies. Necessary companion edits to the other listed files may accompany that request; edits to these files stay separate from unrelated work. This condition also applies to editorial changes.
+The special edit protection covers exactly three root-relative paths: `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md`. Edits require an explicit request concerning the file or its instructions. Asking the agent to apply recommendations specific to that file qualifies. Necessary companion edits to the other two listed files may accompany that request; other affected documentation follows the ordinary synchronization rules under its own authorization and scope; edits to these files stay separate from unrelated work. This condition also applies to editorial changes.
 
-Directory-level instruction files may add compatible rules for their own subtrees. They are not automatically subject to that special three-file protection, although ordinary edit authorization and tool restrictions still apply. Compatibility is a rule for the content of those additions; actual loading, scope, and precedence still follow the tool. Encountered contradictions must be reported. During adoption, a person validates which existing practices, conventions, and workflows persist, as the [installation steps](README.md#get-started) explain.
+Directory-level instruction files may add subtree rules only when those rules are compatible with the root contract. They are not automatically subject to that special three-file protection, although ordinary edit authorization and tool restrictions still apply. The tool determines actual discovery, scope, and precedence, but that precedence never makes conflicting policy acceptable. Encountered conflicts must be reported. During adoption, a person validates which existing practices, conventions, and workflows persist, as the [installation steps](README.md#get-started) explain.
 
 External actions mean commits, publishing or sending, and changes to remote or shared state. They require authorization, which may already be part of your request. Permission to implement a change does not by itself authorize every external action that might follow. Read-only access follows task scope and tool permissions; consulting a source is not itself a publication or state-changing action. The [source-consultation limits](AGENTS.md#54-consult-linked-sources-only-when-needed) still apply to linked methodological sources. See the [instruction-file and external-action rules](AGENTS.md#53-instructions-contract-files-and-external-actions).
 
 ### Records during review and exploration
 
-During analysis or review, [AGENTS.md §1.1](AGENTS.md#11-establish-the-starting-context) permits the record maintenance allowed or required by its material-findings, decision, debt, and continuation rules, plus corrections of verified factual errors in ordinary documentation within the assessed scope. Those permissions do not authorize implementation or changes to requirements or accepted decisions. Your instructions, protected-file rules, and tool restrictions still apply.
+Two separate questions decide whether an assessment changes files. First, what may it write at all? During analysis or review, [AGENTS.md §1.1](AGENTS.md#11-establish-the-starting-context) permits only three kinds of writes: material findings under the findings rule, ADR and technical-debt maintenance under the decision and debt rules, and verified factual corrections. Assessment alone does not authorize implementation, new or changed system requirements, accepting or changing decisions beyond existing authority, unrelated documentation repairs, or documentation backfills. Authorized scope, your instructions (including a no-edit instruction), protected-file rules, and tool permissions and approvals still apply.
 
-An appropriate permanent record preserves the finding and evidence in its canonical location; that permission does not authorize implementing a recommendation, rewriting intended behavior, or repairing unrelated documentation. A factual correction makes an existing description agree with verified project facts, such as correcting a documented command to match authoritative package configuration. An unresolved conflict over intended behavior remains a question or finding, not permission to choose a new requirement.
+Second, is a record due? The [findings rule](AGENTS.md#4-act--use-the-findings-and-determine-what-follows) and the [decision and debt rules](AGENTS.md#41-record-significant-decisions-and-technical-debt) decide this with their own triggers and strengths, whenever their conditions arise. A **permanent record** is the canonical project document owning the topic, such as architecture documentation or an ADR, rather than chat or working notes. A finding must be recorded there when it is both material and durable: expected to stay relevant beyond the current task or attempt and to inform future maintenance, operation, requirements, architecture, or technical decisions. Transient task facts and the routine history of the work need no record, so assessment does not become a work log. A record preserves knowledge; it does not authorize implementing a recommendation, rewriting intended behavior, or accepting or changing decisions beyond existing authority. The examples below show the remaining mechanics, including creating a minimal record when no suitable owner exists and what happens when writes are prohibited.
+
+A verified factual correction makes an existing description of current project facts within the assessed scope—such as a command, path, interface, or behavior—match the source owning that kind of knowledge, for example correcting a documented command to match authoritative package configuration. Requirements, decision records, and protected instruction files are not corrected this way. An unresolved conflict over intended behavior remains a question or finding, not permission to choose a new requirement.
 
 These examples assume you requested only assessment or exploration and the tool permits the described writes, except where stated:
 
 | Situation | Permitted or required result |
 | --- | --- |
-| A brief discussion explores possible CSV-import approaches without establishing material findings or significant lasting choices, and no unfinished context needs preserving. | No record is required merely to document that brainstorming took place. |
-| An assessment establishes that the existing reader mishandles a required input format. No significant design choice has been made. | Preserve the material finding and its evidence in the appropriate permanent record. A finding alone does not require a decision record or authorize a parser repair. |
-| An assessment verifies that the setup command in an ordinary README disagrees with authoritative package configuration. | The agent may correct that factual error within the assessed scope, then validate and report the correction. It may not change the package configuration to make the old command true. |
+| A brief discussion explores possible CSV-import approaches without establishing material findings or significant lasting choices. | No record is required merely to document that brainstorming took place. |
+| An assessment establishes that the existing reader mishandles a required input format. No significant design choice has been made. | This is durable project knowledge, so preserve the material finding and its evidence in the appropriate permanent record. A finding alone does not require a decision record or authorize a parser repair. |
+| A temporary CI outage blocks a check, or a failed experiment matters only to the current attempt. | These are transient task facts: disclose them as the validation and reporting rules require, but they need no permanent record. |
+| The same reader finding must be recorded; it belongs to architectural knowledge, and no suitable permanent record exists because the project has no architecture documentation or other owner for that topic. | The agent must create a minimal architecture document holding only that finding and its evidence, which becomes the topic's canonical owner. The contract recommends placing it in the documentation folder stated in `README.md`, otherwise root `docs/`; that default location needs no `README.md` edit. It adds no empty sections, placeholders, or backfill; other arc42 gaps remain proposals. |
+| An assessment verifies that the setup command in a README disagrees with authoritative package configuration. | The agent may correct that factual error within the assessed scope, then validate and report the correction. It may not change the package configuration to make the old command true. |
 | An architectural evaluation develops a concrete, significant proposal ready for decision or review. | Create a Proposed [Architecture Decision Record (ADR)](#preserve-significant-choices-and-identify-debt) with context, reasons, consequences, and relevant evidence. The proposal itself grants no authority to accept or implement it. |
 | The agent or requester makes a significant lasting decision within their existing authority, such as selecting streaming over full-file buffering to meet the agreed memory limit. | Mark that decision Accepted and preserve the reasons, evidence, and useful rejected alternatives. A separately recorded proposal that was rejected has Rejected status. Recording creates no separate ADR approval checkpoint or implementation permission. |
 | A review identifies duplicated validation rules whose maintenance risk is supported by inconsistent past fixes. | The agent may record [technical debt](#preserve-significant-choices-and-identify-debt), considering accepted requirements and trade-offs. It reports any entry: what, why, where, and classification uncertainty. Recording grants no permission to fix the issue. |
-| An investigation pauses with unfinished context that code, tests, and permanent documentation do not preserve. | The agent must maintain the [continuation record](#example-an-interrupted-investigation), even though the task authorizes only investigation. |
-| You request: "Assess the parser. Do not create, modify, or delete any files." | The restriction covers records and ordinary documentation. The agent can provide findings and proposed record or correction text in its response for you to retain. |
+| You request: "Assess the parser. Do not create, modify, or delete any files." | The restriction covers records and factual documentation corrections. The agent can provide findings and proposed record or correction text in its response for you to retain. That text does not satisfy the record obligation; the unmade record is reported as unfinished work. |
 
-A debt entry is optional under the debt rule; preserving a material finding is still required. See the [findings and record rules](AGENTS.md#4-act--use-the-findings-and-determine-what-follows), subject to the [instruction and tool rules](AGENTS.md#53-instructions-contract-files-and-external-actions).
+A debt entry is optional under the debt rule; preserving a material finding that is durable project knowledge is still required, including one revealed by a discarded approach. See the [findings and record rules](AGENTS.md#4-act--use-the-findings-and-determine-what-follows), subject to the [instruction and tool rules](AGENTS.md#53-instructions-contract-files-and-external-actions).
 
 ### Optional controls you can add
 
@@ -177,7 +180,7 @@ The full interaction conditions are in [AGENTS.md §5.1](AGENTS.md#51-scope-effo
 
 ## When an investigation is needed
 
-Routine code, test, and configuration inspection and all reading of existing project documentation are context gathering. Reading those documents remains exempt from inquiry framing even when it searches for an answer to a material question blocking the next decision. For other inquiry into such uncertainty, the agent must establish and state its question, scope, objective, effort limit, and needed evidence before starting. You do not need to request this framing or supply the limit yourself. Context gathering still follows authorized scope and the material-growth checkpoint; the exemption supplies no unlimited research allowance.
+Inspecting the relevant code, callers, tests, configuration, and directly related dependencies to establish starting context, and all reading of existing project documentation, are context gathering. Following an ordinary caller or test while establishing context needs no framing. Reading those documents remains exempt from inquiry framing even when it searches for an answer to a material question blocking the next decision. Other activity aimed at resolving such uncertainty—an experiment, or exploration beyond that context—is inquiry whatever it is called: the agent must establish and state its question, scope, objective, effort limit, and needed evidence before starting it, or before continuing when inspection turns into it. You do not need to request this framing or supply the limit yourself. Context gathering still follows authorized scope and the material-growth checkpoint; the exemption supplies no unlimited research allowance.
 
 Suppose, unlike the first example, the existing CSV reader's handling of quoted commas is uncertain. The agent could frame an inquiry as follows:
 
@@ -195,11 +198,11 @@ The acceptance condition is an evidenced answer to the question, with its limits
 | --- | --- |
 | The output shows an intact quoted field. | The inquiry has its answer. This sample supports the prediction, within the limits of that evidence. |
 | The output shows a split quoted field. | The inquiry still has its answer, but the prediction is disproved. The parser limitation informs the next Plan. |
-| The attempt produces no usable output. | The allowance is exhausted without meeting acceptance conditions. The agent stops and reports incomplete work, missing evidence, and uncertainty. |
+| The attempt produces no usable output. | The allowance is exhausted without meeting acceptance conditions. The agent ends that inquiry and reports incomplete work, missing evidence, and uncertainty. |
 
 A negative finding can complete an investigation; an implementation required to preserve the field would remain incomplete if it split it. Revising a prediction changes neither your requirements nor the acceptance conditions. If you requested only investigation, that request alone would not authorize a parser change.
 
-An **investigation effort limit** bounds the inquiry independently of whether it succeeds. The agent must stop when it obtains the needed evidence or reaches the limit, report remaining uncertainty and unmet acceptance conditions, and explain any need for broader research or a wider design decision. A negative result or exhausted allowance supplies no additional authority.
+An **investigation effort limit** bounds the inquiry independently of whether it succeeds. The agent must end that inquiry—not necessarily the task—when it obtains the needed evidence or reaches the limit, report remaining uncertainty and unmet acceptance conditions, and explain any need for broader research or a wider design decision. That report is not itself an approval checkpoint: work may continue under existing authorization unless another rule, such as missing evidence that blocks safe continuation, material effort growth, unresolved consequential intent, or your checkpoint, requires your direction. A negative result or exhausted allowance supplies no additional authority.
 
 If the question remains unresolved, the agent may establish another bounded attempt within existing scope and authority, stating its framing before starting. For example, a broadly authorized parser assessment may permit a second, differently framed experiment after an inconclusive first attempt. A requester-imposed overall cap or pending checkpoint still applies. Materially greater effort requires your direction before proceeding, assessed both within the increment and cumulatively across the task. Renaming the inquiry or starting another increment does not erase effort already spent. Repairing a failed test environment and running more experiments follow the same [interaction and growth rules](#when-the-agent-pauses-or-continues).
 
@@ -221,11 +224,11 @@ When you receive a report under the [reporting and checkpoint rules](#when-the-a
 | What could affect my decision? | Material assumptions, conflicts, risks, choices, and explained departures from strong recommendations. |
 | What remains? | Unfinished work, missing evidence, and uncertainty. |
 
-One report can cover several increments. Disclosures affecting authorization or the next decision, such as unexpectedly greater work, must precede that work. Other disclosures, such as nonblocking technical debt, join the next consolidated report unless an earlier time is specified. The early continuation notice and the report when a bounded inquiry stops retain their explicit timing. Small reports need no separate field for every question.
+One report can cover several increments. Disclosures affecting authorization or the next decision, such as unexpectedly greater work, must precede that work. Other disclosures, such as nonblocking technical debt, join the next consolidated report unless an earlier time is specified. The report when a bounded inquiry ends retains its explicit timing, without itself becoming an approval checkpoint. Small reports need no separate field for every question.
 
 Before completing each increment, the agent must run relevant available checks against its acceptance conditions, whether or not it reports at that point. Failed, unavailable, or omitted checks must be disclosed under the reporting rules. Passing tests cannot substitute for an unimplemented requirement or a necessary performance or operational check. Required findings and records are maintained as work proceeds; they are not deferred until the next chat report.
 
-An acceptance condition describes what must be established; a verification method supplies the evidence. Sufficient alternative evidence may replace a check only when that check is unavailable and is not specifically required. A relevant available acceptance check must still run even if another method could provide equally sufficient evidence. Disclosure alone cannot fill an evidence gap. A condition lacking sufficient evidence remains unverified, with validation incomplete, unless the condition is validly revised under existing authority.
+An acceptance condition describes what must be established; a verification method supplies the evidence. Sufficient alternative evidence may replace a check only when that check is unavailable and is not specifically required. A check is available when it can run under the current authorization, tool access, permissions, credentials or resources, and prerequisites with ordinary expected setup; an easier alternative does not make it unavailable, so it must still run even if another method could provide equally sufficient evidence. If running it would need missing access or resources, or materially more work, the agent discloses that rather than silently obtaining or absorbing it, and the authorization and growth rules apply. Disclosure alone cannot fill an evidence gap. A condition lacking sufficient evidence remains unverified, with validation incomplete, unless the condition is validly revised under existing authority. A failed check or difficult implementation never justifies weakening, replacing, or reinterpreting a requirement or acceptance condition. Conditions you supplied change only with your authority, and canonical requirements only through authorized requirement changes. The agent can refine conditions it derived only when the refinement stays consistent with your instructions, project requirements, scope, and decision authority.
 
 For example, suppose an agreed import requirement says a failed import must leave the database unchanged:
 
@@ -236,7 +239,7 @@ For example, suppose an agreed import requirement says a failed import must leav
 | Only tests against a mocked database run. | Those results do not establish rollback in the actual database; that acceptance condition remains unverified. |
 | The requester specifically requires the CI integration check to pass. | A local result does not satisfy that requirement; the required check must run or the condition must be validly revised. |
 
-An unrelated pre-existing failure does not automatically block completion. Its relevance must be assessed and the failure disclosed; evidence for the task's acceptance conditions still determines completion.
+An unrelated pre-existing failure does not automatically block completion. Its relevance must be assessed and the failure disclosed; each increment still needs sufficient evidence for its acceptance conditions and applicable requirements before it is reported complete.
 
 Appropriate tests are a strong default for behavior changes, defect repairs, and clarified edge cases. Unit tests should use [Given/When/Then](https://martinfowler.com/bliki/GivenWhenThen.html): the starting situation, action, and expected result. Neither literal labels nor a particular framework are required. Tests must not be weakened merely to pass.
 
@@ -244,7 +247,7 @@ When edits are displayed, changed portions with enough context are the default. 
 
 The agent must report tool limits that block edits, checks, or instruction loading. For blocked edits, it supplies a focused patch or exact changes with paths and application context where possible. Full contents may help when needed to make those edits usable.
 
-Reports should fit the work. Small mechanical changes normally need only a concise outcome and checks, without invented risks, follow-up, or a mandatory template. See the [reporting rules](AGENTS.md#44-report-the-result-and-choose-the-next-step).
+Reports should fit the work. Small mechanical changes normally need only a concise outcome and checks, without invented risks, follow-up, or a mandatory template. See the [reporting rules](AGENTS.md#43-report-the-result-and-choose-the-next-step).
 
 ### Understanding token use
 
@@ -278,9 +281,9 @@ The project must also settle whether processing continues with later rows. In th
 
 ### Let architectural knowledge grow with the project
 
-[arc42](https://arc42.org/overview/) organizes architectural knowledge: goals, boundaries, structure, operation, decisions, quality, risks, and other applicable topics. You can adopt the contract before that documentation is complete. Use known facts and keep material unknowns visible; empty headings and invented facts do not establish coverage.
+[arc42](https://arc42.org/overview/) organizes architectural knowledge: goals, boundaries, structure, operation, decisions, quality, risks, and other applicable topics. arc42 sets the target coverage; uncovered applicable topics are gaps handled by improvement proposals rather than violations, so you can adopt the contract before that documentation is complete. Use known facts and keep material unknowns visible; empty headings and invented facts do not establish coverage.
 
-Names and folders remain flexible. The initial default is one architecture document in the existing documentation folder, or root `docs/` if there is none. For known coverage gaps, the agent must propose improvements and should make them within authorized scope. You may defer, limit, or decline them; material gaps remain visible.
+Names and folders remain flexible. The initial default is one architecture document in the existing documentation folder stated in `README.md`, or root `docs/` if none is stated. Your `README.md` needs to name documentation locations only when they differ from root `docs/`. For known coverage gaps, the agent must propose improvements and should make them within authorized scope. You may defer, limit, or decline them; material gaps remain visible.
 
 For the CSV project, suppose the command-line interface, parser, importer, and writer already exist and the following behavior has been verified. Part of `docs/architecture.md` could read:
 
@@ -347,120 +350,9 @@ For example:
 
 > Assess how this project's documentation aligns with AGENTS.md.
 
-This authorizes assessment. The agent chooses a useful first assessment increment and can continue through further authorized assessment increments without routine progress reports. It consolidates findings at completion, handoff, or when seeking your input. Assessment permits the [records and verified factual corrections to ordinary documentation](#records-during-review-and-exploration) described above; other edits need authorization. If you want no file changes, say so explicitly. A request that already authorizes improvements can cover subsequent implementation increments, subject to the consultation and reassessment rules.
+This authorizes assessment. The agent chooses a useful first assessment increment and can continue through further authorized assessment increments without routine progress reports. It consolidates findings at completion, handoff, or when seeking your input. Assessment permits the [records and verified factual documentation corrections](#records-during-review-and-exploration) described above; other edits need authorization. If you want no file changes, say so explicitly. A request that already authorizes improvements can cover subsequent implementation increments, subject to the consultation and reassessment rules.
 
 An empty project can develop documentation and implementation through useful authorized work. Coverage expectations alone grant no permission for a repository-wide audit or reorganization.
-
-## Continue unfinished work
-
-**`.agent-continuation-context.md` at the repository root supports resuming unfinished tasks in a new conversation without the previous chat.** You might change devices, lose access to the old conversation, or simply choose a fresh one. The agent maintains a separate, identified entry for each task whose context is not sufficiently preserved in code, tests, and permanent documentation. Together with those artifacts, the entry must preserve enough context for resumption. A task with sufficient permanent context needs no entry merely to demonstrate compliance.
-
-### Starting or resuming a session
-
-When a record is needed, the agent updates it on material changes, at review boundaries, and before planned stops or handoffs. Keeping it current during the work prepares for a new conversation even when the original one becomes unexpectedly unavailable. You do not need to request a save after each increment.
-
-To continue in a new conversation, make the relevant project state, applicable instructions, and existing continuation record available to the new agent, then ask it to continue the task. If you are changing environments, account for relevant uncommitted changes and supporting artifacts. Use a suitable way to transfer or synchronize the work; the contract prescribes no particular mechanism. A record can identify a missing file or change, but its description cannot recreate that content.
-
-Here, startup and resumption mean starting a new conversation, including one used to continue earlier work. A pause or compaction within the ongoing conversation does not trigger this startup procedure. The record is still maintained during the work to prepare for a future handoff.
-
-At new-conversation start, the agent must check the fixed path and read the record if present. Unless you have acknowledged it that conversation, it gives the path and a summary once early in chat. That notice needs no reply and does not authorize resuming the task.
-
-Before resuming in the new conversation, the agent compares available task context, including the record if present, with current files, checks, and instructions. An interruption can leave saved context stale. If no record exists, available permanent artifacts can suffice; only material context gaps need reporting. Completed, partial, unverified, and proposed work remain distinguishable, and material differences are reported. It can continue within the authorization supplied by your request and applicable instructions unless a checkpoint requires direction. Resumption or a recorded next step does not itself grant permission, reset effort limits, or clear pending checkpoints.
-
-### What the record preserves
-
-Each task entry stays concise while retaining the context needed alongside the project artifacts:
-
-| Context | What is preserved |
-| --- | --- |
-| Objectives and direction | Task and current increment objectives, acceptance conditions, agreed direction, authorization, and constraints. |
-| Effort expectations | Increment and cumulative-task baselines, known cumulative effort, and uncertainty about effort already spent. |
-| Work and evidence | Progress, checks, relevant project state, partial or uncommitted work, missing artifacts, and remaining work at the appropriate level. |
-| The next decision | Relevant approach and prediction, open consequential questions, pending checkpoints, and a likely next increment. |
-| An interrupted investigation | Its question, scope, objective, effort limit, and needed evidence, together with known effort already used and uncertainty. |
-| Project sources | Links to authoritative project information that supplies the rest of the context. |
-
-These are content requirements, not a prescribed layout. Effort expectations and known cumulative effort apply to implementation and documentation as well as investigation. An interrupted investigation also needs its explicit framing and limit; a task with no such investigation needs no invented inquiry allowance or usage figures. Known effort and uncertainty are retained without assuming that a new conversation supplies a fresh allowance.
-
-Code, tests, checks, and current-system documentation establish what exists. Architecture and ADRs retain lasting reasons. The continuation record holds otherwise missing task context, avoiding transcripts and detailed distant plans. This applies PDSA's retained learning and DRY's knowledge ownership.
-
-### Example: starting a new conversation
-
-Suppose you need to continue the CSV-import task on another device. Field-count validation has been completed and checked; required-value validation is planned but has not started, and other agreed rules remain unfinished. Authorization and task limits are not fully retained in permanent project files. Before the planned handoff, the agent updates `.agent-continuation-context.md`. Assuming the named files exist and the stated checks succeeded, a concise record could contain:
-
-```markdown
-# Unfinished tasks
-
-## CSV import
-
-- Task objective: Report invalid rows and continue processing valid rows.
-- Authorized work: Implement the agreed row-validation rules, tests, and
-  affected documentation. Shared-parser redesign is outside this request.
-- Direction and constraints: Preserve quoted-comma handling and use the
-  source-line-number convention in docs/import-format.md.
-- Effort baselines: The task is expected to need local row-validation
-  changes and checks, without shared-parser redesign. The next increment
-  is expected to use the established row boundary and focused checks.
-- Known cumulative effort: One implementation increment and its checks
-  are complete; no investigation beyond routine inspection was needed.
-  Exact time/token use is unavailable. The task baseline is unchanged.
-- Recorded project state: The field-count changes in src/importer.py,
-  tests/test_importer.py, and docs/import-format.md are saved in the working
-  tree but have not been committed.
-- Last increment: Field-count validation is complete at the recorded state.
-  Checks passed for valid rows, mismatched counts, reported line numbers,
-  and a valid row after rejection.
-- Current increment: Required-value validation is planned; no edits started.
-- Acceptance conditions: Reject missing required values, report their line
-  numbers, and process valid rows, including one immediately after rejection.
-- Approach and prediction: Validate at the existing row boundary. Its use
-  for field-count validation supports expecting it to suffice for this rule.
-- Remaining work: Required-value validation and the other agreed rules
-  in docs/import-format.md have not been implemented.
-- Current level: Row-validation behavior and its local implementation.
-- Open consequential questions or checkpoints: None recorded. The saved
-  state still needs comparison with current files, checks, and instructions.
-- Project sources: docs/import-format.md, src/importer.py, and
-  tests/test_importer.py define the rules and implemented behavior.
-- Candidate next increment: Implement and check the planned required-value
-  validation within the recorded scope.
-```
-
-These paths, state, and results are illustrative, and the format is not prescribed. The candidate step preserves direction without granting permission to perform it.
-
-You make the relevant working-tree changes, instructions, and record available in the other environment, start a new conversation without the old chat, and ask:
-
-> Continue the CSV import work.
-
-The agent reads the record and gives its path and summary once unless you have already acknowledged it that session. Suppose reconciliation finds the expected files and supporting checks, with no material missing context or pending decision. Your continuation request covers the planned validation work, so the agent can choose the next increment, implement it, and validate its results against the acceptance conditions. Finding the record needs no separate approval exchange. The next choice follows the current evidence and request rather than treating the saved candidate as a fixed instruction.
-
-### Example: resuming after the project changes
-
-Alternatively, suppose another developer changes the parser integration before the new conversation. Comparing the same record with the current project reveals changed line-number handling, and a relevant check now fails. The agent reports that difference: the earlier checks passed at the recorded state, but the changed code now fails the agreed line-number check. If recorded changes or evidence are missing in the new environment, it reports the material gap rather than treating the saved description as proof that they are present.
-
-The finding changes the basis for the next step. If the issue can be addressed within the authorized validation work and expected effort, the agent can proceed with a small, complete increment and its checks. If it needs a parser redesign outside the request, or materially more work or investigation than expected, it explains the unfinished result and proposed next step, then waits for direction before that work. It updates the record as material progress, evidence, or permission changes. Simply opening a session or finding a next step in the record would not have authorized resumption.
-
-Even if the files are unchanged, earlier implementation effort still counts. If several completed increments have already consumed the expected task effort and the remaining work would materially exceed it, a new conversation does not reset the comparison. The agent explains the cumulative growth and waits for direction before taking it on; uncertainty about earlier effort remains visible.
-
-### Example: an interrupted investigation
-
-Suppose you authorized only a single execution attempt for the reader's [quoted-comma investigation](#when-an-investigation-is-needed). Assume your instructions and the tool permit record writes. At a planned pause, no evidenced answer has been obtained, and code, tests, and permanent documentation lack the context needed to resume.
-
-Your overall allowance was one execution attempt; that attempt produced no usable output, and no further investigation was authorized. The agent maintains the task entry under the [record-maintenance exception](#records-during-review-and-exploration), preserving the inquiry's question, scope, objective, and needed evidence, the one-attempt limit, the attempt already used, and the remaining uncertainty. This maintenance does not require permission to change the parser.
-
-In a new conversation, those facts still apply. The agent can explain the evidence gap and the proposed next step, but changing conversations supplies no second attempt and clears no pending decision. Repairing the environment or running another experiment is additional work governed by the [interaction and growth rules](#when-the-agent-pauses-or-continues). If you authorize further investigation, the agent states its framing and effort limit before starting. If prior effort use is uncertain, that uncertainty remains visible; it is not treated as a fresh allowance.
-
-With broader existing authorization instead of that requester-imposed cap, another bounded attempt could be permitted under the [renewal conditions](#when-an-investigation-is-needed). That permission comes from the existing scope and authority, not from changing conversations.
-
-### Keeping context usable
-
-Relevant known earlier context is reused; superseded copies are retired and links repaired. Competing records encountered during ordinary work are reported. If unrelated content occupies the fixed path, the agent preserves it and seeks direction.
-
-Another task's legitimate entry is not a path collision. If task A remains unfinished while task B starts, retain A's entry and add a separate B entry only if B needs one. Updating or retiring B's entry must preserve context still needed for A. This keeps tasks identifiable without creating competing root records.
-
-Lasting findings move to appropriate permanent records, linked from continuation context where useful. Once a task's extra context is unnecessary, remove or archive its entry, update affected links, and preserve unresolved issues with suitable owners. Remove or archive the whole record only when no task entry is still needed.
-
-The detailed conditions are in [starting context](AGENTS.md#11-establish-the-starting-context) and [context retention](AGENTS.md#43-retain-context-for-unfinished-work).
 
 ## Tool compatibility
 

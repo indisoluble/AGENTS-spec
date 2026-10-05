@@ -11,7 +11,7 @@ Keep the three reader-facing guides and this editorial file at the repository ro
 | Root [AGENTS.md](AGENTS.md) | The self-contained repository-wide operating contract: exact definitions, requirements, permissions, triggers, conditions, and exceptions. Project facts and commands belong in the adopting project's code and documentation. |
 | Root [CLAUDE.md](CLAUDE.md) and root-relative [.github/copilot-instructions.md](.github/copilot-instructions.md) | Discovery and application of the local contract, with permitted non-policy titles and provenance. No independent or duplicated collaboration policy in these bridges; directory instruction files follow the contract's separate scope rules. |
 | [README.md](README.md) | Basic adoption: the offering, installation, replacement precautions, adoption checks, a first task, and essential expectations. |
-| [README-powerusers.md](README-powerusers.md) | Detailed practical explanations and examples, alignment, continuation, tool compatibility, adoption diagnostics, and recorded provider-documentation check dates. |
+| [README-powerusers.md](README-powerusers.md) | Detailed practical explanations and examples, alignment, tool compatibility, adoption diagnostics, and recorded provider-documentation check dates. |
 | [README-maintainers.md](README-maintainers.md) | The contract's design: attributes, reasons, engineering choices, exact source assignments, trade-offs, portability criteria, and constraints on evolution. |
 | `META-README.md` | Documentation responsibilities, permitted overlap, editing procedures, and verification. |
 
@@ -78,14 +78,13 @@ Use these editorial checks for the complete change. The technical guide's [desig
 
 ### Reader comprehension questions
 
-Use these questions to assess whether the guides teach their intended responsibilities. They complement the technical guide's [design scenarios](README-maintainers.md#assessing-design-changes), including its restart cases, which assess the contract's behavior and meaning. Use those cases when reviewing continuation explanations; keep the detailed behavioral scenarios in the technical guide. These are editorial checks, not extra operating duties for agents using the contract.
+Use these questions to assess whether the guides teach their intended responsibilities. They complement the technical guide's [design scenarios](README-maintainers.md#assessing-design-changes), which assess the contract's behavior and meaning; keep the detailed behavioral scenarios in the technical guide. These are editorial checks, not extra operating duties for agents using the contract.
 
 | After reading | The reader should be able to explain |
 | --- | --- |
-| `README.md` | What the file is for, which files to install for their tool, how to check adoption, what token control can and cannot promise, and how unfinished work can continue in a new conversation. |
+| `README.md` | What the file is for, which files to install for their tool, how to check adoption, and what token control can and cannot promise. |
 | The practical walkthrough | Why the agent selected that increment, what would count as completion, and how the findings affect subsequent work. |
 | Interaction guidance | Why completing an increment, reporting a result, and requesting approval are separate events; when existing authorization permits continuation and when direction is required. |
 | Requirements and documentation guidance | Which requirements or records may be created or updated, what triggers them, and why examples do not prescribe a document for every step. |
-| Continuation guidance | How to continue in a new conversation without the old chat; what project state, instructions, and artifacts must be available; when a record is needed and updated; what the agent preserves and reconciles; and why resumption or a recorded next step does not itself grant permission, reset effort limits, or clear pending checkpoints. |
 
 For reader testing, give representative newcomers the relevant guide and ask them to carry out or explain these tasks in their own words. A junior developer familiar with Git and a coding agent should be able to follow basic adoption without first studying the contract's engineering methods. Record where a reader cannot find an answer separately from where an explanation is misunderstood. Keep test observations in working or review records, and distinguish observed comprehension from an editor's prediction; an editorial review alone does not establish usability.

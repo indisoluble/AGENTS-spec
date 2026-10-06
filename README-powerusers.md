@@ -27,7 +27,7 @@ You might ask:
 
 That is the **task objective**: the overall outcome you want. The agent selects an **increment**, a deliberately small step toward it, normally useful, understandable, reviewable, and verifiable on its own. You do not need to break the task down first.
 
-The agent uses [PDSA—Plan–Do–Study–Act](https://deming.org/explore/pdsa/) from your request onward. Plan defines the next useful step; Do carries it out; Study checks the result and the approach; Act uses those findings to decide what follows.
+The agent uses [PDSA—Plan–Do–Study–Act](https://deming.org/explore/pdsa/) from your request onward. Plan defines the next useful step; Do carries it out; Study checks the result and the approach; Act uses those findings to decide what follows. PDSA describes what the agent is doing. Separate [progression guards](AGENTS.md#2-progression-guards) decide, in any phase, whether work may proceed or needs your direction, and [triggered rules](AGENTS.md#3-triggered-rules) add duties such as records, documentation updates, or reports whenever their conditions arise.
 
 ### Plan: choose the next increment
 
@@ -69,7 +69,7 @@ A small increment limits how much the agent takes on at once. Completing it requ
 
 For example, choosing a storage approach may require careful examination of requirements, alternatives, dependencies, and risks. It need not include designing every future data structure and function. The agent develops the next decision at the current level of discussion—architecture, an investigation, a document, or a local change—and keeps later detail at outline level until needed.
 
-The agent selects the smallest useful next increment within your authorization, including in planning or approval workflows. During Plan, it considers which unmet behavior or blocking question can usefully be addressed next and which dependencies are needed for a complete result. It assesses the [scope, uncertainty, consequences, and reversibility](AGENTS.md#51-scope-effort-and-requester-interaction) of that decision. These criteria guide judgment; the contract prescribes no fixed sequence or ranking formula.
+The agent selects the smallest useful next increment within your authorization, including in planning or approval workflows. During Plan, it considers which unmet behavior or blocking question can usefully be addressed next and which dependencies are needed for a complete result. It assesses the [scope, uncertainty, consequences, and reversibility](AGENTS.md#22-decisions-and-requester-interaction) of that decision. These criteria guide judgment; the contract prescribes no fixed sequence or ranking formula.
 
 Consequential unresolved intent or constraints come back to you. Selecting and defining the step—its objective, acceptance conditions, approach, and prediction—are standing agent responsibilities, so you need not prescribe a step or stopping condition for every request.
 
@@ -77,11 +77,11 @@ An increment can deliver evidence for a decision as well as an implementation. A
 
 A straightforward authorized correction can proceed without a separate planning exchange. If a proposed step cannot stand alone, the agent must first explain why, what remains usable or testable, and how to undo it. Material limits on undoing changes stay visible. If no safe step is possible, it presents alternatives and seeks direction.
 
-See the contract's [increment rules](AGENTS.md#12-bound-the-work-and-choose-an-approach).
+See the contract's [increment rules](AGENTS.md#11-plan--define-the-next-increment).
 
 ## When the agent pauses or continues
 
-The agent finishes when the task objective is fulfilled. Otherwise, it can continue under existing authorization unless a checkpoint requires a pause. Completing an increment neither grants additional permission nor removes permission already given.
+The agent finishes when the task objective is fulfilled. Otherwise, it can [continue under existing authorization](AGENTS.md#25-continuing-to-another-increment) unless a checkpoint requires a pause; the contract's [composition rules](AGENTS.md#4-how-the-layers-compose) summarize these outcomes. Completing an increment neither grants additional permission nor removes permission already given.
 
 Three events have different purposes:
 
@@ -140,15 +140,15 @@ The special edit protection covers exactly three root-relative paths: `AGENTS.md
 
 Directory-level instruction files may add subtree rules only when those rules are compatible with the root contract. They are not automatically subject to that special three-file protection, although ordinary edit authorization and tool restrictions still apply. The tool determines actual discovery, scope, and precedence, but that precedence never makes conflicting policy acceptable. Encountered conflicts must be reported. During adoption, a person validates which existing practices, conventions, and workflows persist, as the [installation steps](README.md#get-started) explain.
 
-External actions mean commits, publishing or sending, and changes to remote or shared state. They require authorization, which may already be part of your request. Permission to implement a change does not by itself authorize every external action that might follow. Read-only access follows task scope and tool permissions; consulting a source is not itself a publication or state-changing action. The [source-consultation limits](AGENTS.md#54-consult-linked-sources-only-when-needed) still apply to linked methodological sources. See the [instruction-file and external-action rules](AGENTS.md#53-instructions-contract-files-and-external-actions).
+External actions mean commits, publishing or sending, and changes to remote or shared state. They require authorization, which may already be part of your request. Permission to implement a change does not by itself authorize every external action that might follow. Read-only access follows task scope and tool permissions; consulting a source is not itself a publication or state-changing action. The [method-reference consultation limits](AGENTS.md#39-method-references) still apply to linked method references. See the [instruction-file and external-action rules](AGENTS.md#38-instructions-protected-files-and-external-actions).
 
 ### Records during review and exploration
 
-Two separate questions decide whether an assessment changes files. First, what may it write at all? During analysis or review, [AGENTS.md §1.1](AGENTS.md#11-establish-the-starting-context) permits only three kinds of writes: material findings under the findings rule, ADR and technical-debt maintenance under the decision and debt rules, and verified factual corrections. Assessment alone does not authorize implementation, new or changed system requirements, accepting or changing decisions beyond existing authority, unrelated documentation repairs, or documentation backfills. Authorized scope, your instructions (including a no-edit instruction), protected-file rules, and tool permissions and approvals still apply.
+Two separate questions decide whether an assessment changes files. First, what may it write at all? During analysis or review, [AGENTS.md §2.1](AGENTS.md#21-authority-and-scope) permits only three kinds of writes: material findings under the findings rule, ADR and technical-debt maintenance under the decision and debt rules, and verified factual corrections. Assessment alone does not authorize implementation, new or changed system requirements, accepting or changing decisions beyond existing authority, unrelated documentation repairs, or documentation backfills. Authorized scope, your instructions (including a no-edit instruction), protected-file rules, and tool permissions and approvals still apply.
 
-Second, is a record due? The [findings rule](AGENTS.md#4-act--use-the-findings-and-determine-what-follows) and the [decision and debt rules](AGENTS.md#41-record-significant-decisions-and-technical-debt) decide this with their own triggers and strengths, whenever their conditions arise. A **permanent record** is the canonical project document owning the topic, such as architecture documentation or an ADR, rather than chat or working notes. A finding must be recorded there when it is both material and durable: expected to stay relevant beyond the current task or attempt and to inform future maintenance, operation, requirements, architecture, or technical decisions. Transient task facts and the routine history of the work need no record, so assessment does not become a work log. A record preserves knowledge; it does not authorize implementing a recommendation, rewriting intended behavior, or accepting or changing decisions beyond existing authority. The examples below show the remaining mechanics, including creating a minimal record when no suitable owner exists and what happens when writes are prohibited.
+Second, is a record due? The triggered [findings rule](AGENTS.md#32-durable-findings-and-permanent-records), [decision rule](AGENTS.md#33-significant-decisions-adrs), and [debt rule](AGENTS.md#34-technical-debt) decide this with their own triggers and strengths, whenever their conditions arise. A **permanent record** is the canonical project document owning the topic, such as architecture documentation or an ADR, rather than chat or working notes. A finding must be recorded there when it is both material and durable: expected to stay relevant beyond the current task or attempt and to inform future maintenance, operation, requirements, architecture, or technical decisions. Transient task facts and the routine history of the work need no record, so assessment does not become a work log. A record preserves knowledge; it does not authorize implementing a recommendation, rewriting intended behavior, or accepting or changing decisions beyond existing authority. The examples below show the remaining mechanics, including creating a minimal record when no suitable owner exists and what happens when writes are prohibited.
 
-A verified factual correction makes an existing description of current project facts within the assessed scope—such as a command, path, interface, or behavior—match the source owning that kind of knowledge, for example correcting a documented command to match authoritative package configuration. Requirements, decision records, and protected instruction files are not corrected this way. An unresolved conflict over intended behavior remains a question or finding, not permission to choose a new requirement.
+A verified factual correction makes an existing description of current project facts within the assessed scope—such as a command, path, interface, or behavior—match the canonical owner of that kind of knowledge, for example correcting a documented command to match authoritative package configuration. Requirements, decision records, and protected instruction files are not corrected this way. An unresolved conflict over intended behavior remains a question or finding, not permission to choose a new requirement.
 
 These examples assume you requested only assessment or exploration and the tool permits the described writes, except where stated:
 
@@ -164,7 +164,7 @@ These examples assume you requested only assessment or exploration and the tool 
 | A review identifies duplicated validation rules whose maintenance risk is supported by inconsistent past fixes. | The agent may record [technical debt](#preserve-significant-choices-and-identify-debt), considering accepted requirements and trade-offs. It reports any entry: what, why, where, and classification uncertainty. Recording grants no permission to fix the issue. |
 | You request: "Assess the parser. Do not create, modify, or delete any files." | The restriction covers records and factual documentation corrections. The agent can provide findings and proposed record or correction text in its response for you to retain. That text does not satisfy the record obligation; the unmade record is reported as unfinished work. |
 
-A debt entry is optional under the debt rule; preserving a material finding that is durable project knowledge is still required, including one revealed by a discarded approach. See the [findings and record rules](AGENTS.md#4-act--use-the-findings-and-determine-what-follows), subject to the [instruction and tool rules](AGENTS.md#53-instructions-contract-files-and-external-actions).
+A debt entry is optional under the debt rule; preserving a material finding that is durable project knowledge is still required, including one revealed by a discarded approach. See the [findings and record rules](AGENTS.md#32-durable-findings-and-permanent-records), subject to [authorized scope and requester restrictions](AGENTS.md#21-authority-and-scope) and the [protected-file rules](AGENTS.md#38-instructions-protected-files-and-external-actions).
 
 ### Optional controls you can add
 
@@ -176,7 +176,7 @@ The agent chooses and completes the increments needed for that reviewable result
 
 You may instead name the exact behavior to address next or impose a tighter investigation limit. The agent remains responsible for a coherent approach, adequate validation, and every required checkpoint. Establishing and stating a limit before a blocking inquiry is already its duty, as the next section explains.
 
-The full interaction conditions are in [AGENTS.md §5.1](AGENTS.md#51-scope-effort-and-requester-interaction).
+The full interaction conditions are in the contract's [progression guards](AGENTS.md#2-progression-guards), especially [requester interaction](AGENTS.md#22-decisions-and-requester-interaction) and [effort growth](AGENTS.md#23-effort-baselines-and-material-growth).
 
 ## When an investigation is needed
 
@@ -210,7 +210,7 @@ The one-attempt allowance above is an example. The contract prescribes no univer
 
 The findings guide what follows: evidence supporting the reader may allow row validation next; contrary evidence changes the basis for that plan. Either way, the next step stays within authorization, and unexpectedly greater effort requires direction before it proceeds.
 
-See [framing an inquiry](AGENTS.md#12-bound-the-work-and-choose-an-approach) and [assessing completion and learning](AGENTS.md#3-study--assess-completion-and-learning).
+See [framing an inquiry](AGENTS.md#24-context-gathering-and-bounded-inquiry) and [assessing completion and learning](AGENTS.md#13-study--assess-completion-and-learning).
 
 ## Assess the result
 
@@ -247,7 +247,7 @@ When edits are displayed, changed portions with enough context are the default. 
 
 The agent must report tool limits that block edits, checks, or instruction loading. For blocked edits, it supplies a focused patch or exact changes with paths and application context where possible. Full contents may help when needed to make those edits usable.
 
-Reports should fit the work. Small mechanical changes normally need only a concise outcome and checks, without invented risks, follow-up, or a mandatory template. See the [reporting rules](AGENTS.md#43-report-the-result-and-choose-the-next-step).
+Reports should fit the work. Small mechanical changes normally need only a concise outcome and checks, without invented risks, follow-up, or a mandatory template. See the [reporting rules](AGENTS.md#37-reporting).
 
 ### Understanding token use
 
@@ -265,7 +265,7 @@ A request for one input format should produce a complete solution for that forma
 
 Supporting techniques apply when their benefits justify their costs. Examples include supplying a dependency from outside a component, using a value object to express domain meaning, or composing smaller components. They do not automatically require new libraries or restructuring. Public contracts, compatibility, error handling, required logging, resource lifecycles, concurrency guarantees, and security must be preserved unless changing them is intended and authorized.
 
-[Refactoring](https://martinfowler.com/bliki/DefinitionOfRefactoring.html) preserves observable behavior. If you want different behavior, state that outcome so affected requirements, tests, and documentation can change with it. The [engineering rules](AGENTS.md#2-do--perform-the-authorized-work) give the conditions; the [technical guide](README-maintainers.md#engineering-choices) explains the methods and their trade-offs.
+[Refactoring](https://martinfowler.com/bliki/DefinitionOfRefactoring.html) preserves observable behavior. If you want different behavior, state that outcome so affected requirements, tests, and documentation can change with it. The [engineering rules](AGENTS.md#12-do--perform-the-authorized-work) give the conditions; the [technical guide](README-maintainers.md#engineering-choices) explains the methods and their trade-offs.
 
 ## Use requirements and documentation
 
@@ -305,7 +305,7 @@ This excerpt explains responsibilities and behavior while linking to the detaile
 
 ### Preserve significant choices and identify debt
 
-A significant lasting choice within the authorized scope requires an [Architecture Decision Record (ADR)](AGENTS.md#41-record-significant-decisions-and-technical-debt) when a concrete proposal is ready for decision or review, in or linked from [arc42's decision section](https://docs.arc42.org/section-9/). Selecting a parser to meet a memory constraint is one possible example. The record retains context, reasons, consequences, and status. Routine local choices normally need none; exploratory ideas alone do not trigger an ADR.
+A significant lasting choice within the authorized scope requires an [Architecture Decision Record (ADR)](AGENTS.md#33-significant-decisions-adrs) when a concrete proposal is ready for decision or review, in or linked from [arc42's decision section](https://docs.arc42.org/section-9/). Selecting a parser to meet a memory constraint is one possible example. The record retains context, reasons, consequences, and status. Routine local choices normally need none; exploratory ideas alone do not trigger an ADR.
 
 Use Proposed while the choice awaits a decision, Accepted once it is made under existing authority and consultation rules, Rejected for a rejected proposal, and Superseded when a later decision replaces it. Preserve useful history, rejected alternatives, and replacement links. An agent may mark a decision Accepted when already authorized to make it; no extra ADR-specific approval is required. Accepted does not mean implemented, and recording a choice grants no new implementation authority.
 
@@ -329,9 +329,9 @@ Known risks also belong in that architectural topic and need not be internal-qua
 
 New guides require an explicitly requested or agreed purpose. These methods do not require four documents, an ADR, or a new guide for every increment. Affected existing guides stay current. Comments, docstrings, and generated API documentation should follow suitable existing language and tool conventions.
 
-[DRY](https://media.pragprog.com/titles/tpp20/dry.pdf) keeps knowledge consistent through one authoritative owner. A guide can explain a retry setting and link to its definition; necessary copies need a clear source and update process. Similar-looking code may express different rules, so resemblance alone does not require abstraction.
+[DRY](https://media.pragprog.com/titles/tpp20/dry.pdf) keeps knowledge consistent through one authoritative owner. A guide can explain a retry setting and link to its definition; necessary copies need a clear canonical owner and update process. Similar-looking code may express different rules, so resemblance alone does not require abstraction.
 
-See the [knowledge rules](AGENTS.md#52-maintain-canonical-knowledge-and-consistent-artifacts) and the [design reasons for the documentation methods](README-maintainers.md#documentation-choices).
+See the [knowledge rules](AGENTS.md#35-canonical-knowledge-and-affected-documentation), the [architecture and guide rules](AGENTS.md#36-architecture-guides-and-code-documentation), and the [design reasons for the documentation methods](README-maintainers.md#documentation-choices).
 
 ## Bring an existing project into alignment
 

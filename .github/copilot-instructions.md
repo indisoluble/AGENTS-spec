@@ -1,6 +1,6 @@
 # GitHub Copilot bridge
 
-**Release date:** 2026-10-04 - **Upstream source:** https://github.com/indisoluble/AGENTS-spec
+**Release date:** 2026-10-07 - **Upstream source:** https://github.com/indisoluble/AGENTS-spec
 
 Read and follow the repository-root [AGENTS.md](../AGENTS.md) for project tasks.
 

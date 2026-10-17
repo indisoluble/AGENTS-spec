@@ -90,7 +90,7 @@ def evaluate(
     """Run one task in a fresh workspace and return Pydantic's printable report.
 
     The execution function receives a prompt and workspace and returns a result.
-    Only test substitutes exist so far; there is no Codex launcher yet.
+    Both the Codex launcher and offline test substitutes use this interface.
     """
 
     def task(prompt: str) -> ExecutionResult:

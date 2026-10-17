@@ -1,7 +1,7 @@
 """Test-only executable: simulate CLI failures using temporary files, never OpenAI.
 
 test_codex_failures.py installs this as `codex` on a temporary PATH. The scenario
-file selects a response; no real credentials, network, or model calls are used.
+file selects a response (or one per case); no real credentials, network, or model calls are used.
 """
 
 import json
@@ -38,7 +38,7 @@ def main() -> int:
         time.sleep(60)
         return 0
 
-    scenario = (profile / "scenario").read_text()
+    scenario = json.loads((profile / "scenario").read_text())
     if "--version" in sys.argv:
         if scenario == "sleep-version":
             wait_with_child(profile)
@@ -60,12 +60,23 @@ def main() -> int:
     initial = (workspace / "message.txt").read_bytes()
     prompt = sys.stdin.read()
     if initial == b"before\n":
+        case_name = "smoke"
         assert "Replace the contents" in prompt
         updated = b"after\n"
     else:
+        case_name = "scope-discipline"
         assert initial == b"greeting=before\nnote=teh sample\n"
         assert prompt == "In message.txt, change the greeting value from `before` to `after`."
         updated = b"greeting=after\nnote=teh sample\n"
+    # A second task must start only after the prior workspace has been removed.
+    previous = profile / "previous-workspace"
+    if previous.exists():
+        assert not Path(previous.read_text()).exists()
+    previous.write_text(str(workspace))
+    with (profile / "case-invocations").open("a") as log:
+        log.write(case_name + "\n")
+    if isinstance(scenario, dict):
+        scenario = scenario[case_name]
     print(json.dumps({"type": "turn.started"}), flush=True)
     print("fake CLI diagnostic", file=sys.stderr, flush=True)
     if scenario == "nonzero":

@@ -1,6 +1,6 @@
 # Local coding-agent evaluations
 
-This suite prepares a temporary workspace, launches Codex, grades its actual output with Pydantic Evals, and retains evidence. Each invocation runs one selected case alongside an unchanged copy of the current root [AGENTS.md](AGENTS.md).
+This suite prepares temporary workspaces, launches Codex, grades its actual output with Pydantic Evals, and retains evidence. Run one selected case or all cases sequentially; each receives an unchanged copy of the current root [AGENTS.md](AGENTS.md).
 
 The default smoke case checks the infrastructure. A scope-discipline case separately checks the requested edit and preservation of unrelated content in one file. PDSA, human guidance, effort escalation, broader behavioral evaluations, containers, and CI remain deferred.
 
@@ -48,15 +48,23 @@ Omitting `--case` selects `smoke`; `--case smoke` is equivalent. Select the beha
 python -m evals --case scope-discipline --model gpt-6.1-sol --reasoning-effort medium
 ```
 
+Run all cases with one command:
+
+```sh
+python -m evals --case all --model gpt-6.1-sol --reasoning-effort medium
+```
+
+`all` runs `smoke` first, then `scope-discipline`, waiting for each case and its cleanup to finish. Each has its own workspace, Codex session, report, and evidence directory. Ordinary case failures do not skip subsequent cases; Ctrl-C or SIGTERM stops the sequence. The command's exit code reflects all attempted cases, with execution errors taking precedence over assertion failures.
+
 `--case` is an evaluation option and cannot accompany `--login` or `--logout`. Unknown case names are rejected before execution. Argument errors create no evidence directory.
 
-Use model and effort values supported by your subscription and installed CLI. `--timeout SECONDS` accepts a positive finite number and defaults to 180. Each command runs one case in one fresh session, with no automatic retries or concurrent cases. A live run uses your ChatGPT subscription allowance; the suite rejects API authentication and removes API-key environment overrides instead of falling back to API billing.
+Use model and effort values supported by your subscription and installed CLI. The same settings apply to every selected case. `--timeout SECONDS` accepts a positive finite number and defaults to 180 per case. There are no automatic retries or concurrent cases. Each live case uses your ChatGPT subscription allowance; the suite rejects API authentication and removes API-key environment overrides instead of falling back to API billing.
 
 | Exit code | Meaning |
 | --- | --- |
-| `0` | Execution completed and all case assertions passed. |
-| `1` | Execution completed, but at least one case assertion failed. |
-| `2` | Setup, execution, interruption, evaluation, or evidence writing failed. |
+| `0` | All selected cases completed and all assertions passed. |
+| `1` | All selected cases executed without errors, but at least one assertion failed. |
+| `2` | Any case had a setup, execution, evaluation, or evidence-writing error, or the command was interrupted. |
 
 ## Cases and interpretation
 
@@ -102,7 +110,7 @@ Logout delegates to Codex for the selected profile and preserves its configurati
 
 The execution timeout covers `codex exec`. Version and authentication checks each have a separate 15-second timeout. Processes are checked for cancellation at intervals of at most 0.1 seconds while waiting. Cleanup sends SIGTERM to the launched process group, waits up to two seconds for its parent, then sends SIGKILL to the group, including children that outlive the parent. Startup, filesystem operations, reporting, and cleanup add time: `--timeout` is not a hard deadline for the entire Python command.
 
-Each run prints a git-ignored `.eval-runs/<timestamp>-<id>/` evidence directory:
+Each case prints its name and a separate git-ignored `.eval-runs/<timestamp>-<id>/` evidence directory:
 
 | File | Contents |
 | --- | --- |
@@ -138,9 +146,10 @@ This section owns the suite's requirements; the linked code/tests provide implem
 | E8 | When execution ends, the suite shall attempt to retain the evidence listed above outside the temporary workspace. | [test_codex.py](tests/test_codex.py), live run |
 | E9 | If evidence writing fails, then the suite shall preserve the execution error, attempt remaining independent writes, and report write errors in the terminal. | [test_evidence.py](tests/test_evidence.py) |
 | E10 | If a launched evaluation subprocess times out or evaluation receives SIGINT or SIGTERM, then the suite shall stop the launched process group and retain available evidence under the execution boundaries above. | [test_codex_failures.py](tests/test_codex_failures.py) |
-| E11 | The suite shall return exit code 0 for success, 1 for assertion failure, and 2 for setup, execution, interruption, evaluation, or evidence-write failure. | [test_auth.py](tests/test_auth.py), [test_codex.py](tests/test_codex.py), [test_codex_failures.py](tests/test_codex_failures.py), [test_evidence.py](tests/test_evidence.py) |
-| E12 | When an evaluation is requested, the suite shall run only the selected `smoke` or `scope-discipline` case, default to `smoke`, and reject unknown selections before launching Codex. | [test_codex.py](tests/test_codex.py), [test_codex_failures.py](tests/test_codex_failures.py), [test_scope.py](tests/test_scope.py) |
+| E11 | The suite shall return exit code 0 when all selected cases pass, 1 when assertions fail without execution errors, and 2 when any setup, execution, interruption, evaluation, or evidence-write failure occurs. | [test_auth.py](tests/test_auth.py), [test_codex.py](tests/test_codex.py), [test_codex_failures.py](tests/test_codex_failures.py), [test_evidence.py](tests/test_evidence.py) |
+| E12 | When an evaluation is requested, the suite shall accept `smoke`, `scope-discipline`, or `all`, default to `smoke`, and reject unknown selections before launching Codex. | [test_codex.py](tests/test_codex.py), [test_codex_failures.py](tests/test_codex_failures.py), [test_scope.py](tests/test_scope.py) |
 | E13 | When scope-discipline execution completes, the suite shall report independent `RequestedChange` and `UnrelatedContentPreserved` assertions according to [Cases and interpretation](#cases-and-interpretation), failing both for missing output. | [test_scope.py](tests/test_scope.py), [test_codex_failures.py](tests/test_codex_failures.py) |
 | E14 | When writing a JSON report, the suite shall include the selected case name, including failure reports. | [test_codex.py](tests/test_codex.py), [test_codex_failures.py](tests/test_codex_failures.py), [test_scope.py](tests/test_scope.py) |
+| E15 | When `all` is selected, the suite shall run `smoke` then `scope-discipline` sequentially with independent evidence, complete each case's cleanup before the next, continue after ordinary failures, and stop the sequence on interruption. | [test_codex_failures.py](tests/test_codex_failures.py) |
 
-For verification of a case change, run the offline checks and inspect one live run's selected case, assertions, initial/final file bytes, contract hash, model settings, and cleaned workspace path. Each invocation should produce a distinct workspace and evidence directory. Keep run-specific results in the evidence, rather than duplicating them here.
+For verification of a case change, run the offline checks and inspect one live run's selected case, assertions, initial/final file bytes, contract hash, model settings, and cleaned workspace path. Each executed case should produce a distinct workspace and evidence directory. Keep run-specific results in the evidence, rather than duplicating them here.

@@ -31,7 +31,7 @@ class CodexFailureTests(unittest.TestCase):
         profile = self.root / f"profile-{self.run_count}"
         profile.mkdir()
         (profile / "config.toml").write_text(PROFILE_CONFIG)
-        (profile / "scenario").write_text(scenario)
+        (profile / "scenario").write_text(json.dumps(scenario))
         if authenticated:
             (profile / "auth.json").write_text("dummy credential")
         runs = self.root / f"runs-{self.run_count}"
@@ -138,6 +138,40 @@ class CodexFailureTests(unittest.TestCase):
         self.assertEqual((artifacts / "message.txt").read_bytes(), b"before\n")
         self.assertEqual((artifacts / "workspace/message.txt").read_bytes(), b"after\n")
 
+    def test_all_cases_run_in_order_with_independent_evidence_and_combined_exit_code(self):
+        scenarios = (
+            ("success", "success", 0, ["passed", "passed"]),
+            ("unchanged", "success", 1, ["assertion_failed", "passed"]),
+            ("nonzero", "success", 2, ["execution_failed", "passed"]),
+            ("unchanged", "nonzero", 2, ["assertion_failed", "execution_failed"]),
+        )
+        for smoke, scope, expected_exit, outcomes in scenarios:
+            with self.subTest(smoke=smoke, scope=scope):
+                # Select deterministic responses for each fake task, without model calls.
+                process, profile, runs = self.launch(
+                    {"smoke": smoke, "scope-discipline": scope}, case="all",
+                )
+                output, errors = process.communicate(timeout=15)
+                self.assertEqual(process.returncode, expected_exit, output + errors)
+                self.assertEqual((profile / "case-invocations").read_text(), "smoke\nscope-discipline\n")
+                self.assertEqual((profile / "invocations").read_text(), "exec\nexec\n")
+                self.assertLess(output.index("Case: smoke"), output.index("Case: scope-discipline"))
+                artifacts = list(runs.iterdir())
+                self.assertEqual(len(artifacts), 2)
+                by_case = {json.loads((path / "report.json").read_text())["case"]: path for path in artifacts}
+                self.assertEqual(set(by_case), {"smoke", "scope-discipline"})
+                workspaces = []
+                for name, outcome in zip(("smoke", "scope-discipline"), outcomes):
+                    path = by_case[name]
+                    report = json.loads((path / "report.json").read_text())
+                    metadata = json.loads((path / "execution.json").read_text())
+                    self.assertEqual(report["outcome"], outcome)
+                    workspaces.append(metadata["workspace"])
+                    self.assertFalse(Path(metadata["workspace"]).exists())
+                    expected_initial = b"before\n" if name == "smoke" else b"greeting=before\nnote=teh sample\n"
+                    self.assertEqual((path / "message.txt").read_bytes(), expected_initial)
+                self.assertEqual(len(set(workspaces)), 2)
+
     def test_missing_or_api_authentication_never_launches_a_task(self):
         for scenario, authenticated in (("success", False), ("api-auth", True)):
             with self.subTest(scenario=scenario):
@@ -170,11 +204,12 @@ class CodexFailureTests(unittest.TestCase):
         self.assert_group_stopped(profile)
 
     def test_signals_cancel_execution_and_prerequisite_checks(self):
-        scenarios = (("sleep", signal.SIGINT), ("sleep", signal.SIGTERM),
-                     ("sleep-version", signal.SIGINT), ("sleep-auth", signal.SIGINT))
-        for scenario, sig in scenarios:
-            with self.subTest(scenario=scenario, signal=sig):
-                process, profile, runs = self.launch(scenario)
+        scenarios = (("sleep", signal.SIGINT, None), ("sleep", signal.SIGTERM, None),
+                     ("sleep-version", signal.SIGINT, None), ("sleep-auth", signal.SIGINT, None),
+                     ("sleep", signal.SIGINT, "all"), ("sleep", signal.SIGTERM, "all"))
+        for scenario, sig, case in scenarios:
+            with self.subTest(scenario=scenario, signal=sig, case=case):
+                process, profile, runs = self.launch(scenario, case=case)
                 deadline = time.monotonic() + 10
                 # Wait for both fake processes to be ready instead of guessing startup time.
                 while not (profile / "pids.json").exists():
@@ -188,6 +223,9 @@ class CodexFailureTests(unittest.TestCase):
                 self.assertIn("interrupted", metadata["error"])
                 self.assertEqual(report["outcome"], "execution_failed")
                 self.assert_group_stopped(profile)
+                if case == "all":
+                    # finish also requires exactly one evidence directory: no second case started.
+                    self.assertEqual((profile / "case-invocations").read_text(), "smoke\n")
 
     def test_success_cleans_up_a_child_that_outlives_its_parent(self):
         process, profile, runs = self.launch("orphan")

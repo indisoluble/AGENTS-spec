@@ -1,4 +1,4 @@
-"""Command-line entry point for one selected live evaluation.
+"""Command-line entry point for selected live evaluations, run sequentially.
 
 See META-EVALUATIONS.md for commands, exit codes, and requirements.
 """
@@ -11,6 +11,7 @@ from io import StringIO
 import math
 from pathlib import Path
 import sys
+from threading import Event
 from uuid import uuid4
 
 from pydantic_evals.reporting import EvaluationReport
@@ -23,6 +24,7 @@ from evals.smoke import ExecutionResult, evaluate
 
 
 ARTIFACTS_ROOT = Path(__file__).resolve().parents[1] / ".eval-runs"
+CASE_NAMES = ("smoke", "scope-discipline")
 
 
 def report_failure(artifacts: Path, message: str, *, case_name: str = "smoke") -> int:
@@ -77,8 +79,39 @@ def write_report(
     return 2 if errors else exit_code
 
 
+def run_case(case_name: str, *, model: str, effort: str, timeout: float, profile: Path, cancelled: Event) -> int:
+    """Own one case's evidence and reporting; finish cleanup before the next case."""
+    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
+    artifacts = ARTIFACTS_ROOT / run_id
+    try:
+        artifacts.mkdir(parents=True, mode=0o700)
+    except OSError as exc:
+        print(f"Cannot create the evidence directory for {case_name}: {exc}", file=sys.stderr)
+        return 2
+    print(f"Case: {case_name}\nEvidence: {artifacts}", flush=True)
+    try:
+        execute = partial(
+            run_codex, model=model, effort=effort,
+            timeout=timeout, artifacts=artifacts, profile=profile, cancelled=cancelled,
+        )
+        if case_name == "scope-discipline":
+            report = evaluate(execute, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
+        else:
+            report = evaluate(execute)
+        exit_code = write_report(report, artifacts, case_name=case_name)
+        # Also handle a signal arriving after the worker, including during reporting.
+        if cancelled.is_set() and not report.failures:
+            return report_failure(artifacts, "Evaluation interrupted.", case_name=case_name)
+        return exit_code
+    except KeyboardInterrupt:
+        cancelled.set()
+        return report_failure(artifacts, "Evaluation interrupted.", case_name=case_name)
+    except (OSError, RuntimeError, ValueError) as exc:
+        return report_failure(artifacts, f"Evaluation failed: {exc}", case_name=case_name)
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run one Codex text-edit evaluation using ChatGPT authentication.")
+    parser = argparse.ArgumentParser(description="Run Codex text-edit evaluations using ChatGPT authentication.")
     authentication = parser.add_mutually_exclusive_group()
     authentication.add_argument("--login", action="store_true", help="Sign into the dedicated evaluation profile; do not run a case.")
     authentication.add_argument("--logout", action="store_true", help="Remove saved credentials from the evaluation profile; do not run a case.")
@@ -86,9 +119,9 @@ def main() -> int:
                         help="Dedicated profile directory for login, logout, and runs (default: ~/.codex-evals).")
     parser.add_argument("--model", help="Codex model ID (required for an evaluation).")
     parser.add_argument("--reasoning-effort", help="Reasoning effort supported by the selected model (required for an evaluation).")
-    parser.add_argument("--case", choices=("smoke", "scope-discipline"),
-                        help="Run one selected case (default: smoke).")
-    parser.add_argument("--timeout", type=float, default=180, help="Maximum Codex execution seconds (default: 180).")
+    parser.add_argument("--case", choices=(*CASE_NAMES, "all"),
+                        help="Run one case or all cases sequentially (default: smoke).")
+    parser.add_argument("--timeout", type=float, default=180, help="Maximum Codex execution seconds per case (default: 180).")
     args = parser.parse_args()
     # Resolve before Codex changes its working directory to the temporary fixture.
     try:
@@ -111,35 +144,19 @@ def main() -> int:
         parser.error("--model and --reasoning-effort are required unless using --login or --logout")
     if not math.isfinite(args.timeout) or args.timeout <= 0:
         parser.error("--timeout must be a positive, finite number")
-    case_name = args.case or "smoke"
-
-    run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
-    artifacts = ARTIFACTS_ROOT / run_id
-    try:
-        artifacts.mkdir(parents=True, mode=0o700)
-    except OSError as exc:
-        print(f"Cannot create the evidence directory: {exc}", file=sys.stderr)
-        return 2
-    print(f"Evidence: {artifacts}", flush=True)
-    try:
-        with cancellation_signals() as cancelled:
-            execute = partial(
-                run_codex, model=args.model, effort=args.reasoning_effort,
-                timeout=args.timeout, artifacts=artifacts, profile=profile, cancelled=cancelled,
+    selected_cases = CASE_NAMES if args.case == "all" else (args.case or "smoke",)
+    exit_code = 0
+    with cancellation_signals() as cancelled:
+        for case_name in selected_cases:
+            if cancelled.is_set():
+                break
+            case_exit = run_case(
+                case_name, model=args.model, effort=args.reasoning_effort,
+                timeout=args.timeout, profile=profile, cancelled=cancelled,
             )
-            if case_name == "scope-discipline":
-                report = evaluate(execute, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
-            else:
-                report = evaluate(execute)
-            exit_code = write_report(report, artifacts, case_name=case_name)
-            # Also handle a signal arriving after the worker, including during reporting.
-            if cancelled.is_set() and not report.failures:
-                return report_failure(artifacts, "Evaluation interrupted.", case_name=case_name)
-            return exit_code
-    except KeyboardInterrupt:
-        return report_failure(artifacts, "Evaluation interrupted.", case_name=case_name)
-    except (OSError, RuntimeError, ValueError) as exc:
-        return report_failure(artifacts, f"Evaluation failed: {exc}", case_name=case_name)
+            # Execution errors (2) take precedence over assertion failures (1).
+            exit_code = max(exit_code, case_exit)
+        return 2 if cancelled.is_set() else exit_code
 
 
 if __name__ == "__main__":

@@ -9,7 +9,8 @@ The suite shall use ~/.codex-evals unless --codex-home specifies another path.
 The suite shall use the selected home for login, logout, and evaluation.
 
 The suite shall exit with 0 for success, 1 for a content assertion failure,
-and 2 for a setup, execution, or evaluation error.
+and 2 for a setup, execution, evaluation, or evidence-write error.
+If a report cannot be saved, then the suite shall report the error in the terminal.
 """
 
 import argparse
@@ -22,12 +23,63 @@ from pathlib import Path
 import sys
 from uuid import uuid4
 
+from pydantic_evals.reporting import EvaluationReport
+
 from evals import auth
 from evals.codex import run_codex, save_json
-from evals.smoke import evaluate
+from evals.smoke import ExecutionResult, evaluate
 
 
 ARTIFACTS_ROOT = Path(__file__).resolve().parents[1] / ".eval-runs"
+
+
+def report_failure(artifacts: Path, message: str) -> int:
+    """Keep the primary error visible even when the fallback report cannot be saved."""
+    print(message, file=sys.stderr)
+    try:
+        save_json(artifacts / "report.json", {"outcome": "execution_failed", "error": message})
+    except (OSError, ValueError) as exc:
+        print(f"Could not save report.json: {exc}", file=sys.stderr)
+    return 2
+
+
+def write_report(report: EvaluationReport[str, ExecutionResult, None], artifacts: Path) -> int:
+    """Print the result and attempt both report files independently."""
+    rendered = StringIO()
+    with redirect_stdout(rendered):
+        report.print(include_output=True, include_reasons=True)
+    # Show the evaluation result even if the evidence directory is no longer writable.
+    print(rendered.getvalue(), end="")
+    execution_failed = bool(report.failures or report.report_evaluator_failures or not report.cases)
+    execution_failed |= any(case.evaluator_failures for case in report.cases)
+    passed = all(assertion.value for case in report.cases for assertion in case.assertions.values())
+    exit_code = 2 if execution_failed else (0 if passed else 1)
+    errors = []
+    try:
+        (artifacts / "report.txt").write_text(rendered.getvalue(), encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"report.txt: {exc}")
+
+    # Keep machine-readable results simple; Pydantic's full report includes internal objects.
+    summary = {
+        "outcome": {0: "passed", 1: "assertion_failed", 2: "execution_failed"}[2 if errors else exit_code],
+        "cases": [{
+            "name": case.name,
+            "file_contents": case.output.file_contents,
+            "assertions": {name: assertion.value for name, assertion in case.assertions.items()},
+            "evaluator_errors": [str(error) for error in case.evaluator_failures],
+        } for case in report.cases],
+        "execution_errors": [failure.error_message for failure in report.failures],
+        "report_evaluator_errors": [str(error) for error in report.report_evaluator_failures],
+        "evidence_errors": errors,
+    }
+    try:
+        save_json(artifacts / "report.json", summary)
+    except (OSError, ValueError) as exc:
+        errors.append(f"report.json: {exc}")
+    for error in errors:
+        print(f"Could not save {error}", file=sys.stderr)
+    return 2 if errors else exit_code
 
 
 def main() -> int:
@@ -77,37 +129,11 @@ def main() -> int:
     )
     try:
         report = evaluate(execute)
-        # Save the same human-readable report that appears in the terminal.
-        rendered = StringIO()
-        with redirect_stdout(rendered):
-            report.print(include_output=True, include_reasons=True)
-        (artifacts / "report.txt").write_text(rendered.getvalue(), encoding="utf-8")
-        print(rendered.getvalue(), end="")
-        execution_failed = bool(report.failures or report.report_evaluator_failures or not report.cases)
-        execution_failed |= any(case.evaluator_failures for case in report.cases)
-        passed = all(assertion.value for case in report.cases for assertion in case.assertions.values())
-        exit_code = 2 if execution_failed else (0 if passed else 1)
-        # Keep machine-readable results simple; Pydantic's full report includes internal objects.
-        save_json(artifacts / "report.json", {
-            "outcome": {0: "passed", 1: "assertion_failed", 2: "execution_failed"}[exit_code],
-            "cases": [{
-                "name": case.name,
-                "file_contents": case.output.file_contents,
-                "assertions": {name: assertion.value for name, assertion in case.assertions.items()},
-                "evaluator_errors": [str(error) for error in case.evaluator_failures],
-            } for case in report.cases],
-            "execution_errors": [failure.error_message for failure in report.failures],
-            "report_evaluator_errors": [str(error) for error in report.report_evaluator_failures],
-        })
-        return exit_code
+        return write_report(report, artifacts)
     except KeyboardInterrupt:
-        save_json(artifacts / "report.json", {"outcome": "execution_failed", "error": "Interrupted"})
-        print("Evaluation interrupted.", file=sys.stderr)
-        return 2
+        return report_failure(artifacts, "Evaluation interrupted.")
     except (OSError, RuntimeError, ValueError) as exc:
-        save_json(artifacts / "report.json", {"outcome": "execution_failed", "error": str(exc)})
-        print(f"Evaluation failed: {exc}", file=sys.stderr)
-        return 2
+        return report_failure(artifacts, f"Evaluation failed: {exc}")
 
 
 if __name__ == "__main__":

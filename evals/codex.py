@@ -4,6 +4,8 @@ When launching Codex, the runner shall use explicit model settings and a
 workspace-write sandbox, without personal configuration or API-key overrides.
 When execution ends, the runner shall retain evidence outside the workspace.
 If execution exceeds its timeout, then the runner shall stop its process group.
+If evidence cannot be fully saved, then the runner shall report an error while
+preserving the execution error and attempting the remaining evidence writes.
 
 This isolates configuration and fixture writes, not the entire host. Codex's
 built-in and managed instructions still apply. The installed CLI must support
@@ -15,12 +17,12 @@ import json
 import os
 from pathlib import Path
 import signal
-import stat
 import subprocess
+import sys
 import time
 
 from evals import auth
-from evals.smoke import ExecutionResult, read_result
+from evals.smoke import ExecutionResult, read_fixture_file, read_result
 
 
 def execution_command(executable: str, workspace: Path, model: str, effort: str) -> list[str]:
@@ -71,22 +73,56 @@ def save_json(path: Path, value: dict) -> None:
     path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
 
+def retain_evidence(
+    workspace: Path, artifacts: Path, metadata: dict, result: ExecutionResult,
+) -> ExecutionResult:
+    """Save what is available without replacing the primary execution failure."""
+    errors = []
+    final_files = artifacts / "workspace"
+    for name in ("AGENTS.md", "message.txt"):
+        try:
+            # Each copy is independent, so one failure does not skip the other.
+            final_files.mkdir(exist_ok=True)
+            contents = read_fixture_file(workspace / name)
+            if contents is not None:
+                (final_files / name).write_bytes(contents)
+        except (OSError, ValueError) as exc:
+            errors.append(f"workspace/{name}: {exc}")
+
+    # Keep the execution outcome separate from errors in saving its evidence.
+    metadata.update(
+        status="error" if errors else result.status,
+        execution_status=result.status, error=result.error, evidence_errors=errors,
+    )
+    try:
+        save_json(artifacts / "execution.json", metadata)
+    except (OSError, ValueError) as exc:
+        errors.append(f"execution.json: {exc}")
+    if errors:
+        message = "Evidence could not be fully saved: " + "; ".join(errors)
+        if result.error:
+            message = f"{result.error}\n{message}"
+        print(message, file=sys.stderr)
+        return ExecutionResult("error", result.file_contents, message)
+    return result
+
+
 def run_codex(
     prompt: str, workspace: Path, *, model: str, effort: str,
     timeout: float, artifacts: Path, profile: Path,
 ) -> ExecutionResult:
     """Launch once and preserve evidence before the caller removes the workspace."""
     started = time.monotonic()
-    contract = (workspace / "AGENTS.md").read_bytes()
-    (artifacts / "AGENTS.md").write_bytes(contract)
-    (artifacts / "prompt.txt").write_text(prompt, encoding="utf-8")
     metadata = {
         "model": model, "reasoning_effort": effort, "timeout_seconds": timeout,
-        "contract_sha256": hashlib.sha256(contract).hexdigest(),
         "workspace": str(workspace), "codex_home": str(profile), "status": "error",
     }
     result = ExecutionResult("error", error="Execution did not complete")
     try:
+        contract = (workspace / "AGENTS.md").read_bytes()
+        metadata["contract_sha256"] = hashlib.sha256(contract).hexdigest()
+        (artifacts / "AGENTS.md").write_bytes(contract)
+        (artifacts / "prompt.txt").write_text(prompt, encoding="utf-8")
         executable = auth.codex_executable()
         auth.check_profile(profile)
         environment = auth.codex_environment(profile)
@@ -114,25 +150,12 @@ def run_codex(
         event_types = [json.loads(line).get("type") for line in (artifacts / "events.jsonl").read_text().splitlines()]
         if "turn.completed" not in event_types or "turn.failed" in event_types:
             raise RuntimeError("Codex did not emit a successful completed turn; see events.jsonl")
-        output = workspace / "message.txt"
-        if output.is_symlink():
-            raise RuntimeError("message.txt must be a regular fixture file, not a symbolic link")
         result = read_result(workspace)
     except subprocess.TimeoutExpired:
         result = ExecutionResult("error", error="Codex execution or prerequisite check timed out")
     except (OSError, RuntimeError, ValueError, subprocess.CalledProcessError) as exc:
         result = ExecutionResult("error", error=str(exc))
     finally:
-        # Preserve only fixture files; never copy the Codex profile or follow links.
-        final_files = artifacts / "workspace"
-        final_files.mkdir()
-        for name in ("AGENTS.md", "message.txt"):
-            source = workspace / name
-            try:
-                if stat.S_ISREG(source.lstat().st_mode):
-                    (final_files / name).write_bytes(source.read_bytes())
-            except FileNotFoundError:
-                pass
-        metadata.update(status=result.status, error=result.error, duration_seconds=time.monotonic() - started)
-        save_json(artifacts / "execution.json", metadata)
+        metadata["duration_seconds"] = time.monotonic() - started
+        result = retain_evidence(workspace, artifacts, metadata, result)
     return result

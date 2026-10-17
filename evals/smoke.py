@@ -8,12 +8,16 @@ contents exactly with the case's expected contents, including whitespace.
 If execution reports an error or raises an exception, then the smoke suite
 shall report an execution failure separately from content assertions.
 When a case finishes or raises, the smoke suite shall clean its workspace.
+If a fixture is a symbolic link or non-regular file, then the smoke suite shall
+reject it without reading its contents.
 """
 
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
+import os
 from pathlib import Path
+import stat
 from tempfile import TemporaryDirectory
 from typing import Literal
 
@@ -74,13 +78,28 @@ def prepare_workspace() -> Iterator[Path]:
         yield workspace
 
 
+def read_fixture_file(path: Path) -> bytes | None:
+    """Read a regular fixture safely; a missing file returns None."""
+    try:
+        # Do not follow links or wait for a named pipe's writer when opening.
+        descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    except FileNotFoundError:
+        return None
+    try:
+        # Check the opened file itself, avoiding a separate check/read race.
+        if not stat.S_ISREG(os.fstat(descriptor).st_mode):
+            raise ValueError(f"{path.name} must be a regular fixture file")
+        with os.fdopen(descriptor, "rb", closefd=False) as fixture:
+            return fixture.read()
+    finally:
+        os.close(descriptor)
+
+
 def read_result(workspace: Path) -> ExecutionResult:
     """Read the actual file without normalizing newlines or whitespace."""
-    try:
-        contents = (workspace / "message.txt").read_bytes().decode("utf-8")
-    except FileNotFoundError:
-        # Missing output is graded as incorrect, rather than an execution crash.
-        contents = None
+    data = read_fixture_file(workspace / "message.txt")
+    # Missing output is graded as incorrect, rather than an execution crash.
+    contents = None if data is None else data.decode("utf-8")
     return ExecutionResult("completed", contents)
 
 
@@ -91,6 +110,10 @@ def evaluate(
 
     The execution function receives a prompt and workspace and returns a result.
     Both the Codex launcher and offline test substitutes use this interface.
+
+    Pydantic runs this synchronous task in a worker thread. Ctrl-C in the calling
+    thread does not stop the executor; it can continue until completion or its
+    own timeout. Explicit cancellation across this boundary is still pending.
     """
 
     def task(prompt: str) -> ExecutionResult:

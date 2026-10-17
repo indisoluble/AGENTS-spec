@@ -65,7 +65,7 @@ Instruction files cannot guarantee compliance. The tool's controls govern permis
 
 ## Local evaluation suite
 
-The repository includes a Python/Pydantic Evals smoke test that runs Codex in a temporary workspace and checks an exact file edit. See [evaluation setup, commands, and boundaries](META-EVALUATIONS.md), including offline tests and ChatGPT authentication. A pass validates the infrastructure, not behavioral compliance with the contract.
+The repository includes Python/Pydantic Evals cases that run Codex in temporary workspaces: a smoke test for the infrastructure and a scope-discipline case that checks a requested edit and preservation of unrelated content in one file. See [evaluation setup, commands, and boundaries](META-EVALUATIONS.md), including offline tests, ChatGPT authentication, and the limits of what these results establish.
 
 ## License
 

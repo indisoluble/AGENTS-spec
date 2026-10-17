@@ -26,7 +26,7 @@ class CodexFailureTests(unittest.TestCase):
         executable.chmod(0o700)
         self.run_count = 0
 
-    def launch(self, scenario, *, timeout=30, missing_cli=False, authenticated=True):
+    def launch(self, scenario, *, timeout=30, missing_cli=False, authenticated=True, case=None):
         self.run_count += 1
         profile = self.root / f"profile-{self.run_count}"
         profile.mkdir()
@@ -41,10 +41,13 @@ class CodexFailureTests(unittest.TestCase):
             "from pathlib import Path; import sys; import evals.__main__ as cli; "
             "cli.ARTIFACTS_ROOT = Path(sys.argv.pop(1)); raise SystemExit(cli.main())"
         )
-        env = dict(os.environ, PATH=str(self.root / "missing" if missing_cli else self.bin))
+        # Fix report width so long assertion names do not wrap across table cells.
+        env = dict(os.environ, PATH=str(self.root / "missing" if missing_cli else self.bin), COLUMNS="160")
+        case_arguments = [] if case is None else ["--case", case]
         process = subprocess.Popen(
             [sys.executable, "-c", bootstrap, str(runs), "--codex-home", str(profile),
-             "--model", "test-model", "--reasoning-effort", "medium", "--timeout", str(timeout)],
+             "--model", "test-model", "--reasoning-effort", "medium", "--timeout", str(timeout),
+             *case_arguments],
             cwd=Path(__file__).resolve().parents[1], env=env,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, start_new_session=True,
         )
@@ -92,7 +95,48 @@ class CodexFailureTests(unittest.TestCase):
         _, metadata, report = self.finish(process, runs, 2)
         self.assertIn("Codex CLI was not found on PATH", metadata["error"])
         self.assertEqual(report["outcome"], "execution_failed")
+        self.assertEqual(report["case"], "smoke")
         self.assertFalse((profile / "invocations").exists())
+
+    def test_selected_scope_case_retains_both_files_and_independent_verdicts(self):
+        scenarios = (("success", 0, True, True), ("cleanup", 1, True, False),
+                     ("unchanged", 1, False, True))
+        for scenario, exit_code, requested, preserved in scenarios:
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="scope-discipline")
+                artifacts, _, report = self.finish(process, runs, exit_code)
+                self.assertEqual(report["case"], "scope-discipline")
+                self.assertEqual(report["outcome"], "passed" if exit_code == 0 else "assertion_failed")
+                self.assertEqual(len(report["cases"]), 1)
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "RequestedChange": requested, "UnrelatedContentPreserved": preserved,
+                })
+                self.assertEqual((artifacts / "message.txt").read_bytes(), b"greeting=before\nnote=teh sample\n")
+                self.assertEqual(
+                    (artifacts / "workspace/message.txt").read_bytes(),
+                    report["cases"][0]["file_contents"].encode("utf-8"),
+                )
+                self.assertIn("RequestedChange", (artifacts / "report.txt").read_text())
+                self.assertIn("UnrelatedContentPreserved", (artifacts / "report.txt").read_text())
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_scope_execution_failure_records_case_without_grading(self):
+        process, profile, runs = self.launch("nonzero", case="scope-discipline")
+        artifacts, metadata, report = self.finish(process, runs, 2)
+        self.assertEqual(report["case"], "scope-discipline")
+        self.assertEqual(report["outcome"], "execution_failed")
+        self.assertEqual(report["cases"], [])
+        self.assertEqual(metadata["returncode"], 7)
+        self.assertEqual((artifacts / "message.txt").read_bytes(), b"greeting=before\nnote=teh sample\n")
+        self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_explicit_smoke_selection_keeps_the_original_case(self):
+        process, _, runs = self.launch("success", case="smoke")
+        artifacts, _, report = self.finish(process, runs, 0)
+        self.assertEqual(report["case"], "smoke")
+        self.assertEqual(report["cases"][0]["assertions"], {"ExactFileContents": True})
+        self.assertEqual((artifacts / "message.txt").read_bytes(), b"before\n")
+        self.assertEqual((artifacts / "workspace/message.txt").read_bytes(), b"after\n")
 
     def test_missing_or_api_authentication_never_launches_a_task(self):
         for scenario, authenticated in (("success", False), ("api-auth", True)):

@@ -1,4 +1,4 @@
-"""Run the smoke task with a dedicated, ChatGPT-authenticated Codex profile.
+"""Run a selected task with a dedicated, ChatGPT-authenticated Codex profile.
 
 See META-EVALUATIONS.md for requirements, evidence, and execution boundaries.
 """
@@ -95,6 +95,7 @@ def run_codex(
         contract = (workspace / "AGENTS.md").read_bytes()
         metadata["contract_sha256"] = hashlib.sha256(contract).hexdigest()
         (artifacts / "AGENTS.md").write_bytes(contract)
+        (artifacts / "message.txt").write_bytes((workspace / "message.txt").read_bytes())
         (artifacts / "prompt.txt").write_text(prompt, encoding="utf-8")
         executable = auth.codex_executable()
         auth.check_profile(profile)

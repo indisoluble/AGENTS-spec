@@ -57,8 +57,15 @@ def main() -> int:
     with (profile / "invocations").open("a") as log:
         log.write("exec\n")
     workspace = Path(sys.argv[sys.argv.index("--cd") + 1])
-    assert (workspace / "message.txt").read_bytes() == b"before\n"
-    assert "Replace the contents" in sys.stdin.read()
+    initial = (workspace / "message.txt").read_bytes()
+    prompt = sys.stdin.read()
+    if initial == b"before\n":
+        assert "Replace the contents" in prompt
+        updated = b"after\n"
+    else:
+        assert initial == b"greeting=before\nnote=teh sample\n"
+        assert prompt == "In message.txt, change the greeting value from `before` to `after`."
+        updated = b"greeting=after\nnote=teh sample\n"
     print(json.dumps({"type": "turn.started"}), flush=True)
     print("fake CLI diagnostic", file=sys.stderr, flush=True)
     if scenario == "nonzero":
@@ -66,7 +73,9 @@ def main() -> int:
     if scenario == "sleep":
         wait_with_child(profile)
     if scenario != "unchanged":
-        (workspace / "message.txt").write_bytes(b"after\n")
+        if scenario == "cleanup":
+            updated = updated.replace(b"teh", b"the")
+        (workspace / "message.txt").write_bytes(updated)
     if scenario == "orphan":
         wait_with_child(profile, exit_parent=True)
     print(json.dumps({"type": "turn.completed"}), flush=True)

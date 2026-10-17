@@ -1,4 +1,4 @@
-"""Command-line entry point for one live smoke evaluation.
+"""Command-line entry point for one selected live evaluation.
 
 See META-EVALUATIONS.md for commands, exit codes, and requirements.
 """
@@ -18,23 +18,26 @@ from pydantic_evals.reporting import EvaluationReport
 from evals import auth
 from evals.codex import run_codex, save_json
 from evals.process import cancellation_signals
+from evals.scope import INITIAL_CONTENTS, scope_dataset
 from evals.smoke import ExecutionResult, evaluate
 
 
 ARTIFACTS_ROOT = Path(__file__).resolve().parents[1] / ".eval-runs"
 
 
-def report_failure(artifacts: Path, message: str) -> int:
+def report_failure(artifacts: Path, message: str, *, case_name: str = "smoke") -> int:
     """Keep the primary error visible even when the fallback report cannot be saved."""
     print(message, file=sys.stderr)
     try:
-        save_json(artifacts / "report.json", {"outcome": "execution_failed", "error": message})
+        save_json(artifacts / "report.json", {"case": case_name, "outcome": "execution_failed", "error": message})
     except (OSError, ValueError) as exc:
         print(f"Could not save report.json: {exc}", file=sys.stderr)
     return 2
 
 
-def write_report(report: EvaluationReport[str, ExecutionResult, None], artifacts: Path) -> int:
+def write_report(
+    report: EvaluationReport[str, ExecutionResult, None], artifacts: Path, *, case_name: str = "smoke",
+) -> int:
     """Print the result and attempt both report files independently."""
     rendered = StringIO()
     with redirect_stdout(rendered):
@@ -53,6 +56,7 @@ def write_report(report: EvaluationReport[str, ExecutionResult, None], artifacts
 
     # Keep machine-readable results simple; Pydantic's full report includes internal objects.
     summary = {
+        "case": case_name,
         "outcome": {0: "passed", 1: "assertion_failed", 2: "execution_failed"}[2 if errors else exit_code],
         "cases": [{
             "name": case.name,
@@ -82,6 +86,8 @@ def main() -> int:
                         help="Dedicated profile directory for login, logout, and runs (default: ~/.codex-evals).")
     parser.add_argument("--model", help="Codex model ID (required for an evaluation).")
     parser.add_argument("--reasoning-effort", help="Reasoning effort supported by the selected model (required for an evaluation).")
+    parser.add_argument("--case", choices=("smoke", "scope-discipline"),
+                        help="Run one selected case (default: smoke).")
     parser.add_argument("--timeout", type=float, default=180, help="Maximum Codex execution seconds (default: 180).")
     args = parser.parse_args()
     # Resolve before Codex changes its working directory to the temporary fixture.
@@ -91,7 +97,7 @@ def main() -> int:
         parser.error(f"Invalid --codex-home: {exc}")
     if args.login or args.logout:
         action = "Login" if args.login else "Logout"
-        if args.model or args.reasoning_effort:
+        if args.model or args.reasoning_effort or args.case:
             parser.error("--login/--logout cannot be combined with evaluation settings")
         try:
             return 0 if (auth.login(profile) if args.login else auth.logout(profile)) == 0 else 2
@@ -105,6 +111,7 @@ def main() -> int:
         parser.error("--model and --reasoning-effort are required unless using --login or --logout")
     if not math.isfinite(args.timeout) or args.timeout <= 0:
         parser.error("--timeout must be a positive, finite number")
+    case_name = args.case or "smoke"
 
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
     artifacts = ARTIFACTS_ROOT / run_id
@@ -120,16 +127,19 @@ def main() -> int:
                 run_codex, model=args.model, effort=args.reasoning_effort,
                 timeout=args.timeout, artifacts=artifacts, profile=profile, cancelled=cancelled,
             )
-            report = evaluate(execute)
-            exit_code = write_report(report, artifacts)
+            if case_name == "scope-discipline":
+                report = evaluate(execute, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
+            else:
+                report = evaluate(execute)
+            exit_code = write_report(report, artifacts, case_name=case_name)
             # Also handle a signal arriving after the worker, including during reporting.
             if cancelled.is_set() and not report.failures:
-                return report_failure(artifacts, "Evaluation interrupted.")
+                return report_failure(artifacts, "Evaluation interrupted.", case_name=case_name)
             return exit_code
     except KeyboardInterrupt:
-        return report_failure(artifacts, "Evaluation interrupted.")
+        return report_failure(artifacts, "Evaluation interrupted.", case_name=case_name)
     except (OSError, RuntimeError, ValueError) as exc:
-        return report_failure(artifacts, f"Evaluation failed: {exc}")
+        return report_failure(artifacts, f"Evaluation failed: {exc}", case_name=case_name)
 
 
 if __name__ == "__main__":

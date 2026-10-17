@@ -83,6 +83,7 @@ else:
             execution = json.loads((artifacts / "execution.json").read_text())
             # Check the graded content and recorded settings, not an agent's claim of success.
             self.assertEqual(report["outcome"], "passed")
+            self.assertEqual(report["case"], "smoke")
             self.assertEqual(report["cases"][0]["file_contents"], "after\n")
             self.assertEqual(execution["codex_home"], str(profile.resolve()))
             self.assertEqual(execution["model"], "test-model")
@@ -92,6 +93,7 @@ else:
             self.assertFalse(Path(execution["workspace"]).exists())
             self.assertEqual((artifacts / "prompt.txt").read_text(), PROMPT)
             self.assertEqual((artifacts / "AGENTS.md").read_bytes(), CONTRACT_PATH.read_bytes())
+            self.assertEqual((artifacts / "message.txt").read_bytes(), b"before\n")
             self.assertEqual((artifacts / "workspace" / "message.txt").read_bytes(), b"after\n")
             self.assertIn("replace-message", (artifacts / "report.txt").read_text())
             self.assertTrue((artifacts / "events.jsonl").is_file())

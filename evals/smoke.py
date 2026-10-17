@@ -18,6 +18,7 @@ from pydantic_evals.reporting import EvaluationReport
 
 
 CONTRACT_PATH = Path(__file__).resolve().parents[1] / "AGENTS.md"
+INITIAL_CONTENTS = b"before\n"
 PROMPT = (
     "Replace the contents of message.txt with exactly 'after' followed by a single "
     "newline. The file currently contains 'before' followed by a newline."
@@ -59,12 +60,12 @@ def smoke_dataset() -> Dataset[str, ExecutionResult, None]:
 
 
 @contextmanager
-def prepare_workspace() -> Iterator[Path]:
+def prepare_workspace(initial_contents: bytes = INITIAL_CONTENTS) -> Iterator[Path]:
     """Copy the current contract and fixture into a disposable directory."""
     with TemporaryDirectory(prefix="agents-spec-eval-") as directory:
         workspace = Path(directory)
         (workspace / "AGENTS.md").write_bytes(CONTRACT_PATH.read_bytes())
-        (workspace / "message.txt").write_bytes(b"before\n")
+        (workspace / "message.txt").write_bytes(initial_contents)
         # The caller uses this directory; leaving the context removes it.
         yield workspace
 
@@ -96,18 +97,23 @@ def read_result(workspace: Path) -> ExecutionResult:
 
 def evaluate(
     execute: Callable[[str, Path], ExecutionResult],
+    *, dataset: Dataset[str, ExecutionResult, None] | None = None,
+    initial_contents: bytes = INITIAL_CONTENTS,
 ) -> EvaluationReport[str, ExecutionResult, None]:
     """Run one task in a fresh workspace and return Pydantic's printable report.
 
     The execution function receives a prompt and workspace and returns a result.
     Both the Codex launcher and offline test substitutes use this interface.
+    Supply the dataset and its initial contents together to select another case.
 
     Pydantic runs this synchronous task in a worker thread. The CLI supplies
     cancellation to its launcher separately; this case does not own processes.
     """
+    if dataset is None:
+        dataset = smoke_dataset()
 
     def task(prompt: str) -> ExecutionResult:
-        with prepare_workspace() as workspace:
+        with prepare_workspace(initial_contents) as workspace:
             # The supplied function performs the work inside the fresh fixture.
             result = execute(prompt, workspace)
             if result.status == "error":
@@ -116,9 +122,9 @@ def evaluate(
             return result
 
     # Run the case, grade its result, and return the report before continuing.
-    return smoke_dataset().evaluate_sync(
+    return dataset.evaluate_sync(
         task,
-        name="text-edit-smoke",
+        name=dataset.name,
         max_concurrency=1,
         progress=False,
     )

@@ -3,6 +3,8 @@
 See META-EVALUATIONS.md for requirements, evidence, and execution boundaries.
 """
 
+import base64
+from dataclasses import replace
 import hashlib
 import json
 from pathlib import Path
@@ -14,6 +16,7 @@ import time
 from evals import auth
 from evals.process import run_process
 from evals.smoke import ExecutionResult, read_fixture_file, read_result
+from evals.workspace import WorkspaceObservation, WorkspaceSnapshot, snapshot_workspace
 
 
 def execution_command(executable: str, workspace: Path, model: str, effort: str) -> list[str]:
@@ -46,17 +49,40 @@ def save_json(path: Path, value: dict) -> None:
     path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
 
+def snapshot_manifest(snapshot: WorkspaceSnapshot) -> dict:
+    """Encode exact bytes for JSON; links and special files remain descriptions."""
+    return {path: {
+        "kind": entry.kind,
+        "mode": entry.mode,
+        "contents_base64": None if entry.contents is None else base64.b64encode(entry.contents).decode("ascii"),
+        "link_target": entry.link_target,
+    } for path, entry in sorted(snapshot.items())}
+
+
 def retain_evidence(
     workspace: Path, artifacts: Path, metadata: dict, result: ExecutionResult,
 ) -> ExecutionResult:
     """Save what is available without replacing the primary execution failure."""
     errors = []
+    observation = result.workspace_observation
+    if observation is not None:
+        for name, snapshot in (("initial", observation.initial), ("final", observation.final)):
+            if snapshot is not None:
+                try:
+                    save_json(artifacts / f"{name}-workspace.json", snapshot_manifest(snapshot))
+                except (OSError, ValueError) as exc:
+                    errors.append(f"{name}-workspace.json: {exc}")
     final_files = artifacts / "workspace"
     for name in ("AGENTS.md", "message.txt"):
         try:
             # Each copy is independent, so one failure does not skip the other.
             final_files.mkdir(exist_ok=True)
-            contents = read_fixture_file(workspace / name)
+            if observation is None:
+                contents = read_fixture_file(workspace / name)
+            else:
+                # Never re-read agent-controlled paths after capturing the final state.
+                entry = None if observation.final is None else observation.final.get(name)
+                contents = entry.contents if entry is not None and entry.kind == "file" else None
             if contents is not None:
                 (final_files / name).write_bytes(contents)
         except (OSError, ValueError) as exc:
@@ -76,13 +102,14 @@ def retain_evidence(
         if result.error:
             message = f"{result.error}\n{message}"
         print(message, file=sys.stderr)
-        return ExecutionResult("error", result.file_contents, message)
+        return replace(result, status="error", error=message)
     return result
 
 
 def run_codex(
     prompt: str, workspace: Path, *, model: str, effort: str,
     timeout: float, artifacts: Path, profile: Path, cancelled: Event | None = None,
+    observe_workspace: bool = False,
 ) -> ExecutionResult:
     """Launch once and preserve evidence before the caller removes the workspace."""
     started = time.monotonic()
@@ -91,7 +118,10 @@ def run_codex(
         "workspace": str(workspace), "codex_home": str(profile), "status": "error",
     }
     result = ExecutionResult("error", error="Execution did not complete")
+    initial = None
     try:
+        if observe_workspace:
+            initial = snapshot_workspace(workspace)
         contract = (workspace / "AGENTS.md").read_bytes()
         metadata["contract_sha256"] = hashlib.sha256(contract).hexdigest()
         (artifacts / "AGENTS.md").write_bytes(contract)
@@ -121,12 +151,24 @@ def run_codex(
         event_types = [json.loads(line).get("type") for line in (artifacts / "events.jsonl").read_text().splitlines()]
         if "turn.completed" not in event_types or "turn.failed" in event_types:
             raise RuntimeError("Codex did not emit a successful completed turn; see events.jsonl")
-        result = read_result(workspace)
+        result = ExecutionResult("completed") if observe_workspace else read_result(workspace)
     except subprocess.TimeoutExpired:
         result = ExecutionResult("error", error="Codex execution or prerequisite check timed out")
     except (OSError, RuntimeError, ValueError, subprocess.CalledProcessError) as exc:
         result = ExecutionResult("error", error=str(exc))
     finally:
+        if observe_workspace:
+            # run_process has stopped its process group before we reach this point,
+            # including on timeout or interruption. Keep any successful observation.
+            final = None
+            try:
+                final = snapshot_workspace(workspace)
+            except OSError as exc:
+                message = f"Final workspace inspection failed: {exc}"
+                result = replace(result, status="error", error=f"{result.error}\n{message}" if result.error else message)
+            observation = WorkspaceObservation(initial, final)
+            contents = None if final is None else read_result(workspace, workspace_observation=observation).file_contents
+            result = replace(result, file_contents=contents, workspace_observation=observation)
         metadata["duration_seconds"] = time.monotonic() - started
         result = retain_evidence(workspace, artifacts, metadata, result)
     return result

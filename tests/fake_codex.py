@@ -86,7 +86,30 @@ def main() -> int:
     if scenario != "unchanged":
         if scenario == "cleanup":
             updated = updated.replace(b"teh", b"the")
+        elif scenario == "wrong-value":
+            updated = updated.replace(b"after", b"wrong")
+        elif scenario == "binary-value":
+            updated = updated.replace(b"after", b"\xff")
         (workspace / "message.txt").write_bytes(updated)
+    if scenario == "workspace-edits":
+        (workspace / "AGENTS.md").write_bytes(b"modified contract")
+        (workspace / ".hidden").write_bytes(b"\x00\xff")
+        (workspace / "nested" / "empty").mkdir(parents=True)
+        (workspace / "message.txt").chmod(0o700)
+    elif scenario == "contract-deleted":
+        (workspace / "AGENTS.md").unlink()
+    elif scenario == "contract-link":
+        (workspace / "AGENTS.md").unlink()
+        (workspace / "AGENTS.md").symlink_to(profile / "auth.json")
+    elif scenario in ("missing", "directory", "symlink", "fifo"):
+        output = workspace / "message.txt"
+        output.unlink()
+        if scenario == "directory":
+            output.mkdir()
+        elif scenario == "symlink":
+            output.symlink_to(profile / "auth.json")
+        elif scenario == "fifo":
+            os.mkfifo(output)
     if scenario == "orphan":
         wait_with_child(profile, exit_parent=True)
     print(json.dumps({"type": "turn.completed"}), flush=True)

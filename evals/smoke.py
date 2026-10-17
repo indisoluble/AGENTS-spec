@@ -5,7 +5,7 @@ See META-EVALUATIONS.md for the suite's requirements and scope.
 
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import os
 from pathlib import Path
 import stat
@@ -15,6 +15,8 @@ from typing import Literal
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import Evaluator, EvaluatorContext
 from pydantic_evals.reporting import EvaluationReport
+
+from evals.workspace import WorkspaceInspectionError, WorkspaceObservation
 
 
 CONTRACT_PATH = Path(__file__).resolve().parents[1] / "AGENTS.md"
@@ -31,6 +33,8 @@ class ExecutionResult:
     status: Literal["completed", "error"]
     file_contents: str | None = None
     error: str | None = None
+    # Keep potentially large snapshots out of the terminal's output column.
+    workspace_observation: WorkspaceObservation | None = field(default=None, repr=False)
 
 
 class ExecutionError(RuntimeError):
@@ -87,8 +91,19 @@ def read_fixture_file(path: Path) -> bytes | None:
         os.close(descriptor)
 
 
-def read_result(workspace: Path) -> ExecutionResult:
+def read_result(
+    workspace: Path, *, workspace_observation: WorkspaceObservation | None = None,
+) -> ExecutionResult:
     """Read the actual file without normalizing newlines or whitespace."""
+    if workspace_observation is not None:
+        if workspace_observation.final is None:
+            raise WorkspaceInspectionError("Final workspace observation is missing")
+        entry = workspace_observation.final.get("message.txt")
+        # Scope grading uses captured bytes only. Links and special files have no
+        # regular-file output; invalid UTF-8 remains observable rather than crashing.
+        data = entry.contents if entry is not None and entry.kind == "file" else None
+        contents = None if data is None else data.decode("utf-8", errors="surrogateescape")
+        return ExecutionResult("completed", contents, workspace_observation=workspace_observation)
     data = read_fixture_file(workspace / "message.txt")
     # Missing output is graded as incorrect, rather than an execution crash.
     contents = None if data is None else data.decode("utf-8")

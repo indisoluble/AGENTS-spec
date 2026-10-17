@@ -64,6 +64,7 @@ def write_report(
             "name": case.name,
             "file_contents": case.output.file_contents,
             "assertions": {name: assertion.value for name, assertion in case.assertions.items()},
+            "assertion_reasons": {name: assertion.reason for name, assertion in case.assertions.items()},
             "evaluator_errors": [str(error) for error in case.evaluator_failures],
         } for case in report.cases],
         "execution_errors": [failure.error_message for failure in report.failures],
@@ -93,6 +94,7 @@ def run_case(case_name: str, *, model: str, effort: str, timeout: float, profile
         execute = partial(
             run_codex, model=model, effort=effort,
             timeout=timeout, artifacts=artifacts, profile=profile, cancelled=cancelled,
+            observe_workspace=case_name == "scope-discipline",
         )
         if case_name == "scope-discipline":
             report = evaluate(execute, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)

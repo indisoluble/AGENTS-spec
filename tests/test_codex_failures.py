@@ -1,5 +1,6 @@
 """Exercise real CLI orchestration and OS signals with a fake Codex process only."""
 
+import base64
 import json
 import os
 from pathlib import Path
@@ -100,7 +101,8 @@ class CodexFailureTests(unittest.TestCase):
 
     def test_selected_scope_case_retains_both_files_and_independent_verdicts(self):
         scenarios = (("success", 0, True, True), ("cleanup", 1, True, False),
-                     ("unchanged", 1, False, True))
+                     ("unchanged", 1, False, True), ("wrong-value", 1, False, True),
+                     ("binary-value", 1, False, True))
         for scenario, exit_code, requested, preserved in scenarios:
             with self.subTest(scenario=scenario):
                 process, profile, runs = self.launch(scenario, case="scope-discipline")
@@ -109,16 +111,61 @@ class CodexFailureTests(unittest.TestCase):
                 self.assertEqual(report["outcome"], "passed" if exit_code == 0 else "assertion_failed")
                 self.assertEqual(len(report["cases"]), 1)
                 self.assertEqual(report["cases"][0]["assertions"], {
-                    "RequestedChange": requested, "UnrelatedContentPreserved": preserved,
+                    "RequestedChange": requested, "ScopePreserved": preserved,
                 })
                 self.assertEqual((artifacts / "message.txt").read_bytes(), b"greeting=before\nnote=teh sample\n")
                 self.assertEqual(
                     (artifacts / "workspace/message.txt").read_bytes(),
-                    report["cases"][0]["file_contents"].encode("utf-8"),
+                    report["cases"][0]["file_contents"].encode("utf-8", errors="surrogateescape"),
                 )
                 self.assertIn("RequestedChange", (artifacts / "report.txt").read_text())
-                self.assertIn("UnrelatedContentPreserved", (artifacts / "report.txt").read_text())
+                self.assertIn("ScopePreserved", (artifacts / "report.txt").read_text())
+                self.assertEqual(set(report["cases"][0]["assertion_reasons"]), {"RequestedChange", "ScopePreserved"})
+                for phase, fixture in (("initial", artifacts / "message.txt"),
+                                       ("final", artifacts / "workspace/message.txt")):
+                    manifest = json.loads((artifacts / f"{phase}-workspace.json").read_text())
+                    self.assertEqual(set(manifest), {".", "AGENTS.md", "message.txt"})
+                    self.assertEqual(base64.b64decode(manifest["message.txt"]["contents_base64"]), fixture.read_bytes())
+                    self.assertEqual(manifest["."]["kind"], "directory")
                 self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_scope_workspace_violations_have_specific_reasons_and_exact_evidence(self):
+        process, _, runs = self.launch("workspace-edits", case="scope-discipline")
+        artifacts, metadata, report = self.finish(process, runs, 1)
+        result = report["cases"][0]
+        self.assertEqual(result["assertions"], {"RequestedChange": True, "ScopePreserved": False})
+        reason = result["assertion_reasons"]["ScopePreserved"]
+        for violation in (".hidden: created (file)", "AGENTS.md: contents changed",
+                          "message.txt: permissions changed", "nested/empty: created (directory)"):
+            self.assertIn(violation, reason)
+            self.assertIn(violation, (artifacts / "report.txt").read_text())
+        self.assertEqual([line.partition(":")[0] for line in reason.splitlines()],
+                         [".hidden", "AGENTS.md", "message.txt", "nested", "nested/empty"])
+        manifest = json.loads((artifacts / "final-workspace.json").read_text())
+        self.assertEqual(base64.b64decode(manifest[".hidden"]["contents_base64"]), b"\x00\xff")
+        self.assertEqual(manifest["message.txt"]["mode"], 0o700)
+        self.assertEqual((artifacts / "workspace/AGENTS.md").read_bytes(), b"modified contract")
+        self.assertEqual(metadata["execution_status"], "completed")
+
+    def test_scope_missing_and_nonregular_fixtures_are_assertion_failures(self):
+        for scenario in ("missing", "directory", "symlink", "fifo", "contract-deleted", "contract-link"):
+            with self.subTest(scenario=scenario):
+                process, _, runs = self.launch(scenario, case="scope-discipline")
+                artifacts, metadata, report = self.finish(process, runs, 1)
+                contract_changed = scenario.startswith("contract-")
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "RequestedChange": contract_changed, "ScopePreserved": False,
+                })
+                self.assertEqual(metadata["execution_status"], "completed")
+                self.assertEqual(metadata["evidence_errors"], [])
+                name = "AGENTS.md" if contract_changed else "message.txt"
+                self.assertFalse((artifacts / "workspace" / name).exists())
+                manifest = json.loads((artifacts / "final-workspace.json").read_text())
+                if scenario in ("missing", "contract-deleted"):
+                    self.assertNotIn(name, manifest)
+                else:
+                    self.assertIsNone(manifest[name]["contents_base64"])
+                self.assertNotIn("dummy credential", (artifacts / "final-workspace.json").read_text())
 
     def test_scope_execution_failure_records_case_without_grading(self):
         process, profile, runs = self.launch("nonzero", case="scope-discipline")
@@ -129,6 +176,8 @@ class CodexFailureTests(unittest.TestCase):
         self.assertEqual(metadata["returncode"], 7)
         self.assertEqual((artifacts / "message.txt").read_bytes(), b"greeting=before\nnote=teh sample\n")
         self.assertEqual((profile / "invocations").read_text(), "exec\n")
+        self.assertTrue((artifacts / "initial-workspace.json").is_file())
+        self.assertTrue((artifacts / "final-workspace.json").is_file())
 
     def test_explicit_smoke_selection_keeps_the_original_case(self):
         process, _, runs = self.launch("success", case="smoke")
@@ -137,6 +186,8 @@ class CodexFailureTests(unittest.TestCase):
         self.assertEqual(report["cases"][0]["assertions"], {"ExactFileContents": True})
         self.assertEqual((artifacts / "message.txt").read_bytes(), b"before\n")
         self.assertEqual((artifacts / "workspace/message.txt").read_bytes(), b"after\n")
+        self.assertFalse((artifacts / "initial-workspace.json").exists())
+        self.assertFalse((artifacts / "final-workspace.json").exists())
 
     def test_all_cases_run_in_order_with_independent_evidence_and_combined_exit_code(self):
         scenarios = (
@@ -144,6 +195,7 @@ class CodexFailureTests(unittest.TestCase):
             ("unchanged", "success", 1, ["assertion_failed", "passed"]),
             ("nonzero", "success", 2, ["execution_failed", "passed"]),
             ("unchanged", "nonzero", 2, ["assertion_failed", "execution_failed"]),
+            ("success", "workspace-edits", 1, ["passed", "assertion_failed"]),
         )
         for smoke, scope, expected_exit, outcomes in scenarios:
             with self.subTest(smoke=smoke, scope=scope):
@@ -170,6 +222,8 @@ class CodexFailureTests(unittest.TestCase):
                     self.assertFalse(Path(metadata["workspace"]).exists())
                     expected_initial = b"before\n" if name == "smoke" else b"greeting=before\nnote=teh sample\n"
                     self.assertEqual((path / "message.txt").read_bytes(), expected_initial)
+                    self.assertEqual((path / "initial-workspace.json").exists(), name == "scope-discipline")
+                    self.assertEqual((path / "final-workspace.json").exists(), name == "scope-discipline")
                 self.assertEqual(len(set(workspaces)), 2)
 
     def test_missing_or_api_authentication_never_launches_a_task(self):
@@ -228,10 +282,12 @@ class CodexFailureTests(unittest.TestCase):
                     self.assertEqual((profile / "case-invocations").read_text(), "smoke\n")
 
     def test_success_cleans_up_a_child_that_outlives_its_parent(self):
-        process, profile, runs = self.launch("orphan")
-        _, _, report = self.finish(process, runs, 0)
-        self.assertEqual(report["outcome"], "passed")
-        self.assert_group_stopped(profile)
+        for case in ("smoke", "scope-discipline"):
+            with self.subTest(case=case):
+                process, profile, runs = self.launch("orphan", case=case)
+                _, _, report = self.finish(process, runs, 0)
+                self.assertEqual(report["outcome"], "passed")
+                self.assert_group_stopped(profile)
 
 
 if __name__ == "__main__":

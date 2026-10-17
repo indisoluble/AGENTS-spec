@@ -13,7 +13,9 @@ from unittest.mock import patch
 
 from evals.__main__ import main
 from evals.codex import retain_evidence, run_codex
-from evals.smoke import ExecutionResult, evaluate, prepare_workspace
+from evals.scope import INITIAL_CONTENTS
+from evals.smoke import ExecutionResult, evaluate, prepare_workspace, read_result
+from evals.workspace import WorkspaceObservation, snapshot_workspace
 from tests.offline_smoke import write_after
 
 
@@ -150,6 +152,104 @@ for kind in ("pipe", "directory", "symlink"):
                 self.assertEqual(main(), 2)
             self.assertIn("primary failure", errors.getvalue())
             self.assertIn("report unavailable", errors.getvalue())
+
+
+class ScopeEvidenceTests(unittest.TestCase):
+    """Inject process replies and filesystem failures; no real CLI or credentials."""
+
+    def setUp(self):
+        self.artifacts = Path(self.enterContext(TemporaryDirectory()))
+        self.workspace = self.enterContext(prepare_workspace(INITIAL_CONTENTS))
+        self.enterContext(patch("evals.auth.codex_executable", return_value="unused-codex"))
+        self.enterContext(patch("evals.auth.check_profile"))
+        self.enterContext(patch("evals.auth.codex_environment", return_value={}))
+        self.enterContext(patch("evals.auth.require_chatgpt_login"))
+
+        def execute(command, **kwargs):
+            if "--version" in command:
+                return subprocess.CompletedProcess(command, 0, stdout="test-cli")
+            (self.workspace / "message.txt").write_bytes(b"greeting=after\nnote=teh sample\n")
+            kwargs["stdout"].write('{"type": "turn.completed"}\n')
+            return subprocess.CompletedProcess(command, 0)
+
+        self.process = self.enterContext(patch("evals.codex.run_process", side_effect=execute))
+
+    def run_observed(self):
+        return run_codex("test", self.workspace, model="test", effort="medium", timeout=1,
+                         artifacts=self.artifacts, profile=self.artifacts / "unused-profile",
+                         observe_workspace=True)
+
+    def test_initial_inspection_failure_prevents_execution_and_retains_final_observation(self):
+        final = snapshot_workspace(self.workspace)
+        with patch("evals.codex.snapshot_workspace", side_effect=[PermissionError("inspection denied"), final]):
+            result = self.run_observed()
+
+        self.assertEqual(result.status, "error")
+        self.assertIn("inspection denied", result.error)
+        self.process.assert_not_called()
+        self.assertIsNone(result.workspace_observation.initial)
+        self.assertFalse((self.artifacts / "initial-workspace.json").exists())
+        self.assertTrue((self.artifacts / "final-workspace.json").is_file())
+        self.assertTrue((self.artifacts / "execution.json").is_file())
+
+    def test_final_inspection_failure_preserves_primary_error_and_initial_evidence(self):
+        initial = snapshot_workspace(self.workspace)
+        self.process.side_effect = RuntimeError("primary execution failure")
+        with patch("evals.codex.snapshot_workspace", side_effect=[initial, PermissionError("inspection denied")]):
+            result = self.run_observed()
+
+        self.assertEqual(result.status, "error")
+        self.assertIn("primary execution failure", result.error)
+        self.assertIn("Final workspace inspection failed", result.error)
+        self.assertIsNone(result.workspace_observation.final)
+        self.assertTrue((self.artifacts / "initial-workspace.json").is_file())
+        self.assertFalse((self.artifacts / "final-workspace.json").exists())
+        self.assertFalse((self.artifacts / "workspace/message.txt").exists())
+
+    def test_successful_execution_with_failed_inspection_is_an_error(self):
+        initial = snapshot_workspace(self.workspace)
+        with patch("evals.codex.snapshot_workspace", side_effect=[initial, PermissionError("inspection denied")]):
+            result = self.run_observed()
+
+        self.assertEqual(result.status, "error")
+        self.assertIn("inspection denied", result.error)
+        metadata = json.loads((self.artifacts / "execution.json").read_text())
+        self.assertEqual(metadata["status"], "error")
+        self.assertEqual(metadata["returncode"], 0)
+
+    def test_each_manifest_write_is_independent_and_primary_error_survives(self):
+        initial = snapshot_workspace(self.workspace)
+        result = ExecutionResult("error", error="primary failure",
+                                 workspace_observation=WorkspaceObservation(initial, initial))
+        for blocked in ("initial", "final"):
+            with self.subTest(blocked=blocked), TemporaryDirectory() as directory:
+                artifacts = Path(directory)
+                (artifacts / f"{blocked}-workspace.json").mkdir()
+                with redirect_stderr(StringIO()):
+                    retained = retain_evidence(self.workspace, artifacts, {}, result)
+                self.assertEqual(retained.status, "error")
+                self.assertIn("primary failure", retained.error)
+                self.assertIn(f"{blocked}-workspace.json", retained.error)
+                other = "final" if blocked == "initial" else "initial"
+                self.assertTrue((artifacts / f"{other}-workspace.json").is_file())
+                self.assertEqual((artifacts / "workspace/message.txt").read_bytes(), INITIAL_CONTENTS)
+                metadata = json.loads((artifacts / "execution.json").read_text())
+                self.assertEqual(metadata["error"], "primary failure")
+                self.assertTrue(metadata["evidence_errors"])
+
+    def test_final_fixture_copies_use_captured_bytes_without_reopening_paths(self):
+        initial = snapshot_workspace(self.workspace)
+        (self.workspace / "message.txt").write_bytes(b"greeting=after\nnote=teh sample\n")
+        observation = WorkspaceObservation(initial, snapshot_workspace(self.workspace))
+        result = read_result(self.workspace, workspace_observation=observation)
+        # Later disk contents must not disagree with what the retained observation graded.
+        (self.workspace / "message.txt").write_bytes(b"changed after observation")
+        with patch("evals.codex.read_fixture_file", side_effect=AssertionError("Unexpected file read")):
+            retained = retain_evidence(self.workspace, self.artifacts, {}, result)
+
+        self.assertEqual(retained.status, "completed")
+        self.assertEqual((self.artifacts / "workspace/message.txt").read_bytes(),
+                         b"greeting=after\nnote=teh sample\n")
 
 
 if __name__ == "__main__":

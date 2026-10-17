@@ -1,16 +1,6 @@
 """Command-line entry point for one live smoke evaluation.
 
-Setup: python -m evals --login
-Run: python -m evals --model MODEL --reasoning-effort EFFORT
-Clear saved credentials: python -m evals --logout
-Use --codex-home PATH with each command to select a different profile.
-
-The suite shall use ~/.codex-evals unless --codex-home specifies another path.
-The suite shall use the selected home for login, logout, and evaluation.
-
-The suite shall exit with 0 for success, 1 for a content assertion failure,
-and 2 for a setup, execution, evaluation, or evidence-write error.
-If a report cannot be saved, then the suite shall report the error in the terminal.
+See META-EVALUATIONS.md for commands, exit codes, and requirements.
 """
 
 import argparse
@@ -27,6 +17,7 @@ from pydantic_evals.reporting import EvaluationReport
 
 from evals import auth
 from evals.codex import run_codex, save_json
+from evals.process import cancellation_signals
 from evals.smoke import ExecutionResult, evaluate
 
 
@@ -123,13 +114,18 @@ def main() -> int:
         print(f"Cannot create the evidence directory: {exc}", file=sys.stderr)
         return 2
     print(f"Evidence: {artifacts}", flush=True)
-    execute = partial(
-        run_codex, model=args.model, effort=args.reasoning_effort,
-        timeout=args.timeout, artifacts=artifacts, profile=profile,
-    )
     try:
-        report = evaluate(execute)
-        return write_report(report, artifacts)
+        with cancellation_signals() as cancelled:
+            execute = partial(
+                run_codex, model=args.model, effort=args.reasoning_effort,
+                timeout=args.timeout, artifacts=artifacts, profile=profile, cancelled=cancelled,
+            )
+            report = evaluate(execute)
+            exit_code = write_report(report, artifacts)
+            # Also handle a signal arriving after the worker, including during reporting.
+            if cancelled.is_set() and not report.failures:
+                return report_failure(artifacts, "Evaluation interrupted.")
+            return exit_code
     except KeyboardInterrupt:
         return report_failure(artifacts, "Evaluation interrupted.")
     except (OSError, RuntimeError, ValueError) as exc:

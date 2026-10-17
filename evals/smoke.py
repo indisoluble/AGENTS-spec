@@ -1,15 +1,6 @@
 """The text-edit smoke case, workspace lifecycle, and deterministic grading.
 
-Current requirements (owned here until the evaluation guide is added):
-When a case starts, the smoke suite shall provide a fresh temporary workspace
-with the initial fixture and an unchanged copy of the current root AGENTS.md.
-When execution completes, the smoke suite shall compare the reported file
-contents exactly with the case's expected contents, including whitespace.
-If execution reports an error or raises an exception, then the smoke suite
-shall report an execution failure separately from content assertions.
-When a case finishes or raises, the smoke suite shall clean its workspace.
-If a fixture is a symbolic link or non-regular file, then the smoke suite shall
-reject it without reading its contents.
+See META-EVALUATIONS.md for the suite's requirements and scope.
 """
 
 from collections.abc import Callable, Iterator
@@ -111,9 +102,8 @@ def evaluate(
     The execution function receives a prompt and workspace and returns a result.
     Both the Codex launcher and offline test substitutes use this interface.
 
-    Pydantic runs this synchronous task in a worker thread. Ctrl-C in the calling
-    thread does not stop the executor; it can continue until completion or its
-    own timeout. Explicit cancellation across this boundary is still pending.
+    Pydantic runs this synchronous task in a worker thread. The CLI supplies
+    cancellation to its launcher separately; this case does not own processes.
     """
 
     def task(prompt: str) -> ExecutionResult:

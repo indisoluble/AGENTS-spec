@@ -63,6 +63,10 @@ Instruction files cannot guarantee compliance. The tool's controls govern permis
 - **[The design of AGENTS.md](README-maintainers.md)** — design reasons, engineering choices, supporting references, constraints, and trade-offs that inform changes to the contract.
 - **[AGENTS.md](AGENTS.md)** — the complete operating rules, conditions, and exceptions.
 
+## Local evaluation suite
+
+The repository includes a Python/Pydantic Evals smoke test that runs Codex in a temporary workspace and checks an exact file edit. See [evaluation setup, commands, and boundaries](META-EVALUATIONS.md), including offline tests and ChatGPT authentication. A pass validates the infrastructure, not behavioral compliance with the contract.
+
 ## License
 
 Licensed under [MIT No Attribution (MIT-0)](LICENSE).

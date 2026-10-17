@@ -13,6 +13,7 @@ Keep the three reader-facing guides and this editorial file at the repository ro
 | [README.md](README.md) | Basic adoption: the offering, installation, replacement precautions, adoption checks, a first task, and essential expectations. |
 | [README-powerusers.md](README-powerusers.md) | Detailed practical explanations and examples, alignment, tool compatibility, adoption diagnostics, and recorded provider-documentation check dates. |
 | [README-maintainers.md](README-maintainers.md) | The contract's design: attributes, reasons, engineering choices, exact reference assignments, trade-offs, portability criteria, and constraints on evolution. |
+| [META-EVALUATIONS.md](META-EVALUATIONS.md) | The local evaluation suite's setup, commands, verifiable requirements, component responsibilities, authentication lifecycle, evidence, and execution boundaries. Code and tests provide implementation evidence; module comments link here instead of duplicating requirements. |
 | `META-README.md` | Documentation responsibilities, permitted overlap, editing procedures, and verification. |
 
 The ordinary reading path starts at `README.md` and branches into practical use or technical understanding. Keep editorial navigation out of that path; contributors can discover this root file directly. “Power users” means readers seeking practical depth, without requiring technical expertise. The maintainer guide documents the contract itself; it is not a contributor onboarding manual.

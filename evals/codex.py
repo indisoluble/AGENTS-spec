@@ -1,27 +1,18 @@
 """Run the smoke task with a dedicated, ChatGPT-authenticated Codex profile.
 
-When launching Codex, the runner shall use explicit model settings and a
-workspace-write sandbox, without personal configuration or API-key overrides.
-When execution ends, the runner shall retain evidence outside the workspace.
-If execution exceeds its timeout, then the runner shall stop its process group.
-If evidence cannot be fully saved, then the runner shall report an error while
-preserving the execution error and attempting the remaining evidence writes.
-
-This isolates configuration and fixture writes, not the entire host. Codex's
-built-in and managed instructions still apply. The installed CLI must support
-the skip_host_skill_discovery feature; its version is recorded in each run.
+See META-EVALUATIONS.md for requirements, evidence, and execution boundaries.
 """
 
 import hashlib
 import json
-import os
 from pathlib import Path
-import signal
 import subprocess
 import sys
+from threading import Event
 import time
 
 from evals import auth
+from evals.process import run_process
 from evals.smoke import ExecutionResult, read_fixture_file, read_result
 
 
@@ -49,24 +40,6 @@ def execution_command(executable: str, workspace: Path, model: str, effort: str)
     for key, value in settings.items():
         command.extend(["--config", f"{key}={json.dumps(value)}"])
     return [*command, "-"]  # Feed the prompt through stdin.
-
-
-def stop_process_group(process: subprocess.Popen) -> None:
-    # Codex can spawn shell children; stopping only the parent can leave them running.
-    try:
-        os.killpg(process.pid, signal.SIGTERM)
-    except ProcessLookupError:
-        pass
-    try:
-        process.wait(timeout=2)
-    except subprocess.TimeoutExpired:
-        pass
-    finally:
-        try:
-            os.killpg(process.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-        process.wait()
 
 
 def save_json(path: Path, value: dict) -> None:
@@ -109,7 +82,7 @@ def retain_evidence(
 
 def run_codex(
     prompt: str, workspace: Path, *, model: str, effort: str,
-    timeout: float, artifacts: Path, profile: Path,
+    timeout: float, artifacts: Path, profile: Path, cancelled: Event | None = None,
 ) -> ExecutionResult:
     """Launch once and preserve evidence before the caller removes the workspace."""
     started = time.monotonic()
@@ -126,26 +99,23 @@ def run_codex(
         executable = auth.codex_executable()
         auth.check_profile(profile)
         environment = auth.codex_environment(profile)
-        version = subprocess.run(
-            [executable, "--version"], capture_output=True, text=True, check=True,
-            env=environment, cwd=workspace, timeout=15,
+        version = run_process(
+            [executable, "--version"], env=environment, cwd=workspace,
+            timeout=15, cancelled=cancelled,
         )
+        version.check_returncode()
         metadata["codex_version"] = version.stdout.strip()
-        auth.require_chatgpt_login(executable, profile)
+        auth.require_chatgpt_login(executable, profile, cancelled)
         command = execution_command(executable, workspace, model, effort)
         metadata["command"] = command
         with (artifacts / "events.jsonl").open("w") as events, (artifacts / "stderr.txt").open("w") as errors:
-            process = subprocess.Popen(
-                command, cwd=workspace, env=environment, stdin=subprocess.PIPE,
-                stdout=events, stderr=errors, text=True, start_new_session=True,
+            completed = run_process(
+                command, cwd=workspace, env=environment, input_text=prompt,
+                stdout=events, stderr=errors, timeout=timeout, cancelled=cancelled,
             )
-            try:
-                process.communicate(input=prompt, timeout=timeout)
-            finally:
-                stop_process_group(process)
-            metadata["returncode"] = process.returncode
-        if process.returncode:
-            raise RuntimeError(f"Codex exited with status {process.returncode}; see stderr.txt and events.jsonl")
+            metadata["returncode"] = completed.returncode
+        if completed.returncode:
+            raise RuntimeError(f"Codex exited with status {completed.returncode}; see stderr.txt and events.jsonl")
         # Only accept a completed turn, not a silent or partial CLI response.
         event_types = [json.loads(line).get("type") for line in (artifacts / "events.jsonl").read_text().splitlines()]
         if "turn.completed" not in event_types or "turn.failed" in event_types:

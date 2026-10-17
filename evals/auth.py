@@ -1,13 +1,6 @@
 """Own the dedicated evaluation profile and its authentication lifecycle.
 
-The suite shall retain credentials between runs until explicit logout.
-When logout is requested, the suite shall ask Codex to remove credentials
-from the evaluation profile only.
-
-Codex stores plaintext credentials in auth.json under the selected Codex home.
-Codex manages token refresh; the suite never reads or copies credential contents.
-Logout removes local credentials; server-side revocation is not guaranteed.
-See https://learn.chatgpt.com/docs/auth for Codex's storage and refresh behavior.
+See META-EVALUATIONS.md for credential storage, lifetime, and logout semantics.
 """
 
 import json
@@ -15,6 +8,9 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+from threading import Event
+
+from evals.process import run_process
 
 
 AUTH_SETTINGS = {"forced_login_method": "chatgpt", "cli_auth_credentials_store": "file"}
@@ -47,7 +43,7 @@ def check_profile(profile: Path) -> None:
 def codex_executable() -> str:
     executable = shutil.which("codex")
     if executable is None:
-        raise RuntimeError("Codex CLI was not found on PATH.")
+        raise RuntimeError("Codex CLI was not found on PATH. Install it separately or add its directory to PATH.")
     return executable
 
 
@@ -67,12 +63,12 @@ def login(profile: Path) -> int:
     )
 
 
-def require_chatgpt_login(executable: str, profile: Path) -> None:
+def require_chatgpt_login(executable: str, profile: Path, cancelled: Event | None = None) -> None:
     """Check the login method without exposing credential contents."""
     check_profile(profile)
-    status = subprocess.run(
-        [executable, "--no-daemon", "login", "status"], capture_output=True,
-        text=True, env=codex_environment(profile), cwd=profile, timeout=15,
+    status = run_process(
+        [executable, "--no-daemon", "login", "status"],
+        env=codex_environment(profile), cwd=profile, timeout=15, cancelled=cancelled,
     )
     if status.returncode or "Logged in using ChatGPT" not in status.stdout + status.stderr:
         raise RuntimeError("ChatGPT authentication is required. Run python -m evals --login with the same --codex-home")

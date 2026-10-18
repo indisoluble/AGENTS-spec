@@ -13,7 +13,7 @@ import unittest
 
 from evals.auth import PROFILE_CONFIG
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC
-from evals import independence
+from evals import assumptions, independence
 
 
 class CodexFailureTests(unittest.TestCase):
@@ -200,46 +200,137 @@ class CodexFailureTests(unittest.TestCase):
             ("success", "workspace-edits", "success", 1, ["passed", "assertion_failed", "review_required"]),
             ("success", "success", "empty", 1, ["passed", "passed", "assertion_failed"]),
         )
-        names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution")
+        names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure")
+        rubrics = {"requester-guidance": REVIEW_RUBRIC, "independent-execution": independence.REVIEW_RUBRIC,
+                   "assumption-disclosure": assumptions.REVIEW_RUBRIC}
         for smoke, scope, guidance, expected_exit, outcomes in scenarios:
             with self.subTest(smoke=smoke, scope=scope, guidance=guidance):
                 # Select deterministic responses for each fake task, without model calls.
                 process, profile, runs = self.launch(
                     {"smoke": smoke, "scope-discipline": scope, "requester-guidance": guidance,
-                     "independent-execution": "success"}, case="all",
+                     "independent-execution": "success", "assumption-disclosure": "success"}, case="all",
                 )
                 output, errors = process.communicate(timeout=15)
                 self.assertEqual(process.returncode, expected_exit, output + errors)
                 self.assertEqual((profile / "case-invocations").read_text(), "\n".join(names) + "\n")
-                self.assertEqual((profile / "invocations").read_text(), "exec\n" * 4)
-                self.assertLess(output.index("Case: smoke"), output.index("Case: scope-discipline"))
-                self.assertLess(output.index("Case: scope-discipline"), output.index("Case: requester-guidance"))
-                self.assertLess(output.index("Case: requester-guidance"), output.index("Case: independent-execution"))
+                self.assertEqual((profile / "invocations").read_text(), "exec\n" * len(names))
+                for before, after in zip(names, names[1:]):
+                    self.assertLess(output.index(f"Case: {before}"), output.index(f"Case: {after}"))
                 self.assertIn("Human review pending", output)
                 artifacts = list(runs.iterdir())
-                self.assertEqual(len(artifacts), 4)
+                self.assertEqual(len(artifacts), len(names))
                 by_case = {json.loads((path / "report.json").read_text())["case"]: path for path in artifacts}
                 self.assertEqual(set(by_case), set(names))
                 workspaces = []
-                for name, outcome in zip(names, [*outcomes, "review_required"]):
+                for name, outcome in zip(names, [*outcomes, "review_required", "review_required"]):
                     path = by_case[name]
                     report = json.loads((path / "report.json").read_text())
                     metadata = json.loads((path / "execution.json").read_text())
                     self.assertEqual(report["outcome"], outcome)
-                    self.assertEqual(report["review_required"], name in ("requester-guidance", "independent-execution"))
+                    self.assertEqual(report["review_required"], name in rubrics)
                     workspaces.append(metadata["workspace"])
                     self.assertFalse(Path(metadata["workspace"]).exists())
-                    if name in ("requester-guidance", "independent-execution"):
+                    if name in rubrics:
                         self.assertFalse((path / "message.txt").exists())
-                        self.assertEqual((path / "review.md").read_text(),
-                                         REVIEW_RUBRIC if name == "requester-guidance" else independence.REVIEW_RUBRIC)
+                        self.assertEqual((path / "review.md").read_text(), rubrics[name])
                     else:
                         expected_initial = b"before\n" if name == "smoke" else b"greeting=before\nnote=teh sample\n"
                         self.assertEqual((path / "message.txt").read_bytes(), expected_initial)
                     self.assertEqual((path / "initial-workspace.json").exists(), name != "smoke")
                     self.assertEqual((path / "final-workspace.json").exists(), name != "smoke")
-                    self.assertEqual((path / "final-response.txt").exists(), name in ("requester-guidance", "independent-execution"))
-                self.assertEqual(len(set(workspaces)), 4)
+                    self.assertEqual((path / "final-response.txt").exists(), name in rubrics)
+                self.assertEqual(len(set(workspaces)), len(names))
+
+    def test_assumption_previews_and_replies_are_retained_without_semantic_verdicts(self):
+        for scenario in ("success", "month-first", "undisclosed", "misleading"):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="assumption-disclosure")
+                artifacts, metadata, report = self.finish(process, runs, 3)
+                self.assertEqual(report["case"], "assumption-disclosure")
+                self.assertEqual(report["outcome"], "review_required")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "PreviewCorrect": True, "ScopePreserved": True, "FinalResponsePresent": True,
+                })
+                interpretation = "month-first" if scenario == "month-first" else "day-first"
+                self.assertIn(interpretation, report["cases"][0]["assertion_reasons"]["PreviewCorrect"])
+                response = (artifacts / "final-response.txt").read_text()
+                self.assertEqual(report["cases"][0]["final_response"], response)
+                self.assertNotIn("Progress message", response)
+                self.assertIn("Progress message", (artifacts / "events.jsonl").read_text())
+                self.assertIn("--output-last-message", metadata["command"])
+                self.assertEqual((artifacts / "review.md").read_text(), assumptions.REVIEW_RUBRIC)
+                self.assertEqual((artifacts / "prompt.txt").read_text(), assumptions.PROMPT)
+                initial = json.loads((artifacts / "initial-workspace.json").read_text())
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                self.assertEqual(set(initial), {".", "AGENTS.md", *assumptions.FIXTURE_FILES})
+                self.assertEqual(set(final), {*initial, "preview.json"})
+                for name, contents in assumptions.FIXTURE_FILES.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                    self.assertEqual(base64.b64decode(initial[name]["contents_base64"]), contents)
+                for name, entry in initial.items():
+                    self.assertEqual(final[name], entry)
+                for name, entry in final.items():
+                    if entry["kind"] == "file":
+                        self.assertEqual((artifacts / "workspace" / name).read_bytes(),
+                                         base64.b64decode(entry["contents_base64"]))
+                changes = (artifacts / "workspace-changes.txt").read_text()
+                self.assertIn('Path: "preview.json"', changes)
+                self.assertIn("2026-03-04" if scenario == "month-first" else "2026-04-03", changes)
+                self.assertFalse((artifacts / "functional-checks.json").exists())
+                self.assertEqual((profile / "case-invocations").read_text(), "assumption-disclosure\n")
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_assumption_failures_keep_task_scope_and_response_assertions_independent(self):
+        scenarios = (("question", False, True, True), ("mixed", False, True, True),
+                     ("malformed", False, True, True), ("unrelated", True, False, True),
+                     ("source-edited", True, False, True), ("contract-edited", True, False, True),
+                     ("preview-link", False, False, True), ("empty", True, True, False))
+        for scenario, preview, scope, response in scenarios:
+            with self.subTest(scenario=scenario):
+                process, _, runs = self.launch(scenario, case="assumption-disclosure")
+                artifacts, metadata, report = self.finish(process, runs, 1)
+                self.assertEqual(report["outcome"], "assertion_failed")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "PreviewCorrect": preview, "ScopePreserved": scope, "FinalResponsePresent": response,
+                })
+                self.assertEqual(report["execution_errors"], [])
+                self.assertEqual(metadata["status"], "completed")
+                reasons = report["cases"][0]["assertion_reasons"]
+                terminal = (artifacts / "report.txt").read_text()
+                self.assertIn("Human review pending", terminal)
+                if scenario == "question":
+                    self.assertIn("task incomplete", reasons["PreviewCorrect"])
+                    self.assertIn("task incomplete", terminal)
+                    self.assertEqual((artifacts / "workspace-changes.txt").read_text(), "No observed workspace changes.\n")
+                elif scenario in ("unrelated", "source-edited", "contract-edited"):
+                    path = {"unrelated": "notes.txt", "source-edited": "events.csv", "contract-edited": "AGENTS.md"}[scenario]
+                    self.assertIn(f"{path}:", reasons["ScopePreserved"])
+                    self.assertIn(f"{path}:", terminal)
+                elif scenario == "preview-link":
+                    self.assertFalse((artifacts / "workspace/preview.json").exists())
+                    final = json.loads((artifacts / "final-workspace.json").read_text())
+                    self.assertEqual(final["preview.json"]["kind"], "symlink")
+                    self.assertIsNone(final["preview.json"]["contents_base64"])
+
+    def test_assumption_capture_and_execution_errors_retain_available_evidence_and_pending_review(self):
+        for scenario in ("missing-response", "invalid-utf8", "nonzero"):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="assumption-disclosure")
+                artifacts, metadata, report = self.finish(process, runs, 2)
+                self.assertEqual(report["case"], "assumption-disclosure")
+                self.assertEqual(report["outcome"], "execution_failed")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"], [])
+                self.assertIn("Final response capture failed", metadata["error"])
+                if scenario == "nonzero":
+                    self.assertIn("Codex exited with status 7", metadata["error"])
+                self.assertEqual((artifacts / "review.md").read_text(), assumptions.REVIEW_RUBRIC)
+                for name in ("initial-workspace.json", "final-workspace.json", "workspace-changes.txt", "events.jsonl", "stderr.txt"):
+                    self.assertTrue((artifacts / name).is_file(), name)
+                self.assertEqual((artifacts / "workspace/preview.json").exists(), scenario != "nonzero")
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
 
     def test_guidance_replies_and_edits_are_retained_for_human_review(self):
         scenarios = (("success", None), ("misleading", None), ("proposal", "timezone-note.md"),

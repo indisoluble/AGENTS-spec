@@ -4,7 +4,10 @@ Snapshots describe final state, not the operations that produced it. The caller
 owns their lifetime and must keep the initial snapshot outside the agent's reach.
 """
 
+import base64
 from dataclasses import dataclass
+from difflib import unified_diff
+import json
 import os
 from pathlib import Path
 import stat
@@ -41,6 +44,47 @@ _ENTRY_TYPES = {
 
 class WorkspaceInspectionError(OSError):
     """Inspection failed; a partial snapshot cannot support a scope verdict."""
+
+
+def workspace_changes(observation: WorkspaceObservation) -> str:
+    """Describe all observed differences without deciding whether they are allowed."""
+    if observation.initial is None or observation.final is None:
+        return "Workspace comparison unavailable: initial or final inspection is incomplete.\n"
+
+    def describe(entry: WorkspaceEntry | None) -> str:
+        if entry is None:
+            return "absent"
+        description = f"{entry.kind}, mode={entry.mode:04o}"
+        if entry.link_target is not None:
+            description += f", target={json.dumps(entry.link_target)}"
+        return description
+
+    def content_lines(entry: WorkspaceEntry | None) -> list[str]:
+        if entry is None or entry.contents is None:
+            return []
+        try:
+            text = entry.contents.decode("utf-8")
+        except UnicodeDecodeError:
+            return ["base64: " + base64.b64encode(entry.contents).decode("ascii") + "\n"]
+        # Quoted lines expose CRLF, missing final newlines, tabs, and other bytes
+        # that an ordinary text diff can hide. Manifests retain the exact bytes.
+        return [json.dumps(line) + "\n" for line in text.splitlines(keepends=True)]
+
+    blocks = []
+    initial, final = observation.initial, observation.final
+    for path in sorted(initial.keys() | final.keys()):
+        before, after = initial.get(path), final.get(path)
+        if before == after:
+            continue
+        block = f"Path: {json.dumps(path)}\nBefore: {describe(before)}\nAfter: {describe(after)}\n"
+        block += "".join(unified_diff(content_lines(before), content_lines(after),
+                                      fromfile="initial contents", tofile="final contents"))
+        blocks.append(block)
+    if not blocks:
+        return "No observed workspace changes.\n"
+    return ("Observed differences only; authorization requires case-specific assessment.\n"
+            "Text diffs use JSON-quoted lines; binary contents use base64.\n\n"
+            + "\n".join(blocks))
 
 
 def snapshot_workspace(workspace: Path) -> WorkspaceSnapshot:

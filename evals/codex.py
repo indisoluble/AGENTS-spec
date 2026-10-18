@@ -16,7 +16,7 @@ import time
 from evals import auth
 from evals.process import run_process
 from evals.smoke import ExecutionResult, read_fixture_file, read_result
-from evals.workspace import WorkspaceObservation, WorkspaceSnapshot, snapshot_workspace
+from evals.workspace import WorkspaceObservation, WorkspaceSnapshot, snapshot_workspace, workspace_changes
 
 
 def execution_command(
@@ -96,6 +96,10 @@ def retain_evidence(
         for name, snapshot in (("initial", observation.initial), ("final", observation.final)):
             if snapshot is not None:
                 errors.extend(retain_snapshot(snapshot, artifacts, name))
+        try:
+            (artifacts / "workspace-changes.txt").write_text(workspace_changes(observation), encoding="utf-8")
+        except (OSError, ValueError) as exc:
+            errors.append(f"workspace-changes.txt: {exc}")
     else:
         # Preserve smoke's safe reads and its rejection of non-regular fixtures.
         final_files = artifacts / "workspace"

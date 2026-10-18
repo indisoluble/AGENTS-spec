@@ -18,20 +18,29 @@ from pydantic_evals.reporting import EvaluationReport
 
 from evals import auth
 from evals.codex import run_codex, save_json
+from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC, guidance_dataset
 from evals.process import cancellation_signals
 from evals.scope import INITIAL_CONTENTS, scope_dataset
 from evals.smoke import ExecutionResult, evaluate
 
 
 ARTIFACTS_ROOT = Path(__file__).resolve().parents[1] / ".eval-runs"
-CASE_NAMES = ("smoke", "scope-discipline")
+CASE_NAMES = ("smoke", "scope-discipline", "requester-guidance")
+# Known failures take precedence over a case awaiting human review.
+EXIT_PRIORITY = {0: 0, 3: 1, 1: 2, 2: 3}
 
 
 def report_failure(artifacts: Path, message: str, *, case_name: str = "smoke") -> int:
     """Keep the primary error visible even when the fallback report cannot be saved."""
     print(message, file=sys.stderr)
+    review_required = case_name == "requester-guidance"
+    if review_required:
+        print("Human review pending; this execution failure leaves verification incomplete.", file=sys.stderr)
     try:
-        save_json(artifacts / "report.json", {"case": case_name, "outcome": "execution_failed", "error": message})
+        save_json(artifacts / "report.json", {
+            "case": case_name, "outcome": "execution_failed", "error": message,
+            "review_required": review_required,
+        })
     except (OSError, ValueError) as exc:
         print(f"Could not save report.json: {exc}", file=sys.stderr)
     return 2
@@ -44,12 +53,18 @@ def write_report(
     rendered = StringIO()
     with redirect_stdout(rendered):
         report.print(include_output=True, include_reasons=True)
-    # Show the evaluation result even if the evidence directory is no longer writable.
-    print(rendered.getvalue(), end="")
     execution_failed = bool(report.failures or report.report_evaluator_failures or not report.cases)
     execution_failed |= any(case.evaluator_failures for case in report.cases)
     passed = all(assertion.value for case in report.cases for assertion in case.assertions.values())
-    exit_code = 2 if execution_failed else (0 if passed else 1)
+    review_required = case_name == "requester-guidance"
+    exit_code = 2 if execution_failed else (1 if not passed else (3 if review_required else 0))
+    if review_required:
+        if exit_code == 3:
+            rendered.write("Outcome: review_required (automated checks passed).\n")
+        rendered.write("Human review pending: see review.md, final-response.txt, and workspace-changes.txt.\n"
+                       "The four semantic criteria are not graded by this command.\n")
+    # Show the evaluation result even if the evidence directory is no longer writable.
+    print(rendered.getvalue(), end="")
     errors = []
     try:
         (artifacts / "report.txt").write_text(rendered.getvalue(), encoding="utf-8")
@@ -59,10 +74,12 @@ def write_report(
     # Keep machine-readable results simple; Pydantic's full report includes internal objects.
     summary = {
         "case": case_name,
-        "outcome": {0: "passed", 1: "assertion_failed", 2: "execution_failed"}[2 if errors else exit_code],
+        "outcome": {0: "passed", 1: "assertion_failed", 2: "execution_failed", 3: "review_required"}[2 if errors else exit_code],
+        "review_required": review_required,
         "cases": [{
             "name": case.name,
             "file_contents": case.output.file_contents,
+            "final_response": case.output.final_response,
             "assertions": {name: assertion.value for name, assertion in case.assertions.items()},
             "assertion_reasons": {name: assertion.reason for name, assertion in case.assertions.items()},
             "evaluator_errors": [str(error) for error in case.evaluator_failures],
@@ -91,12 +108,18 @@ def run_case(case_name: str, *, model: str, effort: str, timeout: float, profile
         return 2
     print(f"Case: {case_name}\nEvidence: {artifacts}", flush=True)
     try:
+        if case_name == "requester-guidance":
+            # Keep the rubric outside the fixture, so it cannot coach the agent.
+            (artifacts / "review.md").write_text(REVIEW_RUBRIC, encoding="utf-8")
         execute = partial(
             run_codex, model=model, effort=effort,
             timeout=timeout, artifacts=artifacts, profile=profile, cancelled=cancelled,
-            observe_workspace=case_name == "scope-discipline",
+            observe_workspace=case_name in ("scope-discipline", "requester-guidance"),
+            capture_response=case_name == "requester-guidance",
         )
-        if case_name == "scope-discipline":
+        if case_name == "requester-guidance":
+            report = evaluate(execute, dataset=guidance_dataset(), fixture_files=FIXTURE_FILES)
+        elif case_name == "scope-discipline":
             report = evaluate(execute, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
         else:
             report = evaluate(execute)
@@ -113,7 +136,7 @@ def run_case(case_name: str, *, model: str, effort: str, timeout: float, profile
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run Codex text-edit evaluations using ChatGPT authentication.")
+    parser = argparse.ArgumentParser(description="Run Codex behavioral evaluations using ChatGPT authentication.")
     authentication = parser.add_mutually_exclusive_group()
     authentication.add_argument("--login", action="store_true", help="Sign into the dedicated evaluation profile; do not run a case.")
     authentication.add_argument("--logout", action="store_true", help="Remove saved credentials from the evaluation profile; do not run a case.")
@@ -156,8 +179,7 @@ def main() -> int:
                 case_name, model=args.model, effort=args.reasoning_effort,
                 timeout=args.timeout, profile=profile, cancelled=cancelled,
             )
-            # Execution errors (2) take precedence over assertion failures (1).
-            exit_code = max(exit_code, case_exit)
+            exit_code = max((exit_code, case_exit), key=EXIT_PRIORITY.__getitem__)
         return 2 if cancelled.is_set() else exit_code
 
 

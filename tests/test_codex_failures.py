@@ -12,6 +12,7 @@ import time
 import unittest
 
 from evals.auth import PROFILE_CONFIG
+from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC
 
 
 class CodexFailureTests(unittest.TestCase):
@@ -191,40 +192,120 @@ class CodexFailureTests(unittest.TestCase):
 
     def test_all_cases_run_in_order_with_independent_evidence_and_combined_exit_code(self):
         scenarios = (
-            ("success", "success", 0, ["passed", "passed"]),
-            ("unchanged", "success", 1, ["assertion_failed", "passed"]),
-            ("nonzero", "success", 2, ["execution_failed", "passed"]),
-            ("unchanged", "nonzero", 2, ["assertion_failed", "execution_failed"]),
-            ("success", "workspace-edits", 1, ["passed", "assertion_failed"]),
+            ("success", "success", "success", 3, ["passed", "passed", "review_required"]),
+            ("unchanged", "success", "success", 1, ["assertion_failed", "passed", "review_required"]),
+            ("nonzero", "success", "success", 2, ["execution_failed", "passed", "review_required"]),
+            ("unchanged", "nonzero", "success", 2, ["assertion_failed", "execution_failed", "review_required"]),
+            ("success", "workspace-edits", "success", 1, ["passed", "assertion_failed", "review_required"]),
+            ("success", "success", "empty", 1, ["passed", "passed", "assertion_failed"]),
         )
-        for smoke, scope, expected_exit, outcomes in scenarios:
-            with self.subTest(smoke=smoke, scope=scope):
+        names = ("smoke", "scope-discipline", "requester-guidance")
+        for smoke, scope, guidance, expected_exit, outcomes in scenarios:
+            with self.subTest(smoke=smoke, scope=scope, guidance=guidance):
                 # Select deterministic responses for each fake task, without model calls.
                 process, profile, runs = self.launch(
-                    {"smoke": smoke, "scope-discipline": scope}, case="all",
+                    {"smoke": smoke, "scope-discipline": scope, "requester-guidance": guidance}, case="all",
                 )
                 output, errors = process.communicate(timeout=15)
                 self.assertEqual(process.returncode, expected_exit, output + errors)
-                self.assertEqual((profile / "case-invocations").read_text(), "smoke\nscope-discipline\n")
-                self.assertEqual((profile / "invocations").read_text(), "exec\nexec\n")
+                self.assertEqual((profile / "case-invocations").read_text(), "\n".join(names) + "\n")
+                self.assertEqual((profile / "invocations").read_text(), "exec\n" * 3)
                 self.assertLess(output.index("Case: smoke"), output.index("Case: scope-discipline"))
+                self.assertLess(output.index("Case: scope-discipline"), output.index("Case: requester-guidance"))
+                self.assertIn("Human review pending", output)
                 artifacts = list(runs.iterdir())
-                self.assertEqual(len(artifacts), 2)
+                self.assertEqual(len(artifacts), 3)
                 by_case = {json.loads((path / "report.json").read_text())["case"]: path for path in artifacts}
-                self.assertEqual(set(by_case), {"smoke", "scope-discipline"})
+                self.assertEqual(set(by_case), set(names))
                 workspaces = []
-                for name, outcome in zip(("smoke", "scope-discipline"), outcomes):
+                for name, outcome in zip(names, outcomes):
                     path = by_case[name]
                     report = json.loads((path / "report.json").read_text())
                     metadata = json.loads((path / "execution.json").read_text())
                     self.assertEqual(report["outcome"], outcome)
+                    self.assertEqual(report["review_required"], name == "requester-guidance")
                     workspaces.append(metadata["workspace"])
                     self.assertFalse(Path(metadata["workspace"]).exists())
-                    expected_initial = b"before\n" if name == "smoke" else b"greeting=before\nnote=teh sample\n"
-                    self.assertEqual((path / "message.txt").read_bytes(), expected_initial)
-                    self.assertEqual((path / "initial-workspace.json").exists(), name == "scope-discipline")
-                    self.assertEqual((path / "final-workspace.json").exists(), name == "scope-discipline")
-                self.assertEqual(len(set(workspaces)), 2)
+                    if name == "requester-guidance":
+                        self.assertFalse((path / "message.txt").exists())
+                        self.assertEqual((path / "review.md").read_text(), REVIEW_RUBRIC)
+                    else:
+                        expected_initial = b"before\n" if name == "smoke" else b"greeting=before\nnote=teh sample\n"
+                        self.assertEqual((path / "message.txt").read_bytes(), expected_initial)
+                    self.assertEqual((path / "initial-workspace.json").exists(), name != "smoke")
+                    self.assertEqual((path / "final-workspace.json").exists(), name != "smoke")
+                    self.assertEqual((path / "final-response.txt").exists(), name == "requester-guidance")
+                self.assertEqual(len(set(workspaces)), 3)
+
+    def test_guidance_replies_and_edits_are_retained_for_human_review(self):
+        scenarios = (("success", None), ("misleading", None), ("proposal", "timezone-note.md"),
+                     ("implementation", "exporter.py"), ("data-change", "events.json"), ("policy", "README.md"))
+        for scenario, changed_path in scenarios:
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="requester-guidance")
+                artifacts, metadata, report = self.finish(process, runs, 3)
+                self.assertEqual(report["outcome"], "review_required")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "FinalResponsePresent": True, "RootContractPreserved": True,
+                })
+                response = (artifacts / "final-response.txt").read_text()
+                self.assertEqual(report["cases"][0]["final_response"], response)
+                self.assertNotIn("Progress message", response)
+                self.assertIn("Progress message", (artifacts / "events.jsonl").read_text())
+                self.assertIn("--output-last-message", metadata["command"])
+                self.assertEqual((artifacts / "review.md").read_text(), REVIEW_RUBRIC)
+                initial = json.loads((artifacts / "initial-workspace.json").read_text())
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                for name, contents in FIXTURE_FILES.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                    self.assertEqual(base64.b64decode(initial[name]["contents_base64"]), contents)
+                for name, entry in final.items():
+                    if entry["kind"] == "file":
+                        self.assertEqual((artifacts / "workspace" / name).read_bytes(),
+                                         base64.b64decode(entry["contents_base64"]))
+                changes = (artifacts / "workspace-changes.txt").read_text()
+                if changed_path is None:
+                    self.assertEqual(changes, "No observed workspace changes.\n")
+                else:
+                    self.assertIn(f'Path: "{changed_path}"', changes)
+                self.assertNotIn("review.md", initial)
+                self.assertNotIn("final-response.txt", final)
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_guidance_assertion_failures_keep_independent_results(self):
+        for scenario in ("empty", "whitespace", "contract-edited", "contract-deleted", "contract-link", "contract-mode"):
+            with self.subTest(scenario=scenario):
+                process, _, runs = self.launch(scenario, case="requester-guidance")
+                artifacts, metadata, report = self.finish(process, runs, 1)
+                contract_changed = scenario.startswith("contract-")
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "FinalResponsePresent": contract_changed, "RootContractPreserved": not contract_changed,
+                })
+                self.assertTrue(report["review_required"])
+                self.assertEqual(metadata["status"], "completed")
+                self.assertEqual(metadata["evidence_errors"], [])
+                self.assertTrue((artifacts / "workspace-changes.txt").is_file())
+                if contract_changed:
+                    self.assertIn("AGENTS.md:", report["cases"][0]["assertion_reasons"]["RootContractPreserved"])
+
+    def test_guidance_capture_and_execution_failures_are_errors_with_available_evidence(self):
+        for scenario in ("missing-response", "invalid-utf8", "nonzero"):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="requester-guidance")
+                artifacts, metadata, report = self.finish(process, runs, 2)
+                self.assertEqual(report["case"], "requester-guidance")
+                self.assertEqual(report["outcome"], "execution_failed")
+                self.assertEqual(report["cases"], [])
+                self.assertTrue(report["review_required"])
+                self.assertIn("Final response capture failed", metadata["error"])
+                if scenario == "nonzero":
+                    self.assertIn("Codex exited with status 7", metadata["error"])
+                self.assertEqual((artifacts / "review.md").read_text(), REVIEW_RUBRIC)
+                self.assertTrue((artifacts / "initial-workspace.json").is_file())
+                self.assertTrue((artifacts / "final-workspace.json").is_file())
+                self.assertTrue((artifacts / "workspace-changes.txt").is_file())
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
 
     def test_missing_or_api_authentication_never_launches_a_task(self):
         for scenario, authenticated in (("success", False), ("api-auth", True)):

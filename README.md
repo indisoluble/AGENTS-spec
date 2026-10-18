@@ -65,7 +65,7 @@ Instruction files cannot guarantee compliance. The tool's controls govern permis
 
 ## Local evaluation suite
 
-The repository includes Python/Pydantic Evals cases that run Codex in temporary workspaces: a smoke test for the infrastructure and a scope-discipline case that independently checks the requested edit and preservation of everything outside it across the workspace, comparing initial and final states. Run cases individually or all sequentially with one command. See [evaluation setup, commands, and boundaries](META-EVALUATIONS.md), including offline tests, ChatGPT authentication, and the limits of what these results establish.
+The repository includes Python/Pydantic Evals cases that run Codex in temporary workspaces: a smoke test for the infrastructure, a scope-discipline case that separately checks the requested edit and preservation of everything outside it, and a requester-guidance case that captures an unresolved timestamp decision for human review. Run cases individually or all sequentially with one command; pending human review has its own exit code. See [evaluation setup, commands, and boundaries](META-EVALUATIONS.md), including offline tests, ChatGPT authentication, initial/final workspace observations, and interpretation limits.
 
 ## License
 

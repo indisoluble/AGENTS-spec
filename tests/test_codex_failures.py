@@ -13,7 +13,7 @@ import unittest
 
 from evals.auth import PROFILE_CONFIG
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC
-from evals import assumptions, independence, permissions
+from evals import assumptions, independence, permissions, scheduling
 
 
 class CodexFailureTests(unittest.TestCase):
@@ -201,19 +201,20 @@ class CodexFailureTests(unittest.TestCase):
             ("success", "success", "empty", 1, ["passed", "passed", "assertion_failed"]),
         )
         names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure",
-                 "missing-permission")
+                 "missing-permission", "no-safe-next-step")
         rubrics = {"requester-guidance": REVIEW_RUBRIC, "independent-execution": independence.REVIEW_RUBRIC,
                    "assumption-disclosure": assumptions.REVIEW_RUBRIC,
-                   "missing-permission": permissions.REVIEW_RUBRIC}
+                   "missing-permission": permissions.REVIEW_RUBRIC,
+                   "no-safe-next-step": scheduling.REVIEW_RUBRIC}
         for smoke, scope, guidance, expected_exit, outcomes in scenarios:
             with self.subTest(smoke=smoke, scope=scope, guidance=guidance):
                 # Select deterministic responses for each fake task, without model calls.
                 process, profile, runs = self.launch(
                     {"smoke": smoke, "scope-discipline": scope, "requester-guidance": guidance,
                      "independent-execution": "success", "assumption-disclosure": "success",
-                     "missing-permission": "success"}, case="all",
+                     "missing-permission": "success", "no-safe-next-step": "success"}, case="all",
                 )
-                output, errors = process.communicate(timeout=15)
+                output, errors = process.communicate(timeout=20)
                 self.assertEqual(process.returncode, expected_exit, output + errors)
                 self.assertEqual((profile / "case-invocations").read_text(), "\n".join(names) + "\n")
                 self.assertEqual((profile / "invocations").read_text(), "exec\n" * len(names))
@@ -225,7 +226,7 @@ class CodexFailureTests(unittest.TestCase):
                 by_case = {json.loads((path / "report.json").read_text())["case"]: path for path in artifacts}
                 self.assertEqual(set(by_case), set(names))
                 workspaces = []
-                for name, outcome in zip(names, [*outcomes, "review_required", "review_required", "review_required"]):
+                for name, outcome in zip(names, [*outcomes, *(["review_required"] * 4)]):
                     path = by_case[name]
                     report = json.loads((path / "report.json").read_text())
                     metadata = json.loads((path / "execution.json").read_text())
@@ -321,15 +322,17 @@ class CodexFailureTests(unittest.TestCase):
                         self.assertIn("Codex exited with status 7", metadata["error"])
                 self.assertEqual((profile / "invocations").read_text(), "exec\n")
 
-    def test_permission_failure_at_end_of_all_cases_takes_precedence_over_pending_review(self):
+    def test_late_case_failures_take_precedence_over_pending_review_in_all_cases(self):
         names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure",
-                 "missing-permission")
-        for scenario, expected_exit in (("redirected", 1), ("nonzero", 2)):
-            with self.subTest(scenario=scenario):
+                 "missing-permission", "no-safe-next-step")
+        failures = (("missing-permission", "redirected", 1), ("missing-permission", "nonzero", 2),
+                    ("no-safe-next-step", "extra-worker", 1), ("no-safe-next-step", "nonzero", 2))
+        for failed_case, scenario, expected_exit in failures:
+            with self.subTest(case=failed_case, scenario=scenario):
                 scenarios = dict.fromkeys(names, "success")
-                scenarios["missing-permission"] = scenario
+                scenarios[failed_case] = scenario
                 process, profile, runs = self.launch(scenarios, case="all")
-                output, errors = process.communicate(timeout=15)
+                output, errors = process.communicate(timeout=20)
                 self.assertEqual(process.returncode, expected_exit, output + errors)
                 self.assertEqual((profile / "case-invocations").read_text(), "\n".join(names) + "\n")
                 self.assertEqual(len(list(runs.iterdir())), len(names))
@@ -338,8 +341,83 @@ class CodexFailureTests(unittest.TestCase):
                     metadata = json.loads((artifacts / "execution.json").read_text())
                     self.assertFalse(Path(metadata["workspace"]).exists())
                     self.assertEqual(report["review_required"], report["case"] not in names[:2])
-                    if report["case"] == "missing-permission":
+                    if report["case"] == failed_case:
                         self.assertEqual(report["outcome"], "assertion_failed" if expected_exit == 1 else "execution_failed")
+
+    def test_scheduling_restraint_drafts_and_replies_retain_evidence_without_semantic_verdicts(self):
+        for scenario in ("success", "drafts", "generic", "false-completion"):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="no-safe-next-step")
+                artifacts, metadata, report = self.finish(process, runs, 3)
+                self.assertEqual(report["case"], "no-safe-next-step")
+                self.assertEqual(report["outcome"], "review_required")
+                self.assertTrue(report["review_required"])
+                result, = report["cases"]
+                self.assertEqual(result["name"], "nightly-export-capacity")
+                self.assertEqual(result["assertions"], {
+                    "OperationalStatePreserved": True, "FinalResponsePresent": True,
+                })
+                self.assertEqual(set(result["assertion_reasons"]), set(result["assertions"]))
+                self.assertEqual(result["final_response"], (artifacts / "final-response.txt").read_text())
+                self.assertNotIn("Progress message", result["final_response"])
+                self.assertIn("Progress message", (artifacts / "events.jsonl").read_text())
+                self.assertEqual((artifacts / "review.md").read_text(), scheduling.REVIEW_RUBRIC)
+                self.assertEqual((artifacts / "prompt.txt").read_text(), scheduling.PROMPT)
+                self.assertIn("--output-last-message", metadata["command"])
+                initial = json.loads((artifacts / "initial-workspace.json").read_text())
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                for name, contents in scheduling.FIXTURE_FILES.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                    self.assertEqual(base64.b64decode(initial[name]["contents_base64"]), contents)
+                    self.assertEqual(initial[name], final[name])
+                for name, entry in final.items():
+                    if entry["kind"] == "file":
+                        self.assertEqual((artifacts / "workspace" / name).read_bytes(),
+                                         base64.b64decode(entry["contents_base64"]))
+                self.assertNotIn("review.md", final)
+                changes = (artifacts / "workspace-changes.txt").read_text()
+                if scenario == "drafts":
+                    for name in ("two-workers.json", "later-delivery.json"):
+                        self.assertIn(name, final)
+                        self.assertIn(f'Path: "{name}"', changes)
+                else:
+                    self.assertEqual(changes, "No observed workspace changes.\n")
+                self.assertFalse((artifacts / "functional-checks.json").exists())
+                self.assertIn("Human review pending", (artifacts / "report.txt").read_text())
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_scheduling_violations_and_execution_or_capture_failures_remain_distinct_and_pending(self):
+        scenarios = (("extra-worker", 1, "schedule.json:"), ("late-delivery", 1, "schedule.json:"),
+                     ("constraints", 1, "requirements.json:"), ("inspector", 1, "scheduler.py:"),
+                     ("empty", 1, None), ("missing-response", 2, None), ("invalid-utf8", 2, None),
+                     ("nonzero", 2, None))
+        for scenario, exit_code, violation in scenarios:
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="no-safe-next-step")
+                artifacts, metadata, report = self.finish(process, runs, exit_code)
+                self.assertEqual(report["case"], "no-safe-next-step")
+                self.assertTrue(report["review_required"])
+                self.assertEqual((artifacts / "review.md").read_text(), scheduling.REVIEW_RUBRIC)
+                for name in ("initial-workspace.json", "final-workspace.json", "workspace-changes.txt", "events.jsonl", "stderr.txt"):
+                    self.assertTrue((artifacts / name).is_file(), name)
+                if exit_code == 1:
+                    self.assertEqual(report["execution_errors"], [])
+                    self.assertEqual(metadata["status"], "completed")
+                    self.assertEqual(report["outcome"], "assertion_failed")
+                    result, = report["cases"]
+                    self.assertEqual(result["assertions"], {
+                        "OperationalStatePreserved": scenario == "empty", "FinalResponsePresent": scenario != "empty",
+                    })
+                    if violation:
+                        self.assertIn(violation, result["assertion_reasons"]["OperationalStatePreserved"])
+                        self.assertIn(violation, (artifacts / "report.txt").read_text())
+                else:
+                    self.assertEqual(report["outcome"], "execution_failed")
+                    self.assertEqual(report["cases"], [])
+                    self.assertIn("Final response capture failed", metadata["error"])
+                    if scenario == "nonzero":
+                        self.assertIn("Codex exited with status 7", metadata["error"])
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
 
     def test_assumption_previews_and_replies_are_retained_without_semantic_verdicts(self):
         for scenario in ("success", "month-first", "undisclosed", "misleading"):

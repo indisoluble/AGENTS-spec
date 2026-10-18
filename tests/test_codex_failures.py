@@ -13,6 +13,7 @@ import unittest
 
 from evals.auth import PROFILE_CONFIG
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC
+from evals import independence
 
 
 class CodexFailureTests(unittest.TestCase):
@@ -199,43 +200,46 @@ class CodexFailureTests(unittest.TestCase):
             ("success", "workspace-edits", "success", 1, ["passed", "assertion_failed", "review_required"]),
             ("success", "success", "empty", 1, ["passed", "passed", "assertion_failed"]),
         )
-        names = ("smoke", "scope-discipline", "requester-guidance")
+        names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution")
         for smoke, scope, guidance, expected_exit, outcomes in scenarios:
             with self.subTest(smoke=smoke, scope=scope, guidance=guidance):
                 # Select deterministic responses for each fake task, without model calls.
                 process, profile, runs = self.launch(
-                    {"smoke": smoke, "scope-discipline": scope, "requester-guidance": guidance}, case="all",
+                    {"smoke": smoke, "scope-discipline": scope, "requester-guidance": guidance,
+                     "independent-execution": "success"}, case="all",
                 )
                 output, errors = process.communicate(timeout=15)
                 self.assertEqual(process.returncode, expected_exit, output + errors)
                 self.assertEqual((profile / "case-invocations").read_text(), "\n".join(names) + "\n")
-                self.assertEqual((profile / "invocations").read_text(), "exec\n" * 3)
+                self.assertEqual((profile / "invocations").read_text(), "exec\n" * 4)
                 self.assertLess(output.index("Case: smoke"), output.index("Case: scope-discipline"))
                 self.assertLess(output.index("Case: scope-discipline"), output.index("Case: requester-guidance"))
+                self.assertLess(output.index("Case: requester-guidance"), output.index("Case: independent-execution"))
                 self.assertIn("Human review pending", output)
                 artifacts = list(runs.iterdir())
-                self.assertEqual(len(artifacts), 3)
+                self.assertEqual(len(artifacts), 4)
                 by_case = {json.loads((path / "report.json").read_text())["case"]: path for path in artifacts}
                 self.assertEqual(set(by_case), set(names))
                 workspaces = []
-                for name, outcome in zip(names, outcomes):
+                for name, outcome in zip(names, [*outcomes, "review_required"]):
                     path = by_case[name]
                     report = json.loads((path / "report.json").read_text())
                     metadata = json.loads((path / "execution.json").read_text())
                     self.assertEqual(report["outcome"], outcome)
-                    self.assertEqual(report["review_required"], name == "requester-guidance")
+                    self.assertEqual(report["review_required"], name in ("requester-guidance", "independent-execution"))
                     workspaces.append(metadata["workspace"])
                     self.assertFalse(Path(metadata["workspace"]).exists())
-                    if name == "requester-guidance":
+                    if name in ("requester-guidance", "independent-execution"):
                         self.assertFalse((path / "message.txt").exists())
-                        self.assertEqual((path / "review.md").read_text(), REVIEW_RUBRIC)
+                        self.assertEqual((path / "review.md").read_text(),
+                                         REVIEW_RUBRIC if name == "requester-guidance" else independence.REVIEW_RUBRIC)
                     else:
                         expected_initial = b"before\n" if name == "smoke" else b"greeting=before\nnote=teh sample\n"
                         self.assertEqual((path / "message.txt").read_bytes(), expected_initial)
                     self.assertEqual((path / "initial-workspace.json").exists(), name != "smoke")
                     self.assertEqual((path / "final-workspace.json").exists(), name != "smoke")
-                    self.assertEqual((path / "final-response.txt").exists(), name == "requester-guidance")
-                self.assertEqual(len(set(workspaces)), 3)
+                    self.assertEqual((path / "final-response.txt").exists(), name in ("requester-guidance", "independent-execution"))
+                self.assertEqual(len(set(workspaces)), 4)
 
     def test_guidance_replies_and_edits_are_retained_for_human_review(self):
         scenarios = (("success", None), ("misleading", None), ("proposal", "timezone-note.md"),
@@ -272,6 +276,44 @@ class CodexFailureTests(unittest.TestCase):
                 self.assertNotIn("review.md", initial)
                 self.assertNotIn("final-response.txt", final)
                 self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_independent_execution_selection_retains_checks_and_pending_review(self):
+        scenarios = (("success", 3), ("question", 3), ("internal-unrelated", 3),
+                     ("no-tests", 1), ("broken-tests", 1), ("unrelated", 1), ("empty", 1),
+                     ("missing-response", 2), ("nonzero", 2))
+        for scenario, expected_exit in scenarios:
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="independent-execution")
+                artifacts, metadata, report = self.finish(process, runs, expected_exit)
+                self.assertEqual(report["case"], "independent-execution")
+                self.assertTrue(report["review_required"])
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+                self.assertEqual((artifacts / "review.md").read_text(), independence.REVIEW_RUBRIC)
+                self.assertEqual((artifacts / "prompt.txt").read_text(), independence.PROMPT)
+                for name, contents in independence.FIXTURE_FILES.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                records = json.loads((artifacts / "functional-checks.json").read_text())
+                if expected_exit == 2:
+                    self.assertEqual(report["cases"], [])
+                    self.assertTrue(all(record["status"] == "not_run" for record in records.values()))
+                else:
+                    assertions = report["cases"][0]["assertions"]
+                    self.assertTrue(assertions["RequestedChange"])
+                    self.assertEqual(assertions["RegressionTests"], scenario not in ("no-tests", "broken-tests"))
+                    self.assertEqual(assertions["EditBoundaryPreserved"], scenario != "unrelated")
+                    self.assertEqual(assertions["FinalResponsePresent"], scenario != "empty")
+                    self.assertEqual(report["cases"][0]["final_response"], (artifacts / "final-response.txt").read_text())
+                    self.assertEqual(records["RequestedChange"]["returncode"], 0)
+                    self.assertTrue((artifacts / "checks/RequestedChange.stdout").is_file())
+                    self.assertEqual(metadata["status"], "completed")
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                self.assertNotIn("checks", final)
+                self.assertNotIn("review.md", final)
+                changes = (artifacts / "workspace-changes.txt").read_text()
+                if scenario == "nonzero":
+                    self.assertEqual(changes, "No observed workspace changes.\n")
+                else:
+                    self.assertIn('Path: "exporter.py"', changes)
 
     def test_guidance_assertion_failures_keep_independent_results(self):
         for scenario in ("empty", "whitespace", "contract-edited", "contract-deleted", "contract-link", "contract-mode"):

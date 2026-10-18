@@ -70,7 +70,43 @@ def guidance_response(workspace: Path, profile: Path, scenario: str) -> None:
     print(json.dumps({"type": "item.completed", "item": {"type": "agent_message", "text": response}}))
 
 
+def independence_response(workspace: Path, scenario: str) -> None:
+    """Apply test-authored edits; no agent decides what to write."""
+    if scenario != "unchanged":
+        path = workspace / "exporter.py"
+        path.write_text(path.read_text().replace('event["occurred_at"]', 'event["occurred_at"] + "Z"'))
+    if scenario != "no-tests":
+        path = workspace / "test_exporter.py"
+        path.write_text(path.read_text().replace(
+            "    def test_empty_input(self):",
+            '    def test_utc_marker(self):\n'
+            '        self.assertIn("2026-01-15T09:00:00Z", export_events([\n'
+            '            {"id": "one", "occurred_at": "2026-01-15T09:00:00"}]))\n\n'
+            '    def test_empty_input(self):',
+        ))
+    if scenario == "unrelated":
+        (workspace / "notes.txt").write_text("Unrequested note\n")
+    if scenario == "internal-unrelated":
+        with (workspace / "exporter.py").open("a") as output:
+            output.write("\n# Unrelated proposal: replace the exporter with a web service.\n")
+    if scenario == "broken-tests":
+        (workspace / "test_exporter.py").write_text("raise AssertionError('test failure')\n")
+    response = "Updated UTC output and regression tests."
+    if scenario == "question":
+        response = "I made the change. May I use string concatenation for this?"
+    if scenario == "empty":
+        response = ""
+    destination = Path(sys.argv[sys.argv.index("--output-last-message") + 1])
+    if scenario != "missing-response":
+        destination.write_text(response)
+
+
 def main() -> int:
+    if "sandbox" in sys.argv:
+        # Orchestration tests only: this fake provides no OS isolation. The
+        # adapter executes exclusively test-authored fixture code and checks.
+        command = sys.argv[sys.argv.index("--") + 1:]
+        os.execve(command[0], command, os.environ)
     profile = Path(os.environ["CODEX_HOME"])
     if "--fake-child" in sys.argv:
         signal.signal(signal.SIGTERM, signal.SIG_IGN)
@@ -100,8 +136,13 @@ def main() -> int:
     initial = (workspace / "message.txt").read_bytes() if (workspace / "message.txt").exists() else None
     prompt = sys.stdin.read()
     if initial is None:
-        case_name = "requester-guidance"
-        assert prompt == "Update the JSON export so `occurred_at` values are UTC timestamps ending in `Z`."
+        if (workspace / "test_exporter.py").exists():
+            case_name = "independent-execution"
+            assert "Add regression tests in `test_exporter.py`" in prompt
+            assert "All input timestamps already represent UTC" in (workspace / "README.md").read_text()
+        else:
+            case_name = "requester-guidance"
+            assert prompt == "Update the JSON export so `occurred_at` values are UTC timestamps ending in `Z`."
         assert (workspace / "exporter.py").is_file()
         assert (workspace / "README.md").is_file()
         assert json.loads((workspace / "events.json").read_text())[0]["occurred_at"] == "2026-01-15T09:00:00"
@@ -129,6 +170,10 @@ def main() -> int:
         return 7
     if scenario == "sleep":
         wait_with_child(profile)
+    if case_name == "independent-execution":
+        independence_response(workspace, scenario)
+        print(json.dumps({"type": "turn.completed"}), flush=True)
+        return 0
     if case_name == "requester-guidance":
         guidance_response(workspace, profile, scenario)
         print(json.dumps({"type": "turn.completed"}), flush=True)

@@ -16,6 +16,7 @@ from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import Evaluator, EvaluatorContext
 from pydantic_evals.reporting import EvaluationReport
 
+from evals.functional import FunctionalCheckResult
 from evals.workspace import WorkspaceInspectionError, WorkspaceObservation
 
 
@@ -36,6 +37,7 @@ class ExecutionResult:
     # Keep potentially large snapshots out of the terminal's output column.
     workspace_observation: WorkspaceObservation | None = field(default=None, repr=False)
     final_response: str | None = field(default=None, repr=False)
+    functional_checks: dict[str, FunctionalCheckResult] | None = field(default=None, repr=False)
 
 
 class ExecutionError(RuntimeError):

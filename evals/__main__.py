@@ -17,6 +17,7 @@ from uuid import uuid4
 from pydantic_evals.reporting import EvaluationReport
 
 from evals import auth
+from evals import independence
 from evals.codex import run_codex, save_json
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC, guidance_dataset
 from evals.process import cancellation_signals
@@ -25,7 +26,9 @@ from evals.smoke import ExecutionResult, evaluate
 
 
 ARTIFACTS_ROOT = Path(__file__).resolve().parents[1] / ".eval-runs"
-CASE_NAMES = ("smoke", "scope-discipline", "requester-guidance")
+CASE_NAMES = ("smoke", "scope-discipline", "requester-guidance", "independent-execution")
+REVIEW_RUBRICS = {"requester-guidance": REVIEW_RUBRIC,
+                  "independent-execution": independence.REVIEW_RUBRIC}
 # Known failures take precedence over a case awaiting human review.
 EXIT_PRIORITY = {0: 0, 3: 1, 1: 2, 2: 3}
 
@@ -33,7 +36,7 @@ EXIT_PRIORITY = {0: 0, 3: 1, 1: 2, 2: 3}
 def report_failure(artifacts: Path, message: str, *, case_name: str = "smoke") -> int:
     """Keep the primary error visible even when the fallback report cannot be saved."""
     print(message, file=sys.stderr)
-    review_required = case_name == "requester-guidance"
+    review_required = case_name in REVIEW_RUBRICS
     if review_required:
         print("Human review pending; this execution failure leaves verification incomplete.", file=sys.stderr)
     try:
@@ -56,13 +59,13 @@ def write_report(
     execution_failed = bool(report.failures or report.report_evaluator_failures or not report.cases)
     execution_failed |= any(case.evaluator_failures for case in report.cases)
     passed = all(assertion.value for case in report.cases for assertion in case.assertions.values())
-    review_required = case_name == "requester-guidance"
+    review_required = case_name in REVIEW_RUBRICS
     exit_code = 2 if execution_failed else (1 if not passed else (3 if review_required else 0))
     if review_required:
         if exit_code == 3:
             rendered.write("Outcome: review_required (automated checks passed).\n")
         rendered.write("Human review pending: see review.md, final-response.txt, and workspace-changes.txt.\n"
-                       "The four semantic criteria are not graded by this command.\n")
+                       "The semantic criteria are not graded by this command.\n")
     # Show the evaluation result even if the evidence directory is no longer writable.
     print(rendered.getvalue(), end="")
     errors = []
@@ -108,16 +111,23 @@ def run_case(case_name: str, *, model: str, effort: str, timeout: float, profile
         return 2
     print(f"Case: {case_name}\nEvidence: {artifacts}", flush=True)
     try:
-        if case_name == "requester-guidance":
+        if case_name in REVIEW_RUBRICS:
             # Keep the rubric outside the fixture, so it cannot coach the agent.
-            (artifacts / "review.md").write_text(REVIEW_RUBRIC, encoding="utf-8")
+            (artifacts / "review.md").write_text(REVIEW_RUBRICS[case_name], encoding="utf-8")
         execute = partial(
             run_codex, model=model, effort=effort,
             timeout=timeout, artifacts=artifacts, profile=profile, cancelled=cancelled,
-            observe_workspace=case_name in ("scope-discipline", "requester-guidance"),
-            capture_response=case_name == "requester-guidance",
+            observe_workspace=case_name != "smoke",
+            capture_response=case_name in REVIEW_RUBRICS,
         )
-        if case_name == "requester-guidance":
+        if case_name == "independent-execution":
+            def execute_and_check(prompt: str, workspace: Path) -> ExecutionResult:
+                result = execute(prompt, workspace)
+                return independence.check_execution(result, workspace, artifacts=artifacts, cancelled=cancelled)
+
+            report = evaluate(execute_and_check, dataset=independence.independence_dataset(),
+                              fixture_files=independence.FIXTURE_FILES)
+        elif case_name == "requester-guidance":
             report = evaluate(execute, dataset=guidance_dataset(), fixture_files=FIXTURE_FILES)
         elif case_name == "scope-discipline":
             report = evaluate(execute, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)

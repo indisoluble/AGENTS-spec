@@ -19,7 +19,9 @@ from evals.smoke import ExecutionResult, read_fixture_file, read_result
 from evals.workspace import WorkspaceObservation, WorkspaceSnapshot, snapshot_workspace
 
 
-def execution_command(executable: str, workspace: Path, model: str, effort: str) -> list[str]:
+def execution_command(
+    executable: str, workspace: Path, model: str, effort: str, *, final_response_path: Path | None = None,
+) -> list[str]:
     command = [
         executable, "--no-daemon", "exec", "--ignore-user-config", "--ignore-rules",
         "--ephemeral", "--json", "--color", "never", "--skip-git-repo-check",
@@ -42,6 +44,8 @@ def execution_command(executable: str, workspace: Path, model: str, effort: str)
     }
     for key, value in settings.items():
         command.extend(["--config", f"{key}={json.dumps(value)}"])
+    if final_response_path is not None:
+        command.extend(["--output-last-message", str(final_response_path)])
     return [*command, "-"]  # Feed the prompt through stdin.
 
 
@@ -59,6 +63,29 @@ def snapshot_manifest(snapshot: WorkspaceSnapshot) -> dict:
     } for path, entry in sorted(snapshot.items())}
 
 
+def retain_snapshot(snapshot: WorkspaceSnapshot, artifacts: Path, phase: str) -> list[str]:
+    """Attempt the manifest and each regular-file copy independently."""
+    errors = []
+    try:
+        save_json(artifacts / f"{phase}-workspace.json", snapshot_manifest(snapshot))
+    except (OSError, ValueError) as exc:
+        errors.append(f"{phase}-workspace.json: {exc}")
+    folder = "initial-workspace" if phase == "initial" else "workspace"
+    for name, entry in sorted(snapshot.items()):
+        # The manifest describes directories, links, special files, and the root.
+        # Recreate only regular children, using captured bytes rather than paths.
+        if name == "." or entry.kind != "file":
+            continue
+        assert entry.contents is not None
+        target = artifacts / folder / name
+        try:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(entry.contents)
+        except (OSError, ValueError) as exc:
+            errors.append(f"{folder}/{name}: {exc}")
+    return errors
+
+
 def retain_evidence(
     workspace: Path, artifacts: Path, metadata: dict, result: ExecutionResult,
 ) -> ExecutionResult:
@@ -68,25 +95,18 @@ def retain_evidence(
     if observation is not None:
         for name, snapshot in (("initial", observation.initial), ("final", observation.final)):
             if snapshot is not None:
-                try:
-                    save_json(artifacts / f"{name}-workspace.json", snapshot_manifest(snapshot))
-                except (OSError, ValueError) as exc:
-                    errors.append(f"{name}-workspace.json: {exc}")
-    final_files = artifacts / "workspace"
-    for name in ("AGENTS.md", "message.txt"):
-        try:
-            # Each copy is independent, so one failure does not skip the other.
-            final_files.mkdir(exist_ok=True)
-            if observation is None:
+                errors.extend(retain_snapshot(snapshot, artifacts, name))
+    else:
+        # Preserve smoke's safe reads and its rejection of non-regular fixtures.
+        final_files = artifacts / "workspace"
+        for name in ("AGENTS.md", "message.txt"):
+            try:
+                final_files.mkdir(exist_ok=True)
                 contents = read_fixture_file(workspace / name)
-            else:
-                # Never re-read agent-controlled paths after capturing the final state.
-                entry = None if observation.final is None else observation.final.get(name)
-                contents = entry.contents if entry is not None and entry.kind == "file" else None
-            if contents is not None:
-                (final_files / name).write_bytes(contents)
-        except (OSError, ValueError) as exc:
-            errors.append(f"workspace/{name}: {exc}")
+                if contents is not None:
+                    (final_files / name).write_bytes(contents)
+            except (OSError, ValueError) as exc:
+                errors.append(f"workspace/{name}: {exc}")
 
     # Keep the execution outcome separate from errors in saving its evidence.
     metadata.update(
@@ -110,6 +130,7 @@ def run_codex(
     prompt: str, workspace: Path, *, model: str, effort: str,
     timeout: float, artifacts: Path, profile: Path, cancelled: Event | None = None,
     observe_workspace: bool = False,
+    capture_response: bool = False,
 ) -> ExecutionResult:
     """Launch once and preserve evidence before the caller removes the workspace."""
     started = time.monotonic()
@@ -119,13 +140,16 @@ def run_codex(
     }
     result = ExecutionResult("error", error="Execution did not complete")
     initial = None
+    response_path = None
     try:
         if observe_workspace:
             initial = snapshot_workspace(workspace)
         contract = (workspace / "AGENTS.md").read_bytes()
         metadata["contract_sha256"] = hashlib.sha256(contract).hexdigest()
         (artifacts / "AGENTS.md").write_bytes(contract)
-        (artifacts / "message.txt").write_bytes((workspace / "message.txt").read_bytes())
+        message = read_fixture_file(workspace / "message.txt")
+        if message is not None:
+            (artifacts / "message.txt").write_bytes(message)
         (artifacts / "prompt.txt").write_text(prompt, encoding="utf-8")
         executable = auth.codex_executable()
         auth.check_profile(profile)
@@ -137,7 +161,15 @@ def run_codex(
         version.check_returncode()
         metadata["codex_version"] = version.stdout.strip()
         auth.require_chatgpt_login(executable, profile, cancelled)
-        command = execution_command(executable, workspace, model, effort)
+        if capture_response:
+            destination = artifacts.resolve() / "final-response.txt"
+            if destination.is_relative_to(workspace.resolve()):
+                raise ValueError("Final response evidence must be outside the agent workspace")
+            # A pre-existing reply could otherwise turn failed capture into success.
+            if destination.exists() or destination.is_symlink():
+                raise ValueError("Final response evidence already exists; use a fresh evidence directory")
+            response_path = destination
+        command = execution_command(executable, workspace, model, effort, final_response_path=response_path)
         metadata["command"] = command
         with (artifacts / "events.jsonl").open("w") as events, (artifacts / "stderr.txt").open("w") as errors:
             completed = run_process(
@@ -157,6 +189,16 @@ def run_codex(
     except (OSError, RuntimeError, ValueError, subprocess.CalledProcessError) as exc:
         result = ExecutionResult("error", error=str(exc))
     finally:
+        if response_path is not None:
+            try:
+                response = read_fixture_file(response_path)
+                if response is None:
+                    raise ValueError("final-response.txt was not produced")
+                # Preserve whitespace and line endings, including an empty reply.
+                result = replace(result, final_response=response.decode("utf-8"))
+            except (OSError, ValueError) as exc:
+                message = f"Final response capture failed: {exc}"
+                result = replace(result, status="error", error=f"{result.error}\n{message}" if result.error else message)
         if observe_workspace:
             # run_process has stopped its process group before we reach this point,
             # including on timeout or interruption. Keep any successful observation.

@@ -3,7 +3,7 @@
 See META-EVALUATIONS.md for the suite's requirements and scope.
 """
 
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 import os
@@ -35,6 +35,7 @@ class ExecutionResult:
     error: str | None = None
     # Keep potentially large snapshots out of the terminal's output column.
     workspace_observation: WorkspaceObservation | None = field(default=None, repr=False)
+    final_response: str | None = field(default=None, repr=False)
 
 
 class ExecutionError(RuntimeError):
@@ -64,12 +65,27 @@ def smoke_dataset() -> Dataset[str, ExecutionResult, None]:
 
 
 @contextmanager
-def prepare_workspace(initial_contents: bytes = INITIAL_CONTENTS) -> Iterator[Path]:
-    """Copy the current contract and fixture into a disposable directory."""
+def prepare_workspace(
+    initial_contents: bytes = INITIAL_CONTENTS, *, fixture_files: Mapping[str, bytes] | None = None,
+) -> Iterator[Path]:
+    """Copy the current contract and fixture into a disposable directory.
+
+    An explicit mapping replaces the default message.txt fixture. The root
+    contract is always supplied separately and cannot be overridden by a case.
+    """
+    if fixture_files is None:
+        fixture_files = {"message.txt": initial_contents}
     with TemporaryDirectory(prefix="agents-spec-eval-") as directory:
         workspace = Path(directory)
         (workspace / "AGENTS.md").write_bytes(CONTRACT_PATH.read_bytes())
-        (workspace / "message.txt").write_bytes(initial_contents)
+        for name, contents in fixture_files.items():
+            path = Path(name)
+            if (path.is_absolute() or not path.parts or ".." in path.parts
+                    or path.parts[0].casefold() == "agents.md"):
+                raise ValueError(f"Invalid fixture path: {name!r}; use a relative path outside root AGENTS.md")
+            target = workspace / path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(contents)
         # The caller uses this directory; leaving the context removes it.
         yield workspace
 
@@ -114,12 +130,14 @@ def evaluate(
     execute: Callable[[str, Path], ExecutionResult],
     *, dataset: Dataset[str, ExecutionResult, None] | None = None,
     initial_contents: bytes = INITIAL_CONTENTS,
+    fixture_files: Mapping[str, bytes] | None = None,
 ) -> EvaluationReport[str, ExecutionResult, None]:
     """Run one task in a fresh workspace and return Pydantic's printable report.
 
     The execution function receives a prompt and workspace and returns a result.
     Both the Codex launcher and offline test substitutes use this interface.
-    Supply the dataset and its initial contents together to select another case.
+    Supply the dataset and its initial contents or fixture mapping together to
+    select another case. A mapping replaces the default message.txt fixture.
 
     Pydantic runs this synchronous task in a worker thread. The CLI supplies
     cancellation to its launcher separately; this case does not own processes.
@@ -128,7 +146,7 @@ def evaluate(
         dataset = smoke_dataset()
 
     def task(prompt: str) -> ExecutionResult:
-        with prepare_workspace(initial_contents) as workspace:
+        with prepare_workspace(initial_contents, fixture_files=fixture_files) as workspace:
             # The supplied function performs the work inside the fresh fixture.
             result = execute(prompt, workspace)
             if result.status == "error":

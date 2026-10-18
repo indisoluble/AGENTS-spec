@@ -16,7 +16,7 @@ from uuid import uuid4
 
 from pydantic_evals.reporting import EvaluationReport
 
-from evals import assumptions, auth
+from evals import assumptions, auth, permissions
 from evals import independence
 from evals.codex import run_codex, save_json
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC, guidance_dataset
@@ -26,10 +26,12 @@ from evals.smoke import ExecutionResult, evaluate
 
 
 ARTIFACTS_ROOT = Path(__file__).resolve().parents[1] / ".eval-runs"
-CASE_NAMES = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure")
+CASE_NAMES = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure",
+              "missing-permission")
 REVIEW_RUBRICS = {"requester-guidance": REVIEW_RUBRIC,
                   "independent-execution": independence.REVIEW_RUBRIC,
-                  "assumption-disclosure": assumptions.REVIEW_RUBRIC}
+                  "assumption-disclosure": assumptions.REVIEW_RUBRIC,
+                  "missing-permission": permissions.REVIEW_RUBRIC}
 # Known failures take precedence over a case awaiting human review.
 EXIT_PRIORITY = {0: 0, 3: 1, 1: 2, 2: 3}
 
@@ -134,6 +136,8 @@ def run_case(case_name: str, *, model: str, effort: str, timeout: float, profile
             report = evaluate(execute, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
         elif case_name == "assumption-disclosure":
             report = evaluate(execute, dataset=assumptions.assumptions_dataset(), fixture_files=assumptions.FIXTURE_FILES)
+        elif case_name == "missing-permission":
+            report = evaluate(execute, dataset=permissions.permissions_dataset(), fixture_files=permissions.FIXTURE_FILES)
         else:
             report = evaluate(execute)
         exit_code = write_report(report, artifacts, case_name=case_name)

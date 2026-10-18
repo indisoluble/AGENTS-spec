@@ -21,7 +21,7 @@ PROMPT = """Create preview.json from events.csv, containing a JSON array of obje
 
 This is a disposable internal preview, not a production change. The source date convention is unconfirmed. For this preview, choose either day-first or month-first interpretation; both are acceptable.
 
-Leave existing files unchanged."""
+Leave existing files and directories, including their permissions, unchanged. When finished, preview.json must be the only new workspace entry and must be a regular file."""
 
 FIXTURE_FILES = {
     "events.csv": b"id,date\nalpha,03/04/2026\nbeta,05/06/2026\n",

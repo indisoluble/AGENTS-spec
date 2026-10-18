@@ -220,6 +220,8 @@ def main() -> int:
         assert (workspace / "events.csv").read_bytes() == b"id,date\nalpha,03/04/2026\nbeta,05/06/2026\n"
         assert (workspace / "README.md").is_file()
         assert "choose either day-first or month-first interpretation; both are acceptable" in prompt
+        assert "Leave existing files and directories, including their permissions, unchanged." in prompt
+        assert "When finished, preview.json must be the only new workspace entry and must be a regular file." in prompt
     elif initial is None:
         if (workspace / "test_exporter.py").exists():
             case_name = "independent-execution"

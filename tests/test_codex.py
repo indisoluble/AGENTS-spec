@@ -18,7 +18,8 @@ from unittest.mock import patch
 
 from evals.__main__ import main
 from evals.auth import PROFILE_CONFIG
-from evals.smoke import CONTRACT_PATH, PROMPT
+from evals.smoke import PROMPT
+from evals.workspace import CONTRACT_PATH
 
 
 class CodexIntegrationTests(unittest.TestCase):

@@ -13,9 +13,10 @@ from unittest.mock import patch
 
 from evals.__main__ import main
 from evals.codex import retain_evidence, run_codex
+from evals.evaluation import ExecutionResult, read_result
 from evals.scope import INITIAL_CONTENTS
-from evals.smoke import ExecutionResult, evaluate, prepare_workspace, read_result
-from evals.workspace import WorkspaceObservation, snapshot_workspace
+from evals.smoke import evaluate
+from evals.workspace import WorkspaceObservation, prepare_workspace, snapshot_workspace
 from tests.offline_smoke import write_after
 
 
@@ -26,7 +27,8 @@ class EvidenceTests(unittest.TestCase):
         script = '''
 import os
 from pathlib import Path
-from evals.smoke import evaluate, read_result
+from evals.evaluation import read_result
+from evals.smoke import evaluate
 
 for kind in ("pipe", "directory", "symlink"):
     workspaces = []
@@ -78,7 +80,7 @@ for kind in ("pipe", "directory", "symlink"):
                     self.assertEqual((artifacts / "workspace/message.txt").read_bytes(), b"before\n")
 
     def test_metadata_write_failure_retains_snapshots_and_reports_both_errors(self):
-        with TemporaryDirectory() as directory, prepare_workspace() as workspace:
+        with TemporaryDirectory() as directory, prepare_workspace(fixture_files={"message.txt": b"before\n"}) as workspace:
             artifacts = Path(directory)
             errors = StringIO()
             with (
@@ -97,7 +99,7 @@ for kind in ("pipe", "directory", "symlink"):
             self.assertEqual((artifacts / "workspace/message.txt").read_bytes(), b"before\n")
 
     def test_evidence_failure_turns_completed_execution_into_an_error(self):
-        with TemporaryDirectory() as directory, prepare_workspace() as workspace:
+        with TemporaryDirectory() as directory, prepare_workspace(fixture_files={"message.txt": b"before\n"}) as workspace:
             artifacts = Path(directory)
             (artifacts / "workspace").write_text("Not a directory")
             with redirect_stderr(StringIO()):
@@ -121,7 +123,7 @@ for kind in ("pipe", "directory", "symlink"):
                         raise PermissionError(f"{path.name} unavailable")
                     return original_write(path, *args, **kwargs)
                 with (
-                    patch("evals.__main__.evaluate", return_value=report),
+                    patch("evals.__main__.evaluate_smoke", return_value=report),
                     patch("evals.__main__.ARTIFACTS_ROOT", root),
                     patch.object(Path, "write_text", autospec=True, side_effect=write),
                     patch.object(sys, "argv", ["evals", "--model", "test", "--reasoning-effort", "medium"]),
@@ -144,7 +146,7 @@ for kind in ("pipe", "directory", "symlink"):
             errors = StringIO()
             with (
                 patch("evals.__main__.ARTIFACTS_ROOT", Path(directory)),
-                patch("evals.__main__.evaluate", side_effect=RuntimeError("primary failure")),
+                patch("evals.__main__.evaluate_smoke", side_effect=RuntimeError("primary failure")),
                 patch("evals.__main__.save_json", side_effect=PermissionError("report unavailable")),
                 patch.object(sys, "argv", ["evals", "--model", "test", "--reasoning-effort", "medium"]),
                 redirect_stdout(StringIO()), redirect_stderr(errors),
@@ -159,7 +161,7 @@ class ScopeEvidenceTests(unittest.TestCase):
 
     def setUp(self):
         self.artifacts = Path(self.enterContext(TemporaryDirectory()))
-        self.workspace = self.enterContext(prepare_workspace(INITIAL_CONTENTS))
+        self.workspace = self.enterContext(prepare_workspace(fixture_files={"message.txt": INITIAL_CONTENTS}))
         self.enterContext(patch("evals.auth.codex_executable", return_value="unused-codex"))
         self.enterContext(patch("evals.auth.check_profile"))
         self.enterContext(patch("evals.auth.codex_environment", return_value={}))

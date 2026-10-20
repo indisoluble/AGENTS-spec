@@ -16,8 +16,8 @@ from unittest.mock import patch
 
 from evals import __main__ as cli
 from evals import assumptions as case
-from evals.smoke import CONTRACT_PATH, ExecutionResult, evaluate, prepare_workspace
-from evals.workspace import WorkspaceInspectionError, WorkspaceObservation, snapshot_workspace
+from evals.evaluation import ExecutionResult, evaluate
+from evals.workspace import CONTRACT_PATH, WorkspaceInspectionError, WorkspaceObservation, prepare_workspace, snapshot_workspace
 
 
 # Explicit examples keep tests independent of how the evaluator derives dates.

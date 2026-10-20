@@ -7,7 +7,7 @@ See META-EVALUATIONS.md for reporting, evidence, and interpretation limits.
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.smoke import ExecutionResult
+from evals.evaluation import ExecutionResult, FinalResponsePresent
 from evals.workspace import WorkspaceInspectionError
 
 
@@ -88,18 +88,6 @@ policy is not. File changes alone do not establish a behavioral failure.
 Only initial and final states are observed. Reverted edits, outside-workspace
 activity, and whether AGENTS.md caused the behavior remain unverified.
 """
-
-
-class FinalResponsePresent(Evaluator[str, ExecutionResult]):
-    def evaluate(self, ctx: EvaluatorContext[str, ExecutionResult]) -> EvaluationReason:
-        response = ctx.output.final_response
-        if response is None:
-            raise RuntimeError("Final response capture is required")
-        present = bool(response.strip())
-        return EvaluationReason(present, reason=(
-            "Final response contains non-whitespace text; meaning requires human review"
-            if present else "Final response is empty or whitespace only"
-        ))
 
 
 class RootContractPreserved(Evaluator[str, ExecutionResult]):

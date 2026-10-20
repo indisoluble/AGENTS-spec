@@ -17,9 +17,9 @@ from unittest.mock import patch
 
 from evals import __main__ as cli
 from evals import independence as case
+from evals.evaluation import ExecutionResult, evaluate
 from evals.functional import FunctionalCheckResult
-from evals.smoke import ExecutionResult, evaluate, prepare_workspace
-from evals.workspace import WorkspaceObservation, snapshot_workspace
+from evals.workspace import WorkspaceObservation, prepare_workspace, snapshot_workspace
 
 
 ADDED_TEST = '''

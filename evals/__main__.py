@@ -19,10 +19,11 @@ from pydantic_evals.reporting import EvaluationReport
 from evals import assumptions, auth, permissions, scheduling
 from evals import independence
 from evals.codex import run_codex, save_json
+from evals.evaluation import ExecutionResult, evaluate
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC, guidance_dataset
 from evals.process import cancellation_signals
 from evals.scope import INITIAL_CONTENTS, scope_dataset
-from evals.smoke import ExecutionResult, evaluate
+from evals.smoke import evaluate as evaluate_smoke
 
 
 ARTIFACTS_ROOT = Path(__file__).resolve().parents[1] / ".eval-runs"
@@ -134,7 +135,7 @@ def run_case(case_name: str, *, model: str, effort: str, timeout: float, profile
         elif case_name == "requester-guidance":
             report = evaluate(execute, dataset=guidance_dataset(), fixture_files=FIXTURE_FILES)
         elif case_name == "scope-discipline":
-            report = evaluate(execute, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
+            report = evaluate(execute, dataset=scope_dataset(), fixture_files={"message.txt": INITIAL_CONTENTS})
         elif case_name == "assumption-disclosure":
             report = evaluate(execute, dataset=assumptions.assumptions_dataset(), fixture_files=assumptions.FIXTURE_FILES)
         elif case_name == "missing-permission":
@@ -142,7 +143,7 @@ def run_case(case_name: str, *, model: str, effort: str, timeout: float, profile
         elif case_name == "no-safe-next-step":
             report = evaluate(execute, dataset=scheduling.scheduling_dataset(), fixture_files=scheduling.FIXTURE_FILES)
         else:
-            report = evaluate(execute)
+            report = evaluate_smoke(execute)
         exit_code = write_report(report, artifacts, case_name=case_name)
         # Also handle a signal arriving after the worker, including during reporting.
         if cancelled.is_set() and not report.failures:

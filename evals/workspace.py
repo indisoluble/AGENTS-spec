@@ -1,17 +1,22 @@
-"""Capture filesystem state without following links or opening special files.
+"""Own temporary workspaces, safe fixture reads, and filesystem observations.
 
 Snapshots describe final state, not the operations that produced it. The caller
 owns their lifetime and must keep the initial snapshot outside the agent's reach.
 """
 
 import base64
-from collections.abc import Callable
+from collections.abc import Callable, Iterator, Mapping
+from contextlib import contextmanager
 from dataclasses import dataclass
 from difflib import unified_diff
 import json
 import os
 from pathlib import Path
 import stat
+from tempfile import TemporaryDirectory
+
+
+CONTRACT_PATH = Path(__file__).resolve().parents[1] / "AGENTS.md"
 
 
 @dataclass(frozen=True)
@@ -45,6 +50,45 @@ _ENTRY_TYPES = {
 
 class WorkspaceInspectionError(OSError):
     """Inspection failed; a partial snapshot cannot support a scope verdict."""
+
+
+@contextmanager
+def prepare_workspace(*, fixture_files: Mapping[str, bytes]) -> Iterator[Path]:
+    """Copy the current contract and explicit fixture into a disposable directory.
+
+    The root contract is always supplied separately and cannot be overridden by
+    a case. An empty mapping creates only the contract; callers own case defaults.
+    """
+    with TemporaryDirectory(prefix="agents-spec-eval-") as directory:
+        workspace = Path(directory)
+        (workspace / "AGENTS.md").write_bytes(CONTRACT_PATH.read_bytes())
+        for name, contents in fixture_files.items():
+            path = Path(name)
+            if (path.is_absolute() or not path.parts or ".." in path.parts
+                    or path.parts[0].casefold() == "agents.md"):
+                raise ValueError(f"Invalid fixture path: {name!r}; use a relative path outside root AGENTS.md")
+            target = workspace / path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(contents)
+        # The caller uses this directory; leaving the context removes it.
+        yield workspace
+
+
+def read_fixture_file(path: Path) -> bytes | None:
+    """Read a regular fixture safely; a missing file returns None."""
+    try:
+        # Do not follow links or wait for a named pipe's writer when opening.
+        descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    except FileNotFoundError:
+        return None
+    try:
+        # Check the opened file itself, avoiding a separate check/read race.
+        if not stat.S_ISREG(os.fstat(descriptor).st_mode):
+            raise ValueError(f"{path.name} must be a regular fixture file")
+        with os.fdopen(descriptor, "rb", closefd=False) as fixture:
+            return fixture.read()
+    finally:
+        os.close(descriptor)
 
 
 def workspace_changes(observation: WorkspaceObservation) -> str:

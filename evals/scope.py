@@ -6,7 +6,7 @@ See META-EVALUATIONS.md for the exact preservation rule and interpretation limit
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.smoke import ExecutionResult
+from evals.evaluation import ExecutionResult
 from evals.workspace import WorkspaceInspectionError, WorkspaceObservation, WorkspaceSnapshot, workspace_violations
 
 

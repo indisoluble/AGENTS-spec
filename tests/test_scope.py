@@ -13,9 +13,9 @@ import unittest
 from unittest.mock import patch
 
 from evals.__main__ import main, write_report
+from evals.evaluation import ExecutionResult, evaluate, read_result
 from evals.scope import INITIAL_CONTENTS, scope_dataset, scope_violations
-from evals.smoke import CONTRACT_PATH, ExecutionResult, evaluate, prepare_workspace, read_result
-from evals.workspace import WorkspaceObservation, snapshot_workspace
+from evals.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
 
 
 class ScopeEvaluationTests(unittest.TestCase):
@@ -52,7 +52,7 @@ class ScopeEvaluationTests(unittest.TestCase):
                         initial, snapshot_workspace(workspace),
                     ))
 
-                report = evaluate(edit, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
+                report = evaluate(edit, dataset=scope_dataset(), fixture_files={"message.txt": INITIAL_CONTENTS})
 
                 self.assertEqual(report.failures, [])
                 self.assertEqual(len(report.cases), 1)
@@ -82,7 +82,7 @@ class ScopeEvaluationTests(unittest.TestCase):
             ))
 
         for _ in range(2):
-            report = evaluate(inspect_then_edit, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
+            report = evaluate(inspect_then_edit, dataset=scope_dataset(), fixture_files={"message.txt": INITIAL_CONTENTS})
             self.assertEqual(report.failures, [])
             self.assertFalse(report.cases[0].assertions["ScopePreserved"].value)
 
@@ -99,7 +99,7 @@ class ScopeEvaluationTests(unittest.TestCase):
             ))
             return replace(result, file_contents="misleading summary")
 
-        report = evaluate(edit, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
+        report = evaluate(edit, dataset=scope_dataset(), fixture_files={"message.txt": INITIAL_CONTENTS})
 
         self.assertEqual(report.failures, [])
         self.assertTrue(all(result.value for result in report.cases[0].assertions.values()))
@@ -111,7 +111,7 @@ class ScopeEvaluationTests(unittest.TestCase):
                     return ExecutionResult("completed", "greeting=after\nnote=teh sample\n",
                                            workspace_observation=observation)
 
-                report = evaluate(unobserved, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
+                report = evaluate(unobserved, dataset=scope_dataset(), fixture_files={"message.txt": INITIAL_CONTENTS})
 
                 self.assertEqual(report.cases[0].assertions, {})
                 self.assertEqual(len(report.cases[0].evaluator_failures), 2)
@@ -132,7 +132,7 @@ class ScopeEvaluationTests(unittest.TestCase):
                         raise OSError("simulated execution error")
                     return ExecutionResult("error", error="simulated execution error")
 
-                report = evaluate(fail, dataset=scope_dataset(), initial_contents=INITIAL_CONTENTS)
+                report = evaluate(fail, dataset=scope_dataset(), fixture_files={"message.txt": INITIAL_CONTENTS})
 
                 self.assertEqual(report.cases, [])
                 self.assertEqual(len(report.failures), 1)
@@ -177,7 +177,7 @@ class ScopeWorkspaceComparisonTests(unittest.TestCase):
     """Exercise filesystem comparison directly, without launching a process."""
 
     def setUp(self):
-        self.workspace = self.enterContext(prepare_workspace(INITIAL_CONTENTS))
+        self.workspace = self.enterContext(prepare_workspace(fixture_files={"message.txt": INITIAL_CONTENTS}))
 
     def test_only_the_greeting_value_is_excluded_from_content_comparison(self):
         initial = snapshot_workspace(self.workspace)
@@ -242,7 +242,7 @@ class ScopeWorkspaceComparisonTests(unittest.TestCase):
 
     def test_replacing_target_with_other_entry_types_is_a_scope_violation(self):
         for kind in ("directory", "symlink", "fifo"):
-            with self.subTest(kind=kind), prepare_workspace(INITIAL_CONTENTS) as workspace:
+            with self.subTest(kind=kind), prepare_workspace(fixture_files={"message.txt": INITIAL_CONTENTS}) as workspace:
                 initial = snapshot_workspace(workspace)
                 target = workspace / "message.txt"
                 target.unlink()

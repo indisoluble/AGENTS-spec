@@ -9,8 +9,7 @@ import json
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.guidance import FinalResponsePresent
-from evals.smoke import ExecutionResult
+from evals.evaluation import ExecutionResult, FinalResponsePresent
 from evals.workspace import WorkspaceInspectionError, WorkspaceObservation, workspace_violations
 
 

@@ -2,13 +2,11 @@ from contextlib import redirect_stdout
 from io import StringIO
 import unittest
 
-from evals.smoke import (
-    CONTRACT_PATH,
-    PROMPT,
-    ExecutionResult,
-    evaluate,
-    read_result,
-)
+from pydantic_evals import Case, Dataset
+
+from evals.evaluation import ExecutionResult, read_result
+from evals.smoke import PROMPT, evaluate
+from evals.workspace import CONTRACT_PATH
 from tests.offline_smoke import write_after
 
 
@@ -121,6 +119,36 @@ class SmokeEvaluationTests(unittest.TestCase):
 
         self.assertIn("replace-message", output.getvalue())
         self.assertIn("Assertions", output.getvalue())
+
+    def test_explicit_dataset_and_fixture_arguments_override_smoke_defaults(self):
+        dataset = Dataset(
+            name="fixture-arguments",
+            cases=[Case(name="inspect-fixture", inputs="Inspect the supplied fixture.")],
+        )
+        fixtures = (
+            (None, {"message.txt": b"custom\r\n"}),
+            ({"nested/data.bin": b"\x00\xff"}, {"nested/data.bin": b"\x00\xff"}),
+            ({}, {}),
+        )
+        for supplied, expected in fixtures:
+            with self.subTest(fixture_files=supplied):
+                observations = []
+
+                def inspect_fixture(prompt, workspace):
+                    files = {
+                        path.relative_to(workspace).as_posix(): path.read_bytes()
+                        for path in workspace.rglob("*")
+                        if path.is_file() and path.name != "AGENTS.md"
+                    }
+                    observations.append((prompt, files))
+                    return ExecutionResult("completed")
+
+                report = evaluate(inspect_fixture, dataset=dataset,
+                                  initial_contents=b"custom\r\n", fixture_files=supplied)
+
+                self.assertEqual(report.failures, [])
+                self.assertEqual([case.name for case in report.cases], ["inspect-fixture"])
+                self.assertEqual(observations, [("Inspect the supplied fixture.", expected)])
 
 
 if __name__ == "__main__":

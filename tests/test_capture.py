@@ -18,7 +18,9 @@ from pydantic_evals import Case, Dataset
 
 from evals.auth import PROFILE_CONFIG
 from evals.codex import run_codex
-from evals.smoke import CONTRACT_PATH, ExecutionResult, evaluate, prepare_workspace, read_fixture_file
+from evals.evaluation import ExecutionResult, evaluate
+from evals.smoke import evaluate as evaluate_smoke
+from evals.workspace import CONTRACT_PATH, prepare_workspace, read_fixture_file
 
 
 FIXTURE_FILES = {
@@ -130,7 +132,7 @@ class MultiFileFixtureTests(unittest.TestCase):
             directories.append(Path(temporary.name))
             return temporary
 
-        with patch("evals.smoke.TemporaryDirectory", side_effect=track_directory):
+        with patch("evals.workspace.TemporaryDirectory", side_effect=track_directory):
             with self.assertRaises(OSError):
                 # A regular file cannot also serve as a parent directory.
                 with prepare_workspace(fixture_files={"parent": b"file", "parent/child": b"data"}):
@@ -166,7 +168,10 @@ class FinalResponseCaptureTests(unittest.TestCase):
             results.append(result)
             return result
 
-        report = evaluate(execute, dataset=fixture_dataset() if files is not None else None, fixture_files=files)
+        if files is None:
+            report = evaluate_smoke(execute)
+        else:
+            report = evaluate(execute, dataset=fixture_dataset(), fixture_files=files)
         metadata = json.loads((artifacts / "execution.json").read_text())
         self.assertFalse(Path(metadata["workspace"]).exists())
         self.assertEqual((self.profile / "invocations").read_text(), "exec\n" * self.run_count)
@@ -283,7 +288,7 @@ class FinalResponseCaptureTests(unittest.TestCase):
 
     def test_capture_target_inside_workspace_or_existing_reply_is_rejected_before_execution(self):
         for invalid in ("inside", "existing"):
-            with self.subTest(invalid=invalid), prepare_workspace() as workspace:
+            with self.subTest(invalid=invalid), prepare_workspace(fixture_files={"message.txt": b"before\n"}) as workspace:
                 artifacts = workspace / "evidence" if invalid == "inside" else self.root / "existing"
                 artifacts.mkdir()
                 if invalid == "existing":

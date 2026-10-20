@@ -13,9 +13,9 @@ from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
 from evals.codex import save_json
+from evals.evaluation import ExecutionResult, FinalResponsePresent
 from evals.functional import run_python_check
-from evals.guidance import FIXTURE_FILES as GUIDANCE_FIXTURE, FinalResponsePresent
-from evals.smoke import ExecutionResult
+from evals.guidance import FIXTURE_FILES as GUIDANCE_FIXTURE
 from evals.workspace import WorkspaceInspectionError, WorkspaceObservation, workspace_violations
 
 

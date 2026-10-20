@@ -17,9 +17,11 @@ import unittest
 from unittest.mock import patch
 
 from evals import __main__ as cli
+from evals.evaluation import ExecutionResult, evaluate
 from evals.guidance import FIXTURE_FILES, PROMPT, REVIEW_RUBRIC, guidance_dataset
-from evals.smoke import CONTRACT_PATH, ExecutionResult, evaluate, prepare_workspace
-from evals.workspace import WorkspaceEntry, WorkspaceObservation, snapshot_workspace, workspace_changes
+from evals.workspace import (
+    CONTRACT_PATH, WorkspaceEntry, WorkspaceObservation, prepare_workspace, snapshot_workspace, workspace_changes,
+)
 
 
 class GuidanceTests(unittest.TestCase):

@@ -123,7 +123,7 @@ for kind in ("pipe", "directory", "symlink"):
                         raise PermissionError(f"{path.name} unavailable")
                     return original_write(path, *args, **kwargs)
                 with (
-                    patch("evals.__main__.evaluate_smoke", return_value=report),
+                    patch("evals.__main__.evaluate", return_value=report),
                     patch("evals.__main__.ARTIFACTS_ROOT", root),
                     patch.object(Path, "write_text", autospec=True, side_effect=write),
                     patch.object(sys, "argv", ["evals", "--model", "test", "--reasoning-effort", "medium"]),
@@ -146,7 +146,7 @@ for kind in ("pipe", "directory", "symlink"):
             errors = StringIO()
             with (
                 patch("evals.__main__.ARTIFACTS_ROOT", Path(directory)),
-                patch("evals.__main__.evaluate_smoke", side_effect=RuntimeError("primary failure")),
+                patch("evals.__main__.evaluate", side_effect=RuntimeError("primary failure")),
                 patch("evals.__main__.save_json", side_effect=PermissionError("report unavailable")),
                 patch.object(sys, "argv", ["evals", "--model", "test", "--reasoning-effort", "medium"]),
                 redirect_stdout(StringIO()), redirect_stderr(errors),

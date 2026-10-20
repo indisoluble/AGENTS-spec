@@ -12,7 +12,6 @@ from pathlib import Path
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
-from threading import Event
 import unittest
 from unittest.mock import patch
 
@@ -44,7 +43,7 @@ class GuidanceTests(unittest.TestCase):
     def render_report(self, report):
         with TemporaryDirectory() as directory, redirect_stdout(StringIO()) as terminal:
             artifacts = Path(directory)
-            code = cli.write_report(report, artifacts, case_name="requester-guidance")
+            code = cli.write_report(report, artifacts, case_name="requester-guidance", review_required=True)
             saved = json.loads((artifacts / "report.json").read_text())
             self.assertEqual(terminal.getvalue(), (artifacts / "report.txt").read_text())
             return code, saved, terminal.getvalue()
@@ -170,7 +169,7 @@ class GuidanceTests(unittest.TestCase):
             with self.subTest(codes=codes), patch.object(cli, "run_case", side_effect=codes) as run:
                 with patch.object(sys, "argv", ["evals", "--case", "all", "--model", "test", "--reasoning-effort", "medium"]):
                     self.assertEqual(cli.main(), expected)
-                self.assertEqual([call.args[0] for call in run.call_args_list],
+                self.assertEqual([call.args[0].name for call in run.call_args_list],
                                  ["smoke", "scope-discipline", "requester-guidance", "independent-execution",
                                   "assumption-disclosure", "missing-permission", "no-safe-next-step"])
 
@@ -186,9 +185,10 @@ class GuidanceTests(unittest.TestCase):
             with (patch.object(cli, "ARTIFACTS_ROOT", Path(directory)),
                   patch.object(cli, "run_codex") as execute,
                   patch.object(Path, "write_text", autospec=True, side_effect=deny_rubric),
+                  patch.object(sys, "argv", ["evals", "--case", "requester-guidance", "--model", "test",
+                                             "--reasoning-effort", "medium", "--timeout", "1", "--codex-home", directory]),
                   redirect_stdout(StringIO()), redirect_stderr(StringIO())):
-                code = cli.run_case("requester-guidance", model="test", effort="medium",
-                                    timeout=1, profile=Path(directory), cancelled=Event())
+                code = cli.main()
             self.assertEqual(code, 2)
             execute.assert_not_called()
             artifacts, = Path(directory).iterdir()
@@ -208,9 +208,10 @@ class GuidanceTests(unittest.TestCase):
             with (patch.object(cli, "ARTIFACTS_ROOT", Path(directory)),
                   patch("evals.auth.codex_executable", side_effect=RuntimeError("primary failure")),
                   patch.object(Path, "write_text", autospec=True, side_effect=deny_changes),
+                  patch.object(sys, "argv", ["evals", "--case", "requester-guidance", "--model", "test",
+                                             "--reasoning-effort", "medium", "--timeout", "1", "--codex-home", directory]),
                   redirect_stdout(StringIO()), redirect_stderr(StringIO())):
-                code = cli.run_case("requester-guidance", model="test", effort="medium",
-                                    timeout=1, profile=Path(directory), cancelled=Event())
+                code = cli.main()
             self.assertEqual(code, 2)
             artifacts, = Path(directory).iterdir()
             saved = json.loads((artifacts / "report.json").read_text())

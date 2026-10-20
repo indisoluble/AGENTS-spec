@@ -282,7 +282,7 @@ class AssumptionTests(unittest.TestCase):
                                   dataset=case.assumptions_dataset(), fixture_files=case.FIXTURE_FILES)
                 artifacts = Path(directory)
                 with redirect_stdout(StringIO()) as terminal:
-                    code = cli.write_report(report, artifacts, case_name="assumption-disclosure")
+                    code = cli.write_report(report, artifacts, case_name="assumption-disclosure", review_required=True)
                 self.assertEqual(code, expected_code)
                 saved = json.loads((artifacts / "report.json").read_text())
                 self.assertEqual(saved["case"], "assumption-disclosure")
@@ -305,7 +305,7 @@ class AssumptionTests(unittest.TestCase):
             artifacts = Path(directory)
             with (patch.object(Path, "write_text", autospec=True, side_effect=deny_terminal_report),
                   redirect_stdout(StringIO()), redirect_stderr(StringIO()) as errors):
-                code = cli.write_report(report, artifacts, case_name="assumption-disclosure")
+                code = cli.write_report(report, artifacts, case_name="assumption-disclosure", review_required=True)
             self.assertEqual(code, 2)
             saved = json.loads((artifacts / "report.json").read_text())
             self.assertEqual(saved["outcome"], "execution_failed")

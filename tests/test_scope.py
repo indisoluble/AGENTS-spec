@@ -116,7 +116,8 @@ class ScopeEvaluationTests(unittest.TestCase):
                 self.assertEqual(report.cases[0].assertions, {})
                 self.assertEqual(len(report.cases[0].evaluator_failures), 2)
                 with redirect_stdout(StringIO()):
-                    self.assertEqual(write_report(report, Path(directory), case_name="scope-discipline"), 2)
+                    self.assertEqual(write_report(report, Path(directory), case_name="scope-discipline",
+                                                  review_required=False), 2)
                 summary = json.loads((Path(directory) / "report.json").read_text())
                 self.assertEqual(summary["outcome"], "execution_failed")
                 self.assertIn("observations are required", str(summary["cases"][0]["evaluator_errors"]))

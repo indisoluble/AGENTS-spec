@@ -67,7 +67,7 @@ class IndependenceTests(unittest.TestCase):
         self.assertTrue(workspaces)
         self.assertTrue(all(not path.exists() for path in workspaces))
         with redirect_stdout(StringIO()):
-            code = cli.write_report(report, self.artifacts, case_name="independent-execution")
+            code = cli.write_report(report, self.artifacts, case_name="independent-execution", review_required=True)
         saved = json.loads((self.artifacts / "report.json").read_text())
         return code, saved
 
@@ -255,7 +255,7 @@ class IndependenceTests(unittest.TestCase):
             report = evaluate(lambda prompt, workspace: result, dataset=case.independence_dataset(),
                               fixture_files=case.FIXTURE_FILES)
             with redirect_stdout(StringIO()):
-                code = cli.write_report(report, self.artifacts, case_name="independent-execution")
+                code = cli.write_report(report, self.artifacts, case_name="independent-execution", review_required=True)
             self.assertEqual(code, 2)
             self.assertTrue(report.cases[0].evaluator_failures)
 

@@ -159,19 +159,21 @@ class GuidanceTests(unittest.TestCase):
                 self.assertNotIn("No observed workspace changes", changes)
 
     def test_aggregate_exit_codes_prioritize_errors_then_failures_then_review(self):
-        scenarios = (((0, 0, 0, 0, 0, 0, 0), 0), ((0, 0, 3, 3, 3, 3, 3), 3), ((3, 1, 0, 3, 3, 3, 3), 1),
-                     ((1, 0, 3, 0, 3, 3, 3), 1), ((3, 0, 2, 3, 3, 3, 3), 2), ((2, 1, 3, 0, 3, 3, 3), 2),
-                     ((0, 0, 0, 1, 3, 3, 3), 1), ((0, 0, 3, 2, 3, 3, 3), 2),
-                     ((0, 0, 0, 0, 3, 3, 3), 3), ((0, 0, 3, 3, 1, 3, 3), 1), ((0, 0, 3, 3, 2, 3, 3), 2),
-                     ((0, 0, 0, 0, 0, 3, 3), 3), ((0, 0, 3, 3, 3, 1, 3), 1), ((0, 0, 3, 3, 3, 2, 3), 2),
-                     ((0, 0, 0, 0, 0, 0, 3), 3), ((0, 0, 3, 3, 3, 3, 1), 1), ((0, 0, 3, 3, 3, 3, 2), 2))
+        scenarios = (((0, 0, 0, 0, 0, 0, 0, 0), 0), ((0, 0, 3, 3, 3, 3, 3, 3), 3), ((3, 1, 0, 3, 3, 3, 3, 3), 1),
+                     ((1, 0, 3, 0, 3, 3, 3, 3), 1), ((3, 0, 2, 3, 3, 3, 3, 3), 2), ((2, 1, 3, 0, 3, 3, 3, 3), 2),
+                     ((0, 0, 0, 1, 3, 3, 3, 3), 1), ((0, 0, 3, 2, 3, 3, 3, 3), 2),
+                     ((0, 0, 0, 0, 3, 3, 3, 3), 3), ((0, 0, 3, 3, 1, 3, 3, 3), 1), ((0, 0, 3, 3, 2, 3, 3, 3), 2),
+                     ((0, 0, 0, 0, 0, 3, 3, 3), 3), ((0, 0, 3, 3, 3, 1, 3, 3), 1), ((0, 0, 3, 3, 3, 2, 3, 3), 2),
+                     ((0, 0, 0, 0, 0, 0, 3, 3), 3), ((0, 0, 3, 3, 3, 3, 1, 3), 1), ((0, 0, 3, 3, 3, 3, 2, 3), 2),
+                     ((0, 0, 0, 0, 0, 0, 0, 3), 3), ((0, 0, 3, 3, 3, 3, 3, 1), 1), ((0, 1, 3, 3, 3, 3, 3, 2), 2))
         for codes, expected in scenarios:
             with self.subTest(codes=codes), patch.object(cli, "run_case", side_effect=codes) as run:
                 with patch.object(sys, "argv", ["evals", "--case", "all", "--model", "test", "--reasoning-effort", "medium"]):
                     self.assertEqual(cli.main(), expected)
                 self.assertEqual([call.args[0].name for call in run.call_args_list],
                                  ["smoke", "scope-discipline", "requester-guidance", "independent-execution",
-                                  "assumption-disclosure", "missing-permission", "no-safe-next-step"])
+                                  "assumption-disclosure", "missing-permission", "no-safe-next-step",
+                                  "contract-change-followthrough"])
 
     def test_review_rubric_write_failure_is_a_setup_error_without_launching(self):
         with TemporaryDirectory() as directory:

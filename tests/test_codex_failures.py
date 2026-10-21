@@ -1,6 +1,8 @@
 """Exercise real CLI orchestration and OS signals with a fake Codex process only."""
 
 import base64
+from contextlib import redirect_stdout
+from io import StringIO
 import json
 import os
 from pathlib import Path
@@ -8,12 +10,19 @@ import signal
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
+from threading import Event
 import time
 import unittest
+from unittest.mock import patch
 
 from evals.auth import PROFILE_CONFIG
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC
-from evals import assumptions, independence, permissions, scheduling
+from evals import __main__ as cli
+from evals import assumptions, followthrough, independence, permissions, scheduling
+from evals.evaluation import ExecutionResult
+from evals.functional import FunctionalCheckResult
+from evals.workspace import WorkspaceObservation, snapshot_workspace
+from tests.test_followthrough import correct_edit
 
 
 class CodexFailureTests(unittest.TestCase):
@@ -65,9 +74,10 @@ class CodexFailureTests(unittest.TestCase):
                 os.killpg(parent_pid, signal.SIGKILL)
             except ProcessLookupError:
                 pass
-        if process.poll() is None:
-            os.killpg(process.pid, signal.SIGKILL)
-        process.communicate(timeout=5)
+        if process is not None:
+            if process.poll() is None:
+                os.killpg(process.pid, signal.SIGKILL)
+            process.communicate(timeout=5)
 
     def finish(self, process, runs, expected_exit):
         output, errors = process.communicate(timeout=10)
@@ -201,18 +211,20 @@ class CodexFailureTests(unittest.TestCase):
             ("success", "success", "empty", 1, ["passed", "passed", "assertion_failed"]),
         )
         names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure",
-                 "missing-permission", "no-safe-next-step")
+                 "missing-permission", "no-safe-next-step", "contract-change-followthrough")
         rubrics = {"requester-guidance": REVIEW_RUBRIC, "independent-execution": independence.REVIEW_RUBRIC,
                    "assumption-disclosure": assumptions.REVIEW_RUBRIC,
                    "missing-permission": permissions.REVIEW_RUBRIC,
-                   "no-safe-next-step": scheduling.REVIEW_RUBRIC}
+                   "no-safe-next-step": scheduling.REVIEW_RUBRIC,
+                   "contract-change-followthrough": followthrough.REVIEW_RUBRIC}
         for smoke, scope, guidance, expected_exit, outcomes in scenarios:
             with self.subTest(smoke=smoke, scope=scope, guidance=guidance):
                 # Select deterministic responses for each fake task, without model calls.
                 process, profile, runs = self.launch(
                     {"smoke": smoke, "scope-discipline": scope, "requester-guidance": guidance,
                      "independent-execution": "success", "assumption-disclosure": "success",
-                     "missing-permission": "success", "no-safe-next-step": "success"}, case="all",
+                     "missing-permission": "success", "no-safe-next-step": "success",
+                     "contract-change-followthrough": "success"}, case="all",
                 )
                 output, errors = process.communicate(timeout=20)
                 self.assertEqual(process.returncode, expected_exit, output + errors)
@@ -226,7 +238,7 @@ class CodexFailureTests(unittest.TestCase):
                 by_case = {json.loads((path / "report.json").read_text())["case"]: path for path in artifacts}
                 self.assertEqual(set(by_case), set(names))
                 workspaces = []
-                for name, outcome in zip(names, [*outcomes, *(["review_required"] * 4)]):
+                for name, outcome in zip(names, [*outcomes, *(["review_required"] * 5)]):
                     path = by_case[name]
                     report = json.loads((path / "report.json").read_text())
                     metadata = json.loads((path / "execution.json").read_text())
@@ -324,9 +336,10 @@ class CodexFailureTests(unittest.TestCase):
 
     def test_late_case_failures_take_precedence_over_pending_review_in_all_cases(self):
         names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure",
-                 "missing-permission", "no-safe-next-step")
+                 "missing-permission", "no-safe-next-step", "contract-change-followthrough")
         failures = (("missing-permission", "redirected", 1), ("missing-permission", "nonzero", 2),
-                    ("no-safe-next-step", "extra-worker", 1), ("no-safe-next-step", "nonzero", 2))
+                    ("no-safe-next-step", "extra-worker", 1), ("no-safe-next-step", "nonzero", 2),
+                    ("contract-change-followthrough", "unchanged", 1), ("contract-change-followthrough", "nonzero", 2))
         for failed_case, scenario, expected_exit in failures:
             with self.subTest(case=failed_case, scenario=scenario):
                 scenarios = dict.fromkeys(names, "success")
@@ -583,6 +596,120 @@ class CodexFailureTests(unittest.TestCase):
                     self.assertEqual(changes, "No observed workspace changes.\n")
                 else:
                     self.assertIn('Path: "exporter.py"', changes)
+
+    def test_followthrough_selection_composes_fixture_capture_checks_and_pending_review(self):
+        for scenario, expected_exit in (("success", 3), ("unchanged", 1), ("empty", 1),
+                                        ("missing-response", 2), ("nonzero", 2)):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="contract-change-followthrough")
+                artifacts, metadata, report = self.finish(process, runs, expected_exit)
+                self.assertEqual(report["case"], "contract-change-followthrough")
+                self.assertTrue(report["review_required"])
+                self.assertEqual((profile / "case-invocations").read_text(), "contract-change-followthrough\n")
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+                self.assertEqual((artifacts / "review.md").read_text(), followthrough.REVIEW_RUBRIC)
+                self.assertEqual((artifacts / "prompt.txt").read_text(), followthrough.PROMPT)
+                self.assertIn("--output-last-message", metadata["command"])
+                for name, contents in followthrough.FIXTURE_FILES.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                initial = json.loads((artifacts / "initial-workspace.json").read_text())
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                for snapshot in (initial, final):
+                    self.assertNotIn("review.md", snapshot)
+                    self.assertNotIn("checks", snapshot)
+                records = json.loads((artifacts / "functional-checks.json").read_text())
+                self.assertEqual(set(records), {"DuplicateBatchRejected", "ExistingBehaviorPreserved", "ProjectTestsPass"})
+                if expected_exit == 2:
+                    self.assertEqual(report["outcome"], "execution_failed")
+                    self.assertEqual(report["cases"], [])
+                    self.assertTrue(all(record["status"] == "not_run" and record["reason"] for record in records.values()))
+                else:
+                    self.assertEqual(report["outcome"], "review_required" if expected_exit == 3 else "assertion_failed")
+                    result, = report["cases"]
+                    self.assertEqual(result["name"], "atomic-duplicate-rejection")
+                    self.assertEqual(result["assertions"], {
+                        "DuplicateBatchRejected": scenario != "unchanged", "ExistingBehaviorPreserved": True,
+                        "ProjectTestsPass": True, "RootContractPreserved": True, "FinalResponsePresent": scenario != "empty",
+                    })
+                    self.assertEqual(set(result["assertion_reasons"]), set(result["assertions"]))
+                    self.assertEqual(result["final_response"], (artifacts / "final-response.txt").read_text())
+                    self.assertTrue(all(record["status"] == "completed" for record in records.values()))
+                    self.assertEqual(records["DuplicateBatchRejected"]["returncode"], 1 if scenario == "unchanged" else 0)
+                    self.assertEqual(metadata["status"], "completed")
+                for name, source in followthrough.CHECK_SOURCES.items():
+                    self.assertEqual((artifacts / "checks" / f"{name}.py").read_text(), source)
+
+    def test_followthrough_checks_follow_agent_cleanup_and_precede_workspace_removal(self):
+        profile = self.root / "profile"
+        profile.mkdir()
+        (profile / "config.toml").write_text(PROFILE_CONFIG)
+        (profile / "auth.json").write_text("dummy credential")
+        (profile / "scenario").write_text(json.dumps("orphan"))
+        self.addCleanup(self.cleanup_processes, None, profile)
+        runs = self.root / "runs"
+        selected = next(case for case in cli.CASES if case.name == "contract-change-followthrough")
+        self.assertIs(selected.dataset_factory, followthrough.followthrough_dataset)
+        self.assertIs(selected.check_execution, followthrough.check_execution)
+        checked_workspaces = []
+        run_check = followthrough.run_python_check
+
+        def check_after_cleanup(source, workspace, **kwargs):
+            checked_workspaces.append(workspace)
+            self.assertTrue(workspace.is_dir())
+            self.assert_group_stopped(profile)
+            artifacts, = runs.iterdir()
+            self.assertEqual((artifacts / "review.md").read_text(), followthrough.REVIEW_RUBRIC)
+            self.assertTrue((artifacts / "final-workspace.json").is_file())
+            return run_check(source, workspace, **kwargs)
+
+        with (patch.object(cli, "ARTIFACTS_ROOT", runs),
+              patch("evals.auth.codex_executable", return_value=str(self.bin / "codex")),
+              patch("evals.functional.codex_executable", return_value=str(self.bin / "codex")),
+              patch.object(followthrough, "run_python_check", side_effect=check_after_cleanup),
+              redirect_stdout(StringIO())):
+            code = cli.run_case(selected, model="test-model", effort="medium", timeout=10,
+                                profile=profile, cancelled=Event())
+        self.assertEqual(code, 3)
+        self.assertTrue(checked_workspaces)
+        self.assertTrue(all(not workspace.exists() for workspace in checked_workspaces))
+
+    def test_followthrough_check_and_evidence_errors_propagate_through_cli_composition(self):
+        selected = next(case for case in cli.CASES if case.name == "contract-change-followthrough")
+        workspaces = []
+
+        def execute(prompt, workspace, **kwargs):
+            self.assertEqual(prompt, followthrough.PROMPT)
+            self.assertTrue(kwargs["observe_workspace"])
+            self.assertTrue(kwargs["capture_response"])
+            workspaces.append(workspace)
+            initial = snapshot_workspace(workspace)
+            correct_edit(workspace)
+            return ExecutionResult("completed", final_response="Updated.",
+                                   workspace_observation=WorkspaceObservation(initial, snapshot_workspace(workspace)))
+
+        save_json = followthrough.save_json
+        for fail_evidence in (False, True):
+            with self.subTest(fail_evidence=fail_evidence):
+                runs = self.root / f"runs-{fail_evidence}"
+                with (patch.object(cli, "ARTIFACTS_ROOT", runs), patch.object(cli, "run_codex", side_effect=execute),
+                      patch.object(followthrough, "run_python_check", return_value=
+                                   FunctionalCheckResult("error", stdout=b"partial", error="sandbox failed")),
+                      patch.object(followthrough, "save_json", side_effect=
+                                   OSError("cannot save checks") if fail_evidence else save_json),
+                      redirect_stdout(StringIO())):
+                    code = cli.run_case(selected, model="test-model", effort="medium", timeout=10,
+                                        profile=self.root / "unused-profile", cancelled=Event())
+                self.assertEqual(code, 2)
+                self.assertTrue(all(not workspace.exists() for workspace in workspaces))
+                artifacts, = runs.iterdir()
+                report = json.loads((artifacts / "report.json").read_text())
+                self.assertEqual(report["outcome"], "execution_failed")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"], [])
+                self.assertIn("sandbox failed", report["execution_errors"][0])
+                if fail_evidence:
+                    self.assertIn("cannot save checks", report["execution_errors"][0])
+                self.assertEqual((artifacts / "checks/DuplicateBatchRejected.stdout").read_bytes(), b"partial")
 
     def test_guidance_assertion_failures_keep_independent_results(self):
         for scenario in ("empty", "whitespace", "contract-edited", "contract-deleted", "contract-link", "contract-mode"):

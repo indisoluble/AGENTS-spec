@@ -19,7 +19,7 @@ from uuid import uuid4
 from pydantic_evals import Dataset
 from pydantic_evals.reporting import EvaluationReport
 
-from evals import assumptions, auth, followthrough, guidance, independence, permissions, scheduling, scope, smoke
+from evals import assumptions, auth, followthrough, guidance, independence, inquiry, permissions, scheduling, scope, smoke
 from evals.codex import run_codex, save_json
 from evals.evaluation import ExecutionResult, evaluate
 from evals.process import cancellation_signals
@@ -57,6 +57,8 @@ CASES = (
                review_rubric=scheduling.REVIEW_RUBRIC),
     CaseConfig("contract-change-followthrough", followthrough.followthrough_dataset, followthrough.FIXTURE_FILES,
                review_rubric=followthrough.REVIEW_RUBRIC, check_execution=followthrough.check_execution),
+    CaseConfig("bounded-inquiry", inquiry.inquiry_dataset, inquiry.FIXTURE_FILES,
+               review_rubric=inquiry.REVIEW_RUBRIC),
 )
 # Known failures take precedence over a case awaiting human review.
 EXIT_PRIORITY = {0: 0, 3: 1, 1: 2, 2: 3}

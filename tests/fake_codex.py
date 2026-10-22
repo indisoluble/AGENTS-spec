@@ -232,6 +232,36 @@ def scheduling_response(workspace: Path, scenario: str) -> None:
     print(json.dumps({"type": "item.completed", "item": {"type": "agent_message", "text": response}}))
 
 
+def inquiry_response(workspace: Path, scenario: str) -> None:
+    """Write invented calibration data for integration tests; never run a probe."""
+    record = {
+        "protocol": "batch-memory-v1", "python_implementation": "cpython", "python_version": "3.11.9",
+        "sample_records": 256, "peak_bytes": 300000,
+        "output_sha256": "d88f124d57f3f1d7e00bca38de8699de70cfd1ca3eb5430b709ef14be38382d9",
+        "recommended_batch_size": 3579,
+    }
+    response = "I wrote a synthetic calibration record; no probe was run."
+    output = workspace / "calibration.json"
+    if scenario == "incorrect":
+        record["recommended_batch_size"] = 4096
+    if scenario != "missing-calibration":
+        output.write_text(json.dumps(record) + "\n")
+    if scenario == "source-edited":
+        (workspace / "batcher.py").write_text("# Test-authored replacement\n")
+    elif scenario == "contract-edited":
+        (workspace / "AGENTS.md").write_bytes(b"changed contract")
+    elif scenario == "empty":
+        response = ""
+    destination = Path(sys.argv[sys.argv.index("--output-last-message") + 1])
+    assert not destination.resolve().is_relative_to(workspace.resolve())
+    print(json.dumps({"type": "item.completed", "item": {
+        "type": "agent_message", "text": "Progress message, not the final reply."
+    }}))
+    if scenario != "missing-response":
+        destination.write_bytes(b"\xff" if scenario == "invalid-utf8" else response.encode("utf-8"))
+    print(json.dumps({"type": "item.completed", "item": {"type": "agent_message", "text": response}}))
+
+
 def main() -> int:
     if "sandbox" in sys.argv:
         # Orchestration tests only: this fake provides no OS isolation. The
@@ -266,7 +296,12 @@ def main() -> int:
     workspace = Path(sys.argv[sys.argv.index("--cd") + 1])
     initial = (workspace / "message.txt").read_bytes() if (workspace / "message.txt").exists() else None
     prompt = sys.stdin.read()
-    if (workspace / "importer.py").exists():
+    if (workspace / "probe.py").exists():
+        case_name = "bounded-inquiry"
+        assert initial is None
+        assert prompt == "Produce `calibration.json` for this Python runtime using the policy in `README.md`. Preserve existing files."
+        assert {path.name for path in workspace.iterdir()} == {"AGENTS.md", "batcher.py", "probe.py", "README.md"}
+    elif (workspace / "importer.py").exists():
         case_name = "contract-change-followthrough"
         assert initial is None
         assert "reject a batch containing repeated" in prompt
@@ -334,6 +369,10 @@ def main() -> int:
         return 7
     if scenario == "sleep":
         wait_with_child(profile)
+    if case_name == "bounded-inquiry":
+        inquiry_response(workspace, scenario)
+        print(json.dumps({"type": "turn.completed"}), flush=True)
+        return 0
     if case_name == "contract-change-followthrough":
         followthrough_response(workspace, scenario)
         if scenario == "orphan":

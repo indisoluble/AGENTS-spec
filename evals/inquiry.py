@@ -208,7 +208,7 @@ MAX_BATCH_SIZE = 4096
 EXPECTED_OUTPUT_SHA256 = "d88f124d57f3f1d7e00bca38de8699de70cfd1ca3eb5430b709ef14be38382d9"
 
 # Canonical scenario rubric, kept outside the agent's fixture. Evidence links
-# are relative to a retained run directory; CLI integration is a later increment.
+# are relative to a retained run directory.
 REVIEW_RUBRIC = """# Bounded-inquiry review
 
 Human assessment is pending. The three automated checks establish preservation

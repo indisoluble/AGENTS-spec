@@ -24,7 +24,7 @@ from evals.evaluation import ExecutionResult
 from evals.functional import FunctionalCheckResult
 from evals.workspace import CONTRACT_PATH, WorkspaceObservation, snapshot_workspace
 from tests.test_followthrough import correct_edit
-from tests.test_inquiry import VALID_CALIBRATION
+from tests.test_inquiry import VALID_FEASIBILITY
 
 
 class CodexFailureTests(unittest.TestCase):
@@ -375,9 +375,9 @@ class CodexFailureTests(unittest.TestCase):
         self.assertEqual(report["outcome"], "review_required")
         self.assertTrue(report["review_required"])
         result, = report["cases"]
-        self.assertEqual(result["name"], "batch-memory-calibration")
+        self.assertEqual(result["name"], "event-export-feasibility")
         self.assertEqual(result["assertions"], {
-            "FixtureInputsPreserved": True, "CalibrationRecordValid": True, "FinalResponsePresent": True,
+            "FixtureInputsPreserved": True, "FeasibilityRecordConsistent": True, "FinalResponsePresent": True,
         })
         self.assertEqual(set(result["assertion_reasons"]), set(result["assertions"]))
         self.assertEqual(result["evaluator_errors"], [])
@@ -394,30 +394,47 @@ class CodexFailureTests(unittest.TestCase):
         final = json.loads((artifacts / "final-workspace.json").read_text())
         supplied = {"AGENTS.md": contract, **inquiry.FIXTURE_FILES}
         self.assertEqual(set(initial), {".", *supplied})
-        self.assertEqual(set(final), {".", *supplied, "calibration.json"})
+        self.assertEqual(set(final), {".", *supplied, "feasibility.json"})
         for name, contents in supplied.items():
             self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
             self.assertEqual((artifacts / "workspace" / name).read_bytes(), contents)
             self.assertEqual(base64.b64decode(initial[name]["contents_base64"]), contents)
             self.assertEqual(initial[name], final[name])
-        captured = (artifacts / "workspace/calibration.json").read_bytes()
-        self.assertEqual(base64.b64decode(final["calibration.json"]["contents_base64"]), captured)
-        self.assertEqual(json.loads(captured), json.loads(VALID_CALIBRATION))
-        self.assertIn('Path: "calibration.json"', (artifacts / "workspace-changes.txt").read_text())
+        captured = (artifacts / "workspace/feasibility.json").read_bytes()
+        self.assertEqual(base64.b64decode(final["feasibility.json"]["contents_base64"]), captured)
+        self.assertEqual(json.loads(captured), json.loads(VALID_FEASIBILITY))
+        self.assertIn('Path: "feasibility.json"', (artifacts / "workspace-changes.txt").read_text())
         self.assertEqual(result["final_response"], (artifacts / "final-response.txt").read_text())
         self.assertNotIn("Progress message", result["final_response"])
         self.assertIn("Progress message", (artifacts / "events.jsonl").read_text())
         # Fake output is deliberately not empirical evidence or a semantic pass.
         self.assertIn("no probe was run", result["final_response"])
-        self.assertIn("measurement authenticity", result["assertion_reasons"]["CalibrationRecordValid"])
+        self.assertIn("measurement authenticity", result["assertion_reasons"]["FeasibilityRecordConsistent"])
         self.assertIn("Human review pending", (artifacts / "report.txt").read_text())
         self.assertFalse((artifacts / "functional-checks.json").exists())
         self.assertFalse((artifacts / "checks").exists())
         self.assertEqual((profile / "case-invocations").read_text(), "bounded-inquiry\n")
         self.assertEqual((profile / "invocations").read_text(), "exec\n")
 
+    def test_inquiry_explicit_incompletion_retains_null_and_pending_review_without_false_completion(self):
+        process, _, runs = self.launch("incomplete-evidence", case="bounded-inquiry")
+        artifacts, _, report = self.finish(process, runs, 3)
+        self.assertEqual(report["outcome"], "review_required")
+        self.assertTrue(report["review_required"])
+        result, = report["cases"]
+        self.assertEqual(result["assertions"], {
+            "FixtureInputsPreserved": True, "FeasibilityRecordConsistent": True, "FinalResponsePresent": True,
+        })
+        self.assertIn("required decision unestablished: streaming alternative",
+                      result["assertion_reasons"]["FeasibilityRecordConsistent"])
+        captured = json.loads((artifacts / "workspace/feasibility.json").read_text())
+        self.assertIsNone(captured["streaming_feasible"])
+        self.assertEqual(len(captured["measurements"]), 1)
+        self.assertEqual((artifacts / "review.md").read_text(), inquiry.REVIEW_RUBRIC)
+
     def test_inquiry_failures_keep_assertion_attribution_error_classification_and_pending_review(self):
-        scenarios = (("incorrect", 1), ("missing-calibration", 1), ("source-edited", 1),
+        scenarios = (("incorrect", 1), ("missing-feasibility", 1), ("malformed-record", 1),
+                     ("unsupported-replacement", 1), ("source-edited", 1),
                      ("contract-edited", 1), ("empty", 1), ("missing-response", 2),
                      ("invalid-utf8", 2), ("nonzero", 2))
         for scenario, exit_code in scenarios:
@@ -438,7 +455,7 @@ class CodexFailureTests(unittest.TestCase):
                     self.assertEqual(result["evaluator_errors"], [])
                     self.assertEqual(result["assertions"], {
                         "FixtureInputsPreserved": scenario not in ("source-edited", "contract-edited"),
-                        "CalibrationRecordValid": scenario not in ("incorrect", "missing-calibration"),
+                        "FeasibilityRecordConsistent": scenario not in ("incorrect", "missing-feasibility", "malformed-record", "unsupported-replacement"),
                         "FinalResponsePresent": scenario != "empty",
                     })
                     self.assertEqual(set(result["assertion_reasons"]), set(result["assertions"]))
@@ -463,7 +480,7 @@ class CodexFailureTests(unittest.TestCase):
                     self.assertTrue(kwargs["capture_response"])
                     workspaces.append(workspace)
                     initial = snapshot_workspace(workspace)
-                    (workspace / "calibration.json").write_bytes(VALID_CALIBRATION)
+                    (workspace / "feasibility.json").write_bytes(VALID_FEASIBILITY)
                     observation = None if failure == "observation" else WorkspaceObservation(initial, snapshot_workspace(workspace))
                     return ExecutionResult("completed", final_response="Synthetic result.", workspace_observation=observation)
 
@@ -497,7 +514,7 @@ class CodexFailureTests(unittest.TestCase):
                 else:
                     self.assertEqual(result["evaluator_errors"], [])
                     self.assertEqual(result["assertions"], {
-                        "FixtureInputsPreserved": True, "CalibrationRecordValid": True, "FinalResponsePresent": True,
+                        "FixtureInputsPreserved": True, "FeasibilityRecordConsistent": True, "FinalResponsePresent": True,
                     })
                     self.assertIn("cannot save report", report["evidence_errors"][0])
 

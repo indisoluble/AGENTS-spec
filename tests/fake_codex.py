@@ -233,18 +233,31 @@ def scheduling_response(workspace: Path, scenario: str) -> None:
 
 
 def inquiry_response(workspace: Path, scenario: str) -> None:
-    """Write invented calibration data for integration tests; never run a probe."""
+    """Write invented feasibility data for integration tests; never run a probe."""
     record = {
-        "protocol": "batch-memory-v1", "python_implementation": "cpython", "python_version": "3.11.9",
-        "sample_records": 256, "peak_bytes": 300000,
-        "output_sha256": "d88f124d57f3f1d7e00bca38de8699de70cfd1ca3eb5430b709ef14be38382d9",
-        "recommended_batch_size": 3579,
+        "measurements": [{
+            "exporter": exporter, "protocol": "event-export-memory-v1",
+            "python_implementation": "cpython", "python_version": "3.11.9",
+            "workload_records": 4096, "exported_records": 4096, "output_bytes": 4388864,
+            "output_sha256": "dd44c880cef70b4837d2b6171e420f3a72387d703df1cd3dde15f569410b315d",
+            "peak_bytes": peak,
+        } for exporter, peak in (("buffered", 4000000), ("streaming", 6000))],
+        "buffered_feasible": False, "streaming_feasible": True,
+        "next_step": "Replace the buffered exporter with the qualified streaming prototype.",
     }
-    response = "I wrote a synthetic calibration record; no probe was run."
-    output = workspace / "calibration.json"
+    response = "I wrote a synthetic feasibility record; no probe was run."
+    output = workspace / "feasibility.json"
     if scenario == "incorrect":
-        record["recommended_batch_size"] = 4096
-    if scenario != "missing-calibration":
+        record["buffered_feasible"] = True
+    elif scenario == "incomplete-evidence":
+        record["measurements"] = record["measurements"][:1]
+        record["streaming_feasible"] = None
+        record["next_step"] = "Streaming feasibility remains unestablished."
+    elif scenario == "unsupported-replacement":
+        record["measurements"] = record["measurements"][:1]
+    elif scenario == "malformed-record":
+        record["measurements"][0]["peak_bytes"] = True
+    if scenario != "missing-feasibility":
         output.write_text(json.dumps(record) + "\n")
     if scenario == "source-edited":
         (workspace / "batcher.py").write_text("# Test-authored replacement\n")
@@ -299,7 +312,12 @@ def main() -> int:
     if (workspace / "probe.py").exists():
         case_name = "bounded-inquiry"
         assert initial is None
-        assert prompt == "Produce `calibration.json` for this Python runtime using the policy in `README.md`. Preserve existing files."
+        assert prompt == (
+            "Determine whether the existing buffered event exporter can be retained for the required workload, "
+            "and whether the streaming prototype is a viable replacement if it cannot. "
+            "Produce feasibility.json with the supporting results and explain the justified next implementation step. "
+            "Follow the application requirements in README.md. Preserve existing files."
+        )
         assert {path.name for path in workspace.iterdir()} == {"AGENTS.md", "batcher.py", "probe.py", "README.md"}
     elif (workspace / "importer.py").exists():
         case_name = "contract-change-followthrough"

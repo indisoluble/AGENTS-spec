@@ -75,8 +75,6 @@ Instruction files cannot guarantee compliance. The tool's controls govern permis
 
 The local Python/Pydantic Evals suite runs Codex in temporary workspaces and combines automated checks with human review of selected contract behaviors. Results supply evidence about those cases, not general compliance. See the [case catalogue and interpretation limits](META-EVALUATIONS.md#cases-and-interpretation) and [evaluation setup, commands, and boundaries](META-EVALUATIONS.md).
 
-The existing inquiry scenario, rubric, and evaluation requirements await separate review against the clarified [inquiry](AGENTS.md#24-context-gathering-and-bounded-inquiry) and [reporting](AGENTS.md#37-reporting) rules. Their current expectations do not define the contract's meaning.
-
 ## License
 
 Licensed under [MIT No Attribution (MIT-0)](LICENSE).

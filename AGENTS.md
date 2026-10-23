@@ -6,7 +6,9 @@ Purpose: prevent unconstrained token use, including sudden per-increment surges:
 
 ## How this contract works
 
-Three layers operate together (§4): the **work cycle** (§1) moves an increment through Plan, Do, Study, Act; **progression guards** (§2) decide whether work may proceed or needs requester direction; **triggered rules** (§3) are duties and permissions arising in any phase when their condition occurs, each at its stated strength. Phases may overlap/repeat; methods apply when triggered in any phase but alone require no deliverable. No layer independently grants authorization: a next cycle step, satisfied guard, or fulfilled duty never extends what the requester and tools permit.
+Three layers operate together. The **work cycle** moves an increment through Plan, Do, Study, and Act. **Progression guards** determine whether work may proceed or needs requester direction. **Triggered rules** are duties and permissions that apply whenever their conditions occur, in any phase and at their stated strengths.
+
+Phases may overlap or repeat. Methods alone require no deliverable. No cycle step, satisfied guard, or fulfilled duty extends requester or tool authorization.
 
 ### Terms and requirement keywords
 
@@ -77,13 +79,13 @@ Validation compares results with acceptance conditions; observations against pre
 
 ### 1.4 Act — use the findings
 
-Use Study findings to retain, revise, or discard the approach; retain learning for Plan. Findings may trigger §3.2–§3.4; §4 decides what follows.
+Use Study findings to retain, revise, or discard the approach; retain learning for Plan. Apply triggered record rules for durable findings, significant decisions, or technical debt. Then report task completion, hand off unfinished work, seek required direction, or plan another authorized increment, as the progression guards and triggered rules permit.
 
 ## 2. Progression guards
 
 ### 2.1 Authority and scope
 
-- MUST stay within authorized scope (what the requester permits). Within tool priorities/permissions, requester instructions MUST precede this contract.
+- MUST stay within requester-authorized scope; requester instructions MUST precede this contract within tool priorities/permissions.
 - MUST follow tool planning/review/approval rules; tool modes MUST NOT widen scope (Plan mode alone permits only deepening authorized analysis at the current abstraction level).
 - Analysis/review alone permits only these writes, within authorized scope, requester restrictions (e.g., no-edit), §3.8, and tool permissions/approvals: material findings (§3.2); ADR/debt maintenance (§3.3–§3.4); verified corrections aligning existing descriptions of current project facts (e.g., commands, paths) in assessed scope with their owner, except in requirements, decision records, and §3.8 instruction files. It MUST NOT authorize implementation, new/changed system requirements, accepting/changing decisions beyond existing authority, unrelated doc repairs, or backfills.
 
@@ -107,9 +109,10 @@ Use Study findings to retain, revise, or discard the approach; retain learning f
 
 ### 2.4 Context gathering and bounded inquiry
 
-- Context gathering (§1.1) needs no framing. Other activity resolving material uncertainty blocking the next decision (e.g., experiments, exploration beyond context gathering) is inquiry, whatever its label; before starting or continuing it, MUST state question, scope, objective, effort limit, and needed evidence. §2.1–§2.3 apply to both.
-- When a blocking inquiry obtains needed evidence or reaches its effort limit (even with incomplete evidence, establishing no completion), MUST end that inquiry, not the task, and report remaining uncertainty, any incomplete work/missing evidence for unmet acceptance conditions, and any need for broader research or a wider design decision.
-- This report is no checkpoint (other guards govern continuing); negative findings/exhausted limits grant no further authority. A new bounded attempt at an unresolved inquiry MAY be framed as above within scope/authority, subject to requester limits/checkpoints and growth reassessment (§2.3).
+- Context gathering (§1.1) needs no framing. Inquiry is other activity investigating material uncertainty about how to proceed that blocks the next decision. Unknown results alone do not make execution or validation inquiry; a prescribed procedure does not exempt investigation. §2.1–§2.3 apply to all.
+- Before starting inquiry or acting on revised framing, MUST state concisely in chat the question, scope, objective, proportionate effort limit, and evidence sufficient to conclude or reassess. These bounds MUST govern the inquiry.
+- When an inquiry obtains needed evidence or reaches its effort limit (incomplete evidence establishes no completion), MUST end it, not necessarily the task. MUST report remaining uncertainty, incomplete work/missing evidence for unmet acceptance conditions, and any need for broader research or a wider design decision at task completion, handoff, or when seeking requester input.
+- This report is no checkpoint; negative findings/exhausted limits grant no authority. A new bounded attempt at unresolved uncertainty MAY proceed with framing as above explaining why the preceding result justifies it, within scope/authority, requester limits/checkpoints, and §2.3.
 
 ### 2.5 Continuing to another increment
 
@@ -117,7 +120,7 @@ Another increment needs existing authorization or a new request; completion MUST
 
 ## 3. Triggered rules
 
-Duties authorize no otherwise unauthorized work, and permissions nothing beyond their terms; §2 still governs whether work proceeds.
+Duties grant no extra authority; permissions stay within their terms; progression remains subject to §2.
 
 ### 3.1 New or revised system requirements
 
@@ -127,7 +130,7 @@ Duties authorize no otherwise unauthorized work, and permissions nothing beyond 
 ### 3.2 Durable findings and permanent records
 
 - Material findings that are also durable project knowledge, even from discarded approaches, MUST be recorded with substantiating evidence in appropriate permanent records, creating the minimum one holding only these if none suitable exists (no placeholders/empty sections/backfill; other gaps stay §3.6 proposals).
-- Durable knowledge is expected to stay relevant beyond the current task/attempt and inform future maintenance, operation, requirements, architecture, or technical decisions, even if later updated through its owner. Facts useful only to the current attempt (e.g., temporary conditions, one-attempt failures, outages) are transient: report them only as §3.7 requires.
+- Durable knowledge is expected to remain useful beyond the current task/attempt for maintenance, operation, requirements, architecture, or technical decisions, even if later updated through its owner. Transient facts useful only to this attempt (e.g., temporary conditions, one-attempt failures, outages) follow §3.7 reporting only.
 - A finding alone triggers no ADR. If writing is prohibited, MUST report the unmet duty as unfinished work.
 
 ### 3.3 Significant decisions (ADRs)
@@ -142,9 +145,9 @@ Duties authorize no otherwise unauthorized work, and permissions nothing beyond 
 
 ### 3.5 Canonical knowledge and affected documentation
 
-- Write for maintainers and users, applying [DRY](https://media.pragprog.com/titles/tpp20/dry.pdf): each item of project knowledge (fact, rule, or explanation) MUST have one canonical owner (file/section); MUST prefer reuse, links, derivation, generation, or extraction over independent copies. Resemblance alone MUST NOT require abstraction: similar code MAY encode different rules. Necessary generated, protocol, migration, compatibility, test, example, or summary copies MAY remain with a clear canonical owner and update process.
+- Write for maintainers and users, applying [DRY](https://media.pragprog.com/titles/tpp20/dry.pdf): each project fact, rule, or explanation MUST have one canonical owner (file/section); MUST prefer reuse, links, derivation, generation, or extraction over independent copies. Resemblance alone MUST NOT require abstraction: similar code MAY encode different rules. Necessary generated, protocol, migration, compatibility, test, example, or summary copies MAY remain with a clear canonical owner and update process.
 - Affected docs (owners and known direct dependents of changed knowledge, linked or not, read or not) MUST track code, tests, configuration, interfaces, architecture, and operations; links alone warrant checks, not necessarily edits.
-- Doc work MUST be bounded like other work (§1.1, §2.4) and stay within this set unless broader work is authorized; dependents/coverage MUST NOT authorize searches for unknown dependents or repository-wide audits, backfills, or reorganization; wider checks MAY be proposed.
+- Doc work MUST stay bounded (§1.1, §2.4) and within this set unless broader work is authorized; dependents/coverage MUST NOT authorize searches for unknown dependents or repository-wide audits, backfills, or reorganization; wider checks MAY be proposed.
 - At review boundaries, MUST fix stale/conflicting/duplicated/misplaced content and links within authorized scope (analysis/review alone: §2.1 writes only). Current-system docs MUST describe what exists and label unfinished or proposed work.
 
 ### 3.6 Architecture, guides, and code documentation
@@ -158,7 +161,7 @@ Duties authorize no otherwise unauthorized work, and permissions nothing beyond 
 ### 3.7 Reporting
 
 - At task completion, handoff, or when seeking requester input, MUST consolidate unreported work into a report; otherwise MUST NOT draft/output routine progress reports unless requested or required.
-- Disclosures affecting authorization or the next decision MUST precede affected work; others MUST join the next consolidated report unless earlier timing is explicit.
+- Disclosures affecting authorization or a decision requiring requester input MUST precede affected work; others MUST join the next consolidated report unless earlier timing is explicit, as for inquiry framing (§2.4).
 - Reports MUST cover changes/reasons, paths, relevant decisions/canonical links, checks run/omitted, material assumptions/conflicts/risks/choices, and unfinished work; explain material SHOULD exceptions; distinguish evidence/inference and increment/task completion. Reports SHOULD fit the work: small mechanical changes usually need only outcome/checks, no invented risks/follow-up or mandatory templates.
 - Handoff reports MUST also transfer, as task-continuity state, the cumulative task's and any unfinished increment's effort baselines, with still-relevant requester-approved revisions (§2.3).
 - Displayed edits MUST default to changed portions with context (contents/diffs MAY be omitted); new files/extensive rewrites SHOULD get available full-file links and chat explanations; full copyable contents MAY be shown on request or for blocked edits.
@@ -173,17 +176,17 @@ Duties authorize no otherwise unauthorized work, and permissions nothing beyond 
 
 ### 3.9 Method references
 
-Linked method references clarify methods without adding rules; task research is bounded like other work (§1.1, §2.4). MAY consult one without inquiry framing when this contract leaves a material ambiguity in applying its method; MUST read only enough to resolve it, report the ambiguity, reference consulted, and resulting interpretation, and import no other practices. MUST NOT research clear rules. Before broader research, MUST explain unresolved uncertainty and ask the requester.
+Linked method references clarify methods without adding rules; research stays bounded (§1.1, §2.4). MAY consult one without inquiry framing when this contract leaves a material ambiguity in applying its method; MUST read only enough to resolve it, report the ambiguity, consulted reference, and interpretation, and import no other practices. MUST NOT research clear rules. Before broader research, MUST explain unresolved uncertainty and ask the requester.
 
 ## 4. How the layers compose
 
-1. Enter the work cycle at Plan (§1.1).
+1. Start at Plan (§1.1).
 2. Apply guards (§2) whenever work would advance or a relevant decision is due.
 3. Apply each triggered rule (§3) whenever its trigger occurs.
-4. After Study/Act, choose what follows:
+4. After Study/Act:
    - task done: complete and report (§3.7);
    - stopping before completion: hand off with a handoff report (§3.7);
    - a guard or other rule requires requester direction, or no existing authorization covers another increment: report and await direction;
    - otherwise: return to Plan for the next authorized increment (§2.5), with no routine report unless requested or required.
 
-Completing an increment, reporting, recording a decision, discovering a finding, or exhausting an inquiry does not by itself create authorization.
+Completed increments, reports, decision records, findings, and exhausted inquiries alone grant no authorization.

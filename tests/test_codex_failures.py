@@ -19,7 +19,7 @@ from unittest.mock import patch
 from evals.auth import PROFILE_CONFIG
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC
 from evals import __main__ as cli
-from evals import assumptions, followthrough, independence, inquiry, permissions, scheduling
+from evals import assumptions, followthrough, independence, inquiry, material_growth, permissions, scheduling
 from evals.evaluation import ExecutionResult
 from evals.functional import FunctionalCheckResult
 from evals.workspace import CONTRACT_PATH, WorkspaceObservation, snapshot_workspace
@@ -213,13 +213,15 @@ class CodexFailureTests(unittest.TestCase):
             ("success", "success", "empty", 1, ["passed", "passed", "assertion_failed"]),
         )
         names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure",
-                 "missing-permission", "no-safe-next-step", "contract-change-followthrough", "bounded-inquiry")
+                 "missing-permission", "no-safe-next-step", "contract-change-followthrough", "bounded-inquiry",
+                 "material-growth-handoff-b")
         rubrics = {"requester-guidance": REVIEW_RUBRIC, "independent-execution": independence.REVIEW_RUBRIC,
                    "assumption-disclosure": assumptions.REVIEW_RUBRIC,
                    "missing-permission": permissions.REVIEW_RUBRIC,
                    "no-safe-next-step": scheduling.REVIEW_RUBRIC,
                    "contract-change-followthrough": followthrough.REVIEW_RUBRIC,
-                   "bounded-inquiry": inquiry.REVIEW_RUBRIC}
+                   "bounded-inquiry": inquiry.REVIEW_RUBRIC,
+                   "material-growth-handoff-b": material_growth.REVIEW_RUBRIC}
         for smoke, scope, guidance, expected_exit, outcomes in scenarios:
             with self.subTest(smoke=smoke, scope=scope, guidance=guidance):
                 # Select deterministic responses for each fake task, without model calls.
@@ -227,7 +229,8 @@ class CodexFailureTests(unittest.TestCase):
                     {"smoke": smoke, "scope-discipline": scope, "requester-guidance": guidance,
                      "independent-execution": "success", "assumption-disclosure": "success",
                      "missing-permission": "success", "no-safe-next-step": "success",
-                     "contract-change-followthrough": "success", "bounded-inquiry": "success"}, case="all",
+                     "contract-change-followthrough": "success", "bounded-inquiry": "success",
+                     "material-growth-handoff-b": "success"}, case="all",
                 )
                 output, errors = process.communicate(timeout=20)
                 self.assertEqual(process.returncode, expected_exit, output + errors)
@@ -241,7 +244,7 @@ class CodexFailureTests(unittest.TestCase):
                 by_case = {json.loads((path / "report.json").read_text())["case"]: path for path in artifacts}
                 self.assertEqual(set(by_case), set(names))
                 workspaces = []
-                for name, outcome in zip(names, [*outcomes, *(["review_required"] * 6)]):
+                for name, outcome in zip(names, [*outcomes, *(["review_required"] * 7)]):
                     path = by_case[name]
                     report = json.loads((path / "report.json").read_text())
                     metadata = json.loads((path / "execution.json").read_text())
@@ -339,11 +342,13 @@ class CodexFailureTests(unittest.TestCase):
 
     def test_late_case_failures_take_precedence_over_pending_review_in_all_cases(self):
         names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure",
-                 "missing-permission", "no-safe-next-step", "contract-change-followthrough", "bounded-inquiry")
+                 "missing-permission", "no-safe-next-step", "contract-change-followthrough", "bounded-inquiry",
+                 "material-growth-handoff-b")
         failures = (("missing-permission", "redirected", 1), ("missing-permission", "nonzero", 2),
                     ("no-safe-next-step", "extra-worker", 1), ("no-safe-next-step", "nonzero", 2),
                     ("contract-change-followthrough", "unchanged", 1), ("contract-change-followthrough", "nonzero", 2),
-                    ("bounded-inquiry", "incorrect", 1), ("bounded-inquiry", "nonzero", 2))
+                    ("bounded-inquiry", "incorrect", 1), ("bounded-inquiry", "nonzero", 2),
+                    ("material-growth-handoff-b", "contract-edited", 1), ("material-growth-handoff-b", "nonzero", 2))
         for failed_case, scenario, expected_exit in failures:
             with self.subTest(case=failed_case, scenario=scenario):
                 scenarios = dict.fromkeys(names, "success")
@@ -360,6 +365,80 @@ class CodexFailureTests(unittest.TestCase):
                     self.assertEqual(report["review_required"], report["case"] not in names[:2])
                     if report["case"] == failed_case:
                         self.assertEqual(report["outcome"], "assertion_failed" if expected_exit == 1 else "execution_failed")
+
+    def test_material_growth_b_selection_retains_evidence_and_requires_human_review(self):
+        selected = next(case for case in cli.CASES if case.name == "material-growth-handoff-b")
+        self.assertIs(selected.dataset_factory, material_growth.material_growth_dataset)
+        self.assertIs(selected.fixture_files, material_growth.FIXTURE_FILES)
+        self.assertEqual(selected.review_rubric, material_growth.REVIEW_RUBRIC)
+        self.assertTrue(selected.observe_workspace)
+        self.assertIsNone(selected.check_execution)
+
+        for scenario in ("success", "application-edit"):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="material-growth-handoff-b")
+                artifacts, metadata, report = self.finish(process, runs, 3)
+                self.assertEqual(report["case"], "material-growth-handoff-b")
+                self.assertEqual(report["outcome"], "review_required")
+                self.assertTrue(report["review_required"])
+                result, = report["cases"]
+                self.assertEqual(result["name"], "requester-underestimated-repair")
+                self.assertEqual(result["assertions"], {
+                    "InitialFixtureIntact": True, "RootContractPreserved": True, "FinalResponsePresent": True,
+                })
+                self.assertEqual(result["evaluator_errors"], [])
+                self.assertEqual(metadata["evidence_errors"], [])
+                self.assertIn("--output-last-message", metadata["command"])
+                self.assertEqual((artifacts / "prompt.txt").read_text(), material_growth.PROMPT)
+                self.assertEqual((artifacts / "review.md").read_text(), material_growth.REVIEW_RUBRIC)
+                contract = CONTRACT_PATH.read_bytes()
+                self.assertEqual(metadata["contract_sha256"], hashlib.sha256(contract).hexdigest())
+                initial = json.loads((artifacts / "initial-workspace.json").read_text())
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                supplied = {"AGENTS.md": contract, **material_growth.FIXTURE_FILES}
+                self.assertEqual(set(initial), {".", "docs", *supplied})
+                self.assertEqual(set(final), set(initial))
+                for name, contents in supplied.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                    self.assertEqual(base64.b64decode(initial[name]["contents_base64"]), contents)
+                    if scenario == "success" or name != "job_queue.py":
+                        self.assertEqual((artifacts / "workspace" / name).read_bytes(), contents)
+                        self.assertEqual(initial[name], final[name])
+                changes = (artifacts / "workspace-changes.txt").read_text()
+                if scenario == "application-edit":
+                    self.assertIn('Path: "job_queue.py"', changes)
+                else:
+                    self.assertEqual(changes, "No observed workspace changes.\n")
+                self.assertEqual(result["final_response"], (artifacts / "final-response.txt").read_text())
+                # False completion can pass structure; there is no compliance verdict.
+                self.assertIn("repair is complete", result["final_response"])
+                events = (artifacts / "events.jsonl").read_text()
+                self.assertIn("no repair or queue validation", events)
+                self.assertIn("test-only inspection event", events)
+                self.assertIn("Human review pending", (artifacts / "report.txt").read_text())
+                self.assertFalse((artifacts / "functional-checks.json").exists())
+                self.assertFalse((artifacts / "checks").exists())
+                self.assertEqual((profile / "case-invocations").read_text(), "material-growth-handoff-b\n")
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_material_growth_b_failures_preserve_classification_and_pending_review(self):
+        for scenario, expected_exit in (("contract-edited", 1), ("empty", 1), ("missing-response", 2), ("nonzero", 2)):
+            with self.subTest(scenario=scenario):
+                process, _, runs = self.launch(scenario, case="material-growth-handoff-b")
+                artifacts, _, report = self.finish(process, runs, expected_exit)
+                self.assertTrue(report["review_required"])
+                self.assertEqual((artifacts / "review.md").read_text(), material_growth.REVIEW_RUBRIC)
+                if expected_exit == 2:
+                    self.assertEqual(report["outcome"], "execution_failed")
+                    self.assertEqual(report["cases"], [])
+                    self.assertTrue(report["execution_errors"])
+                else:
+                    self.assertEqual(report["outcome"], "assertion_failed")
+                    self.assertEqual(report["cases"][0]["assertions"], {
+                        "InitialFixtureIntact": True,
+                        "RootContractPreserved": scenario != "contract-edited",
+                        "FinalResponsePresent": scenario != "empty",
+                    })
 
     def test_inquiry_selection_uses_accepted_composition_and_retains_review_evidence(self):
         selected = next(case for case in cli.CASES if case.name == "bounded-inquiry")

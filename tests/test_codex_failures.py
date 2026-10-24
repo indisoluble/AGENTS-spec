@@ -214,14 +214,15 @@ class CodexFailureTests(unittest.TestCase):
         )
         names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure",
                  "missing-permission", "no-safe-next-step", "contract-change-followthrough", "bounded-inquiry",
-                 "material-growth-handoff-b")
+                 "material-growth-handoff-b", "material-growth-handoff-c")
         rubrics = {"requester-guidance": REVIEW_RUBRIC, "independent-execution": independence.REVIEW_RUBRIC,
                    "assumption-disclosure": assumptions.REVIEW_RUBRIC,
                    "missing-permission": permissions.REVIEW_RUBRIC,
                    "no-safe-next-step": scheduling.REVIEW_RUBRIC,
                    "contract-change-followthrough": followthrough.REVIEW_RUBRIC,
                    "bounded-inquiry": inquiry.REVIEW_RUBRIC,
-                   "material-growth-handoff-b": material_growth.REVIEW_RUBRIC}
+                   "material-growth-handoff-b": material_growth.REVIEW_RUBRIC,
+                   "material-growth-handoff-c": material_growth.REVIEW_RUBRIC_C}
         for smoke, scope, guidance, expected_exit, outcomes in scenarios:
             with self.subTest(smoke=smoke, scope=scope, guidance=guidance):
                 # Select deterministic responses for each fake task, without model calls.
@@ -230,7 +231,7 @@ class CodexFailureTests(unittest.TestCase):
                      "independent-execution": "success", "assumption-disclosure": "success",
                      "missing-permission": "success", "no-safe-next-step": "success",
                      "contract-change-followthrough": "success", "bounded-inquiry": "success",
-                     "material-growth-handoff-b": "success"}, case="all",
+                     "material-growth-handoff-b": "success", "material-growth-handoff-c": "success"}, case="all",
                 )
                 output, errors = process.communicate(timeout=20)
                 self.assertEqual(process.returncode, expected_exit, output + errors)
@@ -244,7 +245,7 @@ class CodexFailureTests(unittest.TestCase):
                 by_case = {json.loads((path / "report.json").read_text())["case"]: path for path in artifacts}
                 self.assertEqual(set(by_case), set(names))
                 workspaces = []
-                for name, outcome in zip(names, [*outcomes, *(["review_required"] * 7)]):
+                for name, outcome in zip(names, [*outcomes, *(["review_required"] * 8)]):
                     path = by_case[name]
                     report = json.loads((path / "report.json").read_text())
                     metadata = json.loads((path / "execution.json").read_text())
@@ -262,6 +263,25 @@ class CodexFailureTests(unittest.TestCase):
                     self.assertEqual((path / "final-workspace.json").exists(), name != "smoke")
                     self.assertEqual((path / "final-response.txt").exists(), name in rubrics)
                 self.assertEqual(len(set(workspaces)), len(names))
+                before = by_case["material-growth-handoff-b"]
+                budgeted = by_case["material-growth-handoff-c"]
+                self.assertNotEqual(before, budgeted)
+                self.assertEqual((before / "prompt.txt").read_text(), material_growth.PROMPT)
+                self.assertEqual((budgeted / "prompt.txt").read_text(), material_growth.PROMPT_C)
+                for name in ("AGENTS.md", *material_growth.FIXTURE_FILES):
+                    self.assertEqual((before / "initial-workspace" / name).read_bytes(),
+                                     (budgeted / "initial-workspace" / name).read_bytes())
+                first = json.loads((before / "execution.json").read_text())
+                second = json.loads((budgeted / "execution.json").read_text())
+                for key in ("model", "reasoning_effort", "timeout_seconds", "codex_home", "contract_sha256"):
+                    self.assertEqual(first[key], second[key], key)
+                commands = []
+                for metadata in (first, second):
+                    command = list(metadata["command"])
+                    for flag in ("--cd", "--output-last-message"):
+                        command[command.index(flag) + 1] = f"<{flag}>"
+                    commands.append(command)
+                self.assertEqual(commands[0], commands[1])
 
     def test_permission_cleanup_and_questions_retain_complete_evidence_without_semantic_verdicts(self):
         for scenario in ("success", "unchanged", "false-completion", "note"):
@@ -343,12 +363,13 @@ class CodexFailureTests(unittest.TestCase):
     def test_late_case_failures_take_precedence_over_pending_review_in_all_cases(self):
         names = ("smoke", "scope-discipline", "requester-guidance", "independent-execution", "assumption-disclosure",
                  "missing-permission", "no-safe-next-step", "contract-change-followthrough", "bounded-inquiry",
-                 "material-growth-handoff-b")
+                 "material-growth-handoff-b", "material-growth-handoff-c")
         failures = (("missing-permission", "redirected", 1), ("missing-permission", "nonzero", 2),
                     ("no-safe-next-step", "extra-worker", 1), ("no-safe-next-step", "nonzero", 2),
                     ("contract-change-followthrough", "unchanged", 1), ("contract-change-followthrough", "nonzero", 2),
                     ("bounded-inquiry", "incorrect", 1), ("bounded-inquiry", "nonzero", 2),
-                    ("material-growth-handoff-b", "contract-edited", 1), ("material-growth-handoff-b", "nonzero", 2))
+                    ("material-growth-handoff-b", "contract-edited", 1), ("material-growth-handoff-b", "nonzero", 2),
+                    ("material-growth-handoff-c", "contract-edited", 1), ("material-growth-handoff-c", "nonzero", 2))
         for failed_case, scenario, expected_exit in failures:
             with self.subTest(case=failed_case, scenario=scenario):
                 scenarios = dict.fromkeys(names, "success")
@@ -367,30 +388,42 @@ class CodexFailureTests(unittest.TestCase):
                         self.assertEqual(report["outcome"], "assertion_failed" if expected_exit == 1 else "execution_failed")
 
     def test_material_growth_b_selection_retains_evidence_and_requires_human_review(self):
-        selected = next(case for case in cli.CASES if case.name == "material-growth-handoff-b")
-        self.assertIs(selected.dataset_factory, material_growth.material_growth_dataset)
+        self.assert_material_growth_evidence(
+            "material-growth-handoff-b", material_growth.material_growth_dataset,
+            material_growth.PROMPT, material_growth.REVIEW_RUBRIC, "requester-underestimated-repair",
+        )
+
+    def test_material_growth_c_selection_retains_evidence_and_requires_human_review(self):
+        self.assert_material_growth_evidence(
+            "material-growth-handoff-c", material_growth.material_growth_c_dataset,
+            material_growth.PROMPT_C, material_growth.REVIEW_RUBRIC_C, "requester-budgeted-repair",
+        )
+
+    def assert_material_growth_evidence(self, case_name, dataset_factory, prompt, rubric, instance_name):
+        selected = next(case for case in cli.CASES if case.name == case_name)
+        self.assertIs(selected.dataset_factory, dataset_factory)
         self.assertIs(selected.fixture_files, material_growth.FIXTURE_FILES)
-        self.assertEqual(selected.review_rubric, material_growth.REVIEW_RUBRIC)
+        self.assertEqual(selected.review_rubric, rubric)
         self.assertTrue(selected.observe_workspace)
         self.assertIsNone(selected.check_execution)
 
         for scenario in ("success", "application-edit"):
             with self.subTest(scenario=scenario):
-                process, profile, runs = self.launch(scenario, case="material-growth-handoff-b")
+                process, profile, runs = self.launch(scenario, case=case_name)
                 artifacts, metadata, report = self.finish(process, runs, 3)
-                self.assertEqual(report["case"], "material-growth-handoff-b")
+                self.assertEqual(report["case"], case_name)
                 self.assertEqual(report["outcome"], "review_required")
                 self.assertTrue(report["review_required"])
                 result, = report["cases"]
-                self.assertEqual(result["name"], "requester-underestimated-repair")
+                self.assertEqual(result["name"], instance_name)
                 self.assertEqual(result["assertions"], {
                     "InitialFixtureIntact": True, "RootContractPreserved": True, "FinalResponsePresent": True,
                 })
                 self.assertEqual(result["evaluator_errors"], [])
                 self.assertEqual(metadata["evidence_errors"], [])
                 self.assertIn("--output-last-message", metadata["command"])
-                self.assertEqual((artifacts / "prompt.txt").read_text(), material_growth.PROMPT)
-                self.assertEqual((artifacts / "review.md").read_text(), material_growth.REVIEW_RUBRIC)
+                self.assertEqual((artifacts / "prompt.txt").read_text(), prompt)
+                self.assertEqual((artifacts / "review.md").read_text(), rubric)
                 contract = CONTRACT_PATH.read_bytes()
                 self.assertEqual(metadata["contract_sha256"], hashlib.sha256(contract).hexdigest())
                 initial = json.loads((artifacts / "initial-workspace.json").read_text())
@@ -418,16 +451,23 @@ class CodexFailureTests(unittest.TestCase):
                 self.assertIn("Human review pending", (artifacts / "report.txt").read_text())
                 self.assertFalse((artifacts / "functional-checks.json").exists())
                 self.assertFalse((artifacts / "checks").exists())
-                self.assertEqual((profile / "case-invocations").read_text(), "material-growth-handoff-b\n")
+                self.assertEqual((profile / "case-invocations").read_text(), case_name + "\n")
                 self.assertEqual((profile / "invocations").read_text(), "exec\n")
 
     def test_material_growth_b_failures_preserve_classification_and_pending_review(self):
+        self.assert_material_growth_failures("material-growth-handoff-b", material_growth.REVIEW_RUBRIC)
+
+    def test_material_growth_c_failures_preserve_classification_and_pending_review(self):
+        self.assert_material_growth_failures("material-growth-handoff-c", material_growth.REVIEW_RUBRIC_C)
+
+    def assert_material_growth_failures(self, case_name, rubric):
         for scenario, expected_exit in (("contract-edited", 1), ("empty", 1), ("missing-response", 2), ("nonzero", 2)):
             with self.subTest(scenario=scenario):
-                process, _, runs = self.launch(scenario, case="material-growth-handoff-b")
+                process, _, runs = self.launch(scenario, case=case_name)
                 artifacts, _, report = self.finish(process, runs, expected_exit)
                 self.assertTrue(report["review_required"])
-                self.assertEqual((artifacts / "review.md").read_text(), material_growth.REVIEW_RUBRIC)
+                self.assertEqual(report["case"], case_name)
+                self.assertEqual((artifacts / "review.md").read_text(), rubric)
                 if expected_exit == 2:
                     self.assertEqual(report["outcome"], "execution_failed")
                     self.assertEqual(report["cases"], [])

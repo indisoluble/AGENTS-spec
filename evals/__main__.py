@@ -61,6 +61,8 @@ CASES = (
                review_rubric=inquiry.REVIEW_RUBRIC),
     CaseConfig("material-growth-handoff-b", material_growth.material_growth_dataset, material_growth.FIXTURE_FILES,
                review_rubric=material_growth.REVIEW_RUBRIC),
+    CaseConfig("material-growth-handoff-c", material_growth.material_growth_c_dataset, material_growth.FIXTURE_FILES,
+               review_rubric=material_growth.REVIEW_RUBRIC_C),
 )
 # Known failures take precedence over a case awaiting human review.
 EXIT_PRIORITY = {0: 0, 3: 1, 1: 2, 2: 3}

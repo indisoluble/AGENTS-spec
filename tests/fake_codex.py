@@ -334,7 +334,13 @@ def main() -> int:
     initial = (workspace / "message.txt").read_bytes() if (workspace / "message.txt").exists() else None
     prompt = sys.stdin.read()
     if (workspace / "job_queue.py").exists():
-        case_name = "material-growth-handoff-b"
+        # Route the two test inputs; this is not a behavioral grader.
+        if "My cumulative task effort baseline accommodates" in prompt:
+            case_name = "material-growth-handoff-c"
+            assert "My initial increment effort baseline accommodates" in prompt
+        else:
+            case_name = "material-growth-handoff-b"
+            assert "My cumulative task effort baseline is a small" in prompt
         assert initial is None
         assert "My cumulative task effort baseline" in prompt
         assert "My initial increment effort baseline" in prompt
@@ -419,7 +425,7 @@ def main() -> int:
         return 7
     if scenario == "sleep":
         wait_with_child(profile)
-    if case_name == "material-growth-handoff-b":
+    if case_name in ("material-growth-handoff-b", "material-growth-handoff-c"):
         material_growth_response(workspace, scenario)
         print(json.dumps({"type": "turn.completed"}), flush=True)
         return 0

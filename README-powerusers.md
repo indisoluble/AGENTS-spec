@@ -2,7 +2,7 @@
 
 After [installing the files](README.md#get-started), start with an ordinary request for an outcome. The agent is responsible for organizing the work, checking its results, and recognizing when it needs your direction.
 
-The contract's primary aim is to prevent unconstrained token consumption, including unexpectedly heavy use within one step. It uses small, complete increments, develops detail as needed, and preserves the analysis and validation each result requires. This guide explains what that means in practice.
+The contract's primary aim is to control token consumption through small, meaningful, bounded increments and proportionate work. Its second aim is to keep you informed and in control of consequential direction. The agent manages routine execution; documentation preserves shared knowledge for you and future agents. This guide explains what that means in practice.
 
 Read the first example for the overall process, then use the sections relevant to your situation:
 
@@ -10,7 +10,7 @@ Read the first example for the overall process, then use the sections relevant t
 | --- | --- |
 | How does the agent turn my request into progress? | [From a request to a result](#from-a-request-to-a-result) |
 | When will it ask me, pause, or continue? | [Pauses and decisions](#when-the-agent-pauses-or-continues) |
-| How is expected effort established, and what if it grows? | [Effort baselines and growth](#when-the-work-grows-unexpectedly) |
+| How do estimates, limits, and additional work affect continuation? | [Estimates, limits, and changes in work](#when-the-work-grows-unexpectedly) |
 | Can a review or exploration update files? | [Records during review and exploration](#records-during-review-and-exploration) |
 | What happens when it needs to investigate? | [Blocking investigations](#when-an-investigation-is-needed) |
 | How do I assess the work and its effort? | [Results](#assess-the-result) and [token use](#understanding-token-use) |
@@ -42,11 +42,11 @@ The agent defines **acceptance conditions**: reject mismatched rows, report thei
 
 Its **prediction** concerns the proposed approach: validation at the existing row boundary will suffice. If the implementation needs a different approach, that prediction may be wrong even though the acceptance conditions can still be met. The objective, scope, conditions, and approach can be refined together as the context becomes clear, without departing from your instructions or agreed requirements. Later work stays at outline level.
 
-The agent also establishes **effort baselines**: the expected amount and kind of work for the cumulative task and for this first increment. Your direction supplies either baseline when available. The request in this example supplies neither, so the agent uses the initial inspection to make reasonable estimates and briefly states them before substantial further work. For example:
+After proportionate preliminary context gathering, the agent briefly states the overall task outline and the first increment's objective and bounds in chat before substantial work. For example:
 
-> For the CSV-import task, I expect local row-validation changes, regression checks for the agreed import rules, and updates to the import documentation. The first increment covers field-count validation, its checks, and affected documentation. I do not anticipate exploratory investigation or a shared-parser redesign.
+> I'll add the agreed invalid-row checks while preserving processing of valid rows. First, I'll add field-count validation at the existing row boundary, check reported line numbers and continued processing, and update the affected import documentation. Later increments will cover the remaining agreed rules.
 
-The statement is informational: the agent can proceed under existing authorization without waiting for approval of its estimate. Later evidence may change what it expects the work to take, but materially greater effort requires direction before it proceeds. The [growth rules](#when-the-work-grows-unexpectedly) explain how the established baselines remain the comparison point.
+This initial plan makes the direction and next action understandable. It requires no effort estimate and creates no approval checkpoint. The agent can refine routine local implementation details as evidence develops, while keeping the increment bounded and respecting the [limits and consultation rules](#when-the-work-grows-unexpectedly).
 
 Different findings can lead to a different first step. If the intended invalid-row behavior is unsettled, the agent brings consequential questions to you and develops the relevant requirements within authorization. Behavior agreed that way, which the importer must keep providing after this task, is a new system requirement. It belongs in the project's **canonical owner**: the file or section that is authoritative for that knowledge and is kept current when it changes. New or revised requirements use the EARS wording pattern explained under [Make expected behavior explicit](#make-expected-behavior-explicit).
 
@@ -54,13 +54,13 @@ Where the rules already have an authoritative owner, as in this example, the age
 
 ### Do, Study, and Act: complete the step and use its findings
 
-- **Do the work.** Add that validation, the relevant tests, and updates to affected documentation. Keep the changes focused on the agreed behavior. Record significant lasting choices if any arise.
+- **Do the work.** Add that validation, the relevant tests, and updates to affected documentation. Keep the changes focused on the agreed behavior. If a significant lasting choice arises, record it and obtain any required direction before adopting or implementing it.
 - **Study the result.** Run relevant available checks against the acceptance conditions before completing the increment. This is **validation**. Separately, compare the observations with the prediction: did the existing row boundary support the change, or did the approach need revision? Disclose failed, unavailable, or omitted checks under the [reporting rules](#assess-the-result).
 - **Act on what was learned.** Retain, revise, or discard the approach within authorization and preserve useful findings. If the task remains unfinished, use the findings to plan the next authorized increment or seek direction when required.
 
-After checking this increment, the agent can proceed to another within existing authorization unless a checkpoint requires your direction. Routine progress reports are neither drafted nor posted unless requested or otherwise required; [reporting and approval checkpoints](#when-the-agent-pauses-or-continues) have separate triggers. Suppose the findings support adding an agreed check for missing required values next. When planning that increment, the agent establishes its effort baseline and briefly states any newly established agent estimate; unchanged baselines need no routine repetition. That increment receives its own validation and assessment.
+After checking this increment, the agent can proceed to another within existing authorization unless a checkpoint requires your direction. Routine progress reports are neither drafted nor posted unless requested or otherwise required; [reporting and approval checkpoints](#when-the-agent-pauses-or-continues) have separate triggers. Suppose the findings support adding an agreed check for missing required values next. The agent reassesses progress, remaining work, direction, and limits, then defines that next increment and its checks. It need not announce a new estimate or repeat the initial planning message for every increment.
 
-The agent continues through the remaining agreed rules, selecting each next increment from the evidence and completing its checks. In this path, the work stays within authorization and expected effort, and no unresolved consequential question requires your direction. Once all agreed import behavior is implemented and validated, the task objective is fulfilled. A consolidated task-completion report could look like this, assuming the named files exist and the checks succeeded:
+The agent continues through the remaining agreed rules, selecting each next increment from the evidence and completing its checks. In this path, the work stays within authorization, established direction, and applicable limits, and no unresolved consequential question requires your direction. Once all agreed import behavior is implemented and validated, the task objective is fulfilled. A consolidated task-completion report could look like this, assuming the named files exist and the checks succeeded:
 
 > Implemented field-count, required-value, and the remaining agreed row-validation rules in `src/importer.py`. Added regression coverage in `tests/test_importer.py` and updated `docs/import-format.md`.
 >
@@ -68,7 +68,7 @@ The agent continues through the remaining agreed rules, selecting each next incr
 >
 > The agreed CSV-import objective is complete.
 
-Each increment was completed and checked while the agent continued toward the overall objective; task completion triggers the consolidated report. You did not need to request status between increments or supervise their selection. Findings guided each next choice without a complete sequence planned in advance. If evidence instead reveals unexpectedly greater effort, the [pause rule](#when-the-work-grows-unexpectedly) applies at that discovery, as the alternative example below shows.
+Each increment was completed and checked while the agent continued toward the overall objective; task completion triggers the consolidated report. You did not need to request status between increments or supervise their selection. Findings guided each next choice without a complete sequence planned in advance. If evidence instead points to a consequential change in parser direction, the [consultation rules](#when-the-work-grows-unexpectedly) apply before that choice is adopted or implemented.
 
 The phase labels explain the reasoning, not a required report format. Phases can overlap or repeat: tests may be planned before implementation, and documentation changes as facts become established. Routine work needs no worksheet, formal experiment, or separate phase reports. PDSA also applies to investigations and documentation-only work.
 
@@ -82,11 +82,11 @@ For example, choosing a storage approach may require careful examination of requ
 
 The agent selects the smallest useful next increment within your authorization, including in planning or approval workflows. During Plan, it considers which unmet behavior or blocking question can usefully be addressed next and which dependencies are needed for a complete result. It assesses the [scope, uncertainty, consequences, and reversibility](AGENTS.md#22-decisions-and-requester-interaction) of that decision. These criteria guide judgment; the contract prescribes no fixed sequence or ranking formula.
 
-Consequential unresolved intent or constraints come back to you. Selecting and defining the step—its objective, acceptance conditions, approach, and prediction—are standing agent responsibilities, so you need not prescribe a step or stopping condition for every request.
+Consequential unresolved intent or constraints come back to you, as do new consequential architectural or lasting design directions and material departures from established direction unless the specific choice is already authorized. Selecting and defining routine steps—their objectives, acceptance conditions, approaches, and predictions—remain agent responsibilities.
 
 An increment can deliver evidence for a decision as well as an implementation. A code change includes the affected tests, configuration, and documentation needed for its result; an investigation includes the evidence and conclusion needed for its decision. Either can be complete while the overall task remains unfinished.
 
-A straightforward authorized correction can proceed without a separate planning exchange. If a proposed step cannot stand alone, the agent must first explain why, what remains usable or testable, and how to undo it. Material limits on undoing changes stay visible. If no safe step is possible, it presents alternatives and seeks direction.
+A straightforward authorized correction can proceed without an approval exchange; the brief initial planning statement still applies. If a proposed step cannot stand alone, the agent must first explain why, what remains usable or testable, and how to undo it. Material limits on undoing changes stay visible. If no safe step is possible, it presents alternatives and seeks direction.
 
 See the contract's [increment rules](AGENTS.md#11-plan--define-the-next-increment).
 
@@ -99,17 +99,18 @@ These events have different purposes:
 | Event | Purpose |
 | --- | --- |
 | Completing an increment | Establish that one bounded result meets its acceptance conditions. |
-| Stating an agent-set effort baseline or inquiry boundaries | Show expected effort before substantial further work, or inquiry bounds before the investigation; this is informational. |
+| Stating the initial task outline or inquiry boundaries | Make the direction and first increment understandable before substantial work, or frame the question and bounds before an inquiry; neither statement requests approval by itself. |
 | Reporting a result | Show what the work produced, its checks, and what remains; one report can cover several increments. |
-| Reaching an approval checkpoint | Reserve a decision for you before the relevant work continues. |
+| Consulting at a required decision or checkpoint | Obtain your direction before the affected choice is adopted or implemented, or the checkpoint is passed. |
+| Recording durable knowledge | Preserve authoritative facts, decisions, and reasons for humans and future agents; recording supplies no decision authority. |
 
 The agent must combine unreported work into a report at task completion, when seeking your input, or at a **handoff**. A handoff means stopping before the task is complete and passing the unfinished work to you or another person or agent. At other times, the agent must not draft or post routine progress reports unless you request them or another applicable rule requires them.
 
 Some information must arrive before the next action. If it affects permission or a decision you need to make, the agent discloses it before the affected work. Other disclosures, including investigation outcomes, belong in the next consolidated report unless an earlier time is explicit.
 
-Two statements have explicitly earlier timing. The agent briefly states an agent-set [effort baseline](#when-the-work-grows-unexpectedly) in chat when established, before substantial further work. It states [inquiry framing](#when-an-investigation-is-needed), the investigation's question and boundaries, before starting the inquiry or acting on revised framing. These can share one concise message when both apply at the same point. Neither statement requires a progress summary or approval by itself; any separate checkpoint still applies.
+Two statements have explicitly earlier timing. After proportionate preliminary context gathering, the agent briefly states the [task outline and first increment's objective and bounds](#plan-choose-the-next-increment) before substantial work. It states [inquiry framing](#when-an-investigation-is-needed), the investigation's question and boundaries, before starting the inquiry or acting on revised framing. These can share one concise message when both apply. Neither requires a cost estimate, routine progress narration, or approval by itself; any separate checkpoint still applies.
 
-A handoff report also transfers the task's effort baseline and the baseline of any unfinished increment, including your still-relevant approved revisions. This preserves the expected work used to judge growth when someone else continues; a handoff cannot reset it. The [baseline lifecycle](#when-the-work-grows-unexpectedly) explains how the next agent uses or recovers that state. No permanent project record is required for this handoff state.
+A handoff report transfers the task objective and established direction; applicable limits and checkpoints, including allowances already consumed; the next or unfinished increment's objective, bounds, and acceptance conditions; and relevant inquiry framing, findings, and remaining allowance. The report's normal account of completed and unfinished work supplies the rest of the continuation context. A continuing agent uses this state and recovers missing authorization or limit information, or obtains your direction before dependent work. Optional forecasts need not be transferred or recovered. Durable project knowledge remains in its canonical documents.
 
 A completed increment can lead directly to the next one without a chat report. A requested or required report does not itself create an approval checkpoint. Your conditions, the contract's checkpoints, and the tool's rules all apply; your instructions take priority within the tool's actual hierarchy and permissions.
 
@@ -121,55 +122,46 @@ A **material** issue significantly affects correctness, scope, risk, or whether 
 | --- | --- |
 | An unanswered question could significantly change the intended result or permitted work. For example, should an imported duplicate replace the existing record? | Must bring the question to you. |
 | A missing constraint could significantly change the design or checks. For example, the import must fit a deployment's memory budget, but that budget is unsettled. | Must agree the consequential constraint with you as needed. |
-| Within agreed constraints and permission, an unresolved choice has significant consequences. For example, two suitable approaches have substantially different maintenance costs. | Should ask first: this is a strong recommendation with justified exceptions. |
-| A local choice stays within agreed limits, such as naming a private helper. | May choose easily reversible details; material assumptions remain visible. |
-| New evidence shows that completion needs materially more work or investigation than expected. For example, a local validation change needs a shared-parser redesign. | Must reassess and wait for direction before the additional work, even if the outcome is already authorized. |
+| A choice establishes new consequential architectural or lasting design direction, or materially departs from established direction. For example, changing the shared parser's error contract. | Must obtain your direction before adopting or implementing the choice unless that specific choice is already authorized. |
+| Another unsettled choice materially affects the decision factors, optimization, or lasting complexity, without triggering a mandatory consultation rule. | Should ask first: this is a strong recommendation with justified exceptions. |
+| A local correction stays authorized, bounded, low-impact, easily reversible, and consistent with established direction. | May choose the implementation details and validate the correction independently; material assumptions remain visible. |
+| Further work would exceed your explicit limit or pass your checkpoint. | Must obtain your direction first; another increment or retry does not reset the limit. |
+| More increments are needed, but their contribution is justified and the work stays authorized and consistent with direction and limits. | Reassess cumulative progress and continue in small increments; a changed forecast alone requires no approval. |
 
 These strengths follow [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119.html) and [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174.html). Exceptions to a recommendation require weighing consequences and justifying the departure; material departures must be explained. They cannot bypass required involvement or authorization limits. Missing answers grant no broader permission, and reporting a consequential choice afterward cannot supply advance authorization.
 
 ### When the work grows unexpectedly
 
-An **effort baseline** describes the amount and kind of work expected and provides the reference for assessing growth. The contract uses two levels:
+Additional work calls for reassessment, not an automatic approval request. Before expanding planned work or starting another increment or attempt, the agent considers cumulative progress, remaining work, established direction, and applicable limits. It must justify the next increment's contribution from the evidence; if it cannot, it seeks your direction.
 
-| Baseline | What it covers | When it is established |
-| --- | --- | --- |
-| Cumulative task | Expected effort to achieve the whole requested outcome, across its increments. | At the task's start, allowing proportionate preliminary context gathering where needed. |
-| Increment | Expected effort to complete the particular bounded step, including its checks and affected documentation. | When planning that increment; the first increment has its own baseline even when it covers the whole task. |
+**Estimates and limits have different force.** Agent-generated effort estimates are optional and nonbinding. Revising an estimate does not create a checkpoint. If two anticipated increments become five, the agent may continue when the additional increments remain authorized, justified, bounded, and consistent with established direction and limits.
 
-The agent uses your direction for whichever baselines you supply. Where a baseline is missing, it makes a reasonable estimate using its own judgment. It may gather proportionate preliminary context first to make that estimate meaningful. When the estimate is established, the agent briefly states it in chat, before substantial implementation, investigation, or other work beyond that preliminary assessment.
+An informal expectation such as “I expect this to be a small fix” is not automatically a binding budget. “Do not undertake more than one increment without consulting me” is a binding checkpoint. If the intended force of your statement is materially ambiguous, the agent must clarify it rather than treating it as either unlimited authority or a hard limit.
 
-The statement describes anticipated investigation, implementation, and validation effort in practical terms. A qualitative estimate can suffice; no numerical estimate or detailed plan of every future increment is required.
-
-The [CSV walkthrough](#from-a-request-to-a-result) illustrates a task estimate and a more specific first-increment estimate in the same message. If you supplied the task baseline but left the increment open, the agent would use your task baseline and state its estimate for the increment. Supplying an estimate creates no approval checkpoint when the work is already authorized. Unchanged baselines need no routine repetition, and the agent does not narrate each preliminary inspection. The baselines remain task state, not mandatory project records or worksheets.
-
-At a [handoff](#when-the-agent-pauses-or-continues), existing baselines are transferred. Continuing handed-off work uses those baselines. If they are missing, the agent must recover them from available task state or obtain your direction before further effort-bearing work; it must not set fresh ones.
-
-The agent's **current estimate** may change as it learns more. The baseline remains the reference for deciding whether the work has grown materially. Discovering that a parser redesign is needed changes the estimate; it does not silently make that redesign part of the original expected effort.
-
-Only your direction can revise an established baseline. If you approve additional work the agent disclosed, the affected baselines expand to include only that approved commitment. Later growth is judged against the revised baselines. Approval of one extension does not cover further, undisclosed growth.
-
-The comparison also survives subdivision of the work. New increments or investigation attempts do not reset the whole task's baseline. A new increment's baseline cannot absorb growth already discovered unless you directed that change. This prevents a series of individually small steps from concealing a substantially larger task.
-
-If new evidence shows that completion needs materially more work or investigation than expected, the agent must explain what changed, what remains unfinished or uncertain, and the smallest useful complete next step. It then waits for your direction **before undertaking that additional effort**, even if broad authorization already covers the outcome.
+The agent must obtain your direction before exceeding requester-imposed effort or scope limits or passing checkpoints. Only your direction can revise them; new increments, retries, and handoffs do not reset them. An inquiry also has its own [stopping bounds](#when-an-investigation-is-needed), even when you have set no overall effort cap.
 
 For the field-count increment:
 
 | Finding | Expected response |
 | --- | --- |
-| Another malformed row fits the agreed rule and expected local checks. | Complete and validate the regression case within the increment; include it in the next report when reporting is due. |
-| Rejecting rows requires redesigning a shared parser and investigating other callers. | Explain the larger effort and unfinished result, propose a next step, and wait for direction. |
+| Another malformed row fits the agreed rule and existing validation boundary. | Make and validate a routine local correction within the bounded increment; report it when reporting is due. |
+| More agreed validation rules need separate increments than first anticipated. | Reassess and continue within authorization, direction, and limits; the revised forecast alone is no reason to pause. |
+| A proposed repair changes the shared parser's established error contract. | Prepare the concrete proposal and obtain direction before adopting or implementing that material departure, unless the specific choice is already authorized. |
+| The next step would pass your one-increment checkpoint. | Report the result and obtain direction before continuing. |
 
-This assessment considers scope, uncertainty, consequences, and reversibility against both the expectation for the current increment and cumulative effort across the task. Several small additions can together become materially greater work. Starting another increment or investigation attempt does not reset the task's expected effort. There is no numerical threshold based on changed lines or token count. The checkpoint applies in every phase, and splitting the work cannot excuse incomplete or inadequately checked results.
+For an alternative path through the CSV task, suppose field-count and required-value validation have been completed and checked. Inspection shows that the shared parser aborts before the importer can handle another agreed invalid-row case. A bounded assessment supports proposing an opt-in recovery interface for the importer while preserving the fail-fast default for existing callers. That changes established direction and has not been specifically authorized.
 
-For an alternative path through the CSV task, suppose field-count and required-value validation have been completed and checked. While planning another agreed rule, the agent discovers that the shared parser stops before the importer can handle the invalid row. Completing that rule needs changes to parser recovery and investigation of effects on other callers, substantially more work than the expected local validation change. Assuming the named files exist and the earlier checks succeeded, the agent could report:
+Assuming the named files exist, the earlier checks succeeded, and no inquiry remains open and no additional requester limit or checkpoint applies, the agent could report:
 
-> Completed field-count and required-value validation in `src/importer.py`, added regression checks in `tests/test_importer.py`, and updated `docs/import-format.md`. Checks passed for those rules, their reported line numbers, and valid rows following their rejections.
+> Completed field-count and required-value validation in `src/importer.py`, added regression checks in `tests/test_importer.py`, and updated `docs/import-format.md`. Checks passed for those rules, line numbers, and valid rows following rejections.
 >
-> The overall CSV-import task is unfinished. The next rule cannot be implemented at the existing row boundary because the shared parser stops first. Parser-recovery changes affect other callers and need more investigation than expected.
+> The CSV-import objective remains unfinished. The shared parser aborts on the next invalid-row case. I propose an opt-in recovery interface for the importer, preserving existing callers' fail-fast behavior. The proposed decision and compatibility risks are recorded in `docs/decisions/parser-recovery.md`.
 >
-> The smallest useful next step is a bounded assessment of the parser's recovery interface, its direct callers, and existing recovery tests, to identify the behavior and compatibility constraints a change must preserve. That assessment would produce an evidenced change proposal; it would not implement the redesign. Would you like to proceed with that assessment, or reconsider the remaining requirement?
+> If approved, the next increment will implement that interface and its importer integration, with checks for row-error reporting, continued processing, and unchanged default behavior for other callers. Do you approve this direction, or should recovery stay within importer-specific parsing?
 
-The new finding changes the commitment needed to finish the task. The report gives you the completed work, the evidence behind the larger effort, and a concrete next decision. The agent waits for direction before undertaking that additional work, even if the overall outcome was already authorized. If you authorize the assessment, inspecting the recovery interface, direct callers, and existing tests is context gathering, so that inspection needs no inquiry framing. If resolving uncertainty about how to proceed then calls for a recovery experiment, the agent states its boundaries concisely in chat [before that inquiry starts](#when-an-investigation-is-needed).
+The decision concerns the parser's contract and responsibilities. A larger effort estimate would not by itself require this pause. The proposal is recorded as Proposed; recording it does not authorize its adoption or implementation. Relevant context gathering and a justified, framed inquiry can prepare the decision within existing authorization without first asking permission merely because the forecast changed.
+
+The report preserves completed work, the unfinished objective, established behavior, the proposed direction, and the next increment's scope and acceptance conditions. A handoff with active limits or inquiries must also preserve their state as described under [reporting and handoffs](#when-the-agent-pauses-or-continues).
 
 ### Instruction files and external actions
 
@@ -205,7 +197,7 @@ These examples assume you requested only assessment or exploration and the tool 
 | The same reader finding must be recorded; it belongs to architectural knowledge, and no suitable permanent record exists because the project has no architecture documentation or other owner for that topic. | The agent must create a minimal architecture document holding only that finding and its evidence, which becomes the topic's canonical owner. The contract recommends placing it in the documentation folder stated in `README.md`, otherwise root `docs/`; that default location needs no `README.md` edit. It adds no empty sections, placeholders, or backfill; other arc42 gaps remain proposals. |
 | An assessment verifies that the setup command in a README disagrees with authoritative package configuration. | The agent may correct that factual error within the assessed scope, then validate and report the correction. It may not change the package configuration to make the old command true. |
 | An architectural evaluation develops a concrete, significant proposal ready for decision or review. | Create a Proposed [Architecture Decision Record (ADR)](#preserve-significant-choices-and-identify-debt) with context, reasons, consequences, and relevant evidence. The proposal itself grants no authority to accept or implement it. |
-| The agent or requester makes a significant lasting decision within their existing authority, such as selecting streaming over full-file buffering to meet the agreed memory limit. | Mark that decision Accepted and preserve the reasons, evidence, and useful rejected alternatives. A separately recorded proposal that was rejected has Rejected status. Recording creates no separate ADR approval checkpoint or implementation permission. |
+| A significant lasting decision is made under existing authority and consultation rules, such as choosing streaming over full-file buffering after requester direction or specific prior authorization. | Mark it Accepted and preserve the reasons, evidence, and useful rejected alternatives. A separately recorded proposal that was rejected has Rejected status. Recording adds no ADR-specific approval checkpoint and cannot replace required prior consultation or grant implementation permission. |
 | A review identifies duplicated validation rules whose maintenance risk is supported by inconsistent past fixes. | The agent may record [technical debt](#preserve-significant-choices-and-identify-debt), considering accepted requirements and trade-offs. It reports any entry: what, why, where, and classification uncertainty. Recording grants no permission to fix the issue. |
 | You request: "Assess the parser. Do not create, modify, or delete any files." | The restriction covers records and factual documentation corrections. The agent can provide findings and proposed record or correction text in its response for you to retain. That text does not satisfy the record obligation; the unmade record is reported as unfinished work. |
 
@@ -213,7 +205,7 @@ A debt entry is optional under the debt rule; preserving a material finding that
 
 ### Optional controls you can add
 
-You can select a particular increment, supply a task or increment effort baseline, set an investigation limit, request status updates, or add review checkpoints. Asking for updates does not by itself require approval before every next increment. An additional checkpoint can reflect a project dependency, such as a team's review of user-visible behavior:
+You can select a particular increment, impose an explicit effort or scope limit, set an investigation limit, request status updates, or add review checkpoints. Asking for updates does not by itself require approval before every next increment. An additional checkpoint can reflect a project dependency, such as a team's review of user-visible behavior:
 
 > Our team needs to review the import error messages before the importer is connected to the upload workflow. Implement and test the standalone validation and error reporting, then show representative results and wait for my confirmation before integration.
 
@@ -221,11 +213,11 @@ The agent chooses and completes the increments needed for that reviewable result
 
 You may instead name the exact behavior to address next or impose a tighter investigation limit. The agent remains responsible for a coherent approach, adequate validation, and every required checkpoint. Stating an inquiry's boundaries, including its effort limit, concisely in chat before starting is already its duty, as the next section explains.
 
-The full interaction conditions are in the contract's [progression guards](AGENTS.md#2-progression-guards), especially [requester interaction](AGENTS.md#22-decisions-and-requester-interaction) and [effort growth](AGENTS.md#23-effort-baselines-and-material-growth).
+The full interaction conditions are in the contract's [progression guards](AGENTS.md#2-progression-guards), especially [requester interaction](AGENTS.md#22-decisions-and-requester-interaction) and [effort estimates and requester limits](AGENTS.md#23-effort-estimates-and-requester-limits).
 
 ## When an investigation is needed
 
-Inspecting the relevant code, callers, tests, configuration, and directly related dependencies to establish starting context, and all reading of existing project documentation, are context gathering. Following an ordinary caller or test needs no inquiry framing or inspection-by-inspection announcement. Reading those documents remains exempt even when answering a material blocking question. Scope, effort-baseline, and material-growth rules still apply; the exemption supplies no unlimited research allowance.
+Inspecting the relevant code, callers, tests, configuration, and directly related dependencies to establish starting context, and all reading of existing project documentation, are context gathering. Following an ordinary caller or test needs no inquiry framing or inspection-by-inspection announcement. Reading those documents remains exempt even when answering a material blocking question. Scope, requester limits, proportionate work, and cumulative reassessment still apply; the exemption supplies no unlimited research allowance.
 
 Inquiry begins when activity beyond that context investigates material uncertainty about how to proceed that blocks the next decision. Purpose determines the distinction:
 
@@ -240,7 +232,7 @@ Inquiry begins when activity beyond that context investigates material uncertain
 
 The statement does not introduce an approval checkpoint. If existing authorization covers the work and no other rule requires your direction, the agent can begin after stating the framing. It does not need a worksheet, repeated announcements of unchanged framing, or progress narration after each action.
 
-Suppose, unlike the [first example](#from-a-request-to-a-result), context inspection leaves quoted-comma handling unresolved. That uncertainty blocks deciding whether the reader needs repair before row validation can proceed. Assume the task and increment baselines already allow this inquiry and were supplied by you or communicated when the agent established them. Neither needs establishing or revising in this example. The agent could frame the inquiry as follows:
+Suppose, unlike the [first example](#from-a-request-to-a-result), context inspection leaves quoted-comma handling unresolved. That uncertainty blocks deciding whether the reader needs repair before row validation can proceed. Assume the inquiry is authorized and fits any applicable requester limits and checkpoints. The agent could frame it as follows:
 
 | Item stated in chat before starting | Illustrative inquiry |
 | --- | --- |
@@ -266,15 +258,15 @@ A negative finding can complete an investigation; an implementation required to 
 
 An **investigation effort limit** determines when this inquiry must end even if the question remains unanswered. The agent stops when it obtains the needed evidence or reaches that limit, then assesses the result before deciding what follows. In the example, one attempt that produces no usable output still consumes the stated allowance. The absence of an answer does not extend it.
 
-Ending the inquiry does not itself require a chat interruption or pause the whole task. Remaining uncertainty, unmet acceptance conditions, and any need for broader research or a wider design decision join the next consolidated report. If the outcome requires your input—for example, because no safe step remains, effort would grow materially, consequential intent is unresolved, or your checkpoint is due—the agent reports before the affected work and seeks direction. A negative result or exhausted allowance supplies no additional authority.
+Ending the inquiry does not itself require a chat interruption or pause the whole task. Remaining uncertainty, unmet acceptance conditions, and any need for broader research or a wider design decision join the next consolidated report. If the outcome requires your input—for example, because no justified safe step remains, a limit or checkpoint prevents continuation, consequential intent is unresolved, or a new consequential design choice needs your direction—the agent reports before the affected work and seeks direction. A negative result or exhausted allowance supplies no additional authority.
 
-This inquiry limit has a different purpose from the task and increment [effort baselines](#when-the-work-grows-unexpectedly). The limit ends the particular inquiry; the baselines detect whether completing the work would require materially more effort than expected. A new inquiry must respect both its own limit and the continuing task-level controls.
+The inquiry's effort limit governs that attempt; it is not an optional forecast. Any [requester-imposed limit](#when-the-work-grows-unexpectedly) continues to apply across attempts. Changing an estimate cannot extend either kind of limit.
 
-If the question remains unresolved, another bounded attempt can proceed within existing scope and authority only with new framing stated concisely in chat beforehand, explaining why the preceding result justifies further effort. For example, output identifying a transient setup fault may justify a targeted retry within the existing allowance for the task. The agent cannot silently extend an exhausted limit. A requester-imposed overall cap or pending checkpoint still applies. Materially greater effort requires your direction before proceeding, assessed both within the increment and cumulatively across the task. Renaming the inquiry or starting another increment does not erase effort already spent or reset baselines. Repairing a failed test environment and running more experiments follow the same [interaction and growth rules](#when-the-agent-pauses-or-continues).
+If the question remains unresolved, another bounded attempt can proceed within existing scope and authority only with new framing stated concisely in chat beforehand, explaining why the preceding result justifies further effort. For example, output identifying a transient setup fault may justify a targeted retry within applicable requester limits. The agent cannot silently extend an exhausted inquiry. It reassesses cumulative progress and the next attempt's contribution, and respects any overall cap or pending checkpoint. Renaming the inquiry or starting another increment resets no requester limit. Repairing a failed test environment and running more experiments follow the same [interaction and continuation rules](#when-the-agent-pauses-or-continues).
 
 The one-attempt allowance above is an example. The contract prescribes no universal amount, measurement unit, or selection formula. Limits could bound specified checks or experiments, or use time where elapsed time can be tracked. If the agent omits a limit, there is no hidden default to assume. Stating a limit does not itself require your approval of every limit; consequential unresolved constraints and mandatory checkpoints still require your involvement.
 
-The findings guide what follows: evidence supporting the reader may allow row validation next; contrary evidence changes the basis for that plan. Either way, the next step stays within authorization, and unexpectedly greater effort requires direction before it proceeds.
+The findings guide what follows: evidence supporting the reader may allow row validation next; contrary evidence changes the basis for that plan. A routine local repair can proceed within authorization and established direction. A consequential new design direction or material departure needs prior direction unless that specific choice is already authorized.
 
 See [framing an inquiry](AGENTS.md#24-context-gathering-and-bounded-inquiry) and [assessing completion and learning](AGENTS.md#13-study--assess-completion-and-learning).
 
@@ -290,13 +282,13 @@ When you receive a report under the [reporting and checkpoint rules](#when-the-a
 | What could affect my decision? | Material assumptions, conflicts, risks, choices, and explained departures from strong recommendations. |
 | What remains? | Unfinished work, missing evidence, and uncertainty. |
 
-One report can cover several increments. Disclosures affecting authorization or a decision requiring your input, such as unexpectedly greater work, must precede that work. Other disclosures, such as nonblocking technical debt and inquiry outcomes, join the next consolidated report unless an earlier time is specified. Assessing an inquiry's result before an agent decision does not itself require a chat report. Small reports need no separate field for every question.
+One report can cover several increments. Disclosures affecting authorization or a decision requiring your input, such as a proposed change to the parser's established error contract, must precede the affected work. Other disclosures, such as nonblocking technical debt and inquiry outcomes, join the next consolidated report unless an earlier time is specified. Assessing an inquiry's result before an agent decision does not itself require a chat report. Small reports need no separate field for every question.
 
 Before completing each increment, the agent must run relevant available checks against its acceptance conditions, whether or not it reports at that point. Failed, unavailable, or omitted checks must be disclosed under the reporting rules. Passing tests cannot substitute for an unimplemented requirement or a necessary performance or operational check. Required findings and records are maintained as work proceeds; they are not deferred until the next chat report.
 
 The contract distinguishes an unavailable check from an unverified acceptance condition. Alternative evidence can sometimes establish the condition, but it cannot replace a specifically required check. The substitution rules below preserve that distinction.
 
-A check is **available** when it can run with the current authorization, tool access, permissions, credentials or resources, and prerequisites with ordinary expected setup. An easier alternative does not make it unavailable. The relevant available check must run even if another method could provide equally sufficient evidence. If running it would need missing access or resources, or materially more work, the agent discloses that and follows the authorization and growth rules.
+A check is **available** when it can run with the current authorization, tool access, permissions, credentials or resources, and prerequisites with ordinary expected setup. An easier alternative does not make it unavailable. The relevant available check must run even if another method could provide equally sufficient evidence. If running it would need missing access or resources, or materially more work, the agent discloses that and applies the authorization, limit, and reassessment rules. Additional work alone does not create an approval checkpoint.
 
 Sufficient alternative evidence may replace a check only when the original check is unavailable **and** is not specifically required. Both conditions matter. Even then, the alternative must provide enough evidence for the acceptance condition. Simply reporting that a check could not run does not fill the evidence gap: without sufficient evidence, the condition remains unverified and validation incomplete unless the condition is validly revised.
 
@@ -327,7 +319,7 @@ Reports summarize what the effort produced when reporting is due. They provide a
 
 The contract has no token meter, hard quota, or required token total in every report. For figures, use data your tool or provider exposes and check which activity or period it covers before attributing it to an increment. You can ask the agent to include usage figures it can actually access; without measurements, exact consumption remains unknown.
 
-An advance effort estimate describes expected work; it is not a measurement of tokens already spent. It makes the comparison for future growth visible without claiming precise usage figures.
+An optional effort estimate describes expected work; it does not measure tokens already spent or impose a binding limit. The initial planning statement explains the task direction and next step without requiring such an estimate.
 
 The controls aim to prevent unnecessary expansion while preserving required quality. They guarantee neither a particular cost nor measured savings.
 
@@ -345,7 +337,7 @@ Changes must preserve public contracts, compatibility, error handling, required 
 
 ## Use requirements and documentation
 
-Documentation supplies context and develops as work establishes facts. During a bounded repair, affected documentation stays current and significant in-scope choices are recorded. A wider audit, conversion of untouched requirements, or reconstruction of past decisions needs corresponding authorization.
+Documentation supplies context and develops as work establishes facts. Canonical requirements, architecture, decisions, and findings let you and future agents understand the same project without reconstructing its reasoning. During a bounded repair, affected documentation stays current and significant in-scope choices are recorded. A wider audit, conversion of untouched requirements, or reconstruction of past decisions needs corresponding authorization.
 
 ### Make expected behavior explicit
 
@@ -383,7 +375,7 @@ This excerpt explains responsibilities and behavior while linking to the detaile
 
 A significant lasting choice within the authorized scope requires an [Architecture Decision Record (ADR)](AGENTS.md#33-significant-decisions-adrs) when a concrete proposal is ready for decision or review, in or linked from [arc42's decision section](https://docs.arc42.org/section-9/). Selecting a parser to meet a memory constraint is one possible example. The record retains context, reasons, consequences, and status. Routine local choices normally need none; exploratory ideas alone do not trigger an ADR.
 
-Use Proposed while the choice awaits a decision, Accepted once it is made under existing authority and consultation rules, Rejected for a rejected proposal, and Superseded when a later decision replaces it. Preserve useful history, rejected alternatives, and replacement links. An agent may mark a decision Accepted when already authorized to make it; no extra ADR-specific approval is required. Accepted does not mean implemented, and recording a choice grants no new implementation authority.
+Use Proposed while the choice awaits a decision, Accepted once it is made under existing authority and consultation rules, Rejected for a rejected proposal, and Superseded when a later decision replaces it. Preserve useful history, rejected alternatives, and replacement links. A new consequential architectural or lasting design direction, or a material departure from established direction, needs your direction before adoption or implementation unless the specific choice is already authorized. An ADR or retrospective report cannot supply that permission. Accepted does not mean implemented, and recording creates no extra ADR-specific approval checkpoint.
 
 For example, suppose this CSV project has an agreed memory budget and required input sizes. Assume an evaluation has established that streaming meets its parsing and memory requirements, and the significant design choice has been accepted. A short ADR could read:
 
@@ -426,7 +418,7 @@ For example:
 
 > Assess how this project's documentation aligns with AGENTS.md.
 
-This authorizes assessment. The agent chooses a useful first assessment increment, establishes any missing task and increment effort baselines, and briefly states its estimates before substantial further work. It can continue through further authorized assessment increments without routine progress reports, while still giving any required advance statements. It consolidates findings at completion, handoff, or when seeking your input. Assessment permits the [records and verified factual documentation corrections](#records-during-review-and-exploration) described above; other edits need authorization. If you want no file changes, say so explicitly. A request that already authorizes improvements can cover subsequent implementation increments, subject to the consultation and reassessment rules.
+This authorizes assessment. After proportionate preliminary context gathering, the agent briefly states the overall assessment direction and the first increment's objective and bounds before substantial work. It can continue through justified, authorized assessment increments without routine progress reports or mandatory effort estimates, while still giving required inquiry framing and respecting consultation rules. It consolidates findings at completion, handoff, or when seeking your input. Assessment permits the [records and verified factual documentation corrections](#records-during-review-and-exploration) described above; other edits need authorization. If you want no file changes, say so explicitly. A request that already authorizes improvements can cover subsequent implementation increments, subject to the consultation and reassessment rules.
 
 An empty project can develop documentation and implementation through useful authorized work. Coverage expectations alone grant no permission for a repository-wide audit or reorganization.
 
@@ -465,7 +457,7 @@ This example uses the supplied Claude Code bridge. For another interface, use it
 
    > Assess whether the setup command in README.md agrees with the project's package configuration.
 
-3. **Inspect the result.** If you supplied no effort baselines, look for a brief advance estimate covering the task and first increment, allowing any needed preliminary context gathering before it is established. It must precede substantial further work. The agent must examine the relevant files, identify the evidence supporting agreement or a discrepancy, and disclose material uncertainty or unavailable checks. It may correct a verified factual error in the README and maintain triggered records under the [assessment permissions](#records-during-review-and-exploration); any correction needs validation and reporting. To test assessment without file changes, include an explicit no-edit instruction. If your project has no such setup command, choose an equivalent existing instruction and its authoritative configuration.
+3. **Inspect the result.** Look for a brief task outline and the first increment's objective and bounds, communicated after proportionate preliminary context gathering and before substantial work. No effort forecast is required. The agent must examine the relevant files, identify evidence supporting agreement or a discrepancy, and disclose material uncertainty or unavailable checks. It may correct a verified factual error in the README and maintain triggered records under the [assessment permissions](#records-during-review-and-exploration); any correction needs validation and reporting. To test assessment without file changes, include an explicit no-edit instruction. If your project has no such setup command, choose an equivalent existing instruction and its authoritative configuration.
 
 The diagnostic supplies evidence about loading; the task supplies a limited observation of behavior. Neither an agent's assurance nor one successful task establishes general compliance across tasks or interfaces.
 

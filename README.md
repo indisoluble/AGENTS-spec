@@ -36,7 +36,7 @@ Ask for the result you need:
 
 > Fix the incorrect setup command in the README.
 
-For this one-step task, the agent inspects the relevant project files, makes the correction, checks it, and reports the completed task. For example, if the documented command disagreed with the project's package configuration and the corrected command ran successfully, a brief report could be:
+For this one-step task, the agent inspects the relevant project files, briefly states its estimates for any effort baselines you have not supplied, makes the correction, checks it, and reports the completed task. Here, the overall task and the single step needed to complete it can share the same estimate. For example, if the documented command disagreed with the project's package configuration and the corrected command ran successfully, a brief completion report could be:
 
 > Corrected the setup command in `README.md` to match the package configuration. Ran the corrected command successfully.
 
@@ -48,13 +48,14 @@ For a larger objective, use the same approach:
 
 The agent chooses the next small, useful step—called an **increment**—from your request and the project context. It works through Plan–Do–Study–Act (PDSA): plan the step, do the work, assess the result, and use what it learned to decide what follows. Later work stays at outline level until it needs more detail. The [worked example](README-powerusers.md#from-a-request-to-a-result) shows this process from request to report.
 
-The agent can complete several increments under your existing authorization before sending a report. It must combine unreported work into a report when the task is complete, when it hands unfinished work back to you or another person or agent, or when it seeks your input. It does not draft or send routine progress reports unless you request them or an applicable rule requires them. An earlier message is still required when a rule calls for one, such as the advance statement before an investigation described below.
+The agent can complete several increments under your existing authorization before sending a report. It must combine unreported work into a report when the task is complete, when it hands unfinished work back to you or another person or agent, or when it seeks your input. It does not draft or send routine progress reports unless you request them or an applicable rule requires them. Brief statements of agent-set effort baselines and inquiry boundaries have earlier timing, as described below; they inform you about upcoming work without requesting approval.
 
 A message and a request for approval serve different purposes. The agent pauses when the contract, your instructions, or the tool's rules require direction, including before substantially more work or investigation than expected. You can request status updates or [extra review checkpoints](README-powerusers.md#optional-controls-you-can-add) if you want to follow individual increments. [When the agent pauses or continues](README-powerusers.md#when-the-agent-pauses-or-continues) explains these distinctions in detail.
 
 ## What to expect
 
 - **Focused progress.** The agent selects each step using your objective, relevant project evidence, and earlier findings. Unrelated cleanup and speculative features stay outside the task.
+- **Effort expectations stated in advance.** The agent uses your effort baselines where supplied. For a missing baseline, it uses any needed preliminary context to make a reasonable estimate and briefly states it when established, before substantial further work. It distinguishes expected effort for the overall task from the current increment, covering investigation, implementation, and validation in practical terms. Qualitative estimates suffice; unchanged baselines need no routine repetition. See [effort baselines and growth](README-powerusers.md#when-the-work-grows-unexpectedly).
 - **Complete work within each step.** Small scope still receives the necessary reasoning and validation. Affected code, tests, configuration, and documentation stay consistent. A required stop can leave a step unfinished; it cannot be reported as complete.
 - **Decisions and consolidated results.** Consequential unresolved questions come to you. Reports identify completed work, checks, material assumptions, and unfinished work; one report can cover several increments.
 - **Ordinary context gathering.** Reading relevant code, callers, tests, configuration, and directly related dependencies, along with existing project documentation, is part of normal work and needs no inquiry framing or inspection-by-inspection announcement. Running an agreed test or measurement also does not become an investigation merely because its result is not yet known.
@@ -73,7 +74,7 @@ Instruction files cannot guarantee compliance. The tool's controls govern permis
 
 ## Local evaluation suite
 
-The local Python/Pydantic Evals suite runs Codex in temporary workspaces and combines automated checks with human review of selected contract behaviors. Results supply evidence about those cases, not general compliance. See the [case catalogue and interpretation limits](META-EVALUATIONS.md#cases-and-interpretation) and [evaluation setup, commands, and boundaries](META-EVALUATIONS.md).
+The local Python/Pydantic Evals suite runs Codex in temporary workspaces and combines automated checks with human review of selected contract behaviors. Results supply evidence about those cases, not general compliance. See the [case catalogue and interpretation limits](META-EVALUATIONS.md#cases-and-interpretation) and [evaluation setup, commands, and boundaries](META-EVALUATIONS.md). The authoritative operating rules remain in [AGENTS.md](AGENTS.md).
 
 ## License
 

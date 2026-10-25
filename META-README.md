@@ -14,9 +14,9 @@ Keep the three reader-facing guides and this editorial file at the repository ro
 | [README-powerusers.md](README-powerusers.md) | Detailed practical explanations and examples, alignment, tool compatibility, adoption diagnostics, and recorded provider-documentation check dates. |
 | [README-maintainers.md](README-maintainers.md) | The contract's design: attributes, reasons, engineering choices, exact reference assignments, trade-offs, portability criteria, and constraints on evolution. |
 | [META-EVALUATIONS.md](META-EVALUATIONS.md) | The local evaluation suite's setup, commands, verifiable requirements, component responsibilities, authentication lifecycle, evidence, and execution boundaries. Code and tests provide implementation evidence; module comments link here instead of duplicating requirements. |
-| `META-README.md` | Documentation responsibilities, permitted overlap, editing procedures, and verification. |
+| `META-README.md` | Documentation responsibilities, reference audience, permitted overlap, guide-writing and length policy, editing procedures, and verification. |
 
-The ordinary reading path starts at `README.md` and branches into practical use or technical understanding. Keep editorial navigation out of that path; contributors can discover this root file directly. “Power users” means readers seeking practical depth, without requiring technical expertise. The maintainer guide documents the contract itself; it is not a contributor onboarding manual.
+The ordinary reading path starts at `README.md` and branches into practical use or technical understanding. Keep editorial navigation out of that path; contributors can discover this root file directly. “Power users” identifies readers seeking practical depth; it does not assume expertise in the contract's engineering methods. The maintainer guide documents the contract itself; it is not a contributor onboarding manual.
 
 ### Check the authority or evidence for each kind of statement
 
@@ -40,6 +40,14 @@ Give each fact, procedure, rule, or detailed explanation one authoritative owner
 
 A brief introduction, a practical explanation, and a design rationale may discuss the same subject for different reader needs. Let each answer its reader's question, and link to the fuller treatment where useful. Avoid copying complete procedures, reference-assignment tables, or lifecycle descriptions between guides; necessary copies need a clear owner and update relationship. Different wording alone does not establish a separate responsibility.
 
+For the following shared subjects, these sections own the detailed explanations for their respective reader needs. `AGENTS.md` remains the authority for the rules; the table assigns explanatory ownership, not operating policy.
+
+| Shared subject | Practical explanation | Design rationale |
+| --- | --- | --- |
+| Effort baselines and material growth | [Establishment, revision, continuity, and growth](README-powerusers.md#when-the-work-grows-unexpectedly) | [Scope, expected effort, and requester control](README-maintainers.md#authorization-and-requester-decisions) |
+| Context gathering and inquiry | [Classification, framing, and investigation examples](README-powerusers.md#when-an-investigation-is-needed) | [Purpose, stopping limits, and completion](README-maintainers.md#completion-predictions-and-bounded-investigation) |
+| Communication | [Timing and handoff contents](README-powerusers.md#when-the-agent-pauses-or-continues), and [assessing reports and validation evidence](README-powerusers.md#assess-the-result) | [Consolidated reporting and the shared auditability rationale for advance baseline and inquiry statements](README-maintainers.md#reporting-and-continued-execution) |
+
 Keep examples tied to the rules they illustrate. Make their assumptions visible and distinguish an illustrative choice from a general requirement. Neither an example nor an editorial checklist should become a second source of operating policy.
 
 The [practical CSV walkthrough](README-powerusers.md#from-a-request-to-a-result) owns the shared scenario facts. The [technical walkthrough](README-maintainers.md#how-the-design-works-in-a-task) uses those facts to explain design choices; keep it aligned when the practical example changes. Alternative paths and additional examples state their own assumptions locally.
@@ -56,7 +64,9 @@ Keep current descriptions and useful lasting rationale in their owners. Revision
 
 ## Reader paths
 
-- **[README.md](README.md) — basic guide:** explain the primary benefit sought, give actionable installation steps and a useful first task, then show essential expectations and further reading. A newcomer should be able to adopt the contract using this guide alone.
+The reference reader is a developer already familiar with Git and coding agents. A junior developer should be able to follow basic adoption without first studying the contract's engineering methods. Build on that existing knowledge to explain the contract's specific definitions, decisions, and trade-offs.
+
+- **[README.md](README.md) — basic guide:** explain the primary benefit sought, give actionable installation steps and a useful first task, then show essential expectations and further reading. A reader new to this contract should be able to adopt it using this guide alone.
 - **[README-powerusers.md](README-powerusers.md) — practical guide:** begin with an ordinary outcome-oriented request and show how the agent handles it. Then explain situations the user may encounter. Put detailed reference material where readers can find it without making it a prerequisite for the first example.
 - **[README-maintainers.md](README-maintainers.md) — technical guide:** connect design problems with chosen approaches, reasons, trade-offs, and implications for future changes. Keep sufficient method and reference detail available for assessing the contract. Keep instructions for maintaining the READMEs in `META-README.md`.
 
@@ -64,7 +74,7 @@ Use plain Markdown only, descriptive headings, direct links, and tables for comp
 
 When explaining a workflow, give the overall path before developing individual activities. Show what prompts a decision, what context or evidence informs it, and how the result affects what follows. Naming phases or linking to their definitions does not by itself explain these connections. Read examples from the reader's starting point, without relying on knowledge from the editing conversation.
 
-There is no numeric length limit for these guides. Assess necessary detail, repetition, navigation, and the combined impression of headings and examples. Accurate sentences still need a reading path that teaches the intended responsibilities. Keep consequential qualifications close to their claims; avoid empty categories, obligatory templates, and formalism that adds no understanding.
+There is no numeric length target or limit for the three READMEs. Reducing their byte count is not a goal; detail, examples, and useful repetition should serve understanding. Assess necessary detail, repetition, navigation, and the combined impression of headings and examples. Accurate sentences still need a reading path that teaches the intended responsibilities. Keep consequential qualifications close to their claims; avoid empty categories, obligatory templates, and formalism that adds no understanding. The contract's separate [portability criteria](README-maintainers.md#keeping-the-contract-portable) remain in the technical guide and apply to `AGENTS.md`.
 
 ## Meaning and evidence checklist
 
@@ -86,7 +96,7 @@ Use these questions to assess whether the guides teach their intended responsibi
 | --- | --- |
 | [README.md](README.md) | What the file is for, which files to install for their tool, how to check adoption, and what token control can and cannot promise. |
 | [From a request to a result](README-powerusers.md#from-a-request-to-a-result) | Why the agent selected that increment, what would count as completion, and how the findings affect subsequent work. |
-| [When the agent pauses or continues](README-powerusers.md#when-the-agent-pauses-or-continues) | Why completing an increment, reporting a result, and requesting approval are separate events; when existing authorization permits continuation and when direction is required. |
+| [When the agent pauses or continues](README-powerusers.md#when-the-agent-pauses-or-continues) | Why completing an increment, stating effort or inquiry bounds, reporting results, and requesting approval are separate events; when existing authorization permits continuation and when direction is required. |
 | [Use requirements and documentation](README-powerusers.md#use-requirements-and-documentation) | Which requirements or records may be created or updated, what triggers them, and why examples do not prescribe a document for every step. |
 
-For reader testing, give representative newcomers the relevant guide and ask them to carry out or explain these tasks in their own words. A junior developer familiar with Git and a coding agent should be able to follow basic adoption without first studying the contract's engineering methods. Record where a reader cannot find an answer separately from where an explanation is misunderstood. Keep test observations in working or review records, and distinguish observed comprehension from an editor's prediction; an editorial review alone does not establish usability.
+For reader testing, give readers from the [reference audience](#reader-paths) the relevant guide and ask them to carry out or explain these tasks in their own words. Record where a reader cannot find an answer separately from where an explanation is misunderstood. Keep test observations in working or review records, and distinguish observed comprehension from an editor's prediction; an editorial review alone does not establish usability.

@@ -2,7 +2,7 @@
 
 Release date: 2026-10-07 - Upstream source: https://github.com/indisoluble/AGENTS-spec
 
-Purpose: prevent unconstrained token use, including sudden per-increment surges. Under requester-set goals, limits, and direction, small complete steps get adequate reasoning, work, and validation; later detail follows evidence and direction. No token quota or guarantee.
+Purpose: first, control token consumption through small, meaningful, bounded increments, proportionate investigation, and avoidance of unnecessary work; second, keep the requester informed and in control of consequential direction through communication, prior consultation, and reliable documentation shared by humans and future agents. The agent manages authorized execution without requiring requester supervision of tokens or routine decisions. No token quota or guarantee.
 
 ## How this contract works
 
@@ -30,7 +30,7 @@ MUST apply [PDSA](https://deming.org/explore/pdsa/) proportionally to implementa
 
 ### 1.1 Plan — define the next increment
 
-From the request and project evidence, define the increment objective, acceptance conditions, approach, and prediction (expected approach/experiment result).
+From the request and project evidence, MUST outline the task's direction and define the next increment's objective, acceptance conditions, approach, and prediction (expected approach/experiment result). After proportionate preliminary context gathering and before substantial work, MUST briefly state the task outline and first increment's objective and bounds in chat; this creates no approval checkpoint.
 
 **Starting context.**
 
@@ -95,20 +95,18 @@ Use Study findings to retain, revise, or discard the approach; retain learning f
 
 - For the next decision, MUST assess scope (necessary vs. authorized work), uncertainty (missing/conflicting evidence affecting approach or acceptance), consequence (on core/public behavior, architecture, compatibility, security, data, operations, cost, future options), and reversibility (restoration difficulty, including migrations and external effects). Understood, narrow, low-impact, easily reversible changes SHOULD get brief inspection/action/validation without unnecessary plans/records.
 - Within agreed limits, MAY choose easily reversible routine local details; MUST disclose material assumptions, which MAY support progress with limited, easily reversed effects.
-- MUST take material unresolved intent or permission questions to the requester and agree with them as needed on consequential constraints left unsettled by requirements, architecture, or conventions; MUST NOT invent these or treat missing constraints/answers as broader permission. SHOULD ask first when unsettled choices materially affect the factors above, optimization, or lasting complexity.
+- MUST take material unresolved intent or permission questions to the requester and agree with them as needed on consequential constraints left unsettled by requirements, architecture, or conventions; MUST NOT invent these or treat missing constraints/answers as broader permission. Before adopting or implementing a consequential architectural or lasting design direction not yet established, or a material departure from established direction, MUST obtain requester direction unless that specific choice is already authorized. For other unsettled choices materially affecting the factors above, optimization, or lasting complexity, SHOULD ask first.
 - Routine choices and exceptions to asking first do not waive escalation, agreement, authorization, reassessment, or specific-permission requirements.
 - Consequential choices without prior direction MUST be prominently reported with reasons, effects, uncertainty, and revision/reversal options; reporting MUST NOT count as advance authorization.
 - If safe steps are impossible, MUST present alternatives and seek direction (§1.1).
 
-### 2.3 Effort baselines and material growth
+### 2.3 Effort estimates and requester limits
 
 - Correctness, completeness, consistency, and adequate reasoning, implementation, and validation MUST precede saving lines, files, or tokens/context. Among workable solutions, clarity, canonical ownership, and reversibility SHOULD precede fewer parts.
-- MUST set effort baselines for the cumulative task at its start and for each increment when planning it. MUST use requester direction where supplied; otherwise use reasonable agent judgment after proportionate preliminary context gathering if needed. Baselines are task state for growth checks, not permanent records.
-- MUST briefly state agent-set baselines in chat when established, before substantial further work. The statement MUST distinguish cumulative-task from increment effort and describe anticipated investigation, implementation, and validation effort in practical terms; qualitative estimates suffice. This creates no approval checkpoint; unchanged baselines need no routine repetition.
-- Evidence MAY change estimates, but growth MUST be assessed against baselines; only requester direction MAY revise established ones, and approved disclosed growth MUST revise the affected baselines by only that commitment.
-- New increments, attempts, or handoffs MUST NOT reset the task baseline; new increment baselines MUST NOT absorb already-found growth unless the requester directed it.
-- Continuing handed-off work MUST use transferred baselines (§3.7); if none, MUST NOT set fresh ones but MUST recover them from available task state or obtain requester direction before further effort-bearing work.
-- If completion needs materially more work/investigation than the increment or cumulative task baseline, MUST, even if authorized, reassess before that work, explain what changed, unfinished work/uncertainty, and the smallest useful complete next step, then await requester direction.
+- MUST obtain requester direction before exceeding requester-imposed effort/scope limits or passing checkpoints; only requester direction MAY revise them. Increments, retries, and handoffs MUST NOT reset them. Informal expectations are not automatically limits; material ambiguity MUST be resolved under §2.2.
+- Agent effort estimates are optional forecasts, not consumption measurements or limits. Their existence or revision alone MUST NOT require monitoring, re-estimation, handoff transfer, approval, or block continuation.
+- Before expanding planned work or starting another increment/attempt, MUST reassess cumulative progress, remaining work, established direction, and applicable limits. MUST justify the next bounded increment from evidence and its contribution to the task objective; otherwise MUST seek direction (§2.2).
+- On resumption, MUST use transferred task state (§3.7), recovering missing authorization or limit state or obtaining requester direction before dependent work.
 
 ### 2.4 Context gathering and bounded inquiry
 
@@ -164,9 +162,9 @@ Duties grant no extra authority; permissions stay within their terms; progressio
 ### 3.7 Reporting
 
 - At task completion, handoff, or when seeking requester input, MUST consolidate unreported work into a report; otherwise MUST NOT draft/output routine progress reports unless requested or required.
-- Disclosures affecting authorization or a decision requiring requester input MUST precede affected work; others MUST join the next consolidated report unless earlier timing is explicit, as for effort baselines (§2.3) and inquiry framing (§2.4).
+- Disclosures affecting authorization or a decision requiring requester input MUST precede affected work; others MUST join the next consolidated report unless earlier timing is explicit, as for the initial plan (§1.1) and inquiry framing (§2.4).
 - Reports MUST cover changes/reasons, paths, relevant decisions/canonical links, checks run/omitted, material assumptions/conflicts/risks/choices, and unfinished work; explain material SHOULD exceptions; distinguish evidence/inference and increment/task completion. Reports SHOULD fit the work: small mechanical changes usually need only outcome/checks, no invented risks/follow-up or mandatory templates.
-- Handoff reports MUST also transfer, as task-continuity state, the cumulative task's and any unfinished increment's effort baselines, with still-relevant requester-approved revisions (§2.3).
+- Handoff reports MUST also transfer, as task-continuity state, the task objective and established direction, applicable limits/checkpoints and consumed allowances, the next or unfinished increment's objective, bounds, and acceptance conditions, and relevant inquiry framing, results, and remaining allowance (§2.3).
 - Displayed edits MUST default to changed portions with context (contents/diffs MAY be omitted); new files/extensive rewrites SHOULD get available full-file links and chat explanations; full copyable contents MAY be shown on request or for blocked edits.
 - MUST report tool limits blocking edits, checks, or instruction loading; where possible, supply exact changes with paths and application context.
 

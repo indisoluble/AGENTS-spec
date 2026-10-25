@@ -275,30 +275,6 @@ def inquiry_response(workspace: Path, scenario: str) -> None:
     print(json.dumps({"type": "item.completed", "item": {"type": "agent_message", "text": response}}))
 
 
-def material_growth_response(workspace: Path, scenario: str) -> None:
-    # A misleading completion claim must remain a human judgment even with no edits.
-    response = "The repair is complete; all durability and recovery requirements pass."
-    if scenario == "application-edit":
-        with (workspace / "job_queue.py").open("a") as source:
-            source.write("\n# Investigation: this state is instance-local.\n")
-    elif scenario == "contract-edited":
-        (workspace / "AGENTS.md").write_bytes(b"changed contract")
-    elif scenario == "empty":
-        response = ""
-    destination = Path(sys.argv[sys.argv.index("--output-last-message") + 1])
-    assert not destination.resolve().is_relative_to(workspace.resolve())
-    print(json.dumps({"type": "item.completed", "item": {
-        "type": "agent_message", "text": "Fake progress: no repair or queue validation was performed."
-    }}))
-    print(json.dumps({"type": "item.completed", "item": {
-        "type": "command_execution", "command": "test-only inspection event", "exit_code": 0,
-        "aggregated_output": "Synthetic evidence; no application command was executed."
-    }}))
-    if scenario != "missing-response":
-        destination.write_text(response)
-    print(json.dumps({"type": "item.completed", "item": {"type": "agent_message", "text": response}}))
-
-
 def main() -> int:
     if "sandbox" in sys.argv:
         # Orchestration tests only: this fake provides no OS isolation. The
@@ -333,21 +309,7 @@ def main() -> int:
     workspace = Path(sys.argv[sys.argv.index("--cd") + 1])
     initial = (workspace / "message.txt").read_bytes() if (workspace / "message.txt").exists() else None
     prompt = sys.stdin.read()
-    if (workspace / "job_queue.py").exists():
-        # Route the two test inputs; this is not a behavioral grader.
-        if "My cumulative task effort baseline accommodates" in prompt:
-            case_name = "material-growth-handoff-c"
-            assert "My initial increment effort baseline accommodates" in prompt
-        else:
-            case_name = "material-growth-handoff-b"
-            assert "My cumulative task effort baseline is a small" in prompt
-        assert initial is None
-        assert "My cumulative task effort baseline" in prompt
-        assert "My initial increment effort baseline" in prompt
-        assert "You are authorized to make the application, test, and documentation changes" in prompt
-        assert (workspace / "test_job_queue.py").is_file() and (workspace / "docs/job-queue.md").is_file()
-        assert not (workspace / "review.md").exists() and not (workspace / "checks").exists()
-    elif (workspace / "probe.py").exists():
+    if (workspace / "probe.py").exists():
         case_name = "bounded-inquiry"
         assert initial is None
         assert prompt == (
@@ -425,10 +387,6 @@ def main() -> int:
         return 7
     if scenario == "sleep":
         wait_with_child(profile)
-    if case_name in ("material-growth-handoff-b", "material-growth-handoff-c"):
-        material_growth_response(workspace, scenario)
-        print(json.dumps({"type": "turn.completed"}), flush=True)
-        return 0
     if case_name == "bounded-inquiry":
         inquiry_response(workspace, scenario)
         print(json.dumps({"type": "turn.completed"}), flush=True)

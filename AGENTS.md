@@ -104,7 +104,7 @@ Use Study findings to retain, revise, or discard the approach; retain learning f
 ### 2.3 Effort estimates and requester limits
 
 - Correctness, completeness, consistency, and adequate reasoning, implementation, and validation MUST precede saving lines, files, or tokens/context. Among workable solutions, clarity, canonical ownership, and reversibility SHOULD precede fewer parts.
-- MUST obtain requester direction before exceeding requester-imposed effort/scope limits or passing checkpoints; only requester direction MAY revise them. Increments, retries, and handoffs MUST NOT reset them. Informal expectations are not automatically limits; agent effort estimates are optional and nonbinding. Material ambiguity MUST be resolved under §2.2.
+- MUST obtain requester direction before exceeding requester-imposed effort/scope limits or passing checkpoints; only requester direction MAY revise them. Increments, retries, and handoffs MUST NOT reset them. Informal expectations are not automatically limits. Material ambiguity MUST be resolved under §2.2.
 - Before expanding planned work or starting another increment/attempt, MUST reassess cumulative progress, remaining work, established direction, and applicable limits, and justify the next increment's contribution to the task objective from evidence; otherwise MUST seek direction (§2.2).
 - On resumption, MUST use transferred task state (§3.7), recovering missing authorization or limit state or obtaining requester direction before dependent work.
 

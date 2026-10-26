@@ -2,7 +2,7 @@
 
 Release date: 2026-10-07 - Upstream source: https://github.com/indisoluble/AGENTS-spec
 
-Purpose: first, control token consumption through bounded increments and proportionate work; second, keep the requester informed and in control of consequential direction without constant supervision. Reliable documentation preserves shared knowledge for humans and future agents. No token quota or guarantee.
+Purpose: first, control token consumption through bounded increments and proportionate work; second, keep the requester informed and in control of consequential direction without constant supervision. Reliable documentation preserves project knowledge for maintainers, users, and future agents. No token quota or guarantee.
 
 ## How this contract works
 
@@ -110,10 +110,11 @@ Use Study findings to retain, revise, or discard the approach; retain learning f
 
 ### 2.4 Context gathering and bounded inquiry
 
-- Context gathering (§1.1) needs no inquiry framing. Inquiry is other activity investigating material uncertainty about how to proceed that blocks the next decision. Unknown results alone do not make execution or validation inquiry; a prescribed procedure does not exempt investigation. §2.1–§2.3 apply to all.
-- Before starting inquiry or acting on revised framing, MUST state concisely in chat the question, scope, objective, proportionate effort limit, and evidence sufficient to conclude or reassess. These bounds MUST govern the inquiry.
-- When an inquiry obtains needed evidence or reaches its effort limit, MUST end it, not necessarily the task; missing required evidence leaves work incomplete. MUST report remaining uncertainty, incomplete work/missing evidence for unmet acceptance conditions, and any need for broader research or a wider design decision at task completion, handoff, or when seeking requester input.
-- This report is no checkpoint; negative findings/exhausted limits grant no authority. A new bounded attempt at unresolved uncertainty MAY proceed with framing as above explaining why the preceding result justifies it, within scope/authority, requester limits/checkpoints, and §2.3.
+- Context gathering (§1.1) is distinct from inquiry: investigation of material uncertainty about how to proceed that blocks the next decision. Unknown results alone do not make execution or validation inquiry; a prescribed procedure does not exempt investigation. §2.1–§2.3 apply to all.
+- Unless already communicated in the request or task framing (§1.1), MUST promptly make such uncertainty and its significance for the next decision clear to the requester.
+- When inquiry exposes an unsettled decision requiring requester direction (§2.2), MUST consult before adopting or implementing it. Narrow investigation within existing authorization MAY establish facts for consultation. Inquiry communication neither grants authority nor creates an approval checkpoint for otherwise authorized work.
+- Inquiry MUST focus on resolving the blocking uncertainty through small, bounded, proportionate increments (§1.1, §2.3) and end when evidence is sufficient. At an increment's bounds, MUST reassess before further investigation if evidence remains insufficient. Further attempts MUST be justified by preceding findings and stay within established authorization, limits, and checkpoints.
+- At task completion, handoff, or when seeking requester input, MUST report relevant conclusions, supporting evidence, remaining uncertainty, incomplete work or missing evidence for unmet acceptance conditions, and any need for broader research or a wider design decision (§3.7). Inconclusive findings grant no additional authorization.
 
 ### 2.5 Continuing to another increment
 
@@ -161,10 +162,10 @@ Duties grant no extra authority; permissions stay within their terms; progressio
 
 ### 3.7 Reporting
 
-- At task completion, handoff, or when seeking requester input, MUST consolidate unreported work into a report; otherwise MUST NOT draft/output routine progress reports unless requested or required.
-- Disclosures affecting authorization or a decision requiring requester input MUST precede affected work; others MUST join the next consolidated report unless earlier timing is explicit, as for the initial plan (§1.1) and inquiry framing (§2.4).
+- At task completion, handoff, or when seeking requester input, MUST consolidate unreported work into a report. SHOULD minimize routine progress reports; intermediate communication SHOULD be concise and useful.
+- Disclosures affecting authorization or a decision requiring requester input MUST precede affected work. Initial task framing (§1.1) and inquiry notification (§2.4) occur when required; other information SHOULD normally join the next consolidated report.
 - Reports MUST cover changes/reasons, paths, relevant decisions/canonical links, checks run/omitted, material assumptions/conflicts/risks/choices, and unfinished work; explain material SHOULD exceptions; distinguish evidence/inference and increment/task completion. Reports SHOULD fit the work: small mechanical changes usually need only outcome/checks, no invented risks/follow-up or mandatory templates.
-- Handoff reports MUST transfer task state: the task objective and established direction; applicable limits/checkpoints and consumed allowances; the next or unfinished increment's objective, bounds, and acceptance conditions; relevant inquiry framing, results, and remaining allowance (§2.3).
+- Handoff reports MUST transfer task state: the task objective and established direction; applicable limits/checkpoints and consumed allowances; the next or unfinished increment's objective, bounds, and acceptance conditions; relevant inquiry conclusions, supporting evidence, and unresolved uncertainty (§2.3).
 - Displayed edits MUST default to changed portions with context (contents/diffs MAY be omitted); new files/extensive rewrites SHOULD get available full-file links and chat explanations; full copyable contents MAY be shown on request or for blocked edits.
 - MUST report tool limits blocking edits, checks, or instruction loading; where possible, supply exact changes with paths and application context.
 
@@ -177,7 +178,7 @@ Duties grant no extra authority; permissions stay within their terms; progressio
 
 ### 3.9 Method references
 
-Linked method references clarify methods without adding rules; research stays bounded (§1.1, §2.4). MAY consult one without inquiry framing when this contract leaves a material ambiguity in applying its method; MUST read only enough to resolve it, report the ambiguity, consulted reference, and interpretation, and import no other practices. MUST NOT research clear rules. Before broader research, MUST explain unresolved uncertainty and ask the requester.
+Method references are linked sources explaining methods or practices named in this contract; they clarify those methods without adding rules. Research stays bounded (§1.1, §2.4). MAY consult one when this contract leaves a material ambiguity in applying its method; MUST read only enough to resolve it, report the ambiguity, consulted reference, and interpretation, and import no other practices. MUST NOT research clear rules. Before broader research, MUST explain unresolved uncertainty and ask the requester.
 
 ## 4. How the layers compose
 
@@ -188,6 +189,6 @@ Linked method references clarify methods without adding rules; research stays bo
    - task done: complete and report (§3.7);
    - stopping before completion: hand off with a handoff report (§3.7);
    - a guard or other rule requires requester direction, or no existing authorization covers another increment: report and await direction;
-   - otherwise: return to Plan for the next authorized increment (§2.5), with no routine report unless requested or required.
+   - otherwise: return to Plan for the next authorized increment (§2.5), keeping intermediate communication proportionate (§3.7).
 
 Completed increments, reports, decision records, findings, and exhausted inquiries alone grant no authorization.

@@ -195,11 +195,16 @@ class FindingsEvaluationTests(unittest.TestCase):
         self.assert_verdicts(result)
         self.assertIsNone(result.output.functional_checks)
 
-    def test_scenario_remains_unregistered(self):
-        # Inspect registration only; CLI execution/retention belongs to Increment 3.
+    def test_registration_uses_approved_dataset_fixture_and_rubric(self):
         from evals.__main__ import CASES
 
-        self.assertNotIn("durable-finding-review", {registered.name for registered in CASES})
+        registered, = [config for config in CASES if config.name == "durable-finding-review"]
+        self.assertIs(registered.dataset_factory, case.findings_dataset)
+        self.assertIs(registered.fixture_files, case.FIXTURE_FILES)
+        self.assertEqual(registered.review_rubric, case.REVIEW_RUBRIC)
+        self.assertTrue(registered.observe_workspace)
+        self.assertIsNone(registered.check_execution)
+        self.assertEqual(registered.dataset_factory().cases[0].name, "customer-csv-reconstruction")
 
     def test_documentation_and_review_artifacts_remain_observable_without_scope_rejection(self):
         captured = []

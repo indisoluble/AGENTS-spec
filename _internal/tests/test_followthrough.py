@@ -22,6 +22,7 @@ import unittest
 from unittest.mock import patch
 
 from evals import __main__ as cli
+from evals import functional_checks
 from evals import followthrough as case
 from evals.evaluation import ExecutionResult, evaluate
 from evals.functional import FunctionalCheckResult
@@ -418,7 +419,7 @@ class FollowthroughEvaluationTests(unittest.TestCase):
                             target.mkdir()
                         elif kind == "fifo":
                             os.mkfifo(target)
-                    with patch.object(case, "run_python_check", wraps=case.run_python_check) as run:
+                    with patch.object(functional_checks, "run_python_check", wraps=functional_checks.run_python_check) as run:
                         code, saved = self.run_substitute(edit)
                     self.assertEqual(code, 1)
                     affected = ("DuplicateBatchRejected", "ExistingBehaviorPreserved", "ProjectTestsPass") \
@@ -464,7 +465,7 @@ class FollowthroughEvaluationTests(unittest.TestCase):
         for observation in (None, WorkspaceObservation(None, snapshot), WorkspaceObservation(snapshot, None),
                             WorkspaceObservation(snapshot, partial_file)):
             with self.subTest(observation=observation), prepare_workspace(fixture_files=case.FIXTURE_FILES) as workspace:
-                with patch.object(case, "run_python_check") as run:
+                with patch.object(functional_checks, "run_python_check") as run:
                     checked = case.check_execution(replace(result, workspace_observation=observation), workspace,
                                                    artifacts=self.artifacts)
                 run.assert_not_called()
@@ -516,7 +517,7 @@ class FollowthroughEvaluationTests(unittest.TestCase):
 
     def test_check_infrastructure_errors_retain_bytes_and_allow_other_checks(self):
         for message in ("Check launch failed", "Sandbox launcher failed", "Functional check timed out", "Evaluation interrupted"):
-            with self.subTest(message=message), patch.object(case, "run_python_check", side_effect=[
+            with self.subTest(message=message), patch.object(functional_checks, "run_python_check", side_effect=[
                 FunctionalCheckResult("error", stdout=b"partial\xff", stderr=b"check\xfe", error=message,
                                       launcher_stderr=b"launcher\xfd"),
                 FunctionalCheckResult("completed", 0, stdout=b"other check"),
@@ -550,7 +551,7 @@ class FollowthroughEvaluationTests(unittest.TestCase):
                 raise PermissionError("cannot save stdout")
             return write_bytes(path, contents)
 
-        with (patch.object(case, "run_python_check", side_effect=[
+        with (patch.object(functional_checks, "run_python_check", side_effect=[
                   FunctionalCheckResult("error", stderr=b"diagnostic", error="primary check failure", launcher_stderr=b"launcher"),
                   FunctionalCheckResult("completed", 0, stdout=b"preserved"), FunctionalCheckResult("completed", 0)]),
               patch.object(Path, "write_bytes", autospec=True, side_effect=deny_stdout)):
@@ -565,7 +566,7 @@ class FollowthroughEvaluationTests(unittest.TestCase):
         self.assertTrue((self.artifacts / "functional-checks.json").is_file())
 
     def test_summary_write_failure_is_an_error_with_independent_check_files_retained(self):
-        with patch.object(case, "save_json", side_effect=OSError("cannot save summary")):
+        with patch.object(functional_checks, "save_json", side_effect=OSError("cannot save summary")):
             code, saved = self.run_substitute()
         self.assertEqual(code, 2)
         self.assertIn("functional-checks.json: cannot save summary", saved["execution_errors"][0])
@@ -575,7 +576,7 @@ class FollowthroughEvaluationTests(unittest.TestCase):
 
     def test_failed_agent_never_runs_checks_and_retains_explicit_skip_reasons(self):
         with prepare_workspace(fixture_files=case.FIXTURE_FILES) as workspace:
-            with patch.object(case, "run_python_check") as run:
+            with patch.object(functional_checks, "run_python_check") as run:
                 result = case.check_execution(ExecutionResult("error", error="agent failed"), workspace,
                                               artifacts=self.artifacts)
         run.assert_not_called()

@@ -20,6 +20,7 @@ from unittest.mock import patch
 from evals.auth import PROFILE_CONFIG
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC
 from evals import __main__ as cli
+from evals import functional_checks
 from evals import assumptions, findings, followthrough, independence, inquiry, permissions, scheduling
 from evals.evaluation import ExecutionResult
 from evals.functional import FunctionalCheckResult
@@ -956,7 +957,7 @@ class CodexFailureTests(unittest.TestCase):
         self.assertIs(selected.dataset_factory, followthrough.followthrough_dataset)
         self.assertIs(selected.check_execution, followthrough.check_execution)
         checked_workspaces = []
-        run_check = followthrough.run_python_check
+        run_check = functional_checks.run_python_check
 
         def check_after_cleanup(source, workspace, **kwargs):
             checked_workspaces.append(workspace)
@@ -970,7 +971,7 @@ class CodexFailureTests(unittest.TestCase):
         with (patch.object(cli, "ARTIFACTS_ROOT", runs),
               patch("evals.auth.codex_executable", return_value=str(self.bin / "codex")),
               patch("evals.functional.codex_executable", return_value=str(self.bin / "codex")),
-              patch.object(followthrough, "run_python_check", side_effect=check_after_cleanup),
+              patch.object(functional_checks, "run_python_check", side_effect=check_after_cleanup),
               redirect_stdout(StringIO())):
             code = cli.run_case(selected, model="test-model", effort="medium", timeout=10,
                                 profile=profile, cancelled=Event())
@@ -992,14 +993,14 @@ class CodexFailureTests(unittest.TestCase):
             return ExecutionResult("completed", final_response="Updated.",
                                    workspace_observation=WorkspaceObservation(initial, snapshot_workspace(workspace)))
 
-        save_json = followthrough.save_json
+        save_json = functional_checks.save_json
         for fail_evidence in (False, True):
             with self.subTest(fail_evidence=fail_evidence):
                 runs = self.root / f"runs-{fail_evidence}"
                 with (patch.object(cli, "ARTIFACTS_ROOT", runs), patch.object(cli, "run_codex", side_effect=execute),
-                      patch.object(followthrough, "run_python_check", return_value=
+                      patch.object(functional_checks, "run_python_check", return_value=
                                    FunctionalCheckResult("error", stdout=b"partial", error="sandbox failed")),
-                      patch.object(followthrough, "save_json", side_effect=
+                      patch.object(functional_checks, "save_json", side_effect=
                                    OSError("cannot save checks") if fail_evidence else save_json),
                       redirect_stdout(StringIO())):
                     code = cli.run_case(selected, model="test-model", effort="medium", timeout=10,

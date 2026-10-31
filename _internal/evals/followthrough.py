@@ -5,17 +5,15 @@ checks assess resulting behavior; requirements, documentation, test quality,
 agent validation, and completion claims remain separate human judgments.
 """
 
-from dataclasses import replace
 from pathlib import Path
 from threading import Event
 
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.codex import save_json
+from evals import functional_checks
 from evals.evaluation import ExecutionResult, FinalResponsePresent
-from evals.functional import run_python_check
-from evals.workspace import WorkspaceInspectionError, WorkspaceObservation
+from evals.workspace import WorkspaceInspectionError
 
 
 PROMPT = """Change import_records(store, records) to reject a batch containing repeated
@@ -306,92 +304,18 @@ general compliance, private reasoning quality, nor that AGENTS.md caused behavio
 """
 
 
-def _observation(result: ExecutionResult) -> WorkspaceObservation:
-    observation = result.workspace_observation
-    if observation is None or observation.initial is None or observation.final is None:
-        raise WorkspaceInspectionError("Complete initial and final workspace observations are required")
-    return observation
-
-
-def _invalid_files(result: ExecutionResult, name: str) -> list[str]:
-    final = _observation(result).final
-    invalid = []
-    for path in CHECK_FILES[name]:
-        entry = final.get(path)
-        if entry is None or entry.kind != "file":
-            invalid.append(f"{path}: missing or not a regular file")
-        elif entry.contents is None:
-            raise WorkspaceInspectionError(f"{path}: file contents were not observed")
-    return invalid
-
-
 def check_execution(
     result: ExecutionResult, workspace: Path, *, artifacts: Path, cancelled: Event | None = None,
 ) -> ExecutionResult:
-    """Check after agent cleanup and before workspace removal; retain each result.
-
-    This follows independence's scenario-owned evidence convention. Shared
-    execution stays in run_python_check; selection and interpretation stay here.
-    Observed invalid entry points fail assertions without invented exit statuses.
-    """
-    checks = {}
-    evidence = {}
-    errors = [result.error or "Agent execution failed"] if result.status == "error" else []
-    for name, source in CHECK_SOURCES.items():
-        skipped = "Agent execution failed" if result.status == "error" else None
-        if skipped is None:
-            try:
-                invalid = _invalid_files(result, name)
-                skipped = "; ".join(invalid) if invalid else None
-            except WorkspaceInspectionError as exc:
-                skipped = str(exc)
-                errors.append(skipped)
-        record = {"timeout_seconds": CHECK_TIMEOUT, "status": "not_run", "reason": skipped}
-        if skipped is None:
-            check = run_python_check(source, workspace, timeout=CHECK_TIMEOUT, cancelled=cancelled)
-            checks[name] = check
-            record = {"timeout_seconds": CHECK_TIMEOUT, "status": check.status,
-                      "returncode": check.returncode, "error": check.error}
-            if check.status == "error":
-                errors.append(f"{name}: {check.error}")
-        evidence[name] = record
-        files = {f"{name}.py": source.encode("utf-8")}
-        if name in checks:
-            check = checks[name]
-            files.update({f"{name}.stdout": check.stdout, f"{name}.stderr": check.stderr,
-                          f"{name}.launcher-stderr": check.launcher_stderr})
-        # Attempt independent writes even after a check or evidence write fails.
-        for filename, contents in files.items():
-            try:
-                folder = artifacts / "checks"
-                folder.mkdir(exist_ok=True)
-                (folder / filename).write_bytes(contents)
-            except OSError as exc:
-                errors.append(f"checks/{filename}: {exc}")
-    try:
-        save_json(artifacts / "functional-checks.json", evidence)
-    except (OSError, ValueError) as exc:
-        errors.append(f"functional-checks.json: {exc}")
-    return replace(result, functional_checks=checks,
-                   status="error" if errors else result.status,
-                   error="\n".join(errors) if errors else result.error)
+    """Bind this scenario's checks to the shared post-agent execution mechanism."""
+    return functional_checks.run_checks(
+        result, workspace, sources=CHECK_SOURCES, required_files=CHECK_FILES,
+        timeout=CHECK_TIMEOUT, artifacts=artifacts, cancelled=cancelled,
+    )
 
 
 def _check_assertion(result: ExecutionResult, name: str) -> EvaluationReason:
-    invalid = _invalid_files(result, name)
-    if invalid:
-        return EvaluationReason(False, reason="; ".join(invalid))
-    if result.functional_checks is None or name not in result.functional_checks:
-        raise RuntimeError(f"{name}: functional-check observation is required")
-    check = result.functional_checks[name]
-    if check.status != "completed" or check.returncode is None:
-        raise RuntimeError(f"{name}: {check.error or 'functional check did not complete'}")
-    passed = check.returncode == 0
-    return EvaluationReason(passed, reason=(
-        f"{name}: check passed; see checks/{name}.stdout and .stderr"
-        if passed else f"{name}: check exited {check.returncode}; "
-        + check.stderr.decode("utf-8", errors="backslashreplace")
-    ))
+    return functional_checks.check_assertion(result, name, required_files=CHECK_FILES[name])
 
 
 class DuplicateBatchRejected(Evaluator[str, ExecutionResult]):
@@ -411,7 +335,7 @@ class ProjectTestsPass(Evaluator[str, ExecutionResult]):
 
 class RootContractPreserved(Evaluator[str, ExecutionResult]):
     def evaluate(self, ctx: EvaluatorContext[str, ExecutionResult]) -> EvaluationReason:
-        observation = _observation(ctx.output)
+        observation = functional_checks.require_observation(ctx.output)
         before = observation.initial.get("AGENTS.md")
         if before is None or before.kind != "file" or before.contents is None:
             raise WorkspaceInspectionError("Initial root contract must be an observed regular file")

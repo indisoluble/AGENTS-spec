@@ -16,6 +16,7 @@ import unittest
 from unittest.mock import patch
 
 from evals import __main__ as cli
+from evals import functional_checks
 from evals import independence as case
 from evals.evaluation import ExecutionResult, evaluate
 from evals.functional import FunctionalCheckResult
@@ -184,7 +185,7 @@ class IndependenceTests(unittest.TestCase):
                         target.mkdir()
                     elif kind == "fifo":
                         os.mkfifo(target)
-                with patch.object(case, "run_python_check") as run:
+                with patch.object(functional_checks, "run_python_check") as run:
                     code, saved = self.run_substitute(edit)
                 run.assert_not_called()
                 self.assertEqual(code, 1)
@@ -197,7 +198,7 @@ class IndependenceTests(unittest.TestCase):
 
     def test_check_errors_keep_output_and_remain_infrastructure_errors(self):
         for message in ("Sandbox launcher failed", "Functional check timed out", "Evaluation interrupted"):
-            with self.subTest(message=message), patch.object(case, "run_python_check", return_value=
+            with self.subTest(message=message), patch.object(functional_checks, "run_python_check", return_value=
                     FunctionalCheckResult("error", stdout=b"partial\xff", error=message)):
                 code, saved = self.run_substitute()
                 self.assertEqual(code, 2)
@@ -225,7 +226,7 @@ class IndependenceTests(unittest.TestCase):
             if path.name == "RequestedChange.stdout":
                 raise PermissionError("cannot save stdout")
             return write_bytes(path, contents)
-        with (patch.object(case, "run_python_check", return_value=
+        with (patch.object(functional_checks, "run_python_check", return_value=
                            FunctionalCheckResult("error", stderr=b"diagnostic", error="primary check failure")),
               patch.object(Path, "write_bytes", autospec=True, side_effect=deny_stdout)):
             code, saved = self.run_substitute()
@@ -237,7 +238,7 @@ class IndependenceTests(unittest.TestCase):
 
     def test_agent_failure_skips_checks_and_preserves_primary_error(self):
         with prepare_workspace(fixture_files=case.FIXTURE_FILES) as workspace:
-            with patch.object(case, "run_python_check") as run:
+            with patch.object(functional_checks, "run_python_check") as run:
                 result = case.check_execution(ExecutionResult("error", error="agent failed"), workspace,
                                               artifacts=self.artifacts)
         run.assert_not_called()
@@ -297,7 +298,7 @@ class IndependenceTests(unittest.TestCase):
              "exporter.py: file contents were not observed"),
         ):
             with self.subTest(state=state):
-                with patch.object(case, "run_python_check") as run:
+                with patch.object(functional_checks, "run_python_check") as run:
                     checked, records = self.check_observation(observation)
                 run.assert_not_called()
                 self.assertEqual(checked.status, "error")
@@ -315,7 +316,7 @@ class IndependenceTests(unittest.TestCase):
     def test_uncaptured_test_file_skips_only_the_regression_check(self):
         snapshot = self.fixture_result().workspace_observation.initial
         reason = "test_exporter.py: file contents were not observed"
-        with patch.object(case, "run_python_check", return_value=FunctionalCheckResult("completed", 0)) as run:
+        with patch.object(functional_checks, "run_python_check", return_value=FunctionalCheckResult("completed", 0)) as run:
             checked, records = self.check_observation(
                 WorkspaceObservation(snapshot, self.uncaptured(snapshot, "test_exporter.py")))
         self.assertEqual([call.args[0] for call in run.call_args_list], [case.REQUESTED_CHANGE_CHECK])
@@ -335,7 +336,7 @@ class IndependenceTests(unittest.TestCase):
             ("uncaptured", self.uncaptured(snapshot, "exporter.py"), "exporter.py: file contents were not observed"),
         ):
             with self.subTest(state=state):
-                with patch.object(case, "run_python_check") as run:
+                with patch.object(functional_checks, "run_python_check") as run:
                     checked, records = self.check_observation(WorkspaceObservation(snapshot, final))
                 run.assert_not_called()
                 self.assertTrue(all(record["reason"] == reason for record in records.values()))

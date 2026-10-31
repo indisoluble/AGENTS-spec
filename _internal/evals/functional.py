@@ -1,7 +1,8 @@
 """Run evaluator-owned Python checks without a model call or saved credentials.
 
-Used by the independent-execution case. See EVALUATIONS.md#functional-check-execution
-for its result contract, sandbox boundary, and timeout behavior.
+Used by functional_checks.py for individual sandboxed checks. See
+EVALUATIONS.md#functional-check-execution for the result contract, sandbox boundary,
+and timeout behavior.
 """
 
 import base64
@@ -23,7 +24,7 @@ from evals.process import run_process
 @dataclass(frozen=True)
 class FunctionalCheckResult:
     # Completed means the check ran, including when it returned a nonzero status.
-    # The case, not this process owner, interprets its output as assertions.
+    # Generic interpretation and scenario policy live outside this process owner.
     status: Literal["completed", "error"]
     returncode: int | None = None
     stdout: bytes = b""

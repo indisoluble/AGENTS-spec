@@ -18,7 +18,7 @@ Read the first example for the overall process, then use the sections relevant t
 | How do I adopt this in an existing project? | [Alignment](#bring-an-existing-project-into-alignment) |
 | Is my tool loading the instructions? | [Compatibility and adoption checks](#tool-compatibility) |
 
-[AGENTS.md](AGENTS.md) defines the rules and exceptions. The [technical guide](README-maintainers.md) explains their design rationale.
+[AGENTS.md](AGENTS.md) defines the rules and exceptions. The [technical guide](_internal/CONTRACT-DESIGN.md) explains their design rationale.
 
 ## From a request to a result
 
@@ -315,11 +315,11 @@ The contract favors understandable implementations, clear responsibilities, and 
 
 A request for one input format should produce a complete solution for that format. An imagined future feature alone does not justify a framework for other formats. Agreed performance limits or other current requirements can justify complexity. Suitable existing code and patterns can be reused; unrelated cleanup stays outside scope.
 
-Supporting techniques apply when their benefits justify their costs. Dependency injection, value objects, and composition can support clarity or testability, but selecting a technique does not automatically require new libraries or restructuring and grants no additional authority for either. The [technical guide](README-maintainers.md#focused-techniques-and-how-they-work-together) explains the conditions and trade-offs of each technique under this contract.
+Supporting techniques apply when their benefits justify their costs. Dependency injection, value objects, and composition can support clarity or testability, but selecting a technique does not automatically require new libraries or restructuring and grants no additional authority for either. The [technical guide](_internal/CONTRACT-DESIGN.md#focused-techniques-and-how-they-work-together) explains the conditions and trade-offs of each technique under this contract.
 
 Changes must preserve public contracts, compatibility, error handling, required logging, resource lifecycles, concurrency guarantees, and security unless changing them is intended and authorized. These preservation duties apply even when an implementation technique would otherwise simplify the change.
 
-[Refactoring](https://martinfowler.com/bliki/DefinitionOfRefactoring.html) preserves observable behavior. If you want different behavior, state that outcome so affected requirements, tests, and documentation can change with it. The [engineering rules](AGENTS.md#12-do--perform-the-authorized-work) give the conditions; the [technical guide](README-maintainers.md#engineering-choices) explains the methods and their trade-offs.
+[Refactoring](https://martinfowler.com/bliki/DefinitionOfRefactoring.html) preserves observable behavior. If you want different behavior, state that outcome so affected requirements, tests, and documentation can change with it. The [engineering rules](AGENTS.md#12-do--perform-the-authorized-work) give the conditions; the [technical guide](_internal/CONTRACT-DESIGN.md#engineering-choices) explains the methods and their trade-offs.
 
 ## Use requirements and documentation
 
@@ -385,7 +385,7 @@ New guides require an explicitly requested or agreed purpose. These methods do n
 
 [DRY](https://media.pragprog.com/titles/tpp20/dry.pdf) keeps knowledge consistent through one authoritative owner. A guide can explain a retry setting and link to its definition; necessary copies need a clear canonical owner and update process. Similar-looking code may express different rules, so resemblance alone does not require abstraction.
 
-See the [knowledge rules](AGENTS.md#35-canonical-knowledge-and-affected-documentation), the [architecture and guide rules](AGENTS.md#36-architecture-guides-and-code-documentation), and the [design reasons for the documentation methods](README-maintainers.md#documentation-choices).
+See the [knowledge rules](AGENTS.md#35-canonical-knowledge-and-affected-documentation), the [architecture and guide rules](AGENTS.md#36-architecture-guides-and-code-documentation), and the [design reasons for the documentation methods](_internal/CONTRACT-DESIGN.md#documentation-choices).
 
 ## Bring an existing project into alignment
 
@@ -420,7 +420,7 @@ Use the [basic setup](README.md#get-started) to install the supplied files. Load
 | [ChatGPT Projects](https://learn.chatgpt.com/docs/projects) | Project instructions and shared files or connected context; use the product's documented setup. |
 | [Claude Projects](https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects) | Project instructions and project knowledge; use the product's documented setup. |
 
-The supplied root bridges keep operating policy in the local `AGENTS.md`. The Claude file imports it; the Copilot file directs reading and application. Actual loading remains dependent on the interface and settings. Neither bridge defines a separate stop/report/resume protocol for loading failures. A contract that was never loaded cannot govern that failure through its own instructions; behavior then depends on the tool and instructions actually available. This is a limitation common to the supplied integrations, not a new fallback policy in this guide. Use the adoption diagnostics below to check loading. The [technical guide](README-maintainers.md#why-the-bridges-differ) explains the different mechanisms.
+The supplied root bridges keep operating policy in the local `AGENTS.md`. The Claude file imports it; the Copilot file directs reading and application. Actual loading remains dependent on the interface and settings. Neither bridge defines a separate stop/report/resume protocol for loading failures. A contract that was never loaded cannot govern that failure through its own instructions; behavior then depends on the tool and instructions actually available. This is a limitation common to the supplied integrations, not a new fallback policy in this guide. Use the adoption diagnostics below to check loading. The [technical guide](_internal/CONTRACT-DESIGN.md#why-the-bridges-differ) explains the different mechanisms.
 
 ### Check adoption
 
@@ -454,6 +454,6 @@ The project's recorded documentation-check dates are:
 - **2026-09-25:** Codex and Claude Code discovery and size guidance, plus Copilot and VS Code instruction guidance.
 - **2026-09-24:** Projects and Goal mode.
 - **2026-10-03:** Claude Code import syntax and the `/context` loading diagnostic used in the worked adoption check. This documentation check does not refresh the other claims or earlier dates above.
-- **2026-10-04:** Codex's default combined instruction byte limit, Anthropic's guidance on concise instruction files, and the context cost of Claude Code imports, supporting the [portability rationale](README-maintainers.md#keeping-the-contract-portable).
+- **2026-10-04:** Codex's default combined instruction byte limit, Anthropic's guidance on concise instruction files, and the context cost of Claude Code imports, supporting the [portability rationale](_internal/CONTRACT-DESIGN.md#keeping-the-contract-portable).
 
 These identify the evidence supporting the guidance; they are not cross-tool conformance-test results.

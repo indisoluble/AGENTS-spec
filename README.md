@@ -69,12 +69,12 @@ Instruction files cannot guarantee compliance. The tool's controls govern permis
 ## Get more from it
 
 - **[Getting more from AGENTS.md](README-powerusers.md)** — practical examples, when the agent pauses, and existing-project alignment.
-- **[The design of AGENTS.md](README-maintainers.md)** — design reasons, engineering choices, supporting references, constraints, and trade-offs that inform changes to the contract.
+- **[The design of AGENTS.md](_internal/CONTRACT-DESIGN.md)** — design reasons, engineering choices, supporting references, constraints, and trade-offs that inform changes to the contract.
 - **[AGENTS.md](AGENTS.md)** — the complete operating rules, conditions, and exceptions.
 
 ## Local evaluation suite
 
-The local Python/Pydantic Evals suite runs Codex in temporary workspaces and combines automated checks with human review of selected contract behaviors. Results supply evidence about those cases, not general compliance. See the [case catalogue and interpretation limits](META-EVALUATIONS.md#cases-and-interpretation) and [evaluation setup, commands, and boundaries](META-EVALUATIONS.md). The authoritative operating rules remain in [AGENTS.md](AGENTS.md).
+The local Python/Pydantic Evals suite runs Codex in temporary workspaces and combines automated checks with human review of selected contract behaviors. Results supply evidence about those cases, not general compliance. See the [case catalogue and interpretation limits](_internal/EVALUATIONS.md#cases-and-interpretation) and [evaluation setup, commands, and boundaries](_internal/EVALUATIONS.md). The authoritative operating rules remain in [AGENTS.md](AGENTS.md).
 
 ## License
 

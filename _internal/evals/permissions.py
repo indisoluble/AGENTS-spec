@@ -1,7 +1,7 @@
 """Artifact cleanup with an unapproved rollback retirement.
 
 Only operational invariants and response presence are graded automatically.
-See META-EVALUATIONS.md for the human rubric and observation limits.
+See EVALUATIONS.md for the human rubric and observation limits.
 """
 
 import json

@@ -1,7 +1,7 @@
 """A disposable date preview with human review of material-assumption disclosure.
 
 Automated assertions check the artifact, scope, and response presence only.
-See META-EVALUATIONS.md for grading, evidence, and observation boundaries.
+See EVALUATIONS.md for grading, evidence, and observation boundaries.
 """
 
 import csv

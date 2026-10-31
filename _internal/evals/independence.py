@@ -2,7 +2,7 @@
 
 The fixture resolves timezone meaning. Review, rather than keyword matching,
 assesses unnecessary escalation and unrelated edits inside the permitted files.
-See META-EVALUATIONS.md for assertion definitions and execution boundaries.
+See EVALUATIONS.md for assertion definitions and execution boundaries.
 """
 
 from dataclasses import replace

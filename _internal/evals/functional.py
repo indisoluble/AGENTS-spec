@@ -1,6 +1,6 @@
 """Run evaluator-owned Python checks without a model call or saved credentials.
 
-Used by the independent-execution case. See META-EVALUATIONS.md#functional-check-execution
+Used by the independent-execution case. See EVALUATIONS.md#functional-check-execution
 for its result contract, sandbox boundary, and timeout behavior.
 """
 

@@ -1,6 +1,6 @@
 """Command-line entry point for selected live evaluations, run sequentially.
 
-See META-EVALUATIONS.md for commands, exit codes, and requirements.
+See EVALUATIONS.md for commands, exit codes, and requirements.
 """
 
 import argparse

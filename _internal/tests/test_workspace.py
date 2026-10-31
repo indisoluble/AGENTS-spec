@@ -8,9 +8,106 @@ import subprocess
 import sys
 from tempfile import TemporaryDirectory
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
-from evals.workspace import WorkspaceInspectionError, snapshot_workspace
+from evals.workspace import WorkspaceEntry, WorkspaceInspectionError, snapshot_workspace, workspace_violations
+
+
+class WorkspaceComparisonTests(unittest.TestCase):
+    def test_missing_file_contents_raise_before_calling_the_content_rule(self):
+        for phase, before, after in (
+            ("Initial", None, b"observed"),
+            ("Final", b"observed", None),
+            ("Initial", None, None),
+        ):
+            for final_mode in (0o644, 0o600):
+                with self.subTest(phase=phase, before=before, after=after, final_mode=final_mode):
+                    content_rule = Mock(return_value=None)
+                    initial = {"nested/file.txt": WorkspaceEntry("file", 0o644, contents=before)}
+                    final = {"nested/file.txt": WorkspaceEntry("file", final_mode, contents=after)}
+
+                    with self.assertRaisesRegex(
+                        WorkspaceInspectionError, rf"{phase} nested/file\.txt contents were not captured",
+                    ):
+                        workspace_violations(initial, final, content_violation=content_rule)
+
+                    content_rule.assert_not_called()
+
+    def test_captured_bytes_including_empty_contents_use_the_scenario_rule(self):
+        for before, after, reason in (
+            (b"same", b"same", None),
+            (b"before", b"after", None),
+            (b"before", b"after", "content outside the permitted edit changed"),
+            (b"\x00\xff", b"\x00\xfe", "binary contents changed"),
+            (b"", b"", None),
+            (b"", b"after", "contents changed"),
+            (b"before", b"", "contents changed"),
+        ):
+            with self.subTest(before=before, after=after, reason=reason):
+                content_rule = Mock(return_value=reason)
+                initial = {"file.txt": WorkspaceEntry("file", 0o644, contents=before)}
+                final = {"file.txt": WorkspaceEntry("file", 0o644, contents=after)}
+
+                violations = workspace_violations(initial, final, content_violation=content_rule)
+
+                self.assertEqual(violations, [] if reason is None else [f"file.txt: {reason}"])
+                content_rule.assert_called_once_with("file.txt", before, after)
+
+    def test_structural_changes_do_not_require_file_contents(self):
+        file = WorkspaceEntry("file", 0o644)
+        directory = WorkspaceEntry("directory", 0o755)
+        for initial, final, expected in (
+            ({}, {}, []),
+            ({"file.txt": file}, {}, ["file.txt: deleted (file)"]),
+            ({}, {"file.txt": file}, ["file.txt: created (file)"]),
+            ({"file.txt": file}, {"file.txt": directory}, [
+                "file.txt: type changed from file to directory",
+                "file.txt: permissions changed from 0644 to 0755",
+            ]),
+            ({"file.txt": directory}, {"file.txt": file}, [
+                "file.txt: type changed from directory to file",
+                "file.txt: permissions changed from 0755 to 0644",
+            ]),
+        ):
+            with self.subTest(initial=initial, final=final):
+                content_rule = Mock()
+
+                violations = workspace_violations(initial, final, content_violation=content_rule)
+
+                self.assertEqual(violations, expected)
+                content_rule.assert_not_called()
+
+    def test_permissions_and_link_targets_remain_independent_of_content_changes(self):
+        initial = {
+            "link": WorkspaceEntry("symlink", 0o777, link_target="before"),
+            "file.txt": WorkspaceEntry("file", 0o644, contents=b""),
+            "directory": WorkspaceEntry("directory", 0o755),
+        }
+        final = {
+            "link": WorkspaceEntry("symlink", 0o777, link_target="after"),
+            "file.txt": WorkspaceEntry("file", 0o600, contents=b""),
+            "directory": WorkspaceEntry("directory", 0o700),
+        }
+        content_rule = Mock(return_value=None)
+
+        violations = workspace_violations(initial, final, content_violation=content_rule)
+
+        self.assertEqual(violations, [
+            "directory: permissions changed from 0755 to 0700",
+            "file.txt: permissions changed from 0644 to 0600",
+            "link: link target changed from 'before' to 'after'",
+        ])
+        content_rule.assert_called_once_with("file.txt", b"", b"")
+
+    def test_missing_file_contents_raise_under_optimized_python(self):
+        result = subprocess.run(
+            [sys.executable, "-O", "-m", "unittest",
+             "tests.test_workspace.WorkspaceComparisonTests."
+             "test_missing_file_contents_raise_before_calling_the_content_rule"],
+            capture_output=True, text=True, timeout=10,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
 class WorkspaceSnapshotTests(unittest.TestCase):

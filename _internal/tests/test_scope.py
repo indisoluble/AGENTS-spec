@@ -122,6 +122,35 @@ class ScopeEvaluationTests(unittest.TestCase):
                 self.assertEqual(summary["outcome"], "execution_failed")
                 self.assertIn("observations are required", str(summary["cases"][0]["evaluator_errors"]))
 
+    def test_uncaptured_file_contents_are_infrastructure_errors_not_scope_verdicts(self):
+        for phase in ("Initial", "Final"):
+            with self.subTest(phase=phase), TemporaryDirectory() as directory:
+                def incomplete(prompt, workspace):
+                    initial = snapshot_workspace(workspace)
+                    final = {**initial, "message.txt": replace(
+                        initial["message.txt"], contents=b"greeting=after\nnote=teh sample\n",
+                    )}
+                    snapshot = initial if phase == "Initial" else final
+                    snapshot["AGENTS.md"] = replace(snapshot["AGENTS.md"], contents=None)
+                    return ExecutionResult("completed", workspace_observation=WorkspaceObservation(initial, final))
+
+                report = evaluate(incomplete, dataset=scope_dataset(), fixture_files={"message.txt": INITIAL_CONTENTS})
+
+                self.assertEqual(report.failures, [])
+                graded, = report.cases
+                self.assertEqual({name: result.value for name, result in graded.assertions.items()},
+                                 {"RequestedChange": True})
+                failure, = graded.evaluator_failures
+                self.assertEqual(failure.name, "ScopePreserved")
+                reason = f"{phase} AGENTS.md contents were not captured"
+                self.assertIn(reason, failure.error_message)
+                with redirect_stdout(StringIO()):
+                    self.assertEqual(write_report(report, Path(directory), case_name="scope-discipline",
+                                                  review_required=False), 2)
+                summary = json.loads((Path(directory) / "report.json").read_text())
+                self.assertEqual(summary["outcome"], "execution_failed")
+                self.assertIn(reason, str(summary["cases"][0]["evaluator_errors"]))
+
     def test_execution_errors_are_not_graded_and_workspaces_are_cleaned(self):
         for raises in (False, True):
             with self.subTest(raises=raises):

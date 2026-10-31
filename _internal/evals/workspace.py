@@ -136,7 +136,10 @@ def workspace_violations(
     initial: WorkspaceSnapshot, final: WorkspaceSnapshot,
     *, content_violation: Callable[[str, bytes, bytes], str | None],
 ) -> list[str]:
-    """Compare all entries; the case supplies its regular-file content rule."""
+    """Compare all entries; the case supplies its regular-file content rule.
+
+    File-to-file comparisons require captured bytes in both observations.
+    """
     violations = []
     for path in sorted(initial.keys() | final.keys()):
         before, after = initial.get(path), final.get(path)
@@ -153,7 +156,10 @@ def workspace_violations(
         if before.kind != after.kind:
             continue
         if before.kind == "file":
-            assert before.contents is not None and after.contents is not None
+            if before.contents is None:
+                raise WorkspaceInspectionError(f"Initial {path} contents were not captured")
+            if after.contents is None:
+                raise WorkspaceInspectionError(f"Final {path} contents were not captured")
             reason = content_violation(path, before.contents, after.contents)
             if reason is not None:
                 violations.append(f"{path}: {reason}")

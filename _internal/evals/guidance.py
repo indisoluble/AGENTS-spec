@@ -98,12 +98,16 @@ class RootContractPreserved(Evaluator[str, ExecutionResult]):
         before = observation.initial.get("AGENTS.md")
         if before is None or before.kind != "file":
             raise WorkspaceInspectionError("Initial root contract must be a regular file")
+        if before.contents is None:
+            raise WorkspaceInspectionError("Initial root contract contents were not observed")
         after = observation.final.get("AGENTS.md")
         if after is None:
             return EvaluationReason(False, reason="AGENTS.md: deleted")
         changes = []
         if after.kind != before.kind:
             changes.append(f"type changed from {before.kind} to {after.kind}")
+        elif after.contents is None:
+            raise WorkspaceInspectionError("Final root contract contents were not observed")
         elif after.contents != before.contents:
             changes.append("contents changed")
         if after.mode != before.mode:

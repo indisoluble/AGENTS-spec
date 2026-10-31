@@ -150,8 +150,14 @@ def _observation(result: ExecutionResult) -> WorkspaceObservation:
 
 def _invalid_files(result: ExecutionResult, name: str) -> list[str]:
     final = _observation(result).final
-    return [f"{path}: missing or not a regular file" for path in CHECK_FILES[name]
-            if path not in final or final[path].kind != "file"]
+    invalid = []
+    for path in CHECK_FILES[name]:
+        entry = final.get(path)
+        if entry is None or entry.kind != "file":
+            invalid.append(f"{path}: missing or not a regular file")
+        elif entry.contents is None:
+            raise WorkspaceInspectionError(f"{path}: file contents were not observed")
+    return invalid
 
 
 def check_execution(
@@ -230,13 +236,13 @@ class RequestedChange(Evaluator[str, ExecutionResult]):
 
 class RegressionTests(Evaluator[str, ExecutionResult]):
     def evaluate(self, ctx: EvaluatorContext[str, ExecutionResult]) -> EvaluationReason:
+        observation = _observation(ctx.output)
+        before = observation.initial.get("test_exporter.py")
+        if before is None or before.kind != "file" or before.contents is None:
+            raise WorkspaceInspectionError("Initial test_exporter.py must be an observed regular file")
         result = _check_assertion(ctx.output, "RegressionTests")
         if not result.value:
             return result
-        observation = _observation(ctx.output)
-        before = observation.initial.get("test_exporter.py")
-        if before is None or before.kind != "file":
-            raise WorkspaceInspectionError("Initial test_exporter.py must be a regular file")
         changed = before.contents != observation.final["test_exporter.py"].contents
         return EvaluationReason(changed, reason=(
             "test_exporter.py changed and its tests passed; relevance requires human review"

@@ -259,6 +259,127 @@ class IndependenceTests(unittest.TestCase):
             self.assertEqual(code, 2)
             self.assertTrue(report.cases[0].evaluator_failures)
 
+    def fixture_result(self):
+        with prepare_workspace(fixture_files=case.FIXTURE_FILES) as workspace:
+            snapshot = snapshot_workspace(workspace)
+        return ExecutionResult("completed", final_response="Done",
+                               workspace_observation=WorkspaceObservation(snapshot, snapshot),
+                               functional_checks={name: FunctionalCheckResult("completed", 0)
+                                                  for name in case.CHECK_SOURCES})
+
+    @staticmethod
+    def uncaptured(snapshot, path):
+        return {**snapshot, path: replace(snapshot[path], contents=None)}
+
+    def check_observation(self, observation):
+        self.artifacts = Path(self.enterContext(TemporaryDirectory(dir=self.root, prefix="evidence-")))
+        with prepare_workspace(fixture_files=case.FIXTURE_FILES) as workspace:
+            checked = case.check_execution(
+                ExecutionResult("completed", final_response="Done", workspace_observation=observation),
+                workspace, artifacts=self.artifacts)
+        return checked, json.loads((self.artifacts / "functional-checks.json").read_text())
+
+    def grade(self, result):
+        report = evaluate(lambda prompt, workspace: result, dataset=case.independence_dataset(),
+                          fixture_files=case.FIXTURE_FILES)
+        with redirect_stdout(StringIO()):
+            code = cli.write_report(report, self.artifacts, case_name="independent-execution", review_required=True)
+        return code, json.loads((self.artifacts / "report.json").read_text()), report
+
+    def test_incomplete_observations_skip_checks_as_infrastructure_errors(self):
+        snapshot = self.fixture_result().workspace_observation.initial
+        incomplete = "Complete initial and final workspace observations are required"
+        for state, observation, reason in (
+            ("absent", None, incomplete),
+            ("missing initial", WorkspaceObservation(None, snapshot), incomplete),
+            ("missing final", WorkspaceObservation(snapshot, None), incomplete),
+            ("uncaptured final exporter.py", WorkspaceObservation(snapshot, self.uncaptured(snapshot, "exporter.py")),
+             "exporter.py: file contents were not observed"),
+        ):
+            with self.subTest(state=state):
+                with patch.object(case, "run_python_check") as run:
+                    checked, records = self.check_observation(observation)
+                run.assert_not_called()
+                self.assertEqual(checked.status, "error")
+                self.assertEqual(checked.functional_checks, {})
+                for name, source in case.CHECK_SOURCES.items():
+                    self.assertEqual(records[name], {"timeout_seconds": 5, "status": "not_run", "reason": reason})
+                    self.assertEqual((self.artifacts / "checks" / f"{name}.py").read_text(), source)
+                    self.assertFalse((self.artifacts / "checks" / f"{name}.stdout").exists())
+                code, saved, _ = self.grade(checked)
+                self.assertEqual(code, 2)
+                self.assertEqual(saved["outcome"], "execution_failed")
+                self.assertEqual(saved["cases"], [])
+                self.assertIn(reason, saved["execution_errors"][0])
+
+    def test_uncaptured_test_file_skips_only_the_regression_check(self):
+        snapshot = self.fixture_result().workspace_observation.initial
+        reason = "test_exporter.py: file contents were not observed"
+        with patch.object(case, "run_python_check", return_value=FunctionalCheckResult("completed", 0)) as run:
+            checked, records = self.check_observation(
+                WorkspaceObservation(snapshot, self.uncaptured(snapshot, "test_exporter.py")))
+        self.assertEqual([call.args[0] for call in run.call_args_list], [case.REQUESTED_CHANGE_CHECK])
+        self.assertEqual(records["RequestedChange"]["status"], "completed")
+        self.assertEqual(records["RegressionTests"], {"timeout_seconds": 5, "status": "not_run", "reason": reason})
+        self.assertEqual(checked.status, "error")
+        code, saved, _ = self.grade(checked)
+        self.assertEqual(code, 2)
+        self.assertEqual(saved["cases"], [])
+        self.assertIn(reason, saved["execution_errors"][0])
+
+    def test_observed_missing_file_fails_assertions_but_uncaptured_file_is_an_error(self):
+        snapshot = self.fixture_result().workspace_observation.initial
+        missing = {path: entry for path, entry in snapshot.items() if path != "exporter.py"}
+        for state, final, reason in (
+            ("missing", missing, "exporter.py: missing or not a regular file"),
+            ("uncaptured", self.uncaptured(snapshot, "exporter.py"), "exporter.py: file contents were not observed"),
+        ):
+            with self.subTest(state=state):
+                with patch.object(case, "run_python_check") as run:
+                    checked, records = self.check_observation(WorkspaceObservation(snapshot, final))
+                run.assert_not_called()
+                self.assertTrue(all(record["reason"] == reason for record in records.values()))
+                code, saved, _ = self.grade(checked)
+                if state == "missing":
+                    self.assertEqual(code, 1)
+                    self.assertEqual(checked.status, "completed")
+                    self.assertEqual(saved["execution_errors"], [])
+                    self.assertEqual(saved["cases"][0]["evaluator_errors"], [])
+                    self.assertEqual(saved["cases"][0]["assertions"], {
+                        "RequestedChange": False, "RegressionTests": False,
+                        "EditBoundaryPreserved": False, "FinalResponsePresent": True,
+                    })
+                else:
+                    self.assertEqual(code, 2)
+                    self.assertEqual(checked.status, "error")
+                    self.assertEqual(saved["cases"], [])
+
+    def test_regression_verdict_is_never_derived_from_incomplete_observations(self):
+        result = self.fixture_result()
+        snapshot = result.workspace_observation.initial
+        uncaptured = self.uncaptured(snapshot, "test_exporter.py")
+        initial_error = "Initial test_exporter.py must be an observed regular file"
+        incomplete = "Complete initial and final workspace observations are required"
+        for state, observation, returncode, message in (
+            ("uncaptured initial, passing check", WorkspaceObservation(uncaptured, snapshot), 0, initial_error),
+            ("uncaptured initial, failing check", WorkspaceObservation(uncaptured, snapshot), 1, initial_error),
+            ("uncaptured final", WorkspaceObservation(snapshot, uncaptured), 0,
+             "test_exporter.py: file contents were not observed"),
+            ("missing initial", WorkspaceObservation(None, snapshot), 0, incomplete),
+            ("missing final", WorkspaceObservation(snapshot, None), 0, incomplete),
+        ):
+            with self.subTest(state=state):
+                checks = {**result.functional_checks, "RegressionTests": FunctionalCheckResult("completed", returncode)}
+                code, _, report = self.grade(replace(result, workspace_observation=observation, functional_checks=checks))
+                self.assertEqual(code, 2)
+                graded, = report.cases
+                # Require RegressionTests' own error; EditBoundaryPreserved can also fail on these inputs.
+                self.assertNotIn("RegressionTests", graded.assertions)
+                failure, = [failure for failure in graded.evaluator_failures if failure.name == "RegressionTests"]
+                self.assertIn(message, failure.error_message)
+                if None not in (observation.initial, observation.final):
+                    self.assertTrue(graded.assertions["RequestedChange"].value)
+
 
 if __name__ == "__main__":
     unittest.main()

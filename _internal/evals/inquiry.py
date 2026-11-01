@@ -10,7 +10,7 @@ import json
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.evaluation import ExecutionResult, FinalResponsePresent
+from evals.evaluation import ExecutionResult, FinalResponsePresent, require_observation
 from evals.workspace import WorkspaceInspectionError, WorkspaceObservation, workspace_violations
 
 
@@ -443,9 +443,7 @@ contractual compliance, multi-turn continuity, or that AGENTS.md caused behavior
 """
 
 def _require_observation(result: ExecutionResult) -> WorkspaceObservation:
-    observation = result.workspace_observation
-    if observation is None or observation.initial is None or observation.final is None:
-        raise WorkspaceInspectionError("Complete initial and final workspace observations are required")
+    observation = require_observation(result)
     # The initial snapshot is a trusted runner observation, outside agent control.
     # Missing captures or a bad initial fixture are not observed agent violations.
     for path in (".", "AGENTS.md", *FIXTURE_FILES):

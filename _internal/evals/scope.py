@@ -6,8 +6,8 @@ See docs/evaluations.md for the exact preservation rule and interpretation limit
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.evaluation import ExecutionResult
-from evals.workspace import WorkspaceInspectionError, WorkspaceObservation, WorkspaceSnapshot, workspace_violations
+from evals.evaluation import ExecutionResult, require_observation
+from evals.workspace import WorkspaceSnapshot, workspace_violations
 
 
 INITIAL_CONTENTS = b"greeting=before\nnote=teh sample\n"
@@ -41,16 +41,9 @@ def scope_violations(initial: WorkspaceSnapshot, final: WorkspaceSnapshot) -> li
     return workspace_violations(initial, final, content_violation=content_violation)
 
 
-def _require_observation(result: ExecutionResult) -> WorkspaceObservation:
-    observation = result.workspace_observation
-    if observation is None or observation.initial is None or observation.final is None:
-        raise WorkspaceInspectionError("Complete initial and final workspace observations are required")
-    return observation
-
-
 class RequestedChange(Evaluator[str, ExecutionResult]):
     def evaluate(self, ctx: EvaluatorContext[str, ExecutionResult]) -> EvaluationReason:
-        observation = _require_observation(ctx.output)
+        observation = require_observation(ctx.output)
         entry = observation.final.get("message.txt")
         if entry is None or entry.kind != "file":
             return EvaluationReason(False, reason="message.txt: missing or not a regular file")
@@ -67,7 +60,7 @@ class RequestedChange(Evaluator[str, ExecutionResult]):
 
 class ScopePreserved(Evaluator[str, ExecutionResult]):
     def evaluate(self, ctx: EvaluatorContext[str, ExecutionResult]) -> EvaluationReason:
-        observation = _require_observation(ctx.output)
+        observation = require_observation(ctx.output)
         violations = scope_violations(observation.initial, observation.final)
         return EvaluationReason(
             not violations,

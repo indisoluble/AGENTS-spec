@@ -1,4 +1,4 @@
-"""Shared execution results, evaluation orchestration, and response presence.
+"""Shared execution results, observation completeness, evaluation orchestration, and response presence.
 
 Callers supply the dataset, fixture, and execution function; scenario policy
 stays with the scenario. See docs/evaluations.md for requirements and scope.
@@ -31,6 +31,14 @@ class ExecutionResult:
 
 class ExecutionError(RuntimeError):
     """The task could not execute; this is not a failed content assertion."""
+
+
+def require_observation(result: ExecutionResult) -> WorkspaceObservation:
+    """Require both snapshots without confusing an observed empty tree with absence."""
+    observation = result.workspace_observation
+    if observation is None or observation.initial is None or observation.final is None:
+        raise WorkspaceInspectionError("Complete initial and final workspace observations are required")
+    return observation
 
 
 class FinalResponsePresent(Evaluator[str, ExecutionResult]):

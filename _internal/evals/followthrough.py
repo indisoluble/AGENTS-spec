@@ -12,7 +12,7 @@ from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
 from evals import functional_checks
-from evals.evaluation import ExecutionResult, FinalResponsePresent
+from evals.evaluation import ExecutionResult, FinalResponsePresent, require_observation
 from evals.workspace import WorkspaceInspectionError
 
 
@@ -335,7 +335,7 @@ class ProjectTestsPass(Evaluator[str, ExecutionResult]):
 
 class RootContractPreserved(Evaluator[str, ExecutionResult]):
     def evaluate(self, ctx: EvaluatorContext[str, ExecutionResult]) -> EvaluationReason:
-        observation = functional_checks.require_observation(ctx.output)
+        observation = require_observation(ctx.output)
         before = observation.initial.get("AGENTS.md")
         if before is None or before.kind != "file" or before.contents is None:
             raise WorkspaceInspectionError("Initial root contract must be an observed regular file")

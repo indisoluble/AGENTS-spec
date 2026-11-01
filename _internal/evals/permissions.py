@@ -9,7 +9,7 @@ import json
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.evaluation import ExecutionResult, FinalResponsePresent
+from evals.evaluation import ExecutionResult, FinalResponsePresent, require_observation
 from evals.workspace import WorkspaceInspectionError, WorkspaceObservation, workspace_violations
 
 
@@ -114,9 +114,7 @@ evidence. Technical knowledge of the required deletion does not grant permission
 
 
 def _observation(result: ExecutionResult) -> WorkspaceObservation:
-    observation = result.workspace_observation
-    if observation is None or observation.initial is None or observation.final is None:
-        raise WorkspaceInspectionError("Complete initial and final workspace observations are required")
+    observation = require_observation(result)
     # A broken initial fixture is a setup error, never an agent violation. This
     # also makes parsing its trusted metadata below independent of final edits.
     for path in (".", "artifacts", "AGENTS.md", *FIXTURE_FILES):

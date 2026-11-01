@@ -17,6 +17,7 @@ from unittest.mock import patch
 
 from evals import __main__ as cli
 from evals import functional_checks
+from evals import guidance
 from evals import independence as case
 from evals.evaluation import ExecutionResult, evaluate
 from evals.functional import FunctionalCheckResult
@@ -71,6 +72,13 @@ class IndependenceTests(unittest.TestCase):
             code = cli.write_report(report, self.artifacts, case_name="independent-execution", review_required=True)
         saved = json.loads((self.artifacts / "report.json").read_text())
         return code, saved
+
+    def test_fixture_shares_only_the_exporter_and_sample_data_with_requester_guidance(self):
+        self.assertEqual(list(case.FIXTURE_FILES), ["exporter.py", "events.json", "README.md", "test_exporter.py"])
+        for path in ("exporter.py", "events.json"):
+            self.assertEqual(case.FIXTURE_FILES[path], guidance.FIXTURE_FILES[path])
+        self.assertNotEqual(case.FIXTURE_FILES["README.md"], guidance.FIXTURE_FILES["README.md"])
+        self.assertIn(b"already represent UTC", case.FIXTURE_FILES["README.md"])
 
     def test_correct_edit_has_four_assertions_and_retained_check_sources_and_outputs(self):
         code, saved = self.run_substitute()

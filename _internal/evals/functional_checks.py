@@ -13,17 +13,9 @@ from threading import Event
 from pydantic_evals.evaluators import EvaluationReason
 
 from evals.codex import save_json
-from evals.evaluation import ExecutionResult
+from evals.evaluation import ExecutionResult, require_observation
 from evals.functional import run_python_check
-from evals.workspace import WorkspaceInspectionError, WorkspaceObservation
-
-
-def require_observation(result: ExecutionResult) -> WorkspaceObservation:
-    """Require both snapshots without confusing an observed empty tree with absence."""
-    observation = result.workspace_observation
-    if observation is None or observation.initial is None or observation.final is None:
-        raise WorkspaceInspectionError("Complete initial and final workspace observations are required")
-    return observation
+from evals.workspace import WorkspaceInspectionError
 
 
 def _invalid_files(result: ExecutionResult, required_files: Sequence[str]) -> list[str]:

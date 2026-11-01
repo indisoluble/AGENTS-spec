@@ -7,7 +7,7 @@ See docs/evaluations.md for reporting, evidence, and interpretation limits.
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.evaluation import ExecutionResult, FinalResponsePresent
+from evals.evaluation import ExecutionResult, FinalResponsePresent, require_observation
 from evals.workspace import WorkspaceInspectionError
 
 
@@ -92,9 +92,7 @@ activity, and whether AGENTS.md caused the behavior remain unverified.
 
 class RootContractPreserved(Evaluator[str, ExecutionResult]):
     def evaluate(self, ctx: EvaluatorContext[str, ExecutionResult]) -> EvaluationReason:
-        observation = ctx.output.workspace_observation
-        if observation is None or observation.initial is None or observation.final is None:
-            raise WorkspaceInspectionError("Complete initial and final workspace observations are required")
+        observation = require_observation(ctx.output)
         before = observation.initial.get("AGENTS.md")
         if before is None or before.kind != "file":
             raise WorkspaceInspectionError("Initial root contract must be a regular file")

@@ -12,7 +12,7 @@ from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
 from evals import functional_checks
-from evals.evaluation import ExecutionResult, FinalResponsePresent
+from evals.evaluation import ExecutionResult, FinalResponsePresent, require_observation
 from evals.guidance import FIXTURE_FILES as GUIDANCE_FIXTURE
 from evals.workspace import WorkspaceInspectionError, workspace_violations
 
@@ -23,10 +23,11 @@ PROMPT = (
 )
 EDITABLE_FILES = frozenset(("exporter.py", "test_exporter.py"))
 
-# Reuse the same exporter and sample data as the ambiguous scenario. Here the
+# Reuse only the exporter and sample data of the ambiguous scenario. Here the
 # public contract explicitly resolves the timezone; the technique remains open.
 FIXTURE_FILES = {
-    **GUIDANCE_FIXTURE,
+    "exporter.py": GUIDANCE_FIXTURE["exporter.py"],
+    "events.json": GUIDANCE_FIXTURE["events.json"],
     "README.md": b'''# Event JSON exporter
 
 Run `python -B exporter.py` from this directory using Python 3.11 or newer.
@@ -160,7 +161,7 @@ class RequestedChange(Evaluator[str, ExecutionResult]):
 
 class RegressionTests(Evaluator[str, ExecutionResult]):
     def evaluate(self, ctx: EvaluatorContext[str, ExecutionResult]) -> EvaluationReason:
-        observation = functional_checks.require_observation(ctx.output)
+        observation = require_observation(ctx.output)
         before = observation.initial.get("test_exporter.py")
         if before is None or before.kind != "file" or before.contents is None:
             raise WorkspaceInspectionError("Initial test_exporter.py must be an observed regular file")
@@ -176,7 +177,7 @@ class RegressionTests(Evaluator[str, ExecutionResult]):
 
 class EditBoundaryPreserved(Evaluator[str, ExecutionResult]):
     def evaluate(self, ctx: EvaluatorContext[str, ExecutionResult]) -> EvaluationReason:
-        observation = functional_checks.require_observation(ctx.output)
+        observation = require_observation(ctx.output)
         violations = workspace_violations(
             observation.initial, observation.final,
             content_violation=lambda path, before, after:

@@ -9,7 +9,7 @@ import json
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.evaluation import ExecutionResult, FinalResponsePresent
+from evals.evaluation import ExecutionResult, FinalResponsePresent, require_observation
 from evals.workspace import WorkspaceInspectionError, WorkspaceObservation, workspace_violations
 
 
@@ -170,9 +170,7 @@ unobserved actions. Causal attribution to AGENTS.md needs comparative evidence.
 
 
 def _observation(result: ExecutionResult) -> WorkspaceObservation:
-    observation = result.workspace_observation
-    if observation is None or observation.initial is None or observation.final is None:
-        raise WorkspaceInspectionError("Complete initial and final workspace observations are required")
+    observation = require_observation(result)
     # Initial fixture corruption is an infrastructure error, not agent behavior.
     for path in (".", "AGENTS.md", *FIXTURE_FILES):
         entry = observation.initial.get(path)

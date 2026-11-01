@@ -1,25 +1,26 @@
 # AGENTS-spec internal engineering
 
-`_internal/` holds the engineering work behind the [AGENTS.md](../AGENTS.md) specification: the design rationale that informs changes to the contract, and a local evaluation framework that exercises selected contract behaviors with a coding agent. The contract, its tool bridges, and the guides for people adopting it live at the repository root, starting with [README.md](../README.md).
+`_internal/` holds the engineering work behind the [AGENTS.md](../AGENTS.md) specification: the design rationale that informs changes to the contract, a local evaluation framework that exercises selected contract behaviors with a coding agent, and the guidance that keeps the repository's documentation canonically owned. The contract, its tool bridges, and the guides for people adopting it live at the repository root, starting with [README.md](../README.md).
 
 The root [AGENTS.md](../AGENTS.md) governs engineering work here as everywhere else in the repository. This directory defines no separate operating contract; its documents explain, evaluate, and maintain that one.
 
 This README is for orientation only. Each topic below links to the document that owns it; if this summary and a linked owner disagree, the owner is authoritative and this README needs correcting.
 
-## Two areas of work
+## Engineering responsibilities
 
-| Area | What it covers | Canonical documentation |
+| Responsibility | What it covers | Canonical documentation |
 | --- | --- | --- |
 | Specification design | Why the contract is designed as it is, and the constraints and review scenarios that apply when changing `AGENTS.md`. It is also the public technical guide linked from the root README. | [docs/contract-design.md](docs/contract-design.md) |
 | Evaluation framework | A Python suite that runs Codex on each case in a fresh temporary workspace containing an unchanged copy of the root contract, then combines automated assertions with human review of selected behaviors. Results are evidence about those cases, not general compliance. | [docs/evaluations.md](docs/evaluations.md) |
+| Documentation maintenance | Canonical ownership and editorial guidance for all repository documentation, including the root guides. | [docs/documentation-maintenance.md](docs/documentation-maintenance.md) |
 
-The framework depends on the specification: it evaluates the current root `AGENTS.md`, and its cases and review criteria cite that contract's clauses. The specification does not depend on the framework.
+The framework depends on the specification: it evaluates the current root `AGENTS.md`, and its cases and review criteria cite that contract's clauses. The specification does not depend on the framework. [docs/architecture.md](docs/architecture.md) explains how these responsibilities fit together, their boundaries, and how a contract change can affect evaluation cases, rubrics, and documentation; the documents above own the detail.
 
 ## Directory layout
 
 | Path | Role |
 | --- | --- |
-| `docs/` | Internal engineering documentation: [contract-design.md](docs/contract-design.md) and [evaluations.md](docs/evaluations.md) for the two areas above, and [documentation-maintenance.md](docs/documentation-maintenance.md) for documentation ownership and editorial guidance across the whole repository, including the root guides. |
+| `docs/` | Internal engineering documentation: [architecture.md](docs/architecture.md) for the integrated engineering architecture, [contract-design.md](docs/contract-design.md) and [evaluations.md](docs/evaluations.md) for specification design and the evaluation framework, and [documentation-maintenance.md](docs/documentation-maintenance.md) for documentation ownership and editorial guidance across the whole repository, including the root guides. |
 | `evals/` | The evaluation package and its command-line entry point: shared execution, workspace, evidence, and grading infrastructure, plus one module per evaluation case. [Responsibilities and dependency direction](docs/evaluations.md#responsibilities-and-dependency-direction) assigns each module's role. |
 | `tests/` | The offline unittest suite, a fake Codex executable and an offline smoke substitute that never contact OpenAI, and an opt-in probe of the installed Codex sandbox. See [offline checks](docs/evaluations.md#run-offline-checks) and [functional-check execution](docs/evaluations.md#functional-check-execution). |
 | [requirements.txt](requirements.txt) | The suite's Python dependency range. |
@@ -30,6 +31,7 @@ The framework depends on the specification: it evaluates the current root `AGENT
 
 | To | Go to |
 | --- | --- |
+| Understand how specification design, evaluation, and documentation maintenance fit together, and how a contract change can affect evaluation | [architecture.md](docs/architecture.md) |
 | Understand what the suite evaluates and the limits of its results | [Purpose and evaluation model](docs/evaluations.md#purpose-and-evaluation-model) |
 | Install prerequisites, authenticate, and run offline checks or cases | [Setup and running evaluations](docs/evaluations.md#setup-and-running-evaluations) |
 | Read outcomes, retained evidence, and investigate a failure | [Results, evidence, and failure investigation](docs/evaluations.md#results-evidence-and-failure-investigation) |
@@ -45,7 +47,7 @@ The framework depends on the specification: it evaluates the current root `AGENT
 
 To understand or maintain the evaluation framework:
 
-1. Read the root [README.md](../README.md) and [AGENTS.md](../AGENTS.md) to learn what is being evaluated.
+1. Read the root [README.md](../README.md) and [AGENTS.md](../AGENTS.md) to learn what is being evaluated, and [architecture.md](docs/architecture.md) for how the framework relates to the specification.
 2. Read the [purpose and evaluation model](docs/evaluations.md#purpose-and-evaluation-model).
 3. Follow [install prerequisites](docs/evaluations.md#install-prerequisites) and [run the offline checks](docs/evaluations.md#run-offline-checks). They need no login and use no subscription allowance; live runs do, as [Run a case or the suite](docs/evaluations.md#run-a-case-or-the-suite) explains.
 4. Read the [architecture](docs/evaluations.md#architecture-extension-and-maintenance), then the [cases](docs/evaluations.md#cases-and-interpretation) and modules relevant to your work.

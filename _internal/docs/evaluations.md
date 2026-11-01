@@ -1,6 +1,6 @@
 # Local coding-agent evaluations
 
-This document explains how to operate, interpret, and maintain the local evaluation suite.
+This document explains how to operate, interpret, and maintain the local evaluation suite. It owns the detailed documentation of the evaluation framework; [architecture.md](architecture.md) explains how the framework relates to the specification and the rest of the engineering project, including how contract changes can affect cases and rubrics.
 
 - [Purpose and evaluation model](#purpose-and-evaluation-model)
 - [Setup and running evaluations](#setup-and-running-evaluations)

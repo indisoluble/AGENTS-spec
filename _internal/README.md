@@ -19,7 +19,7 @@ The framework depends on the specification: it evaluates the current root `AGENT
 
 | Path | Role |
 | --- | --- |
-| `docs/` | Internal engineering documentation: [contract-design.md](docs/contract-design.md) and [evaluations.md](docs/evaluations.md) for the two areas above, and [documentation.md](docs/documentation.md) for documentation ownership and editorial guidance across the whole repository, including the root guides. |
+| `docs/` | Internal engineering documentation: [contract-design.md](docs/contract-design.md) and [evaluations.md](docs/evaluations.md) for the two areas above, and [documentation-maintenance.md](docs/documentation-maintenance.md) for documentation ownership and editorial guidance across the whole repository, including the root guides. |
 | `evals/` | The evaluation package and its command-line entry point: shared execution, workspace, evidence, and grading infrastructure, plus one module per evaluation case. [Responsibilities and dependency direction](docs/evaluations.md#responsibilities-and-dependency-direction) assigns each module's role. |
 | `tests/` | The offline unittest suite, a fake Codex executable and an offline smoke substitute that never contact OpenAI, and an opt-in probe of the installed Codex sandbox. See [offline checks](docs/evaluations.md#run-offline-checks) and [functional-check execution](docs/evaluations.md#functional-check-execution). |
 | [requirements.txt](requirements.txt) | The suite's Python dependency range. |
@@ -39,7 +39,7 @@ The framework depends on the specification: it evaluates the current root `AGENT
 | Find the suite's requirements (E1–E40) and how each is verified | [Verifiable requirements](docs/evaluations.md#verifiable-requirements) |
 | Change or add an evaluation case | [Modify or extend an evaluation](docs/evaluations.md#modify-or-extend-an-evaluation), then [verify a behavior change](docs/evaluations.md#verify-a-behavior-change) |
 | Understand or assess a change to the contract's design | [contract-design.md](docs/contract-design.md), especially [Evolving the contract](docs/contract-design.md#evolving-the-contract) and [Assessing design changes](docs/contract-design.md#assessing-design-changes) |
-| Edit any documentation, including the root guides | [documentation.md](docs/documentation.md) |
+| Edit any documentation, including the root guides | [documentation-maintenance.md](docs/documentation-maintenance.md) |
 
 ## Getting started
 
@@ -54,4 +54,6 @@ To work on the contract itself, start with the reading guidance at the top of [c
 
 ## Documentation ownership
 
-Each kind of knowledge has one canonical owner. [Document ownership](docs/documentation.md#document-ownership) states what each document owns, and [documentation.md](docs/documentation.md) holds the editing workflow and checks for keeping documents consistent.
+Each kind of knowledge has one canonical owner. [Document ownership](docs/documentation-maintenance.md#document-ownership) states what each document owns, and [documentation-maintenance.md](docs/documentation-maintenance.md) holds the editing workflow and checks for keeping documents consistent.
+
+The root [README.md](../README.md) (an accessible introduction for potential adopters) and [README-powerusers.md](../README-powerusers.md) (detailed practical guidance for users) are user-facing. They may intentionally explain some of the same concepts at different depths, provided both stay consistent with `AGENTS.md` and neither defines competing rules. Internal engineering documents, including this README, apply ownership strictly: each detailed technical fact, requirement, procedure, or decision has one owner, and other documents summarize and link. [Public guides and internal engineering documents](docs/documentation-maintenance.md#public-guides-and-internal-engineering-documents) owns this distinction.

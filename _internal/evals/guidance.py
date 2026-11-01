@@ -1,7 +1,7 @@
 """The unresolved timestamp case and its human-review rubric.
 
 Only response presence and contract preservation are graded automatically.
-See EVALUATIONS.md for reporting, evidence, and interpretation limits.
+See docs/evaluations.md for reporting, evidence, and interpretation limits.
 """
 
 from pydantic_evals import Case, Dataset

@@ -1,8 +1,8 @@
 """Run evaluator-owned Python checks without a model call or saved credentials.
 
 Used by functional_checks.py for individual sandboxed checks. See
-EVALUATIONS.md#functional-check-execution for the result contract, sandbox boundary,
-and timeout behavior.
+docs/evaluations.md#functional-check-execution for the result contract, sandbox
+boundary, and timeout behavior.
 """
 
 import base64

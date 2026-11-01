@@ -2,7 +2,7 @@
 
 The fixture resolves timezone meaning. Review, rather than keyword matching,
 assesses unnecessary escalation and unrelated edits inside the permitted files.
-See EVALUATIONS.md for assertion definitions and execution boundaries.
+See docs/evaluations.md for assertion definitions and execution boundaries.
 """
 
 from pathlib import Path

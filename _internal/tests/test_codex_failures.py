@@ -20,6 +20,7 @@ from unittest.mock import patch
 from evals.auth import PROFILE_CONFIG
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC
 from evals import __main__ as cli
+from evals.__main__ import main
 from evals import functional_checks
 from evals import assumptions, findings, followthrough, independence, inquiry, permissions, scheduling
 from evals.evaluation import ExecutionResult
@@ -1113,6 +1114,45 @@ class CodexFailureTests(unittest.TestCase):
                 _, _, report = self.finish(process, runs, 0)
                 self.assertEqual(report["outcome"], "passed")
                 self.assert_group_stopped(profile)
+
+
+class CaseSelectionTests(unittest.TestCase):
+    def test_aggregate_exit_codes_prioritize_errors_then_failures_then_review(self):
+        scenarios = (
+            ((0, 0, 0, 0, 0, 0, 0, 0, 0, 0), 0), ((0, 0, 3, 3, 3, 3, 3, 3, 3, 3), 3), ((3, 1, 0, 3, 3, 3, 3, 3, 3, 3), 1),
+            ((1, 0, 3, 0, 3, 3, 3, 3, 3, 3), 1), ((3, 0, 2, 3, 3, 3, 3, 3, 3, 3), 2), ((2, 1, 3, 0, 3, 3, 3, 3, 3, 3), 2),
+            ((0, 0, 0, 1, 3, 3, 3, 3, 3, 3), 1), ((0, 0, 3, 2, 3, 3, 3, 3, 3, 3), 2), ((0, 0, 0, 0, 3, 3, 3, 3, 3, 3), 3),
+            ((0, 0, 3, 3, 1, 3, 3, 3, 3, 3), 1), ((0, 0, 3, 3, 2, 3, 3, 3, 3, 3), 2), ((0, 0, 0, 0, 0, 3, 3, 3, 3, 3), 3),
+            ((0, 0, 3, 3, 3, 1, 3, 3, 3, 3), 1), ((0, 0, 3, 3, 3, 2, 3, 3, 3, 3), 2), ((0, 0, 0, 0, 0, 0, 3, 3, 3, 3), 3),
+            ((0, 0, 3, 3, 3, 3, 1, 3, 3, 3), 1), ((0, 0, 3, 3, 3, 3, 2, 3, 3, 3), 2), ((0, 0, 0, 0, 0, 0, 0, 3, 3, 3), 3),
+            ((0, 0, 3, 3, 3, 3, 3, 1, 3, 3), 1), ((0, 1, 3, 3, 3, 3, 3, 2, 3, 3), 2), ((0, 0, 0, 0, 0, 0, 0, 0, 3, 3), 3),
+            ((0, 0, 3, 3, 3, 3, 3, 3, 1, 3), 1), ((0, 1, 3, 3, 3, 3, 3, 3, 2, 3), 2),
+            ((0, 0, 0, 0, 0, 0, 0, 0, 0, 3), 3), ((0, 0, 3, 3, 3, 3, 3, 3, 3, 1), 1),
+            ((0, 1, 3, 3, 3, 3, 3, 3, 3, 2), 2),
+        )
+        for codes, expected in scenarios:
+            with self.subTest(codes=codes), patch.object(cli, "run_case", side_effect=codes) as run:
+                with patch.object(sys, "argv", ["evals", "--case", "all", "--model", "test", "--reasoning-effort", "medium"]):
+                    self.assertEqual(cli.main(), expected)
+                self.assertEqual([call.args[0].name for call in run.call_args_list],
+                                 ["smoke", "scope-discipline", "requester-guidance", "independent-execution",
+                                  "assumption-disclosure", "missing-permission", "no-safe-next-step",
+                                  "contract-change-followthrough", "bounded-inquiry", "durable-finding-review"])
+
+    def test_unknown_case_is_rejected_before_execution_or_evidence_creation(self):
+        with TemporaryDirectory() as directory:
+            with (
+                patch("evals.__main__.ARTIFACTS_ROOT", Path(directory) / "runs"),
+                patch("evals.__main__.run_codex") as execute,
+                patch.object(sys, "argv", ["evals", "--case", "unknown",
+                                          "--model", "test", "--reasoning-effort", "medium"]),
+                redirect_stderr(StringIO()),
+                self.assertRaises(SystemExit) as stopped,
+            ):
+                main()
+            self.assertEqual(stopped.exception.code, 2)
+            execute.assert_not_called()
+            self.assertFalse((Path(directory) / "runs").exists())
 
 
 if __name__ == "__main__":

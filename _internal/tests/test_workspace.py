@@ -1,5 +1,6 @@
 """Inspect disposable local files only; these tests never launch Codex or sign in."""
 
+import json
 import os
 from pathlib import Path
 import socket
@@ -10,7 +11,10 @@ from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import Mock, patch
 
-from evals.workspace import WorkspaceEntry, WorkspaceInspectionError, snapshot_workspace, workspace_violations
+from evals.workspace import (
+    WorkspaceEntry, WorkspaceInspectionError, WorkspaceObservation, snapshot_workspace, workspace_changes,
+    workspace_violations,
+)
 
 
 class WorkspaceComparisonTests(unittest.TestCase):
@@ -268,6 +272,43 @@ for name, kind in (("pipe", "fifo"), ("socket", "socket")):
         with patch("evals.workspace.os.open", side_effect=replace_before_open):
             with self.assertRaisesRegex(WorkspaceInspectionError, "nested:"):
                 snapshot_workspace(self.workspace)
+
+
+class WorkspaceChangeReportTests(unittest.TestCase):
+    def test_changes_include_types_modes_links_exact_text_and_binary_contents_in_path_order(self):
+        initial = {
+            ".": WorkspaceEntry("directory", 0o700),
+            "binary": WorkspaceEntry("file", 0o600, b"\xff"),
+            "deleted": WorkspaceEntry("file", 0o600, b"removed\n"),
+            "link": WorkspaceEntry("symlink", 0o777, link_target="old"),
+            "text": WorkspaceEntry("file", 0o644, b"same\r\nlast"),
+            "type": WorkspaceEntry("directory", 0o700),
+        }
+        final = {
+            ".": WorkspaceEntry("directory", 0o755),
+            ".hidden": WorkspaceEntry("file", 0o600, b"added\n"),
+            "binary": WorkspaceEntry("file", 0o600, b"\x00\xfe"),
+            "empty": WorkspaceEntry("directory", 0o700),
+            "link": WorkspaceEntry("symlink", 0o777, link_target="new\nname"),
+            "nested": WorkspaceEntry("directory", 0o700),
+            "nested/pipe": WorkspaceEntry("fifo", 0o600),
+            "text": WorkspaceEntry("file", 0o755, b"same\nlast\n"),
+            "type": WorkspaceEntry("file", 0o600, b"new file\n"),
+        }
+        rendered = workspace_changes(WorkspaceObservation(initial, final))
+        paths = [json.loads(line.removeprefix("Path: ")) for line in rendered.splitlines() if line.startswith("Path: ")]
+        self.assertEqual(paths, sorted(initial.keys() | final.keys()))
+        for expected in ('mode=0700', 'mode=0755', 'mode=0644', 'After: absent', 'Before: absent',
+                         'target="old"', 'target="new\\nname"', 'fifo, mode=0600',
+                         '-"same\\r\\n"', '+"same\\n"', '-"last"', '+"last\\n"',
+                         '-base64: /w==', '+base64: AP4=', '-"removed\\n"', '+"added\\n"'):
+            self.assertIn(expected, rendered)
+
+    def test_unchanged_and_incomplete_observations_are_distinct(self):
+        self.assertEqual(workspace_changes(WorkspaceObservation({}, {})), "No observed workspace changes.\n")
+        for observation in (WorkspaceObservation(None, {}), WorkspaceObservation({}, None)):
+            self.assertIn("comparison unavailable", workspace_changes(observation))
+            self.assertNotIn("No observed", workspace_changes(observation))
 
 
 if __name__ == "__main__":

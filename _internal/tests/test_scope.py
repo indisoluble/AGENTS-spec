@@ -1,18 +1,16 @@
 """Grade known file edits using substitutes; no real Codex, login, or model calls."""
 
-from contextlib import redirect_stderr, redirect_stdout
+from contextlib import redirect_stdout
 from dataclasses import replace
 from io import StringIO
 import json
 import os
 from pathlib import Path
 import stat
-import sys
 from tempfile import TemporaryDirectory
 import unittest
-from unittest.mock import patch
 
-from evals.__main__ import main, write_report
+from evals.__main__ import write_report
 from evals.evaluation import ExecutionResult, evaluate, read_result
 from evals.scope import INITIAL_CONTENTS, scope_dataset, scope_violations
 from evals.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
@@ -169,38 +167,6 @@ class ScopeEvaluationTests(unittest.TestCase):
                 self.assertIn("simulated execution error", report.failures[0].error_message)
                 self.assertEqual(len(workspaces), 1)
                 self.assertFalse(workspaces[0].exists())
-
-    def test_unknown_case_is_rejected_before_execution_or_evidence_creation(self):
-        with TemporaryDirectory() as directory:
-            with (
-                patch("evals.__main__.ARTIFACTS_ROOT", Path(directory) / "runs"),
-                patch("evals.__main__.run_codex") as execute,
-                patch.object(sys, "argv", ["evals", "--case", "unknown",
-                                          "--model", "test", "--reasoning-effort", "medium"]),
-                redirect_stderr(StringIO()),
-                self.assertRaises(SystemExit) as stopped,
-            ):
-                main()
-            self.assertEqual(stopped.exception.code, 2)
-            execute.assert_not_called()
-            self.assertFalse((Path(directory) / "runs").exists())
-
-    def test_fallback_report_identifies_the_selected_case(self):
-        with TemporaryDirectory() as directory:
-            with (
-                patch("evals.__main__.ARTIFACTS_ROOT", Path(directory)),
-                patch("evals.__main__.evaluate", side_effect=RuntimeError("simulated setup error")),
-                patch.object(sys, "argv", ["evals", "--case", "scope-discipline",
-                                          "--model", "test", "--reasoning-effort", "medium"]),
-                redirect_stdout(StringIO()), redirect_stderr(StringIO()),
-            ):
-                self.assertEqual(main(), 2)
-
-            artifacts, = Path(directory).iterdir()
-            report = json.loads((artifacts / "report.json").read_text())
-            self.assertEqual(report["case"], "scope-discipline")
-            self.assertEqual(report["outcome"], "execution_failed")
-            self.assertIn("simulated setup error", report["error"])
 
 
 class ScopeWorkspaceComparisonTests(unittest.TestCase):

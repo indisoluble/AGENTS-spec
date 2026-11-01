@@ -11,9 +11,11 @@ from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
+from evals import __main__ as cli
 from evals.__main__ import main
 from evals.codex import retain_evidence, run_codex
 from evals.evaluation import ExecutionResult, read_result
+from evals.guidance import REVIEW_RUBRIC
 from evals.scope import INITIAL_CONTENTS
 from evals.smoke import evaluate
 from evals.workspace import WorkspaceObservation, prepare_workspace, snapshot_workspace
@@ -154,6 +156,72 @@ for kind in ("pipe", "directory", "symlink"):
                 self.assertEqual(main(), 2)
             self.assertIn("primary failure", errors.getvalue())
             self.assertIn("report unavailable", errors.getvalue())
+
+    def test_fallback_report_identifies_the_selected_case(self):
+        with TemporaryDirectory() as directory:
+            with (
+                patch("evals.__main__.ARTIFACTS_ROOT", Path(directory)),
+                patch("evals.__main__.evaluate", side_effect=RuntimeError("simulated setup error")),
+                patch.object(sys, "argv", ["evals", "--case", "scope-discipline",
+                                          "--model", "test", "--reasoning-effort", "medium"]),
+                redirect_stdout(StringIO()), redirect_stderr(StringIO()),
+            ):
+                self.assertEqual(main(), 2)
+
+            artifacts, = Path(directory).iterdir()
+            report = json.loads((artifacts / "report.json").read_text())
+            self.assertEqual(report["case"], "scope-discipline")
+            self.assertEqual(report["outcome"], "execution_failed")
+            self.assertIn("simulated setup error", report["error"])
+
+    def test_review_rubric_write_failure_is_a_setup_error_without_launching(self):
+        with TemporaryDirectory() as directory:
+            original_write = Path.write_text
+
+            def deny_rubric(path, *args, **kwargs):
+                if path.name == "review.md":
+                    raise PermissionError("rubric unavailable")
+                return original_write(path, *args, **kwargs)
+
+            with (patch.object(cli, "ARTIFACTS_ROOT", Path(directory)),
+                  patch.object(cli, "run_codex") as execute,
+                  patch.object(Path, "write_text", autospec=True, side_effect=deny_rubric),
+                  patch.object(sys, "argv", ["evals", "--case", "requester-guidance", "--model", "test",
+                                             "--reasoning-effort", "medium", "--timeout", "1", "--codex-home", directory]),
+                  redirect_stdout(StringIO()), redirect_stderr(StringIO())):
+                code = cli.main()
+            self.assertEqual(code, 2)
+            execute.assert_not_called()
+            artifacts, = Path(directory).iterdir()
+            saved = json.loads((artifacts / "report.json").read_text())
+            self.assertIn("rubric unavailable", saved["error"])
+            self.assertTrue(saved["review_required"])
+
+    def test_change_report_write_failure_preserves_primary_error_and_other_evidence(self):
+        with TemporaryDirectory() as directory:
+            original_write = Path.write_text
+
+            def deny_changes(path, *args, **kwargs):
+                if path.name == "workspace-changes.txt":
+                    raise PermissionError("changes unavailable")
+                return original_write(path, *args, **kwargs)
+
+            with (patch.object(cli, "ARTIFACTS_ROOT", Path(directory)),
+                  patch("evals.auth.codex_executable", side_effect=RuntimeError("primary failure")),
+                  patch.object(Path, "write_text", autospec=True, side_effect=deny_changes),
+                  patch.object(sys, "argv", ["evals", "--case", "requester-guidance", "--model", "test",
+                                             "--reasoning-effort", "medium", "--timeout", "1", "--codex-home", directory]),
+                  redirect_stdout(StringIO()), redirect_stderr(StringIO())):
+                code = cli.main()
+            self.assertEqual(code, 2)
+            artifacts, = Path(directory).iterdir()
+            saved = json.loads((artifacts / "report.json").read_text())
+            error = saved["execution_errors"][0]
+            self.assertIn("primary failure", error)
+            self.assertIn("changes unavailable", error)
+            self.assertEqual((artifacts / "review.md").read_text(), REVIEW_RUBRIC)
+            for phase in ("initial", "final"):
+                self.assertTrue((artifacts / f"{phase}-workspace.json").is_file())
 
 
 class ScopeEvidenceTests(unittest.TestCase):

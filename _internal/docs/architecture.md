@@ -8,7 +8,7 @@ The repository delivers a specification: the root `AGENTS.md` contract and two i
 
 `_internal/` holds the engineering work used to develop and assess the specification. Adopters do not install it, and it adds no operating duties: the root contract governs work here as everywhere else in the repository. The engineering project has three related responsibilities:
 
-1. **Specification design and evolution.** Explaining why the contract is designed as it is and constraining how it may change. [contract-design.md](contract-design.md) owns this rationale; it is also the public technical guide linked from the root guides.
+1. **Specification design and evolution.** Explaining why the contract is designed as it is and constraining how it may change. [contract-design.md](contract-design.md) owns this rationale; it is also a publicly readable technical guide, reached from the root guides through [_internal/README.md](../README.md).
 2. **Evaluation.** A local Python framework that runs Codex on a finite set of cases against the current contract and produces evidence about those cases. [evaluations.md](evaluations.md) owns its documentation, including requirements E1–E40.
 3. **Knowledge maintenance.** Keeping each fact, rule, explanation, and decision with one canonical owner and keeping its dependents consistent, across the whole repository including the root guides. [documentation-maintenance.md](documentation-maintenance.md) owns the ownership map and editorial guidance.
 
@@ -120,3 +120,5 @@ This architecture refines into the existing owners rather than replacing them:
 - *Subdirectories such as `specification/` and `evaluation/`:* folders do not explain relationships, and moving files would break root-guide links, docstrings, and anchors for a small document set.
 - *Separate `evaluation-architecture.md` or `evaluation-cases.md`, extracted E1–E40, or another split of `evaluations.md`:* these would present evaluation as an independent subsystem and separate requirements from the case acceptance definitions and evidence they reference. Length alone did not justify a split.
 - *Moving the framework lifecycle into this document:* it would separate that lifecycle from the outcome, evidence, and functional-check sections it explains.
+
+**Later navigation change.** The context and rejected alternatives above record root-guide links into `_internal/docs/` as they existed when this decision was made. A later editorial decision, owned by [documentation-maintenance.md](documentation-maintenance.md#public-guides-and-internal-engineering-documents), replaced those links with one pointer from each root guide to `_internal/README.md`. It changes navigation only; this decision, its paths, and the remaining link constraints from docstrings and external references are unaffected.

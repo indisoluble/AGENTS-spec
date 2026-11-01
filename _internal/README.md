@@ -10,7 +10,7 @@ This README is for orientation only. Each topic below links to the document that
 
 | Responsibility | What it covers | Canonical documentation |
 | --- | --- | --- |
-| Specification design | Why the contract is designed as it is, and the constraints and review scenarios that apply when changing `AGENTS.md`. It is also the public technical guide linked from the root README. | [docs/contract-design.md](docs/contract-design.md) |
+| Specification design | Why the contract is designed as it is, and the constraints and review scenarios that apply when changing `AGENTS.md`. It remains publicly readable for anyone interested in the specification's rationale; the root guides reach it through this README rather than linking to it directly. | [docs/contract-design.md](docs/contract-design.md) |
 | Evaluation framework | A Python suite that runs Codex on each case in a fresh temporary workspace containing an unchanged copy of the root contract, then combines automated assertions with human review of selected behaviors. Results are evidence about those cases, not general compliance. | [docs/evaluations.md](docs/evaluations.md) |
 | Documentation maintenance | Canonical ownership and editorial guidance for all repository documentation, including the root guides. | [docs/documentation-maintenance.md](docs/documentation-maintenance.md) |
 

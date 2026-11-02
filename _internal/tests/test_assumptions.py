@@ -4,6 +4,7 @@ The substitutes write known files in disposable workspaces. Response examples
 exercise presence only; no test pretends to judge the human rubric.
 """
 
+import base64
 from contextlib import redirect_stderr, redirect_stdout
 from dataclasses import replace
 from io import StringIO
@@ -17,7 +18,9 @@ from unittest.mock import patch
 from evals import __main__ as cli
 from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.runtime.workspace import CONTRACT_PATH, WorkspaceInspectionError, WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.scenarios import assumptions
 from evals.scenarios import assumptions as case
+from tests.cli_harness import FakeCodexCLI
 
 
 # Explicit examples keep tests independent of how the evaluator derives dates.
@@ -313,6 +316,99 @@ class AssumptionTests(unittest.TestCase):
             self.assertIn("primary execution failure", saved["execution_errors"][0])
             self.assertIn("report unavailable", saved["evidence_errors"][0])
             self.assertIn("report unavailable", errors.getvalue())
+
+
+class AssumptionCLITests(FakeCodexCLI, unittest.TestCase):
+    def test_assumption_previews_and_replies_are_retained_without_semantic_verdicts(self):
+        for scenario in ("success", "month-first", "undisclosed", "misleading"):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="assumption-disclosure")
+                artifacts, metadata, report = self.finish(process, runs, 3)
+                self.assertEqual(report["case"], "assumption-disclosure")
+                self.assertEqual(report["outcome"], "review_required")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "PreviewCorrect": True, "ScopePreserved": True, "FinalResponsePresent": True,
+                })
+                interpretation = "month-first" if scenario == "month-first" else "day-first"
+                self.assertIn(interpretation, report["cases"][0]["assertion_reasons"]["PreviewCorrect"])
+                response = (artifacts / "final-response.txt").read_text()
+                self.assertEqual(report["cases"][0]["final_response"], response)
+                self.assertNotIn("Progress message", response)
+                self.assertIn("Progress message", (artifacts / "events.jsonl").read_text())
+                self.assertIn("--output-last-message", metadata["command"])
+                self.assertEqual((artifacts / "review.md").read_text(), assumptions.REVIEW_RUBRIC)
+                self.assertEqual((artifacts / "prompt.txt").read_text(), assumptions.PROMPT)
+                initial = json.loads((artifacts / "initial-workspace.json").read_text())
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                self.assertEqual(set(initial), {".", "AGENTS.md", *assumptions.FIXTURE_FILES})
+                self.assertEqual(set(final), {*initial, "preview.json"})
+                for name, contents in assumptions.FIXTURE_FILES.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                    self.assertEqual(base64.b64decode(initial[name]["contents_base64"]), contents)
+                for name, entry in initial.items():
+                    self.assertEqual(final[name], entry)
+                for name, entry in final.items():
+                    if entry["kind"] == "file":
+                        self.assertEqual((artifacts / "workspace" / name).read_bytes(),
+                                         base64.b64decode(entry["contents_base64"]))
+                changes = (artifacts / "workspace-changes.txt").read_text()
+                self.assertIn('Path: "preview.json"', changes)
+                self.assertIn("2026-03-04" if scenario == "month-first" else "2026-04-03", changes)
+                self.assertFalse((artifacts / "functional-checks.json").exists())
+                self.assertEqual((profile / "case-invocations").read_text(), "assumption-disclosure\n")
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_assumption_failures_keep_task_scope_and_response_assertions_independent(self):
+        scenarios = (("question", False, True, True), ("mixed", False, True, True),
+                     ("malformed", False, True, True), ("unrelated", True, False, True),
+                     ("source-edited", True, False, True), ("contract-edited", True, False, True),
+                     ("preview-link", False, False, True), ("empty", True, True, False))
+        for scenario, preview, scope, response in scenarios:
+            with self.subTest(scenario=scenario):
+                process, _, runs = self.launch(scenario, case="assumption-disclosure")
+                artifacts, metadata, report = self.finish(process, runs, 1)
+                self.assertEqual(report["outcome"], "assertion_failed")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "PreviewCorrect": preview, "ScopePreserved": scope, "FinalResponsePresent": response,
+                })
+                self.assertEqual(report["execution_errors"], [])
+                self.assertEqual(metadata["status"], "completed")
+                reasons = report["cases"][0]["assertion_reasons"]
+                terminal = (artifacts / "report.txt").read_text()
+                self.assertIn("Human review pending", terminal)
+                if scenario == "question":
+                    self.assertIn("task incomplete", reasons["PreviewCorrect"])
+                    self.assertIn("task incomplete", terminal)
+                    self.assertEqual((artifacts / "workspace-changes.txt").read_text(), "No observed workspace changes.\n")
+                elif scenario in ("unrelated", "source-edited", "contract-edited"):
+                    path = {"unrelated": "notes.txt", "source-edited": "events.csv", "contract-edited": "AGENTS.md"}[scenario]
+                    self.assertIn(f"{path}:", reasons["ScopePreserved"])
+                    self.assertIn(f"{path}:", terminal)
+                elif scenario == "preview-link":
+                    self.assertFalse((artifacts / "workspace/preview.json").exists())
+                    final = json.loads((artifacts / "final-workspace.json").read_text())
+                    self.assertEqual(final["preview.json"]["kind"], "symlink")
+                    self.assertIsNone(final["preview.json"]["contents_base64"])
+
+    def test_assumption_capture_and_execution_errors_retain_available_evidence_and_pending_review(self):
+        for scenario in ("missing-response", "invalid-utf8", "nonzero"):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="assumption-disclosure")
+                artifacts, metadata, report = self.finish(process, runs, 2)
+                self.assertEqual(report["case"], "assumption-disclosure")
+                self.assertEqual(report["outcome"], "execution_failed")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"], [])
+                self.assertIn("Final response capture failed", metadata["error"])
+                if scenario == "nonzero":
+                    self.assertIn("Codex exited with status 7", metadata["error"])
+                self.assertEqual((artifacts / "review.md").read_text(), assumptions.REVIEW_RUBRIC)
+                for name in ("initial-workspace.json", "final-workspace.json", "workspace-changes.txt", "events.jsonl", "stderr.txt"):
+                    self.assertTrue((artifacts / name).is_file(), name)
+                self.assertEqual((artifacts / "workspace/preview.json").exists(), scenario != "nonzero")
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
 
 
 if __name__ == "__main__":

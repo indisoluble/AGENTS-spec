@@ -502,6 +502,42 @@ The probe runs trusted local code through the actual helper, checking readable f
 
 ## Architecture, extension, and maintenance
 
+### Directory layout and ownership
+
+The package hierarchy separates composition, shared machinery, scenario policy, and verification. [architecture.md](architecture.md#evaluation-framework-package-and-verification-hierarchy) records why.
+
+| Path | Owns |
+| --- | --- |
+| `evals/__main__.py` | Composition and the command line: the ordered `CASES` collection, `run_case()`, and `write_report()`. It decides which scenarios exist, which shared stages each uses, and how results become exit codes. |
+| `evals/runtime/` | Shared execution machinery used by every case: workspaces and observations, Codex launching, authentication, subprocesses, evaluation orchestration, and functional checks. It imports no scenario. |
+| `evals/scenarios/` | One module per case with its prompt, fixture, dataset, evaluators, and any functional checks and review rubric. |
+| `tests/runtime/` | Offline tests of the shared machinery, plus `test_cli.py` for CLI guarantees spanning scenarios: case order, exit-code precedence, authentication, timeouts, signals, cleanup, and the functional-check lifecycle. |
+| `tests/scenarios/` | One `test_<module>.py` per scenario module, containing its grading tests and its CLI tests (`<Name>CLITests`). |
+| `tests/support/` | Test-only substitutes: `fake_codex.py`, a fake `codex` executable with scripted per-case responses, and `cli_harness.py`, whose `FakeCodexCLI` mixin runs the real CLI against it in a child process. |
+| `tests/offline_smoke.py`, `tests/probe_functional_sandbox.py` | Standalone entry points with documented commands: an offline smoke demonstration and the opt-in [sandbox probe](#functional-check-execution). |
+
+A component becomes a directory only when several independently meaningful files justify that boundary, for example if a scenario's evaluators and fixture grew large enough to be reviewed and changed separately. Until then a scenario stays one module with one test module. Production and test layouts correspond by responsibility, not file for file.
+
+### Pydantic Evals concepts used here
+
+The framework uses a small part of Pydantic Evals; the [technical references](#technical-references) link its documentation.
+
+- **`Case`**: one named input, here the prompt, with an optional `expected_output`. Each scenario defines one case.
+- **`Dataset`**: the cases and the evaluators that grade them. Scenarios expose a factory, such as `scope_dataset()`, so every run builds a fresh dataset.
+- **Task**: the function Pydantic calls for each case. [evaluation.py](../evals/runtime/evaluation.py)'s `evaluate()` builds it around the execution callable: it prepares the workspace, calls the callable, and returns its `ExecutionResult` as the case's output, raising `ExecutionError` when execution failed.
+- **`Evaluator` and `EvaluatorContext`**: an evaluator's `evaluate(ctx)` reads `ctx.output` (the `ExecutionResult`) and `ctx.expected_output`, then returns a Boolean or an `EvaluationReason` holding a value and a reason. Each evaluator class yields one named assertion. An exception raised inside an evaluator is an evaluator error, not a false assertion.
+- **`EvaluationReport`**: graded cases with their assertions, task failures, and evaluator failures. `write_report()` derives the outcome and exit code from it.
+
+Pydantic Evals runs the task and the evaluators. It does not launch Codex, inspect workspaces, or retain evidence; the runtime modules do.
+
+### Evaluating an agent versus testing the evaluator
+
+The two activities share code but answer different questions:
+
+- **Evaluating an agent:** `python -m evals` runs the real Codex CLI on a scenario's fixture, consumes subscription allowance, and produces evidence about that run. The [evaluation model](#purpose-and-evaluation-model) bounds what that evidence establishes.
+- **Testing the evaluator:** the offline suite never runs a model. Grading tests call `evaluate()` with test-authored execution functions that edit the fixture as a hypothetical agent would. CLI tests run the real command against `tests/support/fake_codex.py`. Passing tests show that grading, evidence, and failure handling behave as specified, not that any agent complies with the contract.
+- **Checking the sandbox:** the opt-in probe exercises the installed Codex sandbox, which fake processes cannot demonstrate.
+
 ### Responsibilities and dependency direction
 
 The CLI composes a selected scenario with shared execution and evaluation mechanisms. Shared infrastructure has no dependency on individual scenarios. Scenario modules use the common interfaces while retaining their prompts, fixtures, assessment policy, and scenario-specific interpretation.
@@ -529,6 +565,18 @@ One evaluation passes through these owners in the following order. Optional stag
 
 Pydantic owns assertion results/reasons and terminal formatting; the custom code supplies observations and assessment policy. Standard-library filesystem facilities preserve the required byte, permission, and link semantics.
 
+### Walkthrough: scope-discipline
+
+This case shows each owner in a run without optional stages: no functional checks, response capture, or human review.
+
+1. **Definition.** [scope.py](../evals/scenarios/scope.py) holds `PROMPT`, which asks for the greeting in `message.txt` to change, and `INITIAL_CONTENTS`, the fixture's exact bytes. `scope_dataset()` returns a `Dataset` with one `Case`, `edit-greeting-only`, whose `expected_output` is the single permitted edit, and two evaluators. `RequestedChange` compares the first line of the captured final `message.txt` with that expectation. `ScopePreserved` calls `scope_violations()`, which delegates to the shared `workspace_violations()` and supplies the one permitted content change. Both call `require_observation()` first, so missing snapshots become evaluator errors rather than verdicts.
+2. **Registration.** [__main__.py](../evals/__main__.py) registers `CaseConfig("scope-discipline", scope.scope_dataset, {"message.txt": scope.INITIAL_CONTENTS})`. Workspace observation is on by default; with no rubric there is no response capture or pending review, and with no `check_execution` there are no functional checks.
+3. **Run.** `python -m evals --case scope-discipline --model ID --reasoning-effort VALUE` follows the [lifecycle above](#responsibilities-and-dependency-direction). `prepare_workspace()` writes `AGENTS.md` and `message.txt`; `run_codex()` snapshots the workspace, runs Codex, and snapshots it again; the task returns an `ExecutionResult` holding both snapshots; the workspace is removed; Pydantic applies the two evaluators; `write_report()` prints the outcome.
+4. **Result.** `report.json` records `RequestedChange` and `ScopePreserved` with separate reasons. The evidence directory keeps both workspace manifests and `workspace-changes.txt`. The command exits 0 if both pass, 1 if either fails, and 2 on an infrastructure error.
+5. **Verification.** [test_scope.py](../tests/scenarios/test_scope.py) holds all of this case's offline tests. `ScopeEvaluationTests` grade test-authored edits through `evaluate()`. `ScopeWorkspaceComparisonTests` exercise `scope_violations()` directly. `ScopeCLITests` run the command against the fake executable, whose `scope-discipline` responses are in [fake_codex.py](../tests/support/fake_codex.py). Run them with `python -m unittest tests.scenarios.test_scope -v`. The shared behavior they rely on, such as snapshots, evidence, and exit-code precedence, is tested under `tests/runtime/`.
+
+Scope-discipline grades only captured observations. Independent-execution and contract-change-followthrough also run evaluator-owned checks on the edited fixture through their `check_execution` entries; their evaluators turn the attached results into assertions with `functional_checks.check_assertion`. [Functional-check execution](#functional-check-execution) explains that path.
+
 ### Interfaces used by scenarios and substitutes
 
 The shared evaluation runner accepts an explicit dataset, a `fixture_files` mapping, and an execution callable `(prompt, workspace) -> ExecutionResult`. Both the Codex launcher and offline substitutes use that callable boundary.
@@ -549,6 +597,16 @@ Begin with the scenario's intended behavior, its source module, linked tests, an
 2. **Compose through the existing CLI entry.** Register a dataset factory, not an eagerly constructed dataset. Select the existing observation/review settings and, only where needed, the post-execution functional check. Keep that check after agent cleanup and before fixture removal.
 3. **Test observable contracts at the affected boundary.** Use the existing substitutes and fake CLI to verify outcomes, independent assertions, error classification, evidence, and resource cleanup. Preserve meaningful negative cases and independent expected results; do not mirror production grading or configuration logic in tests. Keep scenario-specific expectations local, sharing setup only when it clarifies the tests.
 4. **Synchronize the knowledge owners.** Update the catalogue and affected acceptance/interpretation definitions when behavior changes; update E1–E40 only through an authorized requirement change. Source remains canonical for exact fixture bytes, prompts, check scripts, and rubric text. Check direct documentation links and retain run-specific findings in evidence rather than turning this guide into a record of individual runs.
+
+To add a scenario, apply those principles in these places:
+
+1. Create `evals/scenarios/<module>.py` with `PROMPT`, the fixture bytes, its evaluators, and a dataset factory returning a one-case `Dataset`. Add `REVIEW_RUBRIC` and a `check_execution` wrapper over `functional_checks.run_checks` only if the case needs them. Import shared mechanisms from `evals.runtime`.
+2. Add a `CaseConfig` entry to `CASES` in `evals/__main__.py` at its catalogue position. The `--case` choices and the `all` order come from that collection.
+3. Teach `tests/support/fake_codex.py` to recognize the case from its prompt or fixture and to produce the scripted responses its tests need.
+4. Add `tests/scenarios/test_<module>.py` with grading tests through `evaluate()` and a `<Name>CLITests(FakeCodexCLI, unittest.TestCase)` class for CLI composition, evidence, and failure classification.
+5. Update the tests in `tests/runtime/test_cli.py` that enumerate every case: the all-cases order and evidence, late-case precedence, and aggregate exit codes.
+6. Add the case to the [catalogue](#cases-and-interpretation) with a case section linking its module and test module. The case lists in E12 and E15 are requirements, so adding a case also needs an authorized requirement change.
+7. Run the [offline checks](#run-offline-checks).
 
 The root [engineering rules](../../AGENTS.md#12-do--perform-the-authorized-work) and [validation rules](../../AGENTS.md#13-study--assess-completion-and-learning) apply equally to production modules, tests, fixtures, and testing utilities. Use ordinary functions and existing typed result records for composition, `Path` for filesystem boundaries, and bytes where exact fixture/evidence preservation matters. Supply execution dependencies at the existing callable boundary for offline tests. Keep missing observations distinct from empty state and infrastructure errors distinct from false assertions.
 

@@ -38,6 +38,7 @@ The framework depends on the specification: it evaluates the current root `AGENT
 | Look up a case's situation, assertions, and review interpretation | [Cases and interpretation](docs/evaluations.md#cases-and-interpretation); each case links to the module that owns its exact prompt, fixture, checks, and any rubric |
 | Understand isolation, credentials, deadlines, and cleanup | [Execution and security boundaries](docs/evaluations.md#execution-and-security-boundaries) |
 | Understand the framework's structure and how one run proceeds | [Architecture, extension, and maintenance](docs/evaluations.md#architecture-extension-and-maintenance) |
+| Learn how a scenario is built, run, and tested, starting from the Pydantic Evals concepts used | [Walkthrough: scope-discipline](docs/evaluations.md#walkthrough-scope-discipline) and [Pydantic Evals concepts used here](docs/evaluations.md#pydantic-evals-concepts-used-here) |
 | Find the suite's requirements (E1–E40) and how each is verified | [Verifiable requirements](docs/evaluations.md#verifiable-requirements) |
 | Change or add an evaluation case | [Modify or extend an evaluation](docs/evaluations.md#modify-or-extend-an-evaluation), then [verify a behavior change](docs/evaluations.md#verify-a-behavior-change) |
 | Understand or assess a change to the contract's design | [contract-design.md](docs/contract-design.md), especially [Evolving the contract](docs/contract-design.md#evolving-the-contract) and [Assessing design changes](docs/contract-design.md#assessing-design-changes) |

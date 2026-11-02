@@ -4,6 +4,7 @@ Responses below illustrate different meanings, but tests deliberately do not
 assign human-rubric verdicts. Nonempty text alone must never become a full pass.
 """
 
+import base64
 from contextlib import redirect_stdout
 from dataclasses import replace
 from io import StringIO
@@ -19,7 +20,8 @@ from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.runtime.workspace import (
     CONTRACT_PATH, WorkspaceEntry, WorkspaceObservation, prepare_workspace, snapshot_workspace, workspace_changes,
 )
-from evals.scenarios.guidance import FIXTURE_FILES, PROMPT, guidance_dataset
+from evals.scenarios.guidance import FIXTURE_FILES, PROMPT, REVIEW_RUBRIC, guidance_dataset
+from tests.cli_harness import FakeCodexCLI
 
 
 class GuidanceTests(unittest.TestCase):
@@ -237,6 +239,78 @@ class GuidanceTests(unittest.TestCase):
                 changes = workspace_changes(observation)
                 self.assertIn(f'Path: "{path}"', changes)
                 self.assertNotIn("No observed workspace changes", changes)
+
+
+class GuidanceCLITests(FakeCodexCLI, unittest.TestCase):
+    def test_guidance_replies_and_edits_are_retained_for_human_review(self):
+        scenarios = (("success", None), ("misleading", None), ("proposal", "timezone-note.md"),
+                     ("implementation", "exporter.py"), ("data-change", "events.json"), ("policy", "README.md"))
+        for scenario, changed_path in scenarios:
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="requester-guidance")
+                artifacts, metadata, report = self.finish(process, runs, 3)
+                self.assertEqual(report["outcome"], "review_required")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "FinalResponsePresent": True, "RootContractPreserved": True,
+                })
+                response = (artifacts / "final-response.txt").read_text()
+                self.assertEqual(report["cases"][0]["final_response"], response)
+                self.assertNotIn("Progress message", response)
+                self.assertIn("Progress message", (artifacts / "events.jsonl").read_text())
+                self.assertIn("--output-last-message", metadata["command"])
+                self.assertEqual((artifacts / "review.md").read_text(), REVIEW_RUBRIC)
+                initial = json.loads((artifacts / "initial-workspace.json").read_text())
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                for name, contents in FIXTURE_FILES.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                    self.assertEqual(base64.b64decode(initial[name]["contents_base64"]), contents)
+                for name, entry in final.items():
+                    if entry["kind"] == "file":
+                        self.assertEqual((artifacts / "workspace" / name).read_bytes(),
+                                         base64.b64decode(entry["contents_base64"]))
+                changes = (artifacts / "workspace-changes.txt").read_text()
+                if changed_path is None:
+                    self.assertEqual(changes, "No observed workspace changes.\n")
+                else:
+                    self.assertIn(f'Path: "{changed_path}"', changes)
+                self.assertNotIn("review.md", initial)
+                self.assertNotIn("final-response.txt", final)
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_guidance_assertion_failures_keep_independent_results(self):
+        for scenario in ("empty", "whitespace", "contract-edited", "contract-deleted", "contract-link", "contract-mode"):
+            with self.subTest(scenario=scenario):
+                process, _, runs = self.launch(scenario, case="requester-guidance")
+                artifacts, metadata, report = self.finish(process, runs, 1)
+                contract_changed = scenario.startswith("contract-")
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "FinalResponsePresent": contract_changed, "RootContractPreserved": not contract_changed,
+                })
+                self.assertTrue(report["review_required"])
+                self.assertEqual(metadata["status"], "completed")
+                self.assertEqual(metadata["evidence_errors"], [])
+                self.assertTrue((artifacts / "workspace-changes.txt").is_file())
+                if contract_changed:
+                    self.assertIn("AGENTS.md:", report["cases"][0]["assertion_reasons"]["RootContractPreserved"])
+
+    def test_guidance_capture_and_execution_failures_are_errors_with_available_evidence(self):
+        for scenario in ("missing-response", "invalid-utf8", "nonzero"):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="requester-guidance")
+                artifacts, metadata, report = self.finish(process, runs, 2)
+                self.assertEqual(report["case"], "requester-guidance")
+                self.assertEqual(report["outcome"], "execution_failed")
+                self.assertEqual(report["cases"], [])
+                self.assertTrue(report["review_required"])
+                self.assertIn("Final response capture failed", metadata["error"])
+                if scenario == "nonzero":
+                    self.assertIn("Codex exited with status 7", metadata["error"])
+                self.assertEqual((artifacts / "review.md").read_text(), REVIEW_RUBRIC)
+                self.assertTrue((artifacts / "initial-workspace.json").is_file())
+                self.assertTrue((artifacts / "final-workspace.json").is_file())
+                self.assertTrue((artifacts / "workspace-changes.txt").is_file())
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
 
 
 if __name__ == "__main__":

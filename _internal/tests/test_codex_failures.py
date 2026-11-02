@@ -16,7 +16,7 @@ import unittest
 from unittest.mock import patch
 
 from evals.runtime.auth import PROFILE_CONFIG
-from evals.scenarios.guidance import FIXTURE_FILES, REVIEW_RUBRIC
+from evals.scenarios.guidance import REVIEW_RUBRIC
 from evals import __main__ as cli
 from evals.__main__ import main
 from evals.runtime import functional_checks
@@ -37,86 +37,6 @@ class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
         self.assertEqual(report["outcome"], "execution_failed")
         self.assertEqual(report["case"], "smoke")
         self.assertFalse((profile / "invocations").exists())
-
-    def test_selected_scope_case_retains_both_files_and_independent_verdicts(self):
-        scenarios = (("success", 0, True, True), ("cleanup", 1, True, False),
-                     ("unchanged", 1, False, True), ("wrong-value", 1, False, True),
-                     ("binary-value", 1, False, True))
-        for scenario, exit_code, requested, preserved in scenarios:
-            with self.subTest(scenario=scenario):
-                process, profile, runs = self.launch(scenario, case="scope-discipline")
-                artifacts, _, report = self.finish(process, runs, exit_code)
-                self.assertEqual(report["case"], "scope-discipline")
-                self.assertEqual(report["outcome"], "passed" if exit_code == 0 else "assertion_failed")
-                self.assertEqual(len(report["cases"]), 1)
-                self.assertEqual(report["cases"][0]["assertions"], {
-                    "RequestedChange": requested, "ScopePreserved": preserved,
-                })
-                self.assertEqual((artifacts / "message.txt").read_bytes(), b"greeting=before\nnote=teh sample\n")
-                self.assertEqual(
-                    (artifacts / "workspace/message.txt").read_bytes(),
-                    report["cases"][0]["file_contents"].encode("utf-8", errors="surrogateescape"),
-                )
-                self.assertIn("RequestedChange", (artifacts / "report.txt").read_text())
-                self.assertIn("ScopePreserved", (artifacts / "report.txt").read_text())
-                self.assertEqual(set(report["cases"][0]["assertion_reasons"]), {"RequestedChange", "ScopePreserved"})
-                for phase, fixture in (("initial", artifacts / "message.txt"),
-                                       ("final", artifacts / "workspace/message.txt")):
-                    manifest = json.loads((artifacts / f"{phase}-workspace.json").read_text())
-                    self.assertEqual(set(manifest), {".", "AGENTS.md", "message.txt"})
-                    self.assertEqual(base64.b64decode(manifest["message.txt"]["contents_base64"]), fixture.read_bytes())
-                    self.assertEqual(manifest["."]["kind"], "directory")
-                self.assertEqual((profile / "invocations").read_text(), "exec\n")
-
-    def test_scope_workspace_violations_have_specific_reasons_and_exact_evidence(self):
-        process, _, runs = self.launch("workspace-edits", case="scope-discipline")
-        artifacts, metadata, report = self.finish(process, runs, 1)
-        result = report["cases"][0]
-        self.assertEqual(result["assertions"], {"RequestedChange": True, "ScopePreserved": False})
-        reason = result["assertion_reasons"]["ScopePreserved"]
-        for violation in (".hidden: created (file)", "AGENTS.md: contents changed",
-                          "message.txt: permissions changed", "nested/empty: created (directory)"):
-            self.assertIn(violation, reason)
-            self.assertIn(violation, (artifacts / "report.txt").read_text())
-        self.assertEqual([line.partition(":")[0] for line in reason.splitlines()],
-                         [".hidden", "AGENTS.md", "message.txt", "nested", "nested/empty"])
-        manifest = json.loads((artifacts / "final-workspace.json").read_text())
-        self.assertEqual(base64.b64decode(manifest[".hidden"]["contents_base64"]), b"\x00\xff")
-        self.assertEqual(manifest["message.txt"]["mode"], 0o700)
-        self.assertEqual((artifacts / "workspace/AGENTS.md").read_bytes(), b"modified contract")
-        self.assertEqual(metadata["execution_status"], "completed")
-
-    def test_scope_missing_and_nonregular_fixtures_are_assertion_failures(self):
-        for scenario in ("missing", "directory", "symlink", "fifo", "contract-deleted", "contract-link"):
-            with self.subTest(scenario=scenario):
-                process, _, runs = self.launch(scenario, case="scope-discipline")
-                artifacts, metadata, report = self.finish(process, runs, 1)
-                contract_changed = scenario.startswith("contract-")
-                self.assertEqual(report["cases"][0]["assertions"], {
-                    "RequestedChange": contract_changed, "ScopePreserved": False,
-                })
-                self.assertEqual(metadata["execution_status"], "completed")
-                self.assertEqual(metadata["evidence_errors"], [])
-                name = "AGENTS.md" if contract_changed else "message.txt"
-                self.assertFalse((artifacts / "workspace" / name).exists())
-                manifest = json.loads((artifacts / "final-workspace.json").read_text())
-                if scenario in ("missing", "contract-deleted"):
-                    self.assertNotIn(name, manifest)
-                else:
-                    self.assertIsNone(manifest[name]["contents_base64"])
-                self.assertNotIn("dummy credential", (artifacts / "final-workspace.json").read_text())
-
-    def test_scope_execution_failure_records_case_without_grading(self):
-        process, profile, runs = self.launch("nonzero", case="scope-discipline")
-        artifacts, metadata, report = self.finish(process, runs, 2)
-        self.assertEqual(report["case"], "scope-discipline")
-        self.assertEqual(report["outcome"], "execution_failed")
-        self.assertEqual(report["cases"], [])
-        self.assertEqual(metadata["returncode"], 7)
-        self.assertEqual((artifacts / "message.txt").read_bytes(), b"greeting=before\nnote=teh sample\n")
-        self.assertEqual((profile / "invocations").read_text(), "exec\n")
-        self.assertTrue((artifacts / "initial-workspace.json").is_file())
-        self.assertTrue((artifacts / "final-workspace.json").is_file())
 
     def test_explicit_smoke_selection_keeps_the_original_case(self):
         process, _, runs = self.launch("success", case="smoke")
@@ -752,80 +672,6 @@ class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
                 self.assertEqual((artifacts / "workspace/preview.json").exists(), scenario != "nonzero")
                 self.assertEqual((profile / "invocations").read_text(), "exec\n")
 
-    def test_guidance_replies_and_edits_are_retained_for_human_review(self):
-        scenarios = (("success", None), ("misleading", None), ("proposal", "timezone-note.md"),
-                     ("implementation", "exporter.py"), ("data-change", "events.json"), ("policy", "README.md"))
-        for scenario, changed_path in scenarios:
-            with self.subTest(scenario=scenario):
-                process, profile, runs = self.launch(scenario, case="requester-guidance")
-                artifacts, metadata, report = self.finish(process, runs, 3)
-                self.assertEqual(report["outcome"], "review_required")
-                self.assertTrue(report["review_required"])
-                self.assertEqual(report["cases"][0]["assertions"], {
-                    "FinalResponsePresent": True, "RootContractPreserved": True,
-                })
-                response = (artifacts / "final-response.txt").read_text()
-                self.assertEqual(report["cases"][0]["final_response"], response)
-                self.assertNotIn("Progress message", response)
-                self.assertIn("Progress message", (artifacts / "events.jsonl").read_text())
-                self.assertIn("--output-last-message", metadata["command"])
-                self.assertEqual((artifacts / "review.md").read_text(), REVIEW_RUBRIC)
-                initial = json.loads((artifacts / "initial-workspace.json").read_text())
-                final = json.loads((artifacts / "final-workspace.json").read_text())
-                for name, contents in FIXTURE_FILES.items():
-                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
-                    self.assertEqual(base64.b64decode(initial[name]["contents_base64"]), contents)
-                for name, entry in final.items():
-                    if entry["kind"] == "file":
-                        self.assertEqual((artifacts / "workspace" / name).read_bytes(),
-                                         base64.b64decode(entry["contents_base64"]))
-                changes = (artifacts / "workspace-changes.txt").read_text()
-                if changed_path is None:
-                    self.assertEqual(changes, "No observed workspace changes.\n")
-                else:
-                    self.assertIn(f'Path: "{changed_path}"', changes)
-                self.assertNotIn("review.md", initial)
-                self.assertNotIn("final-response.txt", final)
-                self.assertEqual((profile / "invocations").read_text(), "exec\n")
-
-    def test_independent_execution_selection_retains_checks_and_pending_review(self):
-        scenarios = (("success", 3), ("question", 3), ("internal-unrelated", 3),
-                     ("no-tests", 1), ("broken-tests", 1), ("unrelated", 1), ("empty", 1),
-                     ("missing-response", 2), ("nonzero", 2))
-        for scenario, expected_exit in scenarios:
-            with self.subTest(scenario=scenario):
-                process, profile, runs = self.launch(scenario, case="independent-execution")
-                artifacts, metadata, report = self.finish(process, runs, expected_exit)
-                self.assertEqual(report["case"], "independent-execution")
-                self.assertTrue(report["review_required"])
-                self.assertEqual((profile / "invocations").read_text(), "exec\n")
-                self.assertEqual((artifacts / "review.md").read_text(), independence.REVIEW_RUBRIC)
-                self.assertEqual((artifacts / "prompt.txt").read_text(), independence.PROMPT)
-                for name, contents in independence.FIXTURE_FILES.items():
-                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
-                records = json.loads((artifacts / "functional-checks.json").read_text())
-                if expected_exit == 2:
-                    self.assertEqual(report["cases"], [])
-                    self.assertTrue(all(record["status"] == "not_run" for record in records.values()))
-                else:
-                    assertions = report["cases"][0]["assertions"]
-                    self.assertTrue(assertions["RequestedChange"])
-                    self.assertEqual(assertions["RegressionTests"], scenario not in ("no-tests", "broken-tests"))
-                    self.assertEqual(assertions["EditBoundaryPreserved"], scenario != "unrelated")
-                    self.assertEqual(assertions["FinalResponsePresent"], scenario != "empty")
-                    self.assertEqual(report["cases"][0]["final_response"], (artifacts / "final-response.txt").read_text())
-                    self.assertEqual(records["RequestedChange"]["returncode"], 0)
-                    self.assertTrue((artifacts / "checks/RequestedChange.stdout").is_file())
-                    self.assertEqual(metadata["status"], "completed")
-                final = json.loads((artifacts / "final-workspace.json").read_text())
-                self.assertNotIn("checks", final)
-                self.assertNotIn("review.md", final)
-                changes = (artifacts / "workspace-changes.txt").read_text()
-                if scenario == "nonzero":
-                    self.assertEqual(changes, "No observed workspace changes.\n")
-                else:
-                    self.assertIn('Path: "exporter.py"', changes)
-
     def test_followthrough_selection_composes_fixture_capture_checks_and_pending_review(self):
         for scenario, expected_exit in (("success", 3), ("unchanged", 1), ("empty", 1),
                                         ("missing-response", 2), ("nonzero", 2)):
@@ -939,40 +785,6 @@ class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
                 if fail_evidence:
                     self.assertIn("cannot save checks", report["execution_errors"][0])
                 self.assertEqual((artifacts / "checks/DuplicateBatchRejected.stdout").read_bytes(), b"partial")
-
-    def test_guidance_assertion_failures_keep_independent_results(self):
-        for scenario in ("empty", "whitespace", "contract-edited", "contract-deleted", "contract-link", "contract-mode"):
-            with self.subTest(scenario=scenario):
-                process, _, runs = self.launch(scenario, case="requester-guidance")
-                artifacts, metadata, report = self.finish(process, runs, 1)
-                contract_changed = scenario.startswith("contract-")
-                self.assertEqual(report["cases"][0]["assertions"], {
-                    "FinalResponsePresent": contract_changed, "RootContractPreserved": not contract_changed,
-                })
-                self.assertTrue(report["review_required"])
-                self.assertEqual(metadata["status"], "completed")
-                self.assertEqual(metadata["evidence_errors"], [])
-                self.assertTrue((artifacts / "workspace-changes.txt").is_file())
-                if contract_changed:
-                    self.assertIn("AGENTS.md:", report["cases"][0]["assertion_reasons"]["RootContractPreserved"])
-
-    def test_guidance_capture_and_execution_failures_are_errors_with_available_evidence(self):
-        for scenario in ("missing-response", "invalid-utf8", "nonzero"):
-            with self.subTest(scenario=scenario):
-                process, profile, runs = self.launch(scenario, case="requester-guidance")
-                artifacts, metadata, report = self.finish(process, runs, 2)
-                self.assertEqual(report["case"], "requester-guidance")
-                self.assertEqual(report["outcome"], "execution_failed")
-                self.assertEqual(report["cases"], [])
-                self.assertTrue(report["review_required"])
-                self.assertIn("Final response capture failed", metadata["error"])
-                if scenario == "nonzero":
-                    self.assertIn("Codex exited with status 7", metadata["error"])
-                self.assertEqual((artifacts / "review.md").read_text(), REVIEW_RUBRIC)
-                self.assertTrue((artifacts / "initial-workspace.json").is_file())
-                self.assertTrue((artifacts / "final-workspace.json").is_file())
-                self.assertTrue((artifacts / "workspace-changes.txt").is_file())
-                self.assertEqual((profile / "invocations").read_text(), "exec\n")
 
     def test_missing_or_api_authentication_never_launches_a_task(self):
         for scenario, authenticated in (("success", False), ("api-auth", True)):

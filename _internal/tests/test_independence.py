@@ -21,7 +21,9 @@ from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.runtime.functional import FunctionalCheckResult
 from evals.runtime.workspace import WorkspaceObservation, prepare_workspace, snapshot_workspace
 from evals.scenarios import guidance
+from evals.scenarios import independence
 from evals.scenarios import independence as case
+from tests.cli_harness import FakeCodexCLI
 
 
 ADDED_TEST = '''
@@ -388,6 +390,46 @@ class IndependenceTests(unittest.TestCase):
                 self.assertIn(message, failure.error_message)
                 if None not in (observation.initial, observation.final):
                     self.assertTrue(graded.assertions["RequestedChange"].value)
+
+
+class IndependenceCLITests(FakeCodexCLI, unittest.TestCase):
+    def test_independent_execution_selection_retains_checks_and_pending_review(self):
+        scenarios = (("success", 3), ("question", 3), ("internal-unrelated", 3),
+                     ("no-tests", 1), ("broken-tests", 1), ("unrelated", 1), ("empty", 1),
+                     ("missing-response", 2), ("nonzero", 2))
+        for scenario, expected_exit in scenarios:
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="independent-execution")
+                artifacts, metadata, report = self.finish(process, runs, expected_exit)
+                self.assertEqual(report["case"], "independent-execution")
+                self.assertTrue(report["review_required"])
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+                self.assertEqual((artifacts / "review.md").read_text(), independence.REVIEW_RUBRIC)
+                self.assertEqual((artifacts / "prompt.txt").read_text(), independence.PROMPT)
+                for name, contents in independence.FIXTURE_FILES.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                records = json.loads((artifacts / "functional-checks.json").read_text())
+                if expected_exit == 2:
+                    self.assertEqual(report["cases"], [])
+                    self.assertTrue(all(record["status"] == "not_run" for record in records.values()))
+                else:
+                    assertions = report["cases"][0]["assertions"]
+                    self.assertTrue(assertions["RequestedChange"])
+                    self.assertEqual(assertions["RegressionTests"], scenario not in ("no-tests", "broken-tests"))
+                    self.assertEqual(assertions["EditBoundaryPreserved"], scenario != "unrelated")
+                    self.assertEqual(assertions["FinalResponsePresent"], scenario != "empty")
+                    self.assertEqual(report["cases"][0]["final_response"], (artifacts / "final-response.txt").read_text())
+                    self.assertEqual(records["RequestedChange"]["returncode"], 0)
+                    self.assertTrue((artifacts / "checks/RequestedChange.stdout").is_file())
+                    self.assertEqual(metadata["status"], "completed")
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                self.assertNotIn("checks", final)
+                self.assertNotIn("review.md", final)
+                changes = (artifacts / "workspace-changes.txt").read_text()
+                if scenario == "nonzero":
+                    self.assertEqual(changes, "No observed workspace changes.\n")
+                else:
+                    self.assertIn('Path: "exporter.py"', changes)
 
 
 if __name__ == "__main__":

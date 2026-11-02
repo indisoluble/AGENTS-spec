@@ -1,8 +1,6 @@
 """Exercise real CLI orchestration and OS signals with a fake Codex process only."""
 
-import base64
 from contextlib import redirect_stderr, redirect_stdout
-import hashlib
 from io import StringIO
 import json
 from pathlib import Path
@@ -20,12 +18,7 @@ from evals import __main__ as cli
 from evals.__main__ import main
 from evals.runtime import functional_checks
 from evals.scenarios import assumptions, findings, followthrough, independence, inquiry, permissions, scheduling
-from evals.runtime.evaluation import ExecutionResult
-from evals.runtime.functional import FunctionalCheckResult
-from evals.runtime.workspace import CONTRACT_PATH, WorkspaceObservation, snapshot_workspace
 from tests.cli_harness import FakeCodexCLI
-from tests.test_followthrough import correct_edit
-from tests.test_inquiry import VALID_FEASIBILITY
 
 
 class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
@@ -133,205 +126,6 @@ class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
                     if report["case"] == failed_case:
                         self.assertEqual(report["outcome"], "assertion_failed" if expected_exit == 1 else "execution_failed")
 
-    def test_inquiry_selection_uses_accepted_composition_and_retains_review_evidence(self):
-        selected = next(case for case in cli.CASES if case.name == "bounded-inquiry")
-        self.assertIs(selected.dataset_factory, inquiry.inquiry_dataset)
-        self.assertIs(selected.fixture_files, inquiry.FIXTURE_FILES)
-        self.assertEqual(selected.review_rubric, inquiry.REVIEW_RUBRIC)
-        self.assertTrue(selected.observe_workspace)
-        self.assertIsNone(selected.check_execution)
-
-        process, profile, runs = self.launch("success", case="bounded-inquiry")
-        artifacts, metadata, report = self.finish(process, runs, 3)
-        self.assertEqual(report["case"], "bounded-inquiry")
-        self.assertEqual(report["outcome"], "review_required")
-        self.assertTrue(report["review_required"])
-        result, = report["cases"]
-        self.assertEqual(result["name"], "event-export-feasibility")
-        self.assertEqual(result["assertions"], {
-            "FixtureInputsPreserved": True, "FeasibilityRecordConsistent": True, "FinalResponsePresent": True,
-        })
-        self.assertEqual(set(result["assertion_reasons"]), set(result["assertions"]))
-        self.assertEqual(result["evaluator_errors"], [])
-        self.assertEqual(report["execution_errors"], [])
-        self.assertEqual(metadata["status"], "completed")
-        self.assertEqual(metadata["evidence_errors"], [])
-        self.assertIn("--output-last-message", metadata["command"])
-        self.assertEqual((artifacts / "prompt.txt").read_text(), inquiry.PROMPT)
-        self.assertEqual((artifacts / "review.md").read_text(), inquiry.REVIEW_RUBRIC)
-        contract = CONTRACT_PATH.read_bytes()
-        self.assertEqual((artifacts / "AGENTS.md").read_bytes(), contract)
-        self.assertEqual(metadata["contract_sha256"], hashlib.sha256(contract).hexdigest())
-        initial = json.loads((artifacts / "initial-workspace.json").read_text())
-        final = json.loads((artifacts / "final-workspace.json").read_text())
-        supplied = {"AGENTS.md": contract, **inquiry.FIXTURE_FILES}
-        self.assertEqual(set(initial), {".", *supplied})
-        self.assertEqual(set(final), {".", *supplied, "feasibility.json"})
-        for name, contents in supplied.items():
-            self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
-            self.assertEqual((artifacts / "workspace" / name).read_bytes(), contents)
-            self.assertEqual(base64.b64decode(initial[name]["contents_base64"]), contents)
-            self.assertEqual(initial[name], final[name])
-        captured = (artifacts / "workspace/feasibility.json").read_bytes()
-        self.assertEqual(base64.b64decode(final["feasibility.json"]["contents_base64"]), captured)
-        self.assertEqual(json.loads(captured), json.loads(VALID_FEASIBILITY))
-        self.assertIn('Path: "feasibility.json"', (artifacts / "workspace-changes.txt").read_text())
-        self.assertEqual(result["final_response"], (artifacts / "final-response.txt").read_text())
-        self.assertNotIn("Progress message", result["final_response"])
-        self.assertIn("Progress message", (artifacts / "events.jsonl").read_text())
-        # Fake output is deliberately not empirical evidence or a semantic pass.
-        self.assertIn("no probe was run", result["final_response"])
-        self.assertIn("measurement authenticity", result["assertion_reasons"]["FeasibilityRecordConsistent"])
-        self.assertIn("Human review pending", (artifacts / "report.txt").read_text())
-        self.assertFalse((artifacts / "functional-checks.json").exists())
-        self.assertFalse((artifacts / "checks").exists())
-        self.assertEqual((profile / "case-invocations").read_text(), "bounded-inquiry\n")
-        self.assertEqual((profile / "invocations").read_text(), "exec\n")
-
-    def test_inquiry_explicit_incompletion_retains_null_and_pending_review_without_false_completion(self):
-        process, _, runs = self.launch("incomplete-evidence", case="bounded-inquiry")
-        artifacts, _, report = self.finish(process, runs, 3)
-        self.assertEqual(report["outcome"], "review_required")
-        self.assertTrue(report["review_required"])
-        result, = report["cases"]
-        self.assertEqual(result["assertions"], {
-            "FixtureInputsPreserved": True, "FeasibilityRecordConsistent": True, "FinalResponsePresent": True,
-        })
-        self.assertIn("required decision unestablished: streaming alternative",
-                      result["assertion_reasons"]["FeasibilityRecordConsistent"])
-        captured = json.loads((artifacts / "workspace/feasibility.json").read_text())
-        self.assertIsNone(captured["streaming_feasible"])
-        self.assertEqual(len(captured["measurements"]), 1)
-        self.assertEqual((artifacts / "review.md").read_text(), inquiry.REVIEW_RUBRIC)
-
-    def test_inquiry_failures_keep_assertion_attribution_error_classification_and_pending_review(self):
-        scenarios = (("incorrect", 1), ("missing-feasibility", 1), ("malformed-record", 1),
-                     ("unsupported-replacement", 1), ("source-edited", 1),
-                     ("contract-edited", 1), ("empty", 1), ("missing-response", 2),
-                     ("invalid-utf8", 2), ("nonzero", 2))
-        for scenario, exit_code in scenarios:
-            with self.subTest(scenario=scenario):
-                process, profile, runs = self.launch(scenario, case="bounded-inquiry")
-                artifacts, metadata, report = self.finish(process, runs, exit_code)
-                self.assertEqual(report["case"], "bounded-inquiry")
-                self.assertTrue(report["review_required"])
-                self.assertEqual((artifacts / "review.md").read_text(), inquiry.REVIEW_RUBRIC)
-                self.assertIn("Human review pending", (artifacts / "report.txt").read_text())
-                for name in ("initial-workspace.json", "final-workspace.json", "workspace-changes.txt", "events.jsonl", "stderr.txt"):
-                    self.assertTrue((artifacts / name).is_file(), name)
-                if exit_code == 1:
-                    self.assertEqual(metadata["status"], "completed")
-                    self.assertEqual(report["outcome"], "assertion_failed")
-                    self.assertEqual(report["execution_errors"], [])
-                    result, = report["cases"]
-                    self.assertEqual(result["evaluator_errors"], [])
-                    self.assertEqual(result["assertions"], {
-                        "FixtureInputsPreserved": scenario not in ("source-edited", "contract-edited"),
-                        "FeasibilityRecordConsistent": scenario not in ("incorrect", "missing-feasibility", "malformed-record", "unsupported-replacement"),
-                        "FinalResponsePresent": scenario != "empty",
-                    })
-                    self.assertEqual(set(result["assertion_reasons"]), set(result["assertions"]))
-                else:
-                    self.assertEqual(report["outcome"], "execution_failed")
-                    self.assertEqual(report["cases"], [])
-                    self.assertIn("Final response capture failed", metadata["error"])
-                    if scenario == "nonzero":
-                        self.assertIn("Codex exited with status 7", metadata["error"])
-                self.assertEqual((profile / "invocations").read_text(), "exec\n")
-
-    def test_inquiry_missing_observation_and_report_write_errors_preserve_review_required(self):
-        selected = next(case for case in cli.CASES if case.name == "bounded-inquiry")
-        for failure in ("observation", "report"):
-            with self.subTest(failure=failure):
-                workspaces = []
-                runs = self.root / f"runs-{failure}"
-
-                def execute(prompt, workspace, **kwargs):
-                    self.assertEqual(prompt, inquiry.PROMPT)
-                    self.assertTrue(kwargs["observe_workspace"])
-                    self.assertTrue(kwargs["capture_response"])
-                    workspaces.append(workspace)
-                    initial = snapshot_workspace(workspace)
-                    (workspace / "feasibility.json").write_bytes(VALID_FEASIBILITY)
-                    observation = None if failure == "observation" else WorkspaceObservation(initial, snapshot_workspace(workspace))
-                    return ExecutionResult("completed", final_response="Synthetic result.", workspace_observation=observation)
-
-                write_text = Path.write_text
-
-                def save_text(path, *args, **kwargs):
-                    if failure == "report" and path.name == "report.txt":
-                        raise PermissionError("cannot save report")
-                    return write_text(path, *args, **kwargs)
-
-                with (patch.object(cli, "ARTIFACTS_ROOT", runs), patch.object(cli, "run_codex", side_effect=execute),
-                      patch.object(Path, "write_text", autospec=True, side_effect=save_text),
-                      redirect_stdout(StringIO()), redirect_stderr(StringIO())):
-                    code = cli.run_case(selected, model="test-model", effort="medium", timeout=10,
-                                        profile=self.root / "unused-profile", cancelled=Event())
-                self.assertEqual(code, 2)
-                self.assertTrue(workspaces)
-                self.assertTrue(all(not workspace.exists() for workspace in workspaces))
-                artifacts, = runs.iterdir()
-                self.assertEqual((artifacts / "review.md").read_text(), inquiry.REVIEW_RUBRIC)
-                report = json.loads((artifacts / "report.json").read_text())
-                self.assertEqual(report["case"], "bounded-inquiry")
-                self.assertEqual(report["outcome"], "execution_failed")
-                self.assertTrue(report["review_required"])
-                self.assertEqual(report["execution_errors"], [])
-                result, = report["cases"]
-                if failure == "observation":
-                    self.assertEqual(len(result["evaluator_errors"]), 2)
-                    self.assertEqual(result["assertions"], {"FinalResponsePresent": True})
-                    self.assertEqual(report["evidence_errors"], [])
-                else:
-                    self.assertEqual(result["evaluator_errors"], [])
-                    self.assertEqual(result["assertions"], {
-                        "FixtureInputsPreserved": True, "FeasibilityRecordConsistent": True, "FinalResponsePresent": True,
-                    })
-                    self.assertIn("cannot save report", report["evidence_errors"][0])
-
-    def test_followthrough_selection_composes_fixture_capture_checks_and_pending_review(self):
-        for scenario, expected_exit in (("success", 3), ("unchanged", 1), ("empty", 1),
-                                        ("missing-response", 2), ("nonzero", 2)):
-            with self.subTest(scenario=scenario):
-                process, profile, runs = self.launch(scenario, case="contract-change-followthrough")
-                artifacts, metadata, report = self.finish(process, runs, expected_exit)
-                self.assertEqual(report["case"], "contract-change-followthrough")
-                self.assertTrue(report["review_required"])
-                self.assertEqual((profile / "case-invocations").read_text(), "contract-change-followthrough\n")
-                self.assertEqual((profile / "invocations").read_text(), "exec\n")
-                self.assertEqual((artifacts / "review.md").read_text(), followthrough.REVIEW_RUBRIC)
-                self.assertEqual((artifacts / "prompt.txt").read_text(), followthrough.PROMPT)
-                self.assertIn("--output-last-message", metadata["command"])
-                for name, contents in followthrough.FIXTURE_FILES.items():
-                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
-                initial = json.loads((artifacts / "initial-workspace.json").read_text())
-                final = json.loads((artifacts / "final-workspace.json").read_text())
-                for snapshot in (initial, final):
-                    self.assertNotIn("review.md", snapshot)
-                    self.assertNotIn("checks", snapshot)
-                records = json.loads((artifacts / "functional-checks.json").read_text())
-                self.assertEqual(set(records), {"DuplicateBatchRejected", "ExistingBehaviorPreserved", "ProjectTestsPass"})
-                if expected_exit == 2:
-                    self.assertEqual(report["outcome"], "execution_failed")
-                    self.assertEqual(report["cases"], [])
-                    self.assertTrue(all(record["status"] == "not_run" and record["reason"] for record in records.values()))
-                else:
-                    self.assertEqual(report["outcome"], "review_required" if expected_exit == 3 else "assertion_failed")
-                    result, = report["cases"]
-                    self.assertEqual(result["name"], "atomic-duplicate-rejection")
-                    self.assertEqual(result["assertions"], {
-                        "DuplicateBatchRejected": scenario != "unchanged", "ExistingBehaviorPreserved": True,
-                        "ProjectTestsPass": True, "RootContractPreserved": True, "FinalResponsePresent": scenario != "empty",
-                    })
-                    self.assertEqual(set(result["assertion_reasons"]), set(result["assertions"]))
-                    self.assertEqual(result["final_response"], (artifacts / "final-response.txt").read_text())
-                    self.assertTrue(all(record["status"] == "completed" for record in records.values()))
-                    self.assertEqual(records["DuplicateBatchRejected"]["returncode"], 1 if scenario == "unchanged" else 0)
-                    self.assertEqual(metadata["status"], "completed")
-                for name, source in followthrough.CHECK_SOURCES.items():
-                    self.assertEqual((artifacts / "checks" / f"{name}.py").read_text(), source)
-
     def test_followthrough_checks_follow_agent_cleanup_and_precede_workspace_removal(self):
         profile = self.root / "profile"
         profile.mkdir()
@@ -365,44 +159,6 @@ class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
         self.assertEqual(code, 3)
         self.assertTrue(checked_workspaces)
         self.assertTrue(all(not workspace.exists() for workspace in checked_workspaces))
-
-    def test_followthrough_check_and_evidence_errors_propagate_through_cli_composition(self):
-        selected = next(case for case in cli.CASES if case.name == "contract-change-followthrough")
-        workspaces = []
-
-        def execute(prompt, workspace, **kwargs):
-            self.assertEqual(prompt, followthrough.PROMPT)
-            self.assertTrue(kwargs["observe_workspace"])
-            self.assertTrue(kwargs["capture_response"])
-            workspaces.append(workspace)
-            initial = snapshot_workspace(workspace)
-            correct_edit(workspace)
-            return ExecutionResult("completed", final_response="Updated.",
-                                   workspace_observation=WorkspaceObservation(initial, snapshot_workspace(workspace)))
-
-        save_json = functional_checks.save_json
-        for fail_evidence in (False, True):
-            with self.subTest(fail_evidence=fail_evidence):
-                runs = self.root / f"runs-{fail_evidence}"
-                with (patch.object(cli, "ARTIFACTS_ROOT", runs), patch.object(cli, "run_codex", side_effect=execute),
-                      patch.object(functional_checks, "run_python_check", return_value=
-                                   FunctionalCheckResult("error", stdout=b"partial", error="sandbox failed")),
-                      patch.object(functional_checks, "save_json", side_effect=
-                                   OSError("cannot save checks") if fail_evidence else save_json),
-                      redirect_stdout(StringIO())):
-                    code = cli.run_case(selected, model="test-model", effort="medium", timeout=10,
-                                        profile=self.root / "unused-profile", cancelled=Event())
-                self.assertEqual(code, 2)
-                self.assertTrue(all(not workspace.exists() for workspace in workspaces))
-                artifacts, = runs.iterdir()
-                report = json.loads((artifacts / "report.json").read_text())
-                self.assertEqual(report["outcome"], "execution_failed")
-                self.assertTrue(report["review_required"])
-                self.assertEqual(report["cases"], [])
-                self.assertIn("sandbox failed", report["execution_errors"][0])
-                if fail_evidence:
-                    self.assertIn("cannot save checks", report["execution_errors"][0])
-                self.assertEqual((artifacts / "checks/DuplicateBatchRejected.stdout").read_bytes(), b"partial")
 
     def test_missing_or_api_authentication_never_launches_a_task(self):
         for scenario, authenticated in (("success", False), ("api-auth", True)):

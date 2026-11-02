@@ -26,7 +26,9 @@ from evals.runtime import functional_checks
 from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.runtime.functional import FunctionalCheckResult
 from evals.runtime.workspace import CONTRACT_PATH, WorkspaceEntry, WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.scenarios import followthrough
 from evals.scenarios import followthrough as case
+from tests.cli_harness import FakeCodexCLI
 
 
 class FollowthroughFixtureTests(unittest.TestCase):
@@ -619,6 +621,88 @@ class FollowthroughEvaluationTests(unittest.TestCase):
                 self.assertTrue(saved["review_required"])
                 self.assertEqual(saved["outcome"], "review_required")
                 self.assertEqual(saved["cases"][0]["final_response"], response)
+
+
+class FollowthroughCLITests(FakeCodexCLI, unittest.TestCase):
+    def test_followthrough_selection_composes_fixture_capture_checks_and_pending_review(self):
+        for scenario, expected_exit in (("success", 3), ("unchanged", 1), ("empty", 1),
+                                        ("missing-response", 2), ("nonzero", 2)):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="contract-change-followthrough")
+                artifacts, metadata, report = self.finish(process, runs, expected_exit)
+                self.assertEqual(report["case"], "contract-change-followthrough")
+                self.assertTrue(report["review_required"])
+                self.assertEqual((profile / "case-invocations").read_text(), "contract-change-followthrough\n")
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+                self.assertEqual((artifacts / "review.md").read_text(), followthrough.REVIEW_RUBRIC)
+                self.assertEqual((artifacts / "prompt.txt").read_text(), followthrough.PROMPT)
+                self.assertIn("--output-last-message", metadata["command"])
+                for name, contents in followthrough.FIXTURE_FILES.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                initial = json.loads((artifacts / "initial-workspace.json").read_text())
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                for snapshot in (initial, final):
+                    self.assertNotIn("review.md", snapshot)
+                    self.assertNotIn("checks", snapshot)
+                records = json.loads((artifacts / "functional-checks.json").read_text())
+                self.assertEqual(set(records), {"DuplicateBatchRejected", "ExistingBehaviorPreserved", "ProjectTestsPass"})
+                if expected_exit == 2:
+                    self.assertEqual(report["outcome"], "execution_failed")
+                    self.assertEqual(report["cases"], [])
+                    self.assertTrue(all(record["status"] == "not_run" and record["reason"] for record in records.values()))
+                else:
+                    self.assertEqual(report["outcome"], "review_required" if expected_exit == 3 else "assertion_failed")
+                    result, = report["cases"]
+                    self.assertEqual(result["name"], "atomic-duplicate-rejection")
+                    self.assertEqual(result["assertions"], {
+                        "DuplicateBatchRejected": scenario != "unchanged", "ExistingBehaviorPreserved": True,
+                        "ProjectTestsPass": True, "RootContractPreserved": True, "FinalResponsePresent": scenario != "empty",
+                    })
+                    self.assertEqual(set(result["assertion_reasons"]), set(result["assertions"]))
+                    self.assertEqual(result["final_response"], (artifacts / "final-response.txt").read_text())
+                    self.assertTrue(all(record["status"] == "completed" for record in records.values()))
+                    self.assertEqual(records["DuplicateBatchRejected"]["returncode"], 1 if scenario == "unchanged" else 0)
+                    self.assertEqual(metadata["status"], "completed")
+                for name, source in followthrough.CHECK_SOURCES.items():
+                    self.assertEqual((artifacts / "checks" / f"{name}.py").read_text(), source)
+
+    def test_followthrough_check_and_evidence_errors_propagate_through_cli_composition(self):
+        selected = next(case for case in cli.CASES if case.name == "contract-change-followthrough")
+        workspaces = []
+
+        def execute(prompt, workspace, **kwargs):
+            self.assertEqual(prompt, followthrough.PROMPT)
+            self.assertTrue(kwargs["observe_workspace"])
+            self.assertTrue(kwargs["capture_response"])
+            workspaces.append(workspace)
+            initial = snapshot_workspace(workspace)
+            correct_edit(workspace)
+            return ExecutionResult("completed", final_response="Updated.",
+                                   workspace_observation=WorkspaceObservation(initial, snapshot_workspace(workspace)))
+
+        save_json = functional_checks.save_json
+        for fail_evidence in (False, True):
+            with self.subTest(fail_evidence=fail_evidence):
+                runs = self.root / f"runs-{fail_evidence}"
+                with (patch.object(cli, "ARTIFACTS_ROOT", runs), patch.object(cli, "run_codex", side_effect=execute),
+                      patch.object(functional_checks, "run_python_check", return_value=
+                                   FunctionalCheckResult("error", stdout=b"partial", error="sandbox failed")),
+                      patch.object(functional_checks, "save_json", side_effect=
+                                   OSError("cannot save checks") if fail_evidence else save_json),
+                      redirect_stdout(StringIO())):
+                    code = cli.run_case(selected, model="test-model", effort="medium", timeout=10,
+                                        profile=self.root / "unused-profile", cancelled=Event())
+                self.assertEqual(code, 2)
+                self.assertTrue(all(not workspace.exists() for workspace in workspaces))
+                artifacts, = runs.iterdir()
+                report = json.loads((artifacts / "report.json").read_text())
+                self.assertEqual(report["outcome"], "execution_failed")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"], [])
+                self.assertIn("sandbox failed", report["execution_errors"][0])
+                if fail_evidence:
+                    self.assertIn("cannot save checks", report["execution_errors"][0])
+                self.assertEqual((artifacts / "checks/DuplicateBatchRejected.stdout").read_bytes(), b"partial")
 
 
 if __name__ == "__main__":

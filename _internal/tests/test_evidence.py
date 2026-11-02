@@ -15,10 +15,10 @@ from evals import __main__ as cli
 from evals.__main__ import main
 from evals.runtime.codex import retain_evidence, run_codex
 from evals.runtime.evaluation import ExecutionResult, read_result
-from evals.guidance import REVIEW_RUBRIC
-from evals.scope import INITIAL_CONTENTS
-from evals.smoke import evaluate
 from evals.runtime.workspace import WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.scenarios.guidance import REVIEW_RUBRIC
+from evals.scenarios.scope import INITIAL_CONTENTS
+from evals.scenarios.smoke import evaluate
 from tests.offline_smoke import write_after
 
 
@@ -30,7 +30,7 @@ class EvidenceTests(unittest.TestCase):
 import os
 from pathlib import Path
 from evals.runtime.evaluation import read_result
-from evals.smoke import evaluate
+from evals.scenarios.smoke import evaluate
 
 for kind in ("pipe", "directory", "symlink"):
     workspaces = []

@@ -11,9 +11,9 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
-from evals import permissions as case
 from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.runtime.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.scenarios import permissions as case
 
 
 class PermissionTests(unittest.TestCase):

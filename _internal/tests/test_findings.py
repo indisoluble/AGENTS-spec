@@ -15,11 +15,11 @@ import sys
 import unittest
 from unittest.mock import patch
 
-from evals import findings as case
 from evals.runtime.evaluation import ExecutionResult, FinalResponsePresent, evaluate
 from evals.runtime.workspace import (
     CONTRACT_PATH, WorkspaceEntry, WorkspaceObservation, prepare_workspace, snapshot_workspace, workspace_changes,
 )
+from evals.scenarios import findings as case
 
 
 class FindingsFixtureTests(unittest.TestCase):

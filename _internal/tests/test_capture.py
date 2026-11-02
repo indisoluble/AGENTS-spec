@@ -19,8 +19,8 @@ from pydantic_evals import Case, Dataset
 from evals.runtime.auth import PROFILE_CONFIG
 from evals.runtime.codex import run_codex
 from evals.runtime.evaluation import ExecutionResult, evaluate
-from evals.smoke import evaluate as evaluate_smoke
 from evals.runtime.workspace import CONTRACT_PATH, prepare_workspace, read_fixture_file
+from evals.scenarios.smoke import evaluate as evaluate_smoke
 
 
 FIXTURE_FILES = {

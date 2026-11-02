@@ -23,10 +23,10 @@ from unittest.mock import patch
 
 from evals import __main__ as cli
 from evals.runtime import functional_checks
-from evals import followthrough as case
 from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.runtime.functional import FunctionalCheckResult
 from evals.runtime.workspace import CONTRACT_PATH, WorkspaceEntry, WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.scenarios import followthrough as case
 
 
 class FollowthroughFixtureTests(unittest.TestCase):

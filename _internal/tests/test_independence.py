@@ -17,11 +17,11 @@ from unittest.mock import patch
 
 from evals import __main__ as cli
 from evals.runtime import functional_checks
-from evals import guidance
-from evals import independence as case
 from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.runtime.functional import FunctionalCheckResult
 from evals.runtime.workspace import WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.scenarios import guidance
+from evals.scenarios import independence as case
 
 
 ADDED_TEST = '''

@@ -26,12 +26,12 @@ import tracemalloc
 import unittest
 from unittest.mock import patch
 
-from evals import inquiry as case
 from evals.runtime.evaluation import ExecutionResult, FinalResponsePresent, evaluate
 from evals.runtime.workspace import (
     CONTRACT_PATH, WorkspaceInspectionError, WorkspaceObservation,
     prepare_workspace, snapshot_workspace,
 )
+from evals.scenarios import inquiry as case
 
 
 EXPECTED_DIGEST = "dd44c880cef70b4837d2b6171e420f3a72387d703df1cd3dde15f569410b315d"

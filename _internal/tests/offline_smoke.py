@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from evals.runtime.evaluation import ExecutionResult, read_result
-from evals.smoke import evaluate
+from evals.scenarios.smoke import evaluate
 
 
 def write_after(prompt: str, workspace: Path) -> ExecutionResult:

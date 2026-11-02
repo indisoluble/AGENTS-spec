@@ -11,10 +11,10 @@ from threading import Event
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.guidance import FIXTURE_FILES as GUIDANCE_FIXTURE
 from evals.runtime import functional_checks
 from evals.runtime.evaluation import ExecutionResult, FinalResponsePresent, require_observation
 from evals.runtime.workspace import WorkspaceInspectionError, workspace_violations
+from evals.scenarios.guidance import FIXTURE_FILES as GUIDANCE_FIXTURE
 
 
 PROMPT = (

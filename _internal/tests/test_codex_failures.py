@@ -16,11 +16,11 @@ import unittest
 from unittest.mock import patch
 
 from evals.runtime.auth import PROFILE_CONFIG
-from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC
+from evals.scenarios.guidance import FIXTURE_FILES, REVIEW_RUBRIC
 from evals import __main__ as cli
 from evals.__main__ import main
 from evals.runtime import functional_checks
-from evals import assumptions, findings, followthrough, independence, inquiry, permissions, scheduling
+from evals.scenarios import assumptions, findings, followthrough, independence, inquiry, permissions, scheduling
 from evals.runtime.evaluation import ExecutionResult
 from evals.runtime.functional import FunctionalCheckResult
 from evals.runtime.workspace import CONTRACT_PATH, WorkspaceObservation, snapshot_workspace

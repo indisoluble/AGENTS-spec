@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from evals.evaluation import ExecutionResult, read_result
+from evals.runtime.evaluation import ExecutionResult, read_result
 from evals.smoke import evaluate
 
 

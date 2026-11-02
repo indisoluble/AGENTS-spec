@@ -15,15 +15,15 @@ import time
 import unittest
 from unittest.mock import patch
 
-from evals.auth import PROFILE_CONFIG
+from evals.runtime.auth import PROFILE_CONFIG
 from evals.guidance import FIXTURE_FILES, REVIEW_RUBRIC
 from evals import __main__ as cli
 from evals.__main__ import main
-from evals import functional_checks
+from evals.runtime import functional_checks
 from evals import assumptions, findings, followthrough, independence, inquiry, permissions, scheduling
-from evals.evaluation import ExecutionResult
-from evals.functional import FunctionalCheckResult
-from evals.workspace import CONTRACT_PATH, WorkspaceObservation, snapshot_workspace
+from evals.runtime.evaluation import ExecutionResult
+from evals.runtime.functional import FunctionalCheckResult
+from evals.runtime.workspace import CONTRACT_PATH, WorkspaceObservation, snapshot_workspace
 from tests.cli_harness import FakeCodexCLI
 from tests.test_followthrough import correct_edit
 from tests.test_inquiry import VALID_FEASIBILITY
@@ -892,8 +892,8 @@ class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
             return run_check(source, workspace, **kwargs)
 
         with (patch.object(cli, "ARTIFACTS_ROOT", runs),
-              patch("evals.auth.codex_executable", return_value=str(self.bin / "codex")),
-              patch("evals.functional.codex_executable", return_value=str(self.bin / "codex")),
+              patch("evals.runtime.auth.codex_executable", return_value=str(self.bin / "codex")),
+              patch("evals.runtime.functional.codex_executable", return_value=str(self.bin / "codex")),
               patch.object(functional_checks, "run_python_check", side_effect=check_after_cleanup),
               redirect_stdout(StringIO())):
             code = cli.run_case(selected, model="test-model", effort="medium", timeout=10,

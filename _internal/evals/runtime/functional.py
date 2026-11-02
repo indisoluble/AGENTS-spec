@@ -17,8 +17,8 @@ from tempfile import TemporaryDirectory
 from threading import Event
 from typing import Literal
 
-from evals.auth import codex_executable
-from evals.process import run_process
+from evals.runtime.auth import codex_executable
+from evals.runtime.process import run_process
 
 
 @dataclass(frozen=True)

@@ -11,7 +11,7 @@ import subprocess
 import sys
 from tempfile import TemporaryDirectory
 
-from evals.auth import PROFILE_CONFIG
+from evals.runtime.auth import PROFILE_CONFIG
 
 
 class FakeCodexCLI:

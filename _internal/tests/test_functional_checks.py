@@ -8,10 +8,10 @@ from threading import Event
 import unittest
 from unittest.mock import call, patch
 
-from evals import functional_checks
-from evals.evaluation import ExecutionResult
-from evals.functional import FunctionalCheckResult
-from evals.workspace import WorkspaceEntry, WorkspaceObservation
+from evals.runtime import functional_checks
+from evals.runtime.evaluation import ExecutionResult
+from evals.runtime.functional import FunctionalCheckResult
+from evals.runtime.workspace import WorkspaceEntry, WorkspaceObservation
 
 
 class FunctionalChecksTests(unittest.TestCase):

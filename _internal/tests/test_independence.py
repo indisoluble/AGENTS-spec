@@ -16,12 +16,12 @@ import unittest
 from unittest.mock import patch
 
 from evals import __main__ as cli
-from evals import functional_checks
+from evals.runtime import functional_checks
 from evals import guidance
 from evals import independence as case
-from evals.evaluation import ExecutionResult, evaluate
-from evals.functional import FunctionalCheckResult
-from evals.workspace import WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.runtime.evaluation import ExecutionResult, evaluate
+from evals.runtime.functional import FunctionalCheckResult
+from evals.runtime.workspace import WorkspaceObservation, prepare_workspace, snapshot_workspace
 
 
 ADDED_TEST = '''
@@ -62,7 +62,7 @@ class IndependenceTests(unittest.TestCase):
                 edit(workspace)
             result = ExecutionResult("completed", final_response=response,
                                      workspace_observation=WorkspaceObservation(initial, snapshot_workspace(workspace)))
-            with patch("evals.functional.codex_executable", return_value=str(self.executable)):
+            with patch("evals.runtime.functional.codex_executable", return_value=str(self.executable)):
                 return case.check_execution(result, workspace, artifacts=self.artifacts)
 
         report = evaluate(execute, dataset=case.independence_dataset(), fixture_files=case.FIXTURE_FILES)

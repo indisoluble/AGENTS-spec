@@ -27,8 +27,8 @@ import unittest
 from unittest.mock import patch
 
 from evals import inquiry as case
-from evals.evaluation import ExecutionResult, FinalResponsePresent, evaluate
-from evals.workspace import (
+from evals.runtime.evaluation import ExecutionResult, FinalResponsePresent, evaluate
+from evals.runtime.workspace import (
     CONTRACT_PATH, WorkspaceInspectionError, WorkspaceObservation,
     prepare_workspace, snapshot_workspace,
 )

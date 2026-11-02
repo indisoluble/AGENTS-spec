@@ -8,8 +8,8 @@ require a final response; the rubric owns semantic assessment of durable records
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.evaluation import ExecutionResult, FinalResponsePresent
-from evals.workspace import (
+from evals.runtime.evaluation import ExecutionResult, FinalResponsePresent
+from evals.runtime.workspace import (
     CONTRACT_PATH, WorkspaceEntry, WorkspaceInspectionError, WorkspaceObservation, workspace_violations,
 )
 

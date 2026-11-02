@@ -15,9 +15,9 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from evals import __main__ as cli
-from evals.evaluation import ExecutionResult, evaluate
+from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.guidance import FIXTURE_FILES, PROMPT, guidance_dataset
-from evals.workspace import (
+from evals.runtime.workspace import (
     CONTRACT_PATH, WorkspaceEntry, WorkspaceObservation, prepare_workspace, snapshot_workspace, workspace_changes,
 )
 

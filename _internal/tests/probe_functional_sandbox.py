@@ -11,7 +11,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
-from evals.functional import run_python_check
+from evals.runtime.functional import run_python_check
 
 
 class FunctionalSandboxProbe(unittest.TestCase):

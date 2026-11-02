@@ -11,7 +11,7 @@ from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import Mock, patch
 
-from evals.workspace import (
+from evals.runtime.workspace import (
     WorkspaceEntry, WorkspaceInspectionError, WorkspaceObservation, snapshot_workspace, workspace_changes,
     workspace_violations,
 )
@@ -176,7 +176,7 @@ class WorkspaceSnapshotTests(unittest.TestCase):
         script = """
 from pathlib import Path
 import sys
-from evals.workspace import snapshot_workspace
+from evals.runtime.workspace import snapshot_workspace
 snapshot = snapshot_workspace(Path(sys.argv[1]))
 for name, kind in (("pipe", "fifo"), ("socket", "socket")):
     assert snapshot[name].kind == kind
@@ -232,7 +232,7 @@ for name, kind in (("pipe", "fifo"), ("socket", "socket")):
                 fields[index] += 1
             return os.stat_result(fields)
 
-        with patch("evals.workspace.os.fstat", side_effect=different_metadata):
+        with patch("evals.runtime.workspace.os.fstat", side_effect=different_metadata):
             self.assertEqual(snapshot_workspace(self.workspace), initial)
 
     def test_inspection_errors_raise_instead_of_returning_partial_snapshots(self):
@@ -240,7 +240,7 @@ for name, kind in (("pipe", "fifo"), ("socket", "socket")):
         (self.workspace / "link").symlink_to("missing")
         for operation in ("stat", "open", "fstat", "listdir", "readlink", "fdopen"):
             with self.subTest(operation=operation), patch(
-                f"evals.workspace.os.{operation}", side_effect=PermissionError("simulated inspection failure"),
+                f"evals.runtime.workspace.os.{operation}", side_effect=PermissionError("simulated inspection failure"),
             ):
                 with self.assertRaisesRegex(WorkspaceInspectionError, "simulated inspection failure"):
                     snapshot_workspace(self.workspace)
@@ -254,7 +254,7 @@ for name, kind in (("pipe", "fifo"), ("socket", "socket")):
                 raise FileNotFoundError("simulated disappearance")
             return actual_stat(name, **kwargs)
 
-        with patch("evals.workspace.os.stat", side_effect=missing_child):
+        with patch("evals.runtime.workspace.os.stat", side_effect=missing_child):
             with self.assertRaisesRegex(WorkspaceInspectionError, "file: .*simulated disappearance"):
                 snapshot_workspace(self.workspace)
 
@@ -269,7 +269,7 @@ for name, kind in (("pipe", "fifo"), ("socket", "socket")):
                 nested.symlink_to(self.root)
             return actual_open(name, flags, **kwargs)
 
-        with patch("evals.workspace.os.open", side_effect=replace_before_open):
+        with patch("evals.runtime.workspace.os.open", side_effect=replace_before_open):
             with self.assertRaisesRegex(WorkspaceInspectionError, "nested:"):
                 snapshot_workspace(self.workspace)
 

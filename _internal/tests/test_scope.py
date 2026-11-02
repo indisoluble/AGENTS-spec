@@ -11,9 +11,9 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from evals.__main__ import write_report
-from evals.evaluation import ExecutionResult, evaluate, read_result
+from evals.runtime.evaluation import ExecutionResult, evaluate, read_result
 from evals.scope import INITIAL_CONTENTS, scope_dataset, scope_violations
-from evals.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.runtime.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
 
 
 class ScopeEvaluationTests(unittest.TestCase):

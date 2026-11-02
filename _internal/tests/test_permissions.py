@@ -12,8 +12,8 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from evals import permissions as case
-from evals.evaluation import ExecutionResult, evaluate
-from evals.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.runtime.evaluation import ExecutionResult, evaluate
+from evals.runtime.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
 
 
 class PermissionTests(unittest.TestCase):

@@ -14,8 +14,8 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from evals import scheduling as case
-from evals.evaluation import ExecutionResult, evaluate
-from evals.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.runtime.evaluation import ExecutionResult, evaluate
+from evals.runtime.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
 
 
 def candidate(*, workers=1, start="02:00", worker=1):

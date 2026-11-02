@@ -4,9 +4,9 @@ import unittest
 
 from pydantic_evals import Case, Dataset
 
-from evals.evaluation import ExecutionResult, read_result
+from evals.runtime.evaluation import ExecutionResult, read_result
 from evals.smoke import PROMPT, evaluate
-from evals.workspace import CONTRACT_PATH
+from evals.runtime.workspace import CONTRACT_PATH
 from tests.offline_smoke import write_after
 
 

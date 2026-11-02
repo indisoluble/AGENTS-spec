@@ -14,7 +14,7 @@ from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
-from evals import auth
+from evals.runtime import auth
 from evals.__main__ import main
 
 
@@ -30,7 +30,7 @@ class AuthenticationTests(unittest.TestCase):
             # The substitute records the path: no login runs and no profile is created.
             with (
                 self.subTest(arguments=arguments),
-                patch("evals.auth.login", return_value=0) as login,
+                patch("evals.runtime.auth.login", return_value=0) as login,
                 patch.object(sys, "argv", ["evals", "--login", *arguments]),
             ):
                 self.assertEqual(main(), 0)
@@ -73,7 +73,7 @@ else:
             # Force our code to launch the fake executable. The inherited home points
             # at the dummy everyday profile to check that --codex-home overrides it.
             with (
-                patch("evals.auth.codex_executable", return_value=str(executable)),
+                patch("evals.runtime.auth.codex_executable", return_value=str(executable)),
                 patch.dict("os.environ", {"CODEX_HOME": str(everyday)}),
                 redirect_stdout(StringIO()),
             ):

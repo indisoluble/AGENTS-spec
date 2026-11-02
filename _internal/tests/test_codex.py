@@ -17,9 +17,9 @@ import unittest
 from unittest.mock import patch
 
 from evals.__main__ import main
-from evals.auth import PROFILE_CONFIG
+from evals.runtime.auth import PROFILE_CONFIG
 from evals.smoke import PROMPT
-from evals.workspace import CONTRACT_PATH
+from evals.runtime.workspace import CONTRACT_PATH
 
 
 class CodexIntegrationTests(unittest.TestCase):
@@ -62,7 +62,7 @@ else:
             # patch temporarily redirects executable discovery, reports, and CLI arguments.
             # Plant dummy secrets to check that our runner excludes them from the child.
             with (
-                patch("evals.auth.codex_executable", return_value=str(executable)),
+                patch("evals.runtime.auth.codex_executable", return_value=str(executable)),
                 patch("evals.__main__.ARTIFACTS_ROOT", root / "runs"),
                 patch.dict(os.environ, {
                     "OPENAI_API_KEY": "test-secret", "CODEX_API_KEY": "test-secret",

@@ -11,9 +11,9 @@ from threading import Event
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals import functional_checks
-from evals.evaluation import ExecutionResult, FinalResponsePresent, require_observation
-from evals.workspace import WorkspaceInspectionError
+from evals.runtime import functional_checks
+from evals.runtime.evaluation import ExecutionResult, FinalResponsePresent, require_observation
+from evals.runtime.workspace import WorkspaceInspectionError
 
 
 PROMPT = """Change import_records(store, records) to reject a batch containing repeated

@@ -6,8 +6,8 @@ See docs/evaluations.md for the exact preservation rule and interpretation limit
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.evaluation import ExecutionResult, require_observation
-from evals.workspace import WorkspaceSnapshot, workspace_violations
+from evals.runtime.evaluation import ExecutionResult, require_observation
+from evals.runtime.workspace import WorkspaceSnapshot, workspace_violations
 
 
 INITIAL_CONTENTS = b"greeting=before\nnote=teh sample\n"

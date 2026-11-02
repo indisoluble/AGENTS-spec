@@ -18,8 +18,8 @@ import time
 import unittest
 from unittest.mock import patch
 
-from evals import _check_process
-from evals.functional import run_python_check
+from evals.runtime import _check_process
+from evals.runtime.functional import run_python_check
 
 
 FAKE_SANDBOX = '''import json
@@ -69,7 +69,7 @@ class FunctionalCheckTests(unittest.TestCase):
         self.fake.write_text(f"#!{sys.executable}\n" + FAKE_SANDBOX)
         self.fake.chmod(0o700)
         (self.root / "mode").write_text("run")
-        executable = patch("evals.functional.codex_executable", return_value=str(self.fake))
+        executable = patch("evals.runtime.functional.codex_executable", return_value=str(self.fake))
         executable.start()
         self.addCleanup(executable.stop)
         # A failed cleanup assertion must not leave its deliberate sleeper alive.
@@ -162,7 +162,7 @@ sys.stderr.buffer.write(b"diagnostic\\x00\\xfe")
         self.assertEqual(len(set(homes)), 2)
 
     def test_missing_cli_and_invalid_timeout_do_not_launch(self):
-        with patch("evals.functional.codex_executable", side_effect=RuntimeError("CLI missing")):
+        with patch("evals.runtime.functional.codex_executable", side_effect=RuntimeError("CLI missing")):
             result = run_python_check("pass", self.workspace)
         self.assertEqual(result.status, "error")
         self.assertIn("CLI missing", result.error)
@@ -180,7 +180,7 @@ sys.stderr.buffer.write(b"diagnostic\\x00\\xfe")
             profiles.append(Path(kwargs["env"]["CODEX_HOME"]))
             raise OSError("cannot start sandbox")
 
-        with patch("evals.functional.run_process", side_effect=fail_start):
+        with patch("evals.runtime.functional.run_process", side_effect=fail_start):
             result = run_python_check("pass", self.workspace)
         self.assertEqual(result.status, "error")
         self.assertIn("cannot start sandbox", result.error)

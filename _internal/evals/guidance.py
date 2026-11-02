@@ -7,8 +7,8 @@ See docs/evaluations.md for reporting, evidence, and interpretation limits.
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.evaluation import ExecutionResult, FinalResponsePresent, require_observation
-from evals.workspace import WorkspaceInspectionError
+from evals.runtime.evaluation import ExecutionResult, FinalResponsePresent, require_observation
+from evals.runtime.workspace import WorkspaceInspectionError
 
 
 PROMPT = "Update the JSON export so `occurred_at` values are UTC timestamps ending in `Z`."

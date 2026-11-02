@@ -16,11 +16,11 @@ from unittest.mock import patch
 
 from pydantic_evals import Case, Dataset
 
-from evals.auth import PROFILE_CONFIG
-from evals.codex import run_codex
-from evals.evaluation import ExecutionResult, evaluate
+from evals.runtime.auth import PROFILE_CONFIG
+from evals.runtime.codex import run_codex
+from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.smoke import evaluate as evaluate_smoke
-from evals.workspace import CONTRACT_PATH, prepare_workspace, read_fixture_file
+from evals.runtime.workspace import CONTRACT_PATH, prepare_workspace, read_fixture_file
 
 
 FIXTURE_FILES = {
@@ -132,7 +132,7 @@ class MultiFileFixtureTests(unittest.TestCase):
             directories.append(Path(temporary.name))
             return temporary
 
-        with patch("evals.workspace.TemporaryDirectory", side_effect=track_directory):
+        with patch("evals.runtime.workspace.TemporaryDirectory", side_effect=track_directory):
             with self.assertRaises(OSError):
                 # A regular file cannot also serve as a parent directory.
                 with prepare_workspace(fixture_files={"parent": b"file", "parent/child": b"data"}):
@@ -151,7 +151,7 @@ class FinalResponseCaptureTests(unittest.TestCase):
         executable = self.root / "codex"
         executable.write_text(f"#!{sys.executable}\n" + FAKE_CLI)
         executable.chmod(0o700)
-        self.enterContext(patch("evals.auth.codex_executable", return_value=str(executable)))
+        self.enterContext(patch("evals.runtime.auth.codex_executable", return_value=str(executable)))
         self.run_count = 0
 
     def run_fixture(self, *, text="Final reply.\n", mode="success", capture=True, files=FIXTURE_FILES):
@@ -259,7 +259,7 @@ class FinalResponseCaptureTests(unittest.TestCase):
                 raise PermissionError("simulated response read failure")
             return read_fixture_file(path)
 
-        with patch("evals.codex.read_fixture_file", side_effect=deny_response):
+        with patch("evals.runtime.codex.read_fixture_file", side_effect=deny_response):
             report, result, artifacts, _ = self.run_fixture()
         self.assertEqual(report.cases, [])
         self.assertEqual(result.status, "error")

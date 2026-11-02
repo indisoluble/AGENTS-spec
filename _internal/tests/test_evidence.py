@@ -13,12 +13,12 @@ from unittest.mock import patch
 
 from evals import __main__ as cli
 from evals.__main__ import main
-from evals.codex import retain_evidence, run_codex
-from evals.evaluation import ExecutionResult, read_result
+from evals.runtime.codex import retain_evidence, run_codex
+from evals.runtime.evaluation import ExecutionResult, read_result
 from evals.guidance import REVIEW_RUBRIC
 from evals.scope import INITIAL_CONTENTS
 from evals.smoke import evaluate
-from evals.workspace import WorkspaceObservation, prepare_workspace, snapshot_workspace
+from evals.runtime.workspace import WorkspaceObservation, prepare_workspace, snapshot_workspace
 from tests.offline_smoke import write_after
 
 
@@ -29,7 +29,7 @@ class EvidenceTests(unittest.TestCase):
         script = '''
 import os
 from pathlib import Path
-from evals.evaluation import read_result
+from evals.runtime.evaluation import read_result
 from evals.smoke import evaluate
 
 for kind in ("pipe", "directory", "symlink"):
@@ -65,7 +65,7 @@ for kind in ("pipe", "directory", "symlink"):
                     (artifacts / blocked).mkdir(parents=True)
                 # Fail before launching any CLI; then make a snapshot write fail too.
                 with (
-                    patch("evals.auth.codex_executable", side_effect=RuntimeError("primary failure")),
+                    patch("evals.runtime.auth.codex_executable", side_effect=RuntimeError("primary failure")),
                     redirect_stderr(StringIO()),
                 ):
                     report = evaluate(partial(
@@ -86,8 +86,8 @@ for kind in ("pipe", "directory", "symlink"):
             artifacts = Path(directory)
             errors = StringIO()
             with (
-                patch("evals.auth.codex_executable", side_effect=RuntimeError("primary failure")),
-                patch("evals.codex.save_json", side_effect=PermissionError("metadata unavailable")),
+                patch("evals.runtime.auth.codex_executable", side_effect=RuntimeError("primary failure")),
+                patch("evals.runtime.codex.save_json", side_effect=PermissionError("metadata unavailable")),
                 redirect_stderr(errors),
             ):
                 result = run_codex(
@@ -207,7 +207,7 @@ for kind in ("pipe", "directory", "symlink"):
                 return original_write(path, *args, **kwargs)
 
             with (patch.object(cli, "ARTIFACTS_ROOT", Path(directory)),
-                  patch("evals.auth.codex_executable", side_effect=RuntimeError("primary failure")),
+                  patch("evals.runtime.auth.codex_executable", side_effect=RuntimeError("primary failure")),
                   patch.object(Path, "write_text", autospec=True, side_effect=deny_changes),
                   patch.object(sys, "argv", ["evals", "--case", "requester-guidance", "--model", "test",
                                              "--reasoning-effort", "medium", "--timeout", "1", "--codex-home", directory]),
@@ -230,10 +230,10 @@ class ScopeEvidenceTests(unittest.TestCase):
     def setUp(self):
         self.artifacts = Path(self.enterContext(TemporaryDirectory()))
         self.workspace = self.enterContext(prepare_workspace(fixture_files={"message.txt": INITIAL_CONTENTS}))
-        self.enterContext(patch("evals.auth.codex_executable", return_value="unused-codex"))
-        self.enterContext(patch("evals.auth.check_profile"))
-        self.enterContext(patch("evals.auth.codex_environment", return_value={}))
-        self.enterContext(patch("evals.auth.require_chatgpt_login"))
+        self.enterContext(patch("evals.runtime.auth.codex_executable", return_value="unused-codex"))
+        self.enterContext(patch("evals.runtime.auth.check_profile"))
+        self.enterContext(patch("evals.runtime.auth.codex_environment", return_value={}))
+        self.enterContext(patch("evals.runtime.auth.require_chatgpt_login"))
 
         def execute(command, **kwargs):
             if "--version" in command:
@@ -242,7 +242,7 @@ class ScopeEvidenceTests(unittest.TestCase):
             kwargs["stdout"].write('{"type": "turn.completed"}\n')
             return subprocess.CompletedProcess(command, 0)
 
-        self.process = self.enterContext(patch("evals.codex.run_process", side_effect=execute))
+        self.process = self.enterContext(patch("evals.runtime.codex.run_process", side_effect=execute))
 
     def run_observed(self):
         return run_codex("test", self.workspace, model="test", effort="medium", timeout=1,
@@ -251,7 +251,7 @@ class ScopeEvidenceTests(unittest.TestCase):
 
     def test_initial_inspection_failure_prevents_execution_and_retains_final_observation(self):
         final = snapshot_workspace(self.workspace)
-        with patch("evals.codex.snapshot_workspace", side_effect=[PermissionError("inspection denied"), final]):
+        with patch("evals.runtime.codex.snapshot_workspace", side_effect=[PermissionError("inspection denied"), final]):
             result = self.run_observed()
 
         self.assertEqual(result.status, "error")
@@ -265,7 +265,7 @@ class ScopeEvidenceTests(unittest.TestCase):
     def test_final_inspection_failure_preserves_primary_error_and_initial_evidence(self):
         initial = snapshot_workspace(self.workspace)
         self.process.side_effect = RuntimeError("primary execution failure")
-        with patch("evals.codex.snapshot_workspace", side_effect=[initial, PermissionError("inspection denied")]):
+        with patch("evals.runtime.codex.snapshot_workspace", side_effect=[initial, PermissionError("inspection denied")]):
             result = self.run_observed()
 
         self.assertEqual(result.status, "error")
@@ -278,7 +278,7 @@ class ScopeEvidenceTests(unittest.TestCase):
 
     def test_successful_execution_with_failed_inspection_is_an_error(self):
         initial = snapshot_workspace(self.workspace)
-        with patch("evals.codex.snapshot_workspace", side_effect=[initial, PermissionError("inspection denied")]):
+        with patch("evals.runtime.codex.snapshot_workspace", side_effect=[initial, PermissionError("inspection denied")]):
             result = self.run_observed()
 
         self.assertEqual(result.status, "error")
@@ -314,7 +314,7 @@ class ScopeEvidenceTests(unittest.TestCase):
         result = read_result(self.workspace, workspace_observation=observation)
         # Later disk contents must not disagree with what the retained observation graded.
         (self.workspace / "message.txt").write_bytes(b"changed after observation")
-        with patch("evals.codex.read_fixture_file", side_effect=AssertionError("Unexpected file read")):
+        with patch("evals.runtime.codex.read_fixture_file", side_effect=AssertionError("Unexpected file read")):
             retained = retain_evidence(self.workspace, self.artifacts, {}, result)
 
         self.assertEqual(retained.status, "completed")

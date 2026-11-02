@@ -13,8 +13,8 @@ from pydantic_evals import Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 from pydantic_evals.reporting import EvaluationReport
 
-from evals.functional import FunctionalCheckResult
-from evals.workspace import WorkspaceInspectionError, WorkspaceObservation, prepare_workspace, read_fixture_file
+from evals.runtime.functional import FunctionalCheckResult
+from evals.runtime.workspace import WorkspaceInspectionError, WorkspaceObservation, prepare_workspace, read_fixture_file
 
 
 @dataclass(frozen=True)

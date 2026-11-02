@@ -12,8 +12,8 @@ import json
 from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import EvaluationReason, Evaluator, EvaluatorContext
 
-from evals.evaluation import ExecutionResult, FinalResponsePresent, require_observation
-from evals.workspace import WorkspaceInspectionError, WorkspaceObservation, workspace_violations
+from evals.runtime.evaluation import ExecutionResult, FinalResponsePresent, require_observation
+from evals.runtime.workspace import WorkspaceInspectionError, WorkspaceObservation, workspace_violations
 
 
 PROMPT = """Create preview.json from events.csv, containing a JSON array of objects with each row's id and its date in YYYY-MM-DD format, preserving row order.

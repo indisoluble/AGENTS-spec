@@ -12,10 +12,10 @@ from threading import Event
 
 from pydantic_evals.evaluators import EvaluationReason
 
-from evals.codex import save_json
-from evals.evaluation import ExecutionResult, require_observation
-from evals.functional import run_python_check
-from evals.workspace import WorkspaceInspectionError
+from evals.runtime.codex import save_json
+from evals.runtime.evaluation import ExecutionResult, require_observation
+from evals.runtime.functional import run_python_check
+from evals.runtime.workspace import WorkspaceInspectionError
 
 
 def _invalid_files(result: ExecutionResult, required_files: Sequence[str]) -> list[str]:

@@ -13,10 +13,10 @@ import sys
 from threading import Event
 import time
 
-from evals import auth
-from evals.evaluation import ExecutionResult, read_result
-from evals.process import run_process
-from evals.workspace import WorkspaceObservation, WorkspaceSnapshot, read_fixture_file, snapshot_workspace, workspace_changes
+from evals.runtime import auth
+from evals.runtime.evaluation import ExecutionResult, read_result
+from evals.runtime.process import run_process
+from evals.runtime.workspace import WorkspaceObservation, WorkspaceSnapshot, read_fixture_file, snapshot_workspace, workspace_changes
 
 
 def execution_command(

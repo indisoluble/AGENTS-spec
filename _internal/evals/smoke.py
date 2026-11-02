@@ -10,7 +10,7 @@ from pydantic_evals import Case, Dataset
 from pydantic_evals.evaluators import Evaluator, EvaluatorContext
 from pydantic_evals.reporting import EvaluationReport
 
-from evals.evaluation import ExecutionResult, evaluate as evaluate_dataset
+from evals.runtime.evaluation import ExecutionResult, evaluate as evaluate_dataset
 
 
 INITIAL_CONTENTS = b"before\n"

@@ -10,7 +10,7 @@ import shutil
 import subprocess
 from threading import Event
 
-from evals.process import run_process
+from evals.runtime.process import run_process
 
 
 AUTH_SETTINGS = {"forced_login_method": "chatgpt", "cli_auth_credentials_store": "file"}

@@ -19,10 +19,11 @@ from uuid import uuid4
 from pydantic_evals import Dataset
 from pydantic_evals.reporting import EvaluationReport
 
-from evals import assumptions, auth, findings, followthrough, guidance, independence, inquiry, permissions, scheduling, scope, smoke
-from evals.codex import run_codex, save_json
-from evals.evaluation import ExecutionResult, evaluate
-from evals.process import cancellation_signals
+from evals import assumptions, findings, followthrough, guidance, independence, inquiry, permissions, scheduling, scope, smoke
+from evals.runtime import auth
+from evals.runtime.codex import run_codex, save_json
+from evals.runtime.evaluation import ExecutionResult, evaluate
+from evals.runtime.process import cancellation_signals
 
 
 class ExecutionCheck(Protocol):

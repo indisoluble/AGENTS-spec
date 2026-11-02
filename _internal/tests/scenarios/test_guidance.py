@@ -21,7 +21,7 @@ from evals.runtime.workspace import (
     CONTRACT_PATH, WorkspaceEntry, WorkspaceObservation, prepare_workspace, snapshot_workspace, workspace_changes,
 )
 from evals.scenarios.guidance import FIXTURE_FILES, PROMPT, REVIEW_RUBRIC, guidance_dataset
-from tests.cli_harness import FakeCodexCLI
+from tests.support.cli_harness import FakeCodexCLI
 
 
 class GuidanceTests(unittest.TestCase):

@@ -49,7 +49,7 @@ class FakeCodexCLI:
             [sys.executable, "-c", bootstrap, str(runs), "--codex-home", str(profile),
              "--model", "test-model", "--reasoning-effort", "medium", "--timeout", str(timeout),
              *case_arguments],
-            cwd=Path(__file__).resolve().parents[1], env=env,
+            cwd=Path(__file__).resolve().parents[2], env=env,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, start_new_session=True,
         )
         self.addCleanup(self.cleanup_processes, process, profile)

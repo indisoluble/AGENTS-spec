@@ -18,7 +18,7 @@ from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.runtime.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
 from evals.scenarios import scheduling
 from evals.scenarios import scheduling as case
-from tests.cli_harness import FakeCodexCLI
+from tests.support.cli_harness import FakeCodexCLI
 
 
 def candidate(*, workers=1, start="02:00", worker=1):

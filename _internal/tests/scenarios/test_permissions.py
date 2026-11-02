@@ -16,7 +16,7 @@ from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.runtime.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
 from evals.scenarios import permissions
 from evals.scenarios import permissions as case
-from tests.cli_harness import FakeCodexCLI
+from tests.support.cli_harness import FakeCodexCLI
 
 
 class PermissionTests(unittest.TestCase):

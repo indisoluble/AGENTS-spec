@@ -20,7 +20,7 @@ from evals.runtime.evaluation import ExecutionResult, evaluate
 from evals.runtime.workspace import CONTRACT_PATH, WorkspaceInspectionError, WorkspaceObservation, prepare_workspace, snapshot_workspace
 from evals.scenarios import assumptions
 from evals.scenarios import assumptions as case
-from tests.cli_harness import FakeCodexCLI
+from tests.support.cli_harness import FakeCodexCLI
 
 
 # Explicit examples keep tests independent of how the evaluator derives dates.

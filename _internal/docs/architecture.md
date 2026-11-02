@@ -28,7 +28,7 @@ flowchart LR
     EV["docs/evaluations.md<br/>framework documentation, E1–E40"]
     DM["docs/documentation-maintenance.md"]
     PKG["evals/<br/>CLI composition, runtime/, and scenarios/"]
-    T["tests/<br/>offline suite and sandbox probe"]
+    T["tests/<br/>runtime/, scenarios/, and support/;<br/>offline smoke and sandbox probe"]
     RUNS[".eval-runs/<br/>retained evidence (git-ignored)"]
   end
   BR -->|direct tools to| A

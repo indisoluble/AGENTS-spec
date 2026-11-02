@@ -28,7 +28,7 @@ from evals.runtime.functional import FunctionalCheckResult
 from evals.runtime.workspace import CONTRACT_PATH, WorkspaceEntry, WorkspaceObservation, prepare_workspace, snapshot_workspace
 from evals.scenarios import followthrough
 from evals.scenarios import followthrough as case
-from tests.cli_harness import FakeCodexCLI
+from tests.support.cli_harness import FakeCodexCLI
 
 
 class FollowthroughFixtureTests(unittest.TestCase):
@@ -255,7 +255,7 @@ class FollowthroughEvaluationTests(unittest.TestCase):
     def setUp(self):
         self.root = Path(self.enterContext(TemporaryDirectory()))
         self.executable = self.root / "codex"
-        self.executable.write_text(f"#!{sys.executable}\n" + Path(__file__).with_name("fake_codex.py").read_text())
+        self.executable.write_text(f"#!{sys.executable}\n" + (Path(__file__).resolve().parents[1] / "support" / "fake_codex.py").read_text())
         self.executable.chmod(0o700)
         self.artifacts = self.root / "evidence"
         self.artifacts.mkdir()

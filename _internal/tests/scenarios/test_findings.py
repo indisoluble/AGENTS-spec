@@ -28,7 +28,7 @@ from evals.runtime.workspace import (
 )
 from evals.scenarios import findings
 from evals.scenarios import findings as case
-from tests.cli_harness import FakeCodexCLI
+from tests.support.cli_harness import FakeCodexCLI
 
 
 class FindingsFixtureTests(unittest.TestCase):

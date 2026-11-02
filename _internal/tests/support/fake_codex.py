@@ -2,7 +2,7 @@
 
 cli_harness.py installs this as `codex` on a temporary PATH for CLI tests. The scenario
 file selects a response (or one per case); no real credentials, network, or model calls are used.
-test_independence.py and test_followthrough.py also install it as a fake sandbox for functional checks.
+tests/scenarios/test_independence.py and test_followthrough.py also install it as a fake sandbox for functional checks.
 """
 
 import json

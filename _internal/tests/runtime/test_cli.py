@@ -18,7 +18,7 @@ from evals import __main__ as cli
 from evals.__main__ import main
 from evals.runtime import functional_checks
 from evals.scenarios import assumptions, findings, followthrough, independence, inquiry, permissions, scheduling
-from tests.cli_harness import FakeCodexCLI
+from tests.support.cli_harness import FakeCodexCLI
 
 
 class CodexFailureTests(FakeCodexCLI, unittest.TestCase):

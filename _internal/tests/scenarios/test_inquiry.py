@@ -38,7 +38,7 @@ from evals.runtime.workspace import (
 )
 from evals.scenarios import inquiry
 from evals.scenarios import inquiry as case
-from tests.cli_harness import FakeCodexCLI
+from tests.support.cli_harness import FakeCodexCLI
 
 
 EXPECTED_DIGEST = "dd44c880cef70b4837d2b6171e420f3a72387d703df1cd3dde15f569410b315d"

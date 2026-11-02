@@ -15,7 +15,7 @@ from evals.__main__ import write_report
 from evals.runtime.evaluation import ExecutionResult, evaluate, read_result
 from evals.runtime.workspace import CONTRACT_PATH, WorkspaceObservation, prepare_workspace, snapshot_workspace
 from evals.scenarios.scope import INITIAL_CONTENTS, scope_dataset, scope_violations
-from tests.cli_harness import FakeCodexCLI
+from tests.support.cli_harness import FakeCodexCLI
 
 
 class ScopeEvaluationTests(unittest.TestCase):

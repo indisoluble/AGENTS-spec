@@ -1,6 +1,6 @@
 """Customer CSV review, mechanical grading, and human review.
 
-tests/test_findings.py independently qualifies its source model, complete-output
+tests/scenarios/test_findings.py independently qualifies its source model, complete-output
 collision, and reporting behavior. Automated checks protect observed state and
 require a final response; the rubric owns semantic assessment of durable records.
 """

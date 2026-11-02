@@ -106,7 +106,7 @@ class WorkspaceComparisonTests(unittest.TestCase):
     def test_missing_file_contents_raise_under_optimized_python(self):
         result = subprocess.run(
             [sys.executable, "-O", "-m", "unittest",
-             "tests.test_workspace.WorkspaceComparisonTests."
+             "tests.runtime.test_workspace.WorkspaceComparisonTests."
              "test_missing_file_contents_raise_before_calling_the_content_rule"],
             capture_output=True, text=True, timeout=10,
         )

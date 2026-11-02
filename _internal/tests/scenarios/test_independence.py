@@ -23,7 +23,7 @@ from evals.runtime.workspace import WorkspaceObservation, prepare_workspace, sna
 from evals.scenarios import guidance
 from evals.scenarios import independence
 from evals.scenarios import independence as case
-from tests.cli_harness import FakeCodexCLI
+from tests.support.cli_harness import FakeCodexCLI
 
 
 ADDED_TEST = '''
@@ -48,7 +48,7 @@ class IndependenceTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
         self.executable = self.root / "codex"
-        self.executable.write_text(f"#!{sys.executable}\n" + Path(__file__).with_name("fake_codex.py").read_text())
+        self.executable.write_text(f"#!{sys.executable}\n" + (Path(__file__).resolve().parents[1] / "support" / "fake_codex.py").read_text())
         self.executable.chmod(0o700)
         self.artifacts = self.root / "evidence"
         self.artifacts.mkdir()

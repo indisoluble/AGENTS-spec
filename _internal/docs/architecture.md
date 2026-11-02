@@ -122,3 +122,35 @@ This architecture refines into the existing owners rather than replacing them:
 - *Moving the framework lifecycle into this document:* it would separate that lifecycle from the outcome, evidence, and functional-check sections it explains.
 
 **Later navigation change.** The context and rejected alternatives above record root-guide links into `_internal/docs/` as they existed when this decision was made. A later editorial decision, owned by [documentation-maintenance.md](documentation-maintenance.md#public-guides-and-internal-engineering-documents), replaced those links with one pointer from each root guide to `_internal/README.md`. It changes navigation only; this decision, its paths, and the remaining link constraints from docstrings and external references are unaffected.
+
+### Evaluation framework package and verification hierarchy
+
+**Status:** Accepted. The requester selected this hierarchy after reviewing read-only assessments of alternatives and an incremental migration plan. The migration proceeds in separately reviewed increments; until each one lands, source and test paths elsewhere in this document and in [evaluations.md](evaluations.md) describe the layout that currently exists.
+
+**Context.** `evals/` held the command-line entry point, eight shared execution modules, and ten scenario modules side by side, so its listing did not distinguish what is evaluated from how a case runs. `tests/` was equally flat: shared-mechanism tests, scenario tests, the fake Codex executable, the CLI test harness, and two standalone entry points. `test_codex_failures.py` combined 13 cross-scenario CLI guarantees with 24 tests belonging to individual scenarios, two of which imported values from other test modules; discovery therefore loaded `test_followthrough.py` and `test_inquiry.py` under two module names each, although no test ran twice. A developer unfamiliar with Pydantic Evals could not tell from the tree where a scenario is defined, where it is verified, or which code runs every case. Constraints: keep `python -m evals`, `python -m unittest discover -s tests -v`, `python -m tests.offline_smoke`, and `python -m tests.probe_functional_sandbox` working; preserve E1–E40, grading semantics, and the documented smoke convenience; add no aliases for incidental internal module paths, as [interfaces used by scenarios](evaluations.md#interfaces-used-by-scenarios-and-substitutes) states; keep `_check_process.py` beside `functional.py`, which locates it by file position; and keep `CONTRACT_PATH` resolving to the root `AGENTS.md`.
+
+**Decision.**
+
+- `evals/__main__.py` remains the command-line entry point and composes the scenarios (`CASES`); `python -m evals` requires it at that path.
+- `evals/runtime/` owns the shared execution machinery: `evaluation`, `workspace`, `codex`, `auth`, `process`, `functional`, `functional_checks`, and `_check_process`. It imports no scenario.
+- `evals/scenarios/` owns evaluation definitions and grading policy: one module per scenario with its prompt, fixture, dataset, evaluators, any functional checks, and any review rubric. Scenarios depend on runtime; reuse between scenarios stays explicit, as when independent-execution reuses the requester-guidance fixture.
+- `tests/runtime/` verifies shared mechanisms and cross-scenario CLI guarantees in `test_cli.py`, which is `test_codex_failures.py` after its scenario-specific tests move out.
+- `tests/scenarios/` verifies individual scenarios: each `test_<module>.py` holds that scenario's grading tests and its CLI tests.
+- `tests/support/` holds the fake Codex executable and the CLI test harness. `tests/offline_smoke.py` and `tests/probe_functional_sandbox.py` stay at the `tests/` root so their documented commands are unchanged.
+- A component becomes a directory only when several independently meaningful files justify it; otherwise it stays one module. Test layout corresponds to production by responsibility, not file for file.
+- Internal imports are absolute and package-qualified, and moved modules leave no compatibility re-exports.
+- Live evaluation, which runs Codex through `python -m evals`, stays separate from offline verification under `tests/`, which uses substitutes and the fake CLI to establish evaluator correctness rather than agent behavior.
+
+**Consequences.** The tree separates composition, shared machinery, scenario policy, and verification by responsibility. A scenario's definition and its complete offline verification are each one file, and with no imports between test modules, no module is loaded under two names. Costs are a one-time update of imports, string mock-patch targets, child-process import strings, and documentation links, and path calculations one level deeper: `CONTRACT_PATH`, the CLI harness's working directory, and the fake-executable path in scenario tests. Discovery reports test IDs relative to `tests/`, such as `scenarios.test_scope…`, which differ from the package-qualified names used to run one module, such as `python -m unittest tests.scenarios.test_scope`; during discovery `runtime`, `scenarios`, and `support` are importable as top-level names, as test modules already are. Adding a scenario touches its module, its `CASES` entry, its test module, the fake executable's responses, and the case lists in the cross-scenario CLI tests. Requirement wording is unaffected; only source links and verification references move.
+
+**Rejected alternatives.**
+
+- *Keep both trees flat and explain them in documentation:* least churn, but the listings would still mix shared machinery with scenarios, and scenario-specific CLI tests would stay combined with cross-scenario ones.
+- *Scenarios package only, with flat tests:* fewer moves, but tests would remain distinguishable only by file name.
+- *Shared modules left at the `evals/` root, with tests grouped under `tests/infrastructure/`:* groups tests by responsibility, but leaves shared modules interleaved with the entry point and gives production and verification different names for the same responsibility.
+- *One directory per scenario, such as `evals/scenarios/scope/scenario.py`:* adds a level with no second substantive file to hold.
+- *Compatibility modules at the old paths:* no documented contract or demonstrated consumer depends on internal module paths; aliases would preserve accidental interfaces and hide stale imports that otherwise fail loudly.
+- *Moving `offline_smoke.py` and the sandbox probe into subdirectories:* would change their documented commands.
+- *Test substitutes in runtime, or a shared path constant for the fake executable:* test-only code does not belong in production modules, and scenario tests that install the fake as a sandbox locate it directly instead of depending on the CLI harness.
+
+**Relation to the earlier decision.** The subdirectories rejected in [Integrated engineering architecture with focused detailed owners](#integrated-engineering-architecture-with-focused-detailed-owners) concerned the documents under `_internal/docs/`. This decision concerns code and test packages and leaves the documentation layout unchanged.

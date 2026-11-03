@@ -25,7 +25,7 @@ def execution_command(
     command = [
         executable, "--no-daemon", "exec", "--ignore-user-config", "--ignore-rules",
         "--ephemeral", "--json", "--color", "never", "--skip-git-repo-check",
-        "--sandbox", "workspace-write", "--cd", str(workspace), "--model", model,
+        "--cd", str(workspace), "--model", model,
         "--enable", "skip_host_skill_discovery",
     ]
     # Keep personal extensions and prior-session context out of the evaluation.
@@ -38,7 +38,15 @@ def execution_command(
         **auth.AUTH_SETTINGS,
         "approval_policy": "never",
         "web_search": "disabled",
-        "sandbox_workspace_write.network_access": False,
+        # Native profiles must not be mixed with legacy sandbox settings.
+        # Dotted CLI override keys use unquoted filesystem selectors.
+        "default_permissions": "agents-spec-eval",
+        "permissions.agents-spec-eval.extends": ":workspace",
+        "permissions.agents-spec-eval.filesystem.:root": "deny",
+        "permissions.agents-spec-eval.filesystem.:minimal": "read",
+        "permissions.agents-spec-eval.filesystem.:tmpdir": "deny",
+        "permissions.agents-spec-eval.filesystem.:slash_tmp": "deny",
+        "permissions.agents-spec-eval.network.enabled": False,
         "shell_environment_policy.inherit": "none",
         "analytics.enabled": False,
     }

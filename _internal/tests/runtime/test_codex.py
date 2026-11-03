@@ -13,13 +13,77 @@ import os
 from pathlib import Path
 import sys
 from tempfile import TemporaryDirectory
+import tomllib
 import unittest
 from unittest.mock import patch
 
 from evals.__main__ import main
 from evals.runtime.auth import PROFILE_CONFIG
+from evals.runtime.codex import execution_command
 from evals.runtime.workspace import CONTRACT_PATH
 from evals.scenarios.smoke import PROMPT
+
+
+class ExecutionCommandTests(unittest.TestCase):
+    def test_native_permissions_use_unquoted_selector_keys_and_toml_values(self):
+        command = execution_command("codex", Path("/evaluation/workspace"), "test-model", "medium")
+        overrides = [command[index + 1] for index, argument in enumerate(command) if argument == "--config"]
+        # Codex splits dotted keys itself; only each value is TOML. Parsing the
+        # whole override as TOML would incorrectly require quoted selector keys.
+        settings = {}
+        for override in overrides:
+            key, value = override.split("=", 1)
+            self.assertNotIn(key, settings, "Duplicate overrides could change the effective policy")
+            settings[key] = tomllib.loads(f"value = {value}")["value"]
+        self.assertEqual(settings, {
+            "model_reasoning_effort": "medium",
+            "model_provider": "openai",
+            "forced_login_method": "chatgpt",
+            "cli_auth_credentials_store": "file",
+            "approval_policy": "never",
+            "web_search": "disabled",
+            "default_permissions": "agents-spec-eval",
+            "permissions.agents-spec-eval.extends": ":workspace",
+            "permissions.agents-spec-eval.filesystem.:root": "deny",
+            "permissions.agents-spec-eval.filesystem.:minimal": "read",
+            "permissions.agents-spec-eval.filesystem.:tmpdir": "deny",
+            "permissions.agents-spec-eval.filesystem.:slash_tmp": "deny",
+            "permissions.agents-spec-eval.network.enabled": False,
+            "shell_environment_policy.inherit": "none",
+            "analytics.enabled": False,
+        })
+        self.assertIn('permissions.agents-spec-eval.filesystem.:minimal="read"', overrides)
+        self.assertIn('permissions.agents-spec-eval.network.enabled=false', overrides)
+        self.assertFalse(any(key == "sandbox_mode" or key.startswith("sandbox_workspace_write") for key in settings))
+        for flag in ("--sandbox", "-s", "--permission-profile", "-P", "--full-auto",
+                     "--dangerously-bypass-approvals-and-sandbox", "--yolo"):
+            self.assertNotIn(flag, command)
+
+    def test_execution_controls_and_optional_response_capture_are_preserved(self):
+        workspace = Path("/evaluation/disposable workspace")
+        for response in (None, Path("/evaluation/evidence/final response.txt")):
+            with self.subTest(response=response):
+                command = execution_command("codex", workspace, "test-model", "medium", final_response_path=response)
+                # Check argument boundaries, including paths containing spaces.
+                arguments = []
+                iterator = iter(command)
+                for argument in iterator:
+                    if argument == "--config":
+                        next(iterator)
+                    else:
+                        arguments.append(argument)
+                expected = [
+                    "codex", "--no-daemon", "exec", "--ignore-user-config", "--ignore-rules",
+                    "--ephemeral", "--json", "--color", "never", "--skip-git-repo-check",
+                    "--cd", str(workspace), "--model", "test-model",
+                    "--enable", "skip_host_skill_discovery",
+                    "--disable", "apps", "--disable", "plugins", "--disable", "remote_plugin",
+                    "--disable", "hooks", "--disable", "memories", "--disable", "multi_agent",
+                    "--disable", "skill_search", "--disable", "shell_snapshot", "--disable", "daemon_auto_start",
+                ]
+                if response is not None:
+                    expected.extend(["--output-last-message", str(response)])
+                self.assertEqual(arguments, [*expected, "-"])
 
 
 class CodexIntegrationTests(unittest.TestCase):
@@ -44,6 +108,7 @@ if "--version" in sys.argv:
 elif "login" in sys.argv:
     print("Logged in using ChatGPT")
 else:
+    (Path(os.environ["CODEX_HOME"]) / "received-argv.json").write_text(json.dumps(sys.argv))
     # Check the environment received by the child process, not just the parent's settings.
     assert "OPENAI_API_KEY" not in os.environ
     assert "CODEX_API_KEY" not in os.environ
@@ -90,6 +155,10 @@ else:
             self.assertEqual(execution["model"], "test-model")
             self.assertEqual(execution["reasoning_effort"], "medium")
             self.assertEqual(execution["codex_version"], "codex-cli test")
+            self.assertEqual(json.loads((profile / "received-argv.json").read_text()), execution["command"])
+            self.assertEqual(execution["command"], execution_command(
+                str(executable), Path(execution["workspace"]), "test-model", "medium",
+            ))
             # The execution workspace is gone, but its evidence must still be inspectable.
             self.assertFalse(Path(execution["workspace"]).exists())
             self.assertEqual((artifacts / "prompt.txt").read_text(), PROMPT)

@@ -28,7 +28,7 @@ flowchart LR
     EV["docs/evaluations.md<br/>framework documentation, E1–E40"]
     DM["docs/documentation-maintenance.md"]
     PKG["evals/<br/>CLI composition, runtime/, and scenarios/"]
-    T["tests/<br/>runtime/, scenarios/, and support/;<br/>offline smoke and sandbox probe"]
+    T["tests/<br/>runtime/, scenarios/, and support/;<br/>offline smoke and functional-check sandbox probe"]
     RUNS[".eval-runs/<br/>retained evidence (git-ignored)"]
   end
   BR -->|direct tools to| A
@@ -50,7 +50,7 @@ Solid arrows are actual references or mechanisms; dashed arrows are human activi
 - **Contract and bridges.** `AGENTS.md` is the only operating contract. The bridges apply it through different mechanisms: `CLAUDE.md` uses Claude Code's import syntax, while the Copilot file links to the contract and directs the tool to read and follow it. Neither adds policy, and actual loading still depends on the tool, interface, and settings; [why the bridges differ](contract-design.md#why-the-bridges-differ) explains them.
 - **Design rationale.** `contract-design.md` explains the contract's choices and the constraints on changing it. It cannot change operating behavior; only an authorized edit to `AGENTS.md` can.
 - **Evaluation framework.** The framework depends on the specification; the specification does not depend on the framework. Evaluation workspaces contain the root contract and the case fixture, with no bridge files, and the framework runs only Codex, so it exercises neither bridge nor any other tool.
-- **Offline tests.** The unittest suite, a fake Codex executable, and an offline smoke substitute verify infrastructure and technical assertions without contacting OpenAI. An opt-in probe checks the installed Codex sandbox. Neither establishes live agent behavior or the semantic validity of a rubric.
+- **Offline tests.** The unittest suite, a fake Codex executable, and an offline smoke substitute verify infrastructure and technical assertions without contacting OpenAI. A separate opt-in probe checks the evaluator-owned functional-check sandbox using the installed Codex CLI; it does not verify the evaluated-agent permission profile. Neither establishes live agent behavior or the semantic validity of a rubric.
 - **Evidence and human review.** Each run retains its evidence outside the disposable workspace. Human reviewers assess rubric criteria outside the CLI, which collects no verdicts.
 - **Documentation maintenance.** This concern spans all of the above: it assigns owners and governs how dependent documents are kept consistent.
 
@@ -64,8 +64,8 @@ Results are evidence about the specific cases run, not about general contract co
 | --- | --- | --- |
 | Contract and rationale | `AGENTS.md` defines behavior. `contract-design.md` explains reasons and constrains evolution. Guides and examples cannot enact behavior. | [AGENTS.md](../../AGENTS.md), [contract-design.md](contract-design.md) |
 | Shared evaluation infrastructure and scenarios | Shared modules in `evals/runtime/` have no dependency on individual scenarios. Each scenario module in `evals/scenarios/` owns its prompt, fixture, assertions, any functional checks, and any human-review rubric. The CLI in `evals/__main__.py` composes the two. | [Responsibilities and dependency direction](evaluations.md#responsibilities-and-dependency-direction) |
-| Execution, observation, grading, and human assessment | The agent works in a disposable sandboxed workspace. Observations are captured outside it. Automated grading reads only captured observations. Human assessment uses the retained rubric and evidence. | [Purpose and evaluation model](evaluations.md#purpose-and-evaluation-model), [execution and security boundaries](evaluations.md#execution-and-security-boundaries) |
-| Implementation and verification | The offline suite verifies infrastructure with substitutes. The sandbox probe checks enforcement. Live behavior needs a separately authorized run and its review. | [Run offline checks](evaluations.md#run-offline-checks), [verify a behavior change](evaluations.md#verify-a-behavior-change) |
+| Execution, observation, grading, and human assessment | Agent commands use the restrictive permission profile for a disposable workspace. The parent Codex client and Python evaluator operate outside that command sandbox. Observations are captured outside the workspace; automated grading reads those observations, and human assessment uses the retained rubric and evidence. | [Purpose and evaluation model](evaluations.md#purpose-and-evaluation-model), [execution and security boundaries](evaluations.md#execution-and-security-boundaries) |
+| Implementation and verification | The offline suite verifies configuration and orchestration with substitutes. The repository's sandbox probe checks only the evaluator-owned functional-check boundary. Agent-command enforcement and authenticated integration need separate environment-specific validation. | [Agent execution](evaluations.md#agent-execution), [verify a behavior change](evaluations.md#verify-a-behavior-change) |
 | Evidence retention and interpretation | Evidence directories record what happened. Reports classify execution failures, assertion failures, and pending review separately. Interpretation stays tied to the captured contract and rubric. | [Results, evidence, and failure investigation](evaluations.md#results-evidence-and-failure-investigation) |
 | Documentation ownership | Internal documents give each detailed fact one owner. The root guides are user-facing and may overlap intentionally. | [documentation-maintenance.md](documentation-maintenance.md) |
 
@@ -103,6 +103,16 @@ This architecture refines into the existing owners rather than replacing them:
 [_internal/README.md](../README.md) provides orientation and task-based navigation into these documents.
 
 ## Decisions
+
+### Restrictive evaluation-agent command permissions
+
+**Status:** Provisionally accepted for implementation review; production acceptance remains pending resolution of [E7](evaluations.md#verifiable-requirements), which explicitly requires `workspace-write` sandboxing. The implementation does not satisfy that wording.
+
+**Context.** Evaluation-agent commands need workspace reads/writes while denying unrelated host access and shell networking. Pydantic Evals manages execution and grading; Codex runs the evaluated agent using a dedicated authentication profile. Evaluator-owned functional checks use a separate sandbox. [Agent execution](evaluations.md#agent-execution) owns the configured command boundary, official references, and verification limits.
+
+**Decision under review.** Configure evaluated-agent commands through one restrictive native permission profile passed inline to `codex exec`. The parent Codex client's authentication and provider communication and the Python evaluator operate outside that command sandbox. E7 requires a separate normative decision; this record does not amend E7 or any other E1–E40 requirement.
+
+**Consequences.** The configured profile limits command access to the workspace and Codex's minimal runtime reads, with command networking disabled. Tools needing broader access may be unavailable. CLI support, runtime enforcement, and authenticated integration require environment-specific validation; offline tests establish configuration and orchestration only. The profile neither confines the parent client or Python evaluator nor establishes complete host isolation. Inline permission configuration requires no persistent user settings.
 
 ### Integrated engineering architecture with focused detailed owners
 

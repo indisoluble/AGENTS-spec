@@ -29,7 +29,7 @@ The [catalogue](#cases-and-interpretation) describes designed coverage and its l
 
 ### Install prerequisites
 
-Run commands from the `_internal/` directory. Use Python 3.11 or newer and a POSIX system; verification so far uses macOS with Python 3.14. Windows is not supported by the process-group and file-opening implementation.
+Run commands from the `_internal/` directory. Use Python 3.11 or newer and a POSIX system. Windows is not supported by the process-group and file-opening implementation. Runtime compatibility and sandbox enforcement need separate validation in the target environment; see [agent execution](#agent-execution).
 
 ```sh
 python3 -m venv .venv
@@ -40,14 +40,14 @@ python -m pip install --upgrade -r requirements.txt
 
 [requirements.txt](../requirements.txt) owns the dependency range. It allows Pydantic Evals minor and patch upgrades within major version 2. Dependencies are not locked, so installations can resolve different versions; rerun the offline checks after upgrading.
 
-**Codex is a separate prerequisite for live runs and the sandbox probe.** Installing Python dependencies does not install it. Follow the [official Codex CLI installation instructions](https://learn.chatgpt.com/docs/codex/cli), then check it in the same terminal that will run the suite:
+**Codex is a separate prerequisite for live runs and the functional-check sandbox probe.** Installing Python dependencies does not install it. Follow the [official Codex CLI installation instructions](https://learn.chatgpt.com/docs/codex/cli), then check it in the same terminal that will run the suite:
 
 ```sh
 command -v codex
 codex --version
 ```
 
-The runner finds `codex` on `PATH`. An editor can provide its own executable without making it available in your terminal; add that executable's directory to `PATH` or install the CLI separately. `--codex-home` selects credential/configuration storage, not the executable. The verified CLI build is `0.162.0-alpha.17.2`; another build must support the flags and features in [execution_command](../evals/runtime/codex.py), including `skip_host_skill_discovery`.
+The runner finds `codex` on `PATH`. An editor can provide its own executable without making it available in your terminal; add that executable's directory to `PATH` or install the CLI separately. `--codex-home` selects credential/configuration storage, not the executable. The selected build must support the flags, features, and permission overrides in [execution_command](../evals/runtime/codex.py), including native permission profiles and `skip_host_skill_discovery`. See [agent execution](#agent-execution) for the configured boundary, verification limits, and pending acceptance decision.
 
 ### Run offline checks
 
@@ -450,9 +450,23 @@ Implementation and canonical rubric: [findings.py](../evals/scenarios/findings.p
 
 ### Agent execution
 
-The runner supplies explicit model/effort settings, `workspace-write` sandboxing, noninteractive approvals, and no shell network access. The model connection still needs network access. It ignores user configuration and rules, disables personal extensions and host skill discovery, and uses an ephemeral session. Ephemeral execution suppresses session persistence, not the saved login. The exact invocation is owned by [codex.py](../evals/runtime/codex.py).
+**Production acceptance pending E7 decision.** [E7](#verifiable-requirements) explicitly requires `workspace-write` sandboxing. The implementation uses a native restrictive permission profile and does not satisfy E7 as written. A separately authorized requirement decision is needed before production acceptance. The [decision under review](architecture.md#restrictive-evaluation-agent-command-permissions) records the rationale and limits; it does not amend E1–E40.
 
-Built-in prompts, platform enforcement, and managed requirements/instructions may still apply. Temporary workspaces and sandboxing are not complete host isolation: code and grading remain outside the writable fixture, but host reads and tool/platform behavior matter. Model behavior and service availability remain nondeterministic even though grading is deterministic.
+The exact invocation is owned by [codex.py](../evals/runtime/codex.py). It selects `agents-spec-eval` through `default_permissions` and supplies the named profile entirely through repeatable `--config` arguments. The configured boundary permits reads/writes inside the disposable workspace, retaining Codex's protected-subpath safeguards through `extends=":workspace"`. It denies unrelated filesystem reads/writes through `:root="deny"`, allowing only Codex-defined `:minimal="read"` runtime access outside the workspace. Explicit `:tmpdir="deny"` and `:slash_tmp="deny"` overrides remove inherited temporary-directory access, and `network.enabled=false` disables command networking. These are configured restrictions, not evidence that every access path has been verified. See the official [permission-profile documentation](https://learn.chatgpt.com/docs/permissions).
+
+This profile targets sandboxed commands executed by the evaluated agent. The parent Codex client uses the dedicated authentication profile, communicates with the provider, and writes final-response output. The Python evaluator creates and removes workspaces, manages subprocesses, retains evidence outside the workspace, and grades captured observations. Neither the parent client nor the Python evaluator runs inside this agent-command sandbox; it does not provide comprehensive host isolation.
+
+The command omits legacy `--sandbox` and `sandbox_workspace_write` settings, which conflict with native profiles. It emits unquoted filesystem selector names in dotted CLI keys, for example `--config 'permissions.agents-spec-eval.filesystem.:minimal="read"'`, with TOML-serialized values. `exec` selects the profile via configuration, without the sandbox helper's `--permission-profile` flag. The [CLI reference](https://learn.chatgpt.com/docs/cli/reference) documents inline overrides and `--ignore-user-config`, which skips the user configuration file while authentication still uses `CODEX_HOME`; see also the [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).
+
+Execution uses explicit model/effort settings, `approval_policy="never"` (no permission escalation), environment filtering, ignored user configuration/rules, disabled extensions and host skill discovery, output capture, and managed subprocess lifetimes. Permission configuration is supplied inline rather than persisted in user settings. Ephemeral execution suppresses session persistence, not the saved login.
+
+Verification has separate scopes:
+
+- **Offline configuration and orchestration.** [test_codex.py](../tests/runtime/test_codex.py) checks profile selection, override keys and values, execution controls, and arguments received by a fake CLI. The [offline suite](#run-offline-checks) checks execution orchestration with substitutes. These tests do not run real Codex or establish runtime sandbox enforcement.
+- **Runtime enforcement.** Filesystem and network restrictions require separate verification against the target operating system, CLI build, and effective configuration. The repository's [functional-check sandbox probe](#functional-check-execution) covers only the separate evaluator-owned check sandbox; it does not verify the evaluated-agent profile.
+- **Authenticated integration and platform behavior.** The complete `codex exec` path, including authentication, provider communication, sandboxed commands, and output capture, requires separately authorized validation. Offline tests and the functional-check probe do not establish this integration or portability across environments, including Linux and GitHub Actions.
+
+Built-in prompts, platform enforcement, and managed configuration/requirements/instructions may affect a run. Model behavior and service availability remain nondeterministic even though grading is deterministic.
 
 ### Observation and capture boundaries
 
@@ -536,7 +550,7 @@ The two activities share code but answer different questions:
 
 - **Evaluating an agent:** `python -m evals` runs the real Codex CLI on a scenario's fixture, consumes subscription allowance, and produces evidence about that run. The [evaluation model](#purpose-and-evaluation-model) bounds what that evidence establishes.
 - **Testing the evaluator:** the offline suite never runs a model. Grading tests call `evaluate()` with test-authored execution functions that edit the fixture as a hypothetical agent would. CLI tests run the real command against `tests/support/fake_codex.py`. Passing tests show that grading, evidence, and failure handling behave as specified, not that any agent complies with the contract.
-- **Checking the sandbox:** the opt-in probe exercises the installed Codex sandbox, which fake processes cannot demonstrate.
+- **Checking the functional-check sandbox:** the opt-in probe exercises that sandbox's filesystem and network restrictions using the installed Codex CLI. It does not verify the evaluated-agent permission profile; see [agent execution](#agent-execution) for the separate verification scopes.
 
 ### Responsibilities and dependency direction
 
@@ -614,7 +628,7 @@ The root [engineering rules](../../AGENTS.md#12-do--perform-the-authorized-work)
 
 For a case change, run the [offline checks](#run-offline-checks). The case and requirement tables link the relevant regression tests; shared-infrastructure tests cover authentication, cancellation, filesystem observation, and evidence failures. For human-rubric changes, also compare the revised criteria with the applicable contract provisions, preserving rule strengths, triggers, exceptions, evidence limits, and unaffected technical checks. Offline tests verify infrastructure and technical assertions; they do not establish rubric semantic validity or live contractual compliance.
 
-Live verification requires inspecting one separately authorized run. If authorization covers only offline work, stop after that verification and report live assessment as pending. The [sandbox probe](#functional-check-execution) separately checks actual policy enforcement, which fake processes cannot demonstrate.
+Live verification requires inspecting one separately authorized run. If authorization covers only offline work, stop after that verification and report live assessment as pending. The [functional-check sandbox probe](#functional-check-execution) checks that separate boundary's runtime enforcement. Verification of the evaluated-agent permission profile and authenticated integration follows the distinct scopes in [agent execution](#agent-execution).
 
 Inspect the live run's selected case, assertions and reasons, initial/final bytes and available manifests, contract hash, model settings, and cleaned workspace path. For human-review cases, also inspect response capture, readable differences, the retained rubric, and pending-review reporting, and assess the rubric with the requester. For independent-execution and contract-change-followthrough, include functional-check evidence. Each executed case should produce a distinct workspace and evidence directory. Keep run-specific results with that evidence rather than duplicating them here.
 

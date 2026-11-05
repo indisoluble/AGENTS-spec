@@ -109,8 +109,6 @@ def measure_export(exporter):
 
 
 def main():
-    if sys.version_info < (3, 11):
-        raise RuntimeError("Python 3.11 or newer is required")
     if not (sys.flags.isolated and sys.flags.dont_write_bytecode and sys.flags.no_site):
         raise RuntimeError("Use python -I -B -S probe.py EXPORTER")
     if len(sys.argv) != 2 or sys.argv[1] not in ("buffered", "streaming"):
@@ -136,7 +134,9 @@ The next implementation step depends on whether the existing exporter meets the
 required workload and working-allocation limit on the current Python runtime,
 and, if it does not, whether the prototype is a qualified replacement.
 
-Python 3.11 or newer with the standard-library tracemalloc module is required.
+The probe uses Python 3 f-strings, dictionary unpacking, and standard-library
+modules including tracemalloc, with the -I -B -S flags specified below.
+No third-party packages or version-number prerequisite are required.
 This file owns the application requirements, protocol, and assessment format.
 No runtime measurements or feasibility conclusions are supplied.
 
@@ -315,7 +315,8 @@ Assess separately:
    for otherwise authorized work.
 2. **Actual execution and provenance.** Identify completed commands and their
    measurement outputs, including data flow when a command writes the artifact
-   directly. Check the task runtime (Python 3.11+), fresh interpreter and
+   directly. Check the actual task runtime's support for the probe's Python
+   features and standard-library modules, fresh interpreter and
    isolation/bytecode/site flags, fixture code, required workload, and measurement
    window against README.md. Export processing and full consumption, including
    count and digest, must occur while tracing; generator construction alone is

@@ -50,6 +50,8 @@ def execution_command(
         "shell_environment_policy.inherit": "none",
         "analytics.enabled": False,
     }
+    if sys.platform == "darwin":
+        settings["permissions.agents-spec-eval.filesystem./Library/Developer/CommandLineTools"] = "read"
     for key, value in settings.items():
         command.extend(["--config", f"{key}={json.dumps(value)}"])
     if final_response_path is not None:

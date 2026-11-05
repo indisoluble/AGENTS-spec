@@ -26,16 +26,7 @@ from evals.scenarios.smoke import PROMPT
 
 class ExecutionCommandTests(unittest.TestCase):
     def test_native_permissions_use_unquoted_selector_keys_and_toml_values(self):
-        command = execution_command("codex", Path("/evaluation/workspace"), "test-model", "medium")
-        overrides = [command[index + 1] for index, argument in enumerate(command) if argument == "--config"]
-        # Codex splits dotted keys itself; only each value is TOML. Parsing the
-        # whole override as TOML would incorrectly require quoted selector keys.
-        settings = {}
-        for override in overrides:
-            key, value = override.split("=", 1)
-            self.assertNotIn(key, settings, "Duplicate overrides could change the effective policy")
-            settings[key] = tomllib.loads(f"value = {value}")["value"]
-        self.assertEqual(settings, {
+        expected_settings = {
             "model_reasoning_effort": "medium",
             "model_provider": "openai",
             "forced_login_method": "chatgpt",
@@ -51,39 +42,62 @@ class ExecutionCommandTests(unittest.TestCase):
             "permissions.agents-spec-eval.network.enabled": False,
             "shell_environment_policy.inherit": "none",
             "analytics.enabled": False,
-        })
-        self.assertIn('permissions.agents-spec-eval.filesystem.:minimal="read"', overrides)
-        self.assertIn('permissions.agents-spec-eval.network.enabled=false', overrides)
-        self.assertFalse(any(key == "sandbox_mode" or key.startswith("sandbox_workspace_write") for key in settings))
-        for flag in ("--sandbox", "-s", "--permission-profile", "-P", "--full-auto",
-                     "--dangerously-bypass-approvals-and-sandbox", "--yolo"):
-            self.assertNotIn(flag, command)
+        }
+        clt_key = "permissions.agents-spec-eval.filesystem./Library/Developer/CommandLineTools"
+        workspace = Path("/evaluation/workspace")
+        for platform, expected_clt in (("darwin", "read"), ("linux", None), ("freebsd", None)):
+            with self.subTest(platform=platform):
+                with patch("evals.runtime.codex.sys.platform", platform):
+                    command = execution_command("codex", workspace, "test-model", "medium")
+                overrides = [command[index + 1] for index, argument in enumerate(command) if argument == "--config"]
+                # Codex splits dotted keys itself; only each value is TOML. Parsing the
+                # whole override as TOML would incorrectly require quoted selector keys.
+                settings = {}
+                for override in overrides:
+                    key, value = override.split("=", 1)
+                    self.assertNotIn(key, settings, "Duplicate overrides could change the effective policy")
+                    settings[key] = tomllib.loads(f"value = {value}")["value"]
+                expected = expected_settings.copy()
+                if expected_clt is not None:
+                    expected[clt_key] = expected_clt
+                    self.assertIn(f'{clt_key}="read"', overrides)
+                else:
+                    self.assertNotIn(clt_key, settings)
+                self.assertEqual(settings, expected)
+                self.assertIn('permissions.agents-spec-eval.filesystem.:minimal="read"', overrides)
+                self.assertIn('permissions.agents-spec-eval.network.enabled=false', overrides)
+                self.assertFalse(any(key == "sandbox_mode" or key.startswith("sandbox_workspace_write") for key in settings))
+                for flag in ("--sandbox", "-s", "--permission-profile", "-P", "--full-auto",
+                             "--dangerously-bypass-approvals-and-sandbox", "--yolo"):
+                    self.assertNotIn(flag, command)
 
     def test_execution_controls_and_optional_response_capture_are_preserved(self):
         workspace = Path("/evaluation/disposable workspace")
-        for response in (None, Path("/evaluation/evidence/final response.txt")):
-            with self.subTest(response=response):
-                command = execution_command("codex", workspace, "test-model", "medium", final_response_path=response)
-                # Check argument boundaries, including paths containing spaces.
-                arguments = []
-                iterator = iter(command)
-                for argument in iterator:
-                    if argument == "--config":
-                        next(iterator)
-                    else:
-                        arguments.append(argument)
-                expected = [
-                    "codex", "--no-daemon", "exec", "--ignore-user-config", "--ignore-rules",
-                    "--ephemeral", "--json", "--color", "never", "--skip-git-repo-check",
-                    "--cd", str(workspace), "--model", "test-model",
-                    "--enable", "skip_host_skill_discovery",
-                    "--disable", "apps", "--disable", "plugins", "--disable", "remote_plugin",
-                    "--disable", "hooks", "--disable", "memories", "--disable", "multi_agent",
-                    "--disable", "skill_search", "--disable", "shell_snapshot", "--disable", "daemon_auto_start",
-                ]
-                if response is not None:
-                    expected.extend(["--output-last-message", str(response)])
-                self.assertEqual(arguments, [*expected, "-"])
+        for platform in ("darwin", "linux", "freebsd"):
+            for response in (None, Path("/evaluation/evidence/final response.txt")):
+                with self.subTest(platform=platform, response=response):
+                    with patch("evals.runtime.codex.sys.platform", platform):
+                        command = execution_command("codex", workspace, "test-model", "medium", final_response_path=response)
+                    # Check argument boundaries, including paths containing spaces.
+                    arguments = []
+                    iterator = iter(command)
+                    for argument in iterator:
+                        if argument == "--config":
+                            next(iterator)
+                        else:
+                            arguments.append(argument)
+                    expected = [
+                        "codex", "--no-daemon", "exec", "--ignore-user-config", "--ignore-rules",
+                        "--ephemeral", "--json", "--color", "never", "--skip-git-repo-check",
+                        "--cd", str(workspace), "--model", "test-model",
+                        "--enable", "skip_host_skill_discovery",
+                        "--disable", "apps", "--disable", "plugins", "--disable", "remote_plugin",
+                        "--disable", "hooks", "--disable", "memories", "--disable", "multi_agent",
+                        "--disable", "skill_search", "--disable", "shell_snapshot", "--disable", "daemon_auto_start",
+                    ]
+                    if response is not None:
+                        expected.extend(["--output-last-message", str(response)])
+                    self.assertEqual(arguments, [*expected, "-"])
 
 
 class CodexIntegrationTests(unittest.TestCase):

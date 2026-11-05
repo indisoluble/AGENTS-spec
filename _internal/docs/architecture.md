@@ -112,7 +112,7 @@ This architecture refines into the existing owners rather than replacing them:
 
 **Decision.** Configure evaluated-agent commands through one restrictive native permission profile passed inline to `codex exec`, as required by [E7](evaluations.md#verifiable-requirements). The parent Codex client's authentication and provider communication and the Python evaluator operate outside that command sandbox.
 
-**Consequences.** The configured profile limits command access to the workspace and Codex's minimal runtime reads, with command networking disabled. Tools needing broader access may be unavailable. CLI support, runtime enforcement, and authenticated integration require environment-specific validation; offline tests establish configuration and orchestration only. The profile neither confines the parent client or Python evaluator nor establishes complete host isolation. Inline permission configuration requires no persistent user settings.
+**Consequences.** The configured profile limits command access to the workspace and the runtime reads documented under [agent execution](evaluations.md#agent-execution), with command networking disabled. Tools needing broader access may be unavailable. CLI support, runtime enforcement, and authenticated integration require environment-specific validation; offline tests establish configuration and orchestration only. The profile neither confines the parent client or Python evaluator nor establishes complete host isolation. Inline permission configuration requires no persistent user settings.
 
 ### Integrated engineering architecture with focused detailed owners
 

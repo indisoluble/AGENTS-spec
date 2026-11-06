@@ -149,14 +149,16 @@ class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
             self.assertTrue((artifacts / "final-workspace.json").is_file())
             return run_check(source, workspace, **kwargs)
 
+        captured = StringIO()
         with (patch.object(cli, "ARTIFACTS_ROOT", runs),
               patch("evals.runtime.auth.codex_executable", return_value=str(self.bin / "codex")),
               patch("evals.runtime.functional.codex_executable", return_value=str(self.bin / "codex")),
               patch.object(functional_checks, "run_python_check", side_effect=check_after_cleanup),
-              redirect_stdout(StringIO())):
+              redirect_stdout(captured),
+              redirect_stderr(captured)):
             code = cli.run_case(selected, model="test-model", effort="medium", timeout=10,
                                 profile=profile, cancelled=Event())
-        self.assertEqual(code, 3)
+        self.assertEqual(code, 3, captured.getvalue())
         self.assertTrue(checked_workspaces)
         self.assertTrue(all(not workspace.exists() for workspace in checked_workspaces))
 

@@ -8,11 +8,19 @@ The repository delivers a specification: the root `AGENTS.md` contract and two i
 
 `_internal/` holds the engineering work used to develop and assess the specification. Adopters do not install it, and it adds no operating duties: the root contract governs work here as everywhere else in the repository. The engineering project has three related responsibilities:
 
-1. **Specification design and evolution.** Explaining why the contract is designed as it is and constraining how it may change. [contract-design.md](contract-design.md) owns this rationale; it is also a publicly readable technical guide, reached from the root guides through [_internal/README.md](../README.md).
-2. **Evaluation.** A local Python framework that runs Codex on a finite set of cases against the current contract and produces evidence about those cases. [evaluations.md](evaluations.md) owns its documentation, including requirements E1–E40.
+1. **Product requirements, design, and evolution.** Defining intended agent behavior and product constraints, and explaining the mechanisms, decisions, and trade-offs selected to realize them. [contract-design.md](contract-design.md) is the designated canonical owner of both requirements and rationale, with those responsibilities distinguishable in one document. Its requirements inventory and substantive restructuring remain pending; existing contract clauses are not automatically accepted product requirements.
+2. **Behavioral evaluation and evaluator verification.** A local Python framework runs Codex on finite cases against the current contract and produces evidence about those cases. Offline tests verify the evaluation machinery. [evaluations.md](evaluations.md) owns the subsystem documentation, including evaluator requirements E1–E40, which are distinct from product requirements.
 3. **Knowledge maintenance.** Keeping each fact, rule, explanation, and decision with one canonical owner and keeping its dependents consistent, across the whole repository including the root guides. [documentation-maintenance.md](documentation-maintenance.md) owns the ownership map and editorial guidance.
 
-Its readers are people who engineer, evaluate, evolve, operate, and maintain the specification and its evaluation framework. Outside its scope are the normative content of the contract, which only `AGENTS.md` defines; the facts and architecture of adopting projects; and the instruction-loading behavior of agent tools, which their providers' documentation governs. The root guides are user documentation rather than engineering documentation, although their editing follows `documentation-maintenance.md`.
+Its readers are people who engineer, evaluate, evolve, operate, and maintain the specification and its evaluation framework. This document explains the engineering relationships; it does not supply runtime operating rules, adopting-project facts or architecture, or provider-owned instruction-loading behavior. Everything outside `_internal/` belongs to the user-facing product or its adoption and usage material. Root files neither reference nor depend on `_internal/`, including optional further-reading links. Internal documentation may reference root files, and engineering navigation starts at [_internal/README.md](../README.md).
+
+### Development-time and runtime authority
+
+Product objectives and established product requirements guide development of `AGENTS.md` and the intended expectations of behavioral evaluations. Design rationale and decisions explain why selected mechanisms realize that intent. Existing wording is evidence of the current implementation, not automatic proof of accepted product intent. Inferred requirement candidates remain separate from established requirements and are reviewed by coherent topic; extracting and accepting that inventory is later work.
+
+At runtime, `AGENTS.md` remains the complete normative authority for agents receiving it, within the actual tool hierarchy and permissions. Requirements and rationale in internal documentation create no additional operating duties or runtime dependencies. A mismatch between intended requirements and contract wording calls for human review and authorized correction, not an implicit change to the rules applied to an agent. Existing runs remain interpreted under their captured contract and rubric until approved changes are implemented; revised criteria do not silently revise historical conclusions.
+
+Verifying the contract against intended requirements examines whether its text expresses the intended obligations, permissions, conditions, exceptions, and constraints. Behavioral evaluation instead examines what agents receiving that text actually do. Evaluator tests verify the machinery's own specified execution, observation, grading, reporting, and failure behavior; they do not establish agent compliance or the semantic validity of the expectations. These are separate evidence relationships. Requirement-to-contract and requirement-to-evaluation traceability remain pending, and this architecture does not claim they are already implemented.
 
 ## Context and relationships
 
@@ -24,8 +32,11 @@ flowchart LR
     G["README.md,<br/>README-powerusers.md"]
   end
   subgraph Internal["_internal/: engineering"]
-    CD["docs/contract-design.md<br/>design rationale"]
-    EV["docs/evaluations.md<br/>framework documentation, E1–E40"]
+    subgraph CD["docs/contract-design.md"]
+      PR["Product requirements<br/>inventory pending"]
+      DR["Design rationale and decisions"]
+    end
+    EV["docs/evaluations.md<br/>evaluation expectations and framework;<br/>evaluator requirements E1–E40"]
     DM["docs/documentation-maintenance.md"]
     PKG["evals/<br/>CLI composition, runtime/, and scenarios/"]
     T["tests/<br/>runtime/, scenarios/, and support/;<br/>offline smoke and functional-check sandbox probe"]
@@ -33,22 +44,28 @@ flowchart LR
   end
   BR -->|direct tools to| A
   G -->|explain| A
-  CD -->|explains and constrains changes to| A
+  PR -.->|guide development| A
+  PR -.->|guide intended expectations;<br/>traceability pending| EV
+  DR -.->|explains mechanisms and trade-offs| A
   PKG -->|copies current bytes into each run;<br/>cases and rubrics cite clauses| A
   EV -->|specifies and explains| PKG
   T -->|verifies offline| PKG
   PKG -->|writes| RUNS
   RUNS -.->|read in human review| H["Maintainers and requester"]
+  H -.->|may propose changes| PR
+  H -.->|may propose changes| DR
   H -.->|"may propose; edits need §3.8 authorization"| A
-  DM -.->|governs editing of| CD
+  H -.->|may propose changes| EV
+  DM -.->|governs editing of| PR
+  DM -.->|governs editing of| DR
   DM -.->|governs editing of| EV
   DM -.->|governs editing of| G
 ```
 
-Solid arrows are actual references or mechanisms; dashed arrows are human activities. No automated path leads from evaluation results back to the contract.
+Solid arrows are current references or mechanisms; dashed arrows are engineering responsibilities and human activities, including the requirements relationships whose inventory and traceability remain pending. The internal-to-root editing relationships create no reference or dependency from product files back into engineering documentation. No automated path leads from evaluation results to changes in requirements, design, the contract, or evaluation expectations.
 
 - **Contract and bridges.** `AGENTS.md` is the only operating contract. The bridges apply it through different mechanisms: `CLAUDE.md` uses Claude Code's import syntax, while the Copilot file links to the contract and directs the tool to read and follow it. Neither adds policy, and actual loading still depends on the tool, interface, and settings; [why the bridges differ](contract-design.md#why-the-bridges-differ) explains them.
-- **Design rationale.** `contract-design.md` explains the contract's choices and the constraints on changing it. It cannot change operating behavior; only an authorized edit to `AGENTS.md` can.
+- **Product requirements and design rationale.** `contract-design.md` is the designated owner described under [development-time and runtime authority](#development-time-and-runtime-authority). Its current rationale and evolution constraints remain useful, while requirements extraction is pending. Internal intent and explanation cannot change runtime operating behavior; only an authorized edit to `AGENTS.md` can.
 - **Evaluation framework.** The framework depends on the specification; the specification does not depend on the framework. Evaluation workspaces contain the root contract and the case fixture, with no bridge files, and the framework runs only Codex, so it exercises neither bridge nor any other tool.
 - **Offline tests.** The unittest suite, a fake Codex executable, and an offline smoke substitute verify infrastructure and technical assertions without contacting OpenAI. A separate opt-in probe checks the evaluator-owned functional-check sandbox using the installed Codex CLI; it does not verify the evaluated-agent permission profile. Neither establishes live agent behavior or the semantic validity of a rubric.
 - **Evidence and human review.** Each run retains its evidence outside the disposable workspace. Human reviewers assess rubric criteria outside the CLI, which collects no verdicts.
@@ -56,22 +73,23 @@ Solid arrows are actual references or mechanisms; dashed arrows are human activi
 
 ### What evaluation evidence can establish
 
-Results are evidence about the specific cases run, not about general contract compliance. The cases are finite and present designed conditions; automated assertions answer defined technical questions, while semantic criteria remain with human reviewers; model behavior is nondeterministic, so one run is not repeated evidence; and showing that the contract caused an observed behavior requires comparative evidence. [Purpose and evaluation model](evaluations.md#purpose-and-evaluation-model) owns these limits and the current coverage gaps. Evaluation evidence may inform a maintainer's assessment or a proposal to change the contract. It does not authorize that change: `AGENTS.md` changes only through an authorized edit under its [protected-file rule](../../AGENTS.md#38-instructions-protected-files-and-external-actions), assessed against the [evolution constraints](contract-design.md#evolving-the-contract).
+Results are evidence about the specific cases run, not about general contract compliance. The cases are finite and present designed conditions; automated assertions answer defined technical questions, while semantic criteria remain with human reviewers; model behavior is nondeterministic, so one run is not repeated evidence; and showing that the contract caused an observed behavior requires comparative evidence. [Purpose and evaluation model](evaluations.md#purpose-and-evaluation-model) owns these limits and the current coverage gaps. Human review distinguishes evaluator faults, unsuitable expectations or scenarios, contract wording that fails intended requirements, agent behavior, and unresolved product intent. Findings can inform proposals about requirements, design, implementation, or evaluation expectations; they authorize none of those changes. Contract edits retain the [protected-file rule](../../AGENTS.md#38-instructions-protected-files-and-external-actions) and the [evolution constraints](contract-design.md#evolving-the-contract).
 
 ## Principal boundaries
 
 | Boundary | What it separates | Detail |
 | --- | --- | --- |
-| Contract and rationale | `AGENTS.md` defines behavior. `contract-design.md` explains reasons and constrains evolution. Guides and examples cannot enact behavior. | [AGENTS.md](../../AGENTS.md), [contract-design.md](contract-design.md) |
+| Product intent and runtime implementation | Product requirements guide development; rationale explains design choices. `AGENTS.md` implements the intended behavior as the complete runtime contract. The requirements inventory remains pending; guides and examples cannot enact behavior. | [Development-time and runtime authority](#development-time-and-runtime-authority) |
+| Product requirements and evaluator requirements | Product requirements concern intended agent behavior and product constraints. E1–E40 specify the suite's required behavior, including how cases are executed and assessed; they do not independently establish product intent. Fictional application requirements in fixtures concern those applications. | [Verifiable requirements](evaluations.md#verifiable-requirements), [contract-design.md](contract-design.md) |
 | Shared evaluation infrastructure and scenarios | Shared modules in `evals/runtime/` have no dependency on individual scenarios. Each scenario module in `evals/scenarios/` owns its prompt, fixture, assertions, any functional checks, and any human-review rubric. The CLI in `evals/__main__.py` composes the two. | [Responsibilities and dependency direction](evaluations.md#responsibilities-and-dependency-direction) |
 | Execution, observation, grading, and human assessment | Agent commands use the restrictive permission profile for a disposable workspace. The parent Codex client and Python evaluator operate outside that command sandbox. Observations are captured outside the workspace; automated grading reads those observations, and human assessment uses the retained rubric and evidence. | [Purpose and evaluation model](evaluations.md#purpose-and-evaluation-model), [execution and security boundaries](evaluations.md#execution-and-security-boundaries) |
 | Implementation and verification | The offline suite verifies configuration and orchestration with substitutes. The repository's sandbox probe checks only the evaluator-owned functional-check boundary. Agent-command enforcement and authenticated integration need separate environment-specific validation. | [Agent execution](evaluations.md#agent-execution), [verify a behavior change](evaluations.md#verify-a-behavior-change) |
 | Evidence retention and interpretation | Evidence directories record what happened. Reports classify execution failures, assertion failures, and pending review separately. Interpretation stays tied to the captured contract and rubric. | [Results, evidence, and failure investigation](evaluations.md#results-evidence-and-failure-investigation) |
-| Documentation ownership | Internal documents give each detailed fact one owner. The root guides are user-facing and may overlap intentionally. | [documentation-maintenance.md](documentation-maintenance.md) |
+| Product and internal engineering documentation | Root files remain independent of internal engineering documentation. Internal documents give each detailed fact one owner; the user-facing root guides may overlap intentionally. | [Public guides and internal engineering documents](documentation-maintenance.md#public-guides-and-internal-engineering-documents) |
 
 ## Specification-to-evaluation dependencies
 
-The framework exists to evaluate the current contract, so its dependence on that contract is intended. The dependencies below are the known direct dependents to inspect under the contract's [canonical-knowledge rule](../../AGENTS.md#35-canonical-knowledge-and-affected-documentation) when `AGENTS.md` changes. They describe what exists; they add no procedure or approval step.
+The framework currently exercises the root contract, and the dependencies below describe that implementation. The agreed requirements-led model guides future development without claiming that product-requirement traceability already exists. These are the known direct dependents to inspect under the contract's [canonical-knowledge rule](../../AGENTS.md#35-canonical-knowledge-and-affected-documentation) when `AGENTS.md` changes; they add no procedure or approval step.
 
 | Dependency | Mechanism | Consequence |
 | --- | --- | --- |
@@ -83,7 +101,7 @@ Other documents also link `AGENTS.md` heading anchors, including `contract-desig
 
 ### Change impact
 
-A contract change does not necessarily require an evaluation change. Compare the changed clauses with the behavior each case exercises, using the catalogue's contract references and the rubric citations above:
+A contract change does not necessarily require an evaluation change. Established product requirements guide intended behavior and expectations; existing clauses and rubrics describe the current implementation and assessment baseline. Compare the changed clauses with the behavior each case exercises, using the catalogue's contract references and the rubric citations above, without treating contract edits alone as authority to redefine expected behavior:
 
 - **Behavior an evaluated case exercises.** If a rule's strength, trigger, condition, exception, or scope changes where a case's assertions or rubric criteria depend on it, the scenario module and its catalogue entry are affected owners. Assess whether the case still presents its intended condition and whether its assertions and rubric still match the contract. An E1–E40 requirement changes only if the framework's own required behavior changes, through authorized requirement work.
 - **Structure or wording without changed behavior.** Renumbering, renamed headings, or moved clauses need reference corrections in rubrics, the catalogue, and linking documents. Rubric meaning is unchanged.
@@ -95,14 +113,23 @@ Changes in the other direction never alter the contract. Editing a case or rubri
 
 This architecture refines into the existing owners rather than replacing them:
 
-- **Normative behavior:** [AGENTS.md](../../AGENTS.md), the only operating contract.
-- **Specification rationale and evolution:** [contract-design.md](contract-design.md): design goals, choices and trade-offs, evolution constraints, design scenarios, and reference assignments.
+- **Runtime normative behavior:** [AGENTS.md](../../AGENTS.md), the complete operating contract.
+- **Product requirements, specification rationale, and evolution:** [contract-design.md](contract-design.md), the designated owner of intended requirements and constraints alongside design choices, trade-offs, significant specification decisions, evolution constraints, design scenarios, and reference assignments. Requirements inventory and substantive restructuring remain pending.
 - **Evaluation framework:** [evaluations.md](evaluations.md): evaluation model, operations and authentication, evidence and failure investigation, cases, execution boundaries, framework architecture and lifecycle, and E1–E40. Scenario modules own exact prompts, fixtures, checks, and rubrics.
 - **Documentation ownership and editorial guidance:** [documentation-maintenance.md](documentation-maintenance.md), including the [per-document ownership table](documentation-maintenance.md#document-ownership) and the [public/internal distinction](documentation-maintenance.md#public-guides-and-internal-engineering-documents).
 
 [_internal/README.md](../README.md) provides orientation and task-based navigation into these documents.
 
 ## Decisions
+
+This section holds engineering-system-wide decisions and indexes decisions owned at narrower scopes. Specification-design decisions belong with requirements and rationale in `contract-design.md`; evaluation-subsystem decisions belong in `evaluations.md`. The two existing evaluation-specific records below remain canonical here, with their complete history preserved, until a separately authorized relocation. Documentation maintenance owns the ownership map and editing guidance, not duplicate decision records.
+
+| Decision | Scope and canonical record |
+| --- | --- |
+| [Restrictive evaluation-agent command permissions](#restrictive-evaluation-agent-command-permissions) | Evaluation subsystem; retained here, intended future location `evaluations.md`. |
+| [Integrated engineering architecture with focused detailed owners](#integrated-engineering-architecture-with-focused-detailed-owners) | Engineering system; retained here with the refinements recorded below. |
+| [Evaluation framework package and verification hierarchy](#evaluation-framework-package-and-verification-hierarchy) | Evaluation subsystem; retained here, intended future location `evaluations.md`. |
+| [Requirements-led engineering and product/internal separation](#requirements-led-engineering-and-productinternal-separation) | Engineering system; authority, ownership, and navigation boundaries. |
 
 ### Restrictive evaluation-agent command permissions
 
@@ -132,6 +159,8 @@ This architecture refines into the existing owners rather than replacing them:
 - *Moving the framework lifecycle into this document:* it would separate that lifecycle from the outcome, evidence, and functional-check sections it explains.
 
 **Later navigation change.** The context and rejected alternatives above record root-guide links into `_internal/docs/` as they existed when this decision was made. A later editorial decision, owned by [documentation-maintenance.md](documentation-maintenance.md#public-guides-and-internal-engineering-documents), replaced those links with one pointer from each root guide to `_internal/README.md`. It changes navigation only; this decision, its paths, and the remaining link constraints from docstrings and external references are unaffected.
+
+That pointer arrangement is historical. [Requirements-led engineering and product/internal separation](#requirements-led-engineering-and-productinternal-separation) supersedes it and refines the earlier rationale-only description of specification design, while retaining the integrated architecture and focused detailed owners.
 
 ### Evaluation framework package and verification hierarchy
 
@@ -164,3 +193,25 @@ This architecture refines into the existing owners rather than replacing them:
 - *Test substitutes in runtime, or a shared path constant for the fake executable:* test-only code does not belong in production modules, and scenario tests that install the fake as a sandbox locate it directly instead of depending on the CLI harness.
 
 **Relation to the earlier decision.** The subdirectories rejected in [Integrated engineering architecture with focused detailed owners](#integrated-engineering-architecture-with-focused-detailed-owners) concerned the documents under `_internal/docs/`. This decision concerns code and test packages and leaves the documentation layout unchanged.
+
+### Requirements-led engineering and product/internal separation
+
+**Status:** Accepted. The requester approved this engineering direction and authorized its documentation in Stage 1; requirements extraction, design-document restructuring, evaluation traceability, and directory reorganization remain outside this stage.
+
+**Context.** The project now develops and evaluates a reusable contract, with separate evaluation code and offline tests. Earlier ownership described `contract-design.md` as rationale, while cases and rubrics referred to the implemented contract. That arrangement did not separately identify product intent as the basis for development. Root guides also pointed into `_internal/`, following the historical navigation change above. The requester established independent product documentation, requirements-led development, preservation of existing knowledge, and unchanged paths as the constraints for this correction.
+
+**Decision.** Product requirements define intended agent behavior and product constraints and guide contract development and evaluation expectations. `contract-design.md` is their canonical owner alongside clearly distinguishable design rationale and specification-design decisions, in one document. Existing clauses are not automatically accepted requirements; inferred candidates remain separate for later review by coherent topic. `AGENTS.md` remains the complete runtime normative contract, and current runs retain their captured contract and rubric interpretation. E1–E40 remain evaluator requirements. Evaluation results provide evidence for human review, without automatically authorizing changes to any of these artifacts.
+
+Everything outside `_internal/` belongs to the user-facing product or its adoption and usage material. Root product files contain no references or dependencies into `_internal/`; internal documentation may reference them. Apply [§3.6](../../AGENTS.md#36-architecture-guides-and-code-documentation) by scope: the root README identifies user-facing documentation, while `_internal/README.md` identifies engineering documentation and serves as its entry point. The clause names `README.md` without explicitly assigning all documentation locations to one root entry point. This records the approved repository interpretation without changing that clause or adding consumer duties.
+
+This architecture owns engineering-system-wide decisions and their index. Specification-specific records belong in `contract-design.md`, and evaluation-specific records belong in `evaluations.md`; the existing evaluation records remain here until separately authorized relocation. Keep the current paths for this stage. The [ownership map](documentation-maintenance.md#document-ownership) and [navigation guidance](documentation-maintenance.md#public-guides-and-internal-engineering-documents) apply these boundaries without duplicating decision records.
+
+**Consequences.** Product documentation remains independently usable, with no internal runtime dependency. Maintainers distinguish intended requirements, design reasoning, implemented instructions, observed agent behavior, and verification of the evaluator. The requirements inventory is not yet extracted or accepted, and evaluation traceability is not yet established. Later work preserves significant rationale, constraints, accepted decisions, and useful alternatives; the historical PDSA guide informs that work without overriding current decisions or implementation. No code, grading policy, contract behavior, or directory layout changes in this stage. The earlier integrated-architecture decision remains accepted, with its rationale-only ownership description refined and its root-guide pointer arrangement superseded.
+
+**Rejected alternatives.**
+
+- *Accept current implementation wording wholesale as product requirements:* would infer intent from implementation without topic-level review.
+- *Retain optional root-guide pointers into internal engineering documentation:* would violate the approved product/internal boundary.
+- *Make internal requirements or rationale additional runtime instructions:* would make the adopted contract incomplete and create hidden dependencies.
+
+Splitting requirements from rationale into separate files, relocating existing decision records, and reorganizing directories are deferred; this decision does not perform or authorize them.

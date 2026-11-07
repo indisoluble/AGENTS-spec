@@ -1,8 +1,8 @@
 # AGENTS-spec internal engineering
 
-`_internal/` holds the engineering work behind the [AGENTS.md](../AGENTS.md) specification: the design rationale that informs changes to the contract, a local evaluation framework that exercises selected contract behaviors with a coding agent, and the guidance that keeps the repository's documentation canonically owned. The contract, its tool bridges, and the guides for people adopting it live at the repository root, starting with [README.md](../README.md).
+`_internal/` holds the engineering work behind the [AGENTS.md](../AGENTS.md) specification: product requirements and design rationale, behavioral evaluation and verification of its machinery, engineering architecture, and documentation governance. Product-requirements inventory and evaluation traceability remain pending. The contract, its tool bridges, and the guides for people adopting it live at the repository root, starting with [README.md](../README.md).
 
-The root [AGENTS.md](../AGENTS.md) governs engineering work here as everywhere else in the repository. This directory defines no separate operating contract; its documents explain, evaluate, and maintain that one.
+The root [AGENTS.md](../AGENTS.md) governs engineering work here as everywhere else in the repository. It remains the complete normative authority at runtime; internal product requirements guide development without adding consumer duties. [Development-time and runtime authority](docs/architecture.md#development-time-and-runtime-authority) explains that distinction and the current implementation limits.
 
 This README is for orientation only. Each topic below links to the document that owns it; if this summary and a linked owner disagree, the owner is authoritative and this README needs correcting.
 
@@ -10,11 +10,12 @@ This README is for orientation only. Each topic below links to the document that
 
 | Responsibility | What it covers | Canonical documentation |
 | --- | --- | --- |
-| Specification design | Why the contract is designed as it is, and the constraints and review scenarios that apply when changing `AGENTS.md`. It remains publicly readable for anyone interested in the specification's rationale; the root guides reach it through this README rather than linking to it directly. | [docs/contract-design.md](docs/contract-design.md) |
-| Evaluation framework | A Python suite that runs Codex on each case in a fresh temporary workspace containing an unchanged copy of the root contract, then combines automated assertions with human review of selected behaviors. Results are evidence about those cases, not general compliance. | [docs/evaluations.md](docs/evaluations.md) |
+| Product requirements and specification design | Intended agent behavior and product constraints, alongside distinguishable rationale, design decisions, trade-offs, and review scenarios in one document. The requirements inventory is pending; existing clauses are not automatically accepted requirements. | [docs/contract-design.md](docs/contract-design.md), the designated owner |
+| Behavioral evaluation and evaluator verification | A Python suite runs Codex in fresh workspaces with the unchanged current contract; automated assertions and human review assess selected behaviors. Offline tests verify the machinery; E1–E40 specify evaluator behavior, distinct from product requirements. Results are evidence about the exercised cases, not general compliance. | [docs/evaluations.md](docs/evaluations.md) |
+| Engineering architecture | Authority, responsibilities, boundaries, cross-domain dependencies, and system-wide decisions with an index of narrower decision records. | [docs/architecture.md](docs/architecture.md) |
 | Documentation maintenance | Canonical ownership and editorial guidance for all repository documentation, including the root guides. | [docs/documentation-maintenance.md](docs/documentation-maintenance.md) |
 
-The framework depends on the specification: it evaluates the current root `AGENTS.md`, and its cases and review criteria cite that contract's clauses. The specification does not depend on the framework. [docs/architecture.md](docs/architecture.md) explains how these responsibilities fit together, their boundaries, and how a contract change can affect evaluation cases, rubrics, and documentation; the documents above own the detail.
+The current framework evaluates the root `AGENTS.md`, and its cases and review criteria cite contract clauses. Established product requirements guide development and intended evaluation expectations; explicit traceability is later work. The adopted contract depends on no internal engineering document or framework. Results enter human review and do not authorize changes to requirements, implementation, or expectations. [docs/architecture.md](docs/architecture.md) owns these relationships; the documents above own their detail.
 
 ## Directory layout
 
@@ -32,6 +33,7 @@ The framework depends on the specification: it evaluates the current root `AGENT
 | To | Go to |
 | --- | --- |
 | Understand how specification design, evaluation, and documentation maintenance fit together, and how a contract change can affect evaluation | [architecture.md](docs/architecture.md) |
+| Distinguish intended requirements from runtime rules and find decision ownership | [Development-time and runtime authority](docs/architecture.md#development-time-and-runtime-authority) and [Decisions](docs/architecture.md#decisions) |
 | Understand what the suite evaluates and the limits of its results | [Purpose and evaluation model](docs/evaluations.md#purpose-and-evaluation-model) |
 | Install prerequisites, authenticate, and run offline checks or cases | [Setup and running evaluations](docs/evaluations.md#setup-and-running-evaluations) |
 | Read outcomes, retained evidence, and investigate a failure | [Results, evidence, and failure investigation](docs/evaluations.md#results-evidence-and-failure-investigation) |
@@ -53,10 +55,12 @@ To understand or maintain the evaluation framework:
 3. Follow [install prerequisites](docs/evaluations.md#install-prerequisites) and [run the offline checks](docs/evaluations.md#run-offline-checks). They need no login and use no subscription allowance; live runs do, as [Run a case or the suite](docs/evaluations.md#run-a-case-or-the-suite) explains.
 4. Read the [architecture](docs/evaluations.md#architecture-extension-and-maintenance), then the [cases](docs/evaluations.md#cases-and-interpretation) and modules relevant to your work.
 
-To work on the contract itself, start with the reading guidance at the top of [contract-design.md](docs/contract-design.md). Edits to `AGENTS.md`, `CLAUDE.md`, or `.github/copilot-instructions.md` follow the contract's [protected-file rule](../AGENTS.md#38-instructions-protected-files-and-external-actions).
+To work on the contract itself, read the [authority model](docs/architecture.md#development-time-and-runtime-authority), then the reading guidance at the top of [contract-design.md](docs/contract-design.md). Its existing rationale remains available; extracting and accepting requirements by coherent topic is later work. Edits to `AGENTS.md`, `CLAUDE.md`, or `.github/copilot-instructions.md` follow the contract's [protected-file rule](../AGENTS.md#38-instructions-protected-files-and-external-actions).
 
 ## Documentation ownership
 
 Each kind of knowledge has one canonical owner. [Document ownership](docs/documentation-maintenance.md#document-ownership) states what each document owns, and [documentation-maintenance.md](docs/documentation-maintenance.md) holds the editing workflow and checks for keeping documents consistent.
+
+This README is the engineering entry point. Root product files contain no references or dependencies into `_internal/`, including optional navigation; internal documents may reference root files. The [accepted boundary decision](docs/architecture.md#requirements-led-engineering-and-productinternal-separation) records the scoped application of §3.6, with each README identifying documentation for its own audience.
 
 The root [README.md](../README.md) (an accessible introduction for potential adopters) and [README-powerusers.md](../README-powerusers.md) (detailed practical guidance for users) are user-facing. They may intentionally explain some of the same concepts at different depths, provided both stay consistent with `AGENTS.md` and neither defines competing rules. Internal engineering documents, including this README, apply ownership strictly: each detailed technical fact, requirement, procedure, or decision has one owner, and other documents summarize and link. [Public guides and internal engineering documents](docs/documentation-maintenance.md#public-guides-and-internal-engineering-documents) owns this distinction.

@@ -18,7 +18,7 @@ Read the first example for the overall process, then use the sections relevant t
 | How do I adopt this in an existing project? | [Alignment](#bring-an-existing-project-into-alignment) |
 | Is my tool loading the instructions? | [Compatibility and adoption checks](#tool-compatibility) |
 
-[AGENTS.md](AGENTS.md) defines the rules and exceptions. The engineering work behind the specification—its design, evaluation, and maintenance—is documented separately under [`_internal/`](_internal/README.md).
+[AGENTS.md](AGENTS.md) defines the rules and exceptions.
 
 ## From a request to a result
 

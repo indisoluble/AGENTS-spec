@@ -71,8 +71,6 @@ Instruction files cannot guarantee compliance. The tool's controls govern permis
 - **[Getting more from AGENTS.md](README-powerusers.md)** — practical examples, when the agent pauses, and existing-project alignment.
 - **[AGENTS.md](AGENTS.md)** — the complete operating rules, conditions, and exceptions.
 
-The specification's design, evaluation, and maintenance work is documented under [`_internal/`](_internal/README.md).
-
 ## License
 
 Licensed under [MIT No Attribution (MIT-0)](LICENSE).

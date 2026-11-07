@@ -1,6 +1,6 @@
 # AGENTS-spec internal engineering
 
-`_internal/` holds the engineering work behind the [AGENTS.md](../AGENTS.md) specification: product requirements and design rationale, behavioral evaluation and verification of its machinery, engineering architecture, and documentation governance. Product-requirements inventory and evaluation traceability remain pending. The contract, its tool bridges, and the guides for people adopting it live at the repository root, starting with [README.md](../README.md).
+`_internal/` holds the engineering work behind the [AGENTS.md](../AGENTS.md) specification: product requirements and design rationale, behavioral evaluation and verification of its machinery, engineering architecture, and documentation governance. Requirements classification and the provisional inventory are complete; candidate acceptance and traceability to the contract and evaluations remain pending. The contract, its tool bridges, and the guides for people adopting it live at the repository root, starting with [README.md](../README.md).
 
 The root [AGENTS.md](../AGENTS.md) is the self-contained normative product contract. Product requirements, accepted engineering decisions, and requester direction guide its evolution. Agents maintaining this repository may receive it through provider-specific instruction-loading mechanisms; when loaded, its applicable instructions govern their conduct within the actual instruction hierarchy and tool permissions. This current arrangement is not a permanent architectural requirement. [Development-time and runtime authority](docs/architecture.md#development-time-and-runtime-authority) owns these distinctions and their operational limits.
 
@@ -10,7 +10,7 @@ This README is for orientation only. Each topic below links to the document that
 
 | Responsibility | What it covers | Canonical documentation |
 | --- | --- | --- |
-| Product requirements and specification design | Intended agent behavior and product constraints, alongside distinguishable rationale, design decisions, trade-offs, and review scenarios in one document. The requirements inventory is pending; existing clauses are not automatically accepted requirements. | [docs/contract-design.md](docs/contract-design.md), the designated owner |
+| Product requirements and specification design | Intended agent behavior and product constraints, alongside distinguishable rationale, design decisions, trade-offs, and review scenarios in one document. The provisional inventory is complete; RC1–RC10 await acceptance, and existing clauses are not automatically accepted requirements. | [docs/contract-design.md](docs/contract-design.md), the designated owner |
 | Behavioral evaluation and evaluator verification | A Python suite runs Codex in fresh workspaces with the unchanged current contract; automated assertions and human review assess selected behaviors. Offline tests verify the machinery; E1–E40 specify evaluator behavior, distinct from product requirements. Results are evidence about the exercised cases, not general compliance. | [docs/evaluations.md](docs/evaluations.md) |
 | Engineering architecture | Authority, responsibilities, boundaries, cross-domain dependencies, and system-wide decisions with an index of narrower decision records. | [docs/architecture.md](docs/architecture.md) |
 | Documentation maintenance | Canonical ownership and editorial guidance for all repository documentation, including the root guides. | [docs/documentation-maintenance.md](docs/documentation-maintenance.md) |
@@ -55,7 +55,7 @@ To understand or maintain the evaluation framework:
 3. Follow [install prerequisites](docs/evaluations.md#install-prerequisites) and [run the offline checks](docs/evaluations.md#run-offline-checks). They need no login and use no subscription allowance; live runs do, as [Run a case or the suite](docs/evaluations.md#run-a-case-or-the-suite) explains.
 4. Read the [architecture](docs/evaluations.md#architecture-extension-and-maintenance), then the [cases](docs/evaluations.md#cases-and-interpretation) and modules relevant to your work.
 
-To work on the contract itself, read the [authority model](docs/architecture.md#development-time-and-runtime-authority), then the reading guidance at the top of [contract-design.md](docs/contract-design.md). Its existing rationale remains available; extracting and accepting requirements by coherent topic is later work. Edits to `AGENTS.md`, `CLAUDE.md`, or `.github/copilot-instructions.md` follow the contract's [protected-file rule](../AGENTS.md#38-instructions-protected-files-and-external-actions).
+To work on the contract itself, read the [authority model](docs/architecture.md#development-time-and-runtime-authority), then the reading guidance at the top of [contract-design.md](docs/contract-design.md). Its existing rationale remains available; reviewing and accepting RC1–RC10 by coherent topic is later work. Edits to `AGENTS.md`, `CLAUDE.md`, or `.github/copilot-instructions.md` follow the contract's [protected-file rule](../AGENTS.md#38-instructions-protected-files-and-external-actions).
 
 ## Documentation ownership
 

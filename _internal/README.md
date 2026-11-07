@@ -2,7 +2,7 @@
 
 `_internal/` holds the engineering work behind the [AGENTS.md](../AGENTS.md) specification: product requirements and design rationale, behavioral evaluation and verification of its machinery, engineering architecture, and documentation governance. Product-requirements inventory and evaluation traceability remain pending. The contract, its tool bridges, and the guides for people adopting it live at the repository root, starting with [README.md](../README.md).
 
-The root [AGENTS.md](../AGENTS.md) governs engineering work here as everywhere else in the repository. It remains the complete normative authority at runtime; internal product requirements guide development without adding consumer duties. [Development-time and runtime authority](docs/architecture.md#development-time-and-runtime-authority) explains that distinction and the current implementation limits.
+The root [AGENTS.md](../AGENTS.md) is the self-contained normative product contract. Product requirements, accepted engineering decisions, and requester direction guide its evolution. Codex currently loads it while maintaining this repository, so its applicable instructions govern that work within the actual instruction hierarchy and tool permissions. This current arrangement is not a permanent architectural requirement. [Development-time and runtime authority](docs/architecture.md#development-time-and-runtime-authority) owns these distinctions and their operational limits.
 
 This README is for orientation only. Each topic below links to the document that owns it; if this summary and a linked owner disagree, the owner is authoritative and this README needs correcting.
 

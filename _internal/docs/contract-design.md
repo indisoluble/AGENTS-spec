@@ -1,19 +1,88 @@
-# The design of AGENTS.md
+# Product requirements and design of AGENTS.md
 
-[AGENTS.md](../../AGENTS.md) is a reusable, opinionated contract with two ordered objectives: control token consumption through bounded, proportionate work, then keep the requester informed and in control of consequential direction. Necessary reasoning, work, and validation remain requirements within each increment. Canonical documentation preserves project knowledge for maintainers, users, and future agents. This guide explains the design choices, trade-offs, and constraints that inform changes to the contract.
+This document owns the product objectives, requirements, and constraints that guide the reusable, opinionated [AGENTS.md](../../AGENTS.md) contract, alongside the rationale, selected mechanisms, trade-offs, and significant historical alternatives explaining its design. These responsibilities are separated below. Internal requirements and explanations add no runtime duties: `AGENTS.md` owns the exact operative instructions delivered to consuming agents.
 
-For adoption, use [README.md](../../README.md). For practical guidance, use [Getting more from AGENTS.md](../../README-powerusers.md). This guide has four parts:
+For adoption, use [README.md](../../README.md); for practical guidance, use [Getting more from AGENTS.md](../../README-powerusers.md). For engineering-system relationships and authority, use [architecture.md](architecture.md#development-time-and-runtime-authority); for editorial procedures and canonical ownership, use [documentation-maintenance.md](documentation-maintenance.md#document-ownership). This reference explains product intent and design, rather than supplying a complete product-development process, branching strategy, workflow engine, or framework tutorial.
 
-1. [Design overview](#design-overview): the [design goals and boundaries](#design-goals-and-boundaries) and [a worked task](#how-the-design-works-in-a-task) showing how the parts connect.
-2. [Design choices](#design-choices): [workflow choices](#workflow-design-choices) for the contract's layers, scope, learning, investigation, and requester control; [engineering choices](#engineering-choices) and [documentation choices](#documentation-choices) for methods, reasons, and conditions; and [why the bridges differ](#why-the-bridges-differ) across tools.
-3. [Evolving the contract](#evolving-the-contract): [method selection](#choosing-or-replacing-methods), [portability](#keeping-the-contract-portable), and [current wording trade-offs](#current-wording-trade-offs) as constraints on changing `AGENTS.md`.
-4. [Design reference](#design-reference): [design scenarios](#assessing-design-changes) for reviewing changes and the exact [reference assignments](#principles-and-reference-boundaries).
+Read by question:
 
-For a sequential understanding of the design, read the parts in order. For a proposed change, start with the relevant design choices, then use the evolution constraints and design reference to assess it.
+| Question | Start here |
+| --- | --- |
+| What is intended, established, or still provisional? | [Product objectives, requirements, and constraints](#product-objectives-requirements-and-constraints) |
+| Why these mechanisms, and how do they interact? | [Design choices](#design-choices), including the [worked task](#how-the-design-works-in-a-task) |
+| Which decisions and older alternatives affect interpretation? | [Decision status and historical alternatives](#decision-status-and-historical-alternatives) |
+| How should the contract evolve? | [Evolving the contract](#evolving-the-contract) |
+| What distinctions and sources matter in review? | [Design reference](#design-reference) |
 
-## Design overview
+## Product objectives, requirements, and constraints
 
-### Design goals and boundaries
+### Classification and evidence
+
+The classification concerns engineering intent, not whether a currently loaded instruction applies to an agent. Existing clauses prove what the runtime contract presently specifies; they do not independently prove that every behavior or selected method is an accepted product requirement. An authorized redesign can reconsider mechanisms, including PDSA and the three-layer organization. The engineering architecture is provider-neutral; the current loading of this repository's contract during maintenance is not a permanent self-governance requirement. [Development-time and runtime authority](architecture.md#development-time-and-runtime-authority) owns that distinction.
+
+| Status | Evidence and interpretation in this document |
+| --- | --- |
+| **Established objective or product requirement** | Supported by explicit requester direction or accepted project records beyond the implemented clause alone. Objectives state desired outcomes; the requirement below states a verifiable product constraint. |
+| **Established constraint** | A retained, documented compatibility, portability, or design boundary. Its original strength, exceptions, measurement, and revision conditions remain attached; a preferred target is not a hard ceiling. |
+| **Design rationale or selected decision** | Reasons for a mechanism, its interactions, costs, and alternatives. Selection in the current design does not make the mechanism a permanent product requirement. Explicit acceptance and supersession are distinguished in the [decision index](#decision-status-and-historical-alternatives). |
+| **Current implementation description** | An explanation checked against `AGENTS.md` for its present modality, trigger, scope, and exceptions. The detailed [design choices](#design-choices) and [assessment scenarios](#assessing-design-changes) contain these descriptions alongside rationale; neither independently accepts them as product requirements. |
+| **Requirement candidate — provisional** | Intended behavior inferred from rationale, examples, or clauses without independently established acceptance. The [candidate inventory](#requirement-candidates) identifies topics and acceptance decisions still needed. |
+| **Historical or superseded reasoning** | Significant earlier mechanisms and reasons, with source context and current replacement links. These explain evolution; they are not current policy or accepted requirements. |
+
+The ordered objectives were already recorded in this guide and independently in the [documentation reader guidance](documentation-maintenance.md#reader-paths) and [root adoption guide](../../README.md). The accepted [requirements-led engineering decision](architecture.md#requirements-led-engineering-and-productinternal-separation) and the request for this restructuring establish the self-contained product boundary and distinguish intended behavior from implementation. The existing method-selection and portability constraints are retained under the request to preserve those constraints; that does not accept additional agent behavior inferred from them. Detailed behavioral acceptance cannot be reconstructed merely from an “accepted contract” commit title or normative wording, so it remains provisional where no separate evidence is available.
+
+### Established objectives
+
+| Objective | Intended outcome and qualifications |
+| --- | --- |
+| **O1 — Control token consumption, first** | Bound the next commitment and keep work proportionate. The current design uses small, meaningful increments and progressive detail. Necessary reasoning, completeness, consistency, and validation remain part of the work; a smaller commitment is not permission for insufficient depth. This is a qualitative objective, with no token quota or guarantee of savings. |
+| **O2 — Requester awareness and consequential control, second** | Keep the requester informed and in control of consequential direction without constant supervision. Routine execution can remain autonomous within authorization. The exact consultation, notification, reporting, and limit mechanisms are explained below; this objective alone does not establish each mechanism's permanent trigger or strength. |
+| **Knowledge continuity** | Preserve project facts and reasons for maintainers, users, and future agents through reliable canonical documentation. This supports both ordered objectives without making every discussion a permanent record or every method a deliverable. |
+
+These are intended effects. Textual consistency, file size, message counts, and selected methods do not establish measured token savings, comprehension, or agent adherence. Quantitative thresholds and comprehensive behavioral acceptance criteria have not been independently established here.
+
+### Established product requirement
+
+**PR1 — Self-contained operating contract.** The delivered `AGENTS.md` contract shall contain its complete operative instructions without depending on guides, bridge-specific policy, or internal engineering documents for additional operating duties.
+
+This restates the accepted product boundary in verifiable EARS form, rather than accepting every current clause as a requirement. Bridges may still be needed for a provider to load the contract. Guides may explain it, and adopting-project artifacts supply that project's facts, requirements, build commands, and architecture. None supplies hidden generic operating policy. A standalone reading can check textual completeness; loading and actual agent behavior require their own evidence.
+
+### Established constraints
+
+| Constraint | Retained scope, strength, and authoritative detail |
+| --- | --- |
+| **Authority and capability boundaries** | Reuse operates within the actual tool hierarchy, permissions, and native approvals. The contract supplies neither capabilities nor technical enforcement, and cannot invent requester authority or missing project requirements. The [authority model](architecture.md#development-time-and-runtime-authority) owns engineering/runtime relationships; [design boundaries](#design-goals-and-boundaries) explain the product consequences. Detailed requester-interaction behavior remains in the candidate inventory where not separately established. |
+| **Method selection** | Recognized practices, freely accessible material sufficient for the assigned role, and distinct responsibilities constrain additions and replacements unless explicitly revised. [Choosing or replacing methods](#choosing-or-replacing-methods) owns the full criteria and their consequences. These criteria do not freeze PDSA, Simple Design, or another named mechanism. |
+| **Portability and standing context** | A strongly preferred target of about 24,000 LF-normalized UTF-8 bytes applies to the whole contract, with qualified excess, deliberate compression review, fidelity/comprehensibility priority, and headroom under applicable combined loading limits. It is not a task-effort allowance or a universal hard ceiling. [Keeping the contract portable](#keeping-the-contract-portable) owns the exact measurement, exceptions, and provider-evidence qualifications. |
+
+The root-product/internal-engineering separation and document ownership are accepted engineering boundaries owned by [architecture.md](architecture.md#requirements-led-engineering-and-productinternal-separation), rather than additional operating requirements for adopting projects. Evaluator requirements [E1–E40](evaluations.md#verifiable-requirements) govern the evaluation machinery. Fictional application requirements in examples or fixtures govern only those illustrated applications; none is an AGENTS-spec product requirement.
+
+### Requirement candidates
+
+**All RC entries are provisional.** They identify potential enduring outcomes and unresolved acceptance choices, not newly accepted requirements or proposals to change the loaded contract. Current operative detail remains in the linked clauses and explanations. Acceptance needs requester direction or an accepted project record settling the relevant outcome, modality, triggers, conditions, exceptions, and scope; retaining a detailed explanation below supplies neither that acceptance nor implementation authority.
+
+| Candidate topic | Evidence and current explanation | Decision still needed |
+| --- | --- | --- |
+| **RC1 — Bounded, complete commitments** | [Small commitments with sufficient depth](#small-commitments-with-sufficient-depth); current §§1.1 and 2.3. Supports O1, including decision-level depth, cumulative reassessment, and coherence/recovery. | Which detailed decomposition, continuation, and recovery expectations are enduring product requirements, and which are the selected implementation? No numeric budget, score, or unique sequence is established. |
+| **RC2 — Evidence-led planning and knowledge ownership** | [Documentation choices](#documentation-choices) and [completion/prediction distinctions](#completion-predictions-and-bounded-investigation); current §1.1. | Determine which evidence/intent distinctions and unresolved-conflict responses are product requirements, and at what strength, without making every artifact category or current ordering permanent. |
+| **RC3 — Authorization and consequential consultation** | [Authorization and requester decisions](#authorization-and-requester-decisions); current §§2.1–2.3, 2.5, and 3.8. | Confirm detailed scope boundaries, routine permissions, prior-direction triggers and exceptions, requester limits versus expectations, and protection of supplied paths. Current MUST/SHOULD/MAY distinctions cannot be inferred from the broad objective alone. |
+| **RC4 — Purpose-based inquiry and timely awareness** | [Completion, predictions, and bounded investigation](#completion-predictions-and-bounded-investigation); current §§1.1, 2.4. | Confirm context-gathering exclusions, notification timing and its already-communicated exception, evidence sufficiency, bounds, and justified continuation, without reinstating the historical announcement/baseline mechanism. |
+| **RC5 — Completion evidence and learning** | [Learning throughout the work](#learning-throughout-the-work) and [validation and test evidence](#validation-and-test-evidence); current §§1, 1.3. | Determine desired learning and completion outcomes separately, including the status of checks, availability/substitution rules, and appropriate-test recommendations. A disproved prediction does not alone establish incomplete research or fulfilled implementation. PDSA and Given/When/Then remain selected techniques. |
+| **RC6 — Proportionate reports and continuity** | [Reporting and continued execution](#reporting-and-continued-execution); current §§2.3, 3.7. | Confirm consolidation occasions, advance disclosures, initial framing, optional useful updates, and handoff/resumption content at their current distinct strengths; no automatic report or pause per increment follows from O2. |
+| **RC7 — Durable knowledge and decision authority** | [Authorization and requester decisions](#authorization-and-requester-decisions), [ADRs](#adrs-preserving-the-reasons-for-lasting-choices), and [debt](#recording-technical-debt); current §§2.1, 3.2–3.4. | Confirm material-and-durable record triggers, assessment-write permissions/exclusions, significant-proposal timing/status, optional debt recording and related duties. Recording and acceptance of a decision remain distinct from permission to implement it. |
+| **RC8 — Engineering quality and preservation** | [Engineering choices](#engineering-choices); current §§1.2–1.3. | Determine which quality/preservation outcomes and qualified recommendations are product requirements without freezing each technique, adding speculative complexity, or treating line count as simplicity. |
+| **RC9 — Requirements and documentation maintenance** | [Documentation choices](#documentation-choices); current §§3.1, 3.5–3.6. | Confirm new/revised-requirement handling, affected-owner/direct-dependent scope, architectural coverage, and reader needs. EARS, arc42, ADRs, and Diátaxis are selected methods, not independently permanent product obligations. No repository-wide audit or new guide follows automatically. |
+| **RC10 — Reference and bridge behavior** | [Why the bridges differ](#why-the-bridges-differ) and [reference boundaries](#principles-and-reference-boundaries); current §§3.8–3.9 and supplied bridges. | Confirm detailed compatibility, provenance, failure-to-load, and narrow-consultation expectations. Tool-specific loading mechanisms and the absence of a common bootstrap protocol are current design choices, not universal provider behavior. |
+
+This inventory is deliberately conservative: absence of recovered acceptance evidence is not evidence that a behavior was rejected or never accepted. The unresolved question is its independently established product status. No comprehensive requirement-to-clause or requirement-to-evaluation coverage map is claimed; evaluation traceability remains subsequent work.
+
+## Design choices
+
+**Status: selected mechanisms, rationale, and current implementation descriptions.** The sections below preserve the reasons, interactions, and qualifications of the present design. Statements about what an agent must, should, or may do explain `AGENTS.md` at its current strength; they are not an additional operating contract or acceptance of the provisional RC topics. The named methods and exact three-layer arrangement are revisable design choices under the established objectives and constraints.
+
+### Design overview
+
+#### Design goals and boundaries
 
 The motivating risk is especially visible in a new or poorly documented project. Without established requirements, interfaces, decisions, and conventions, planning and autonomous design have fewer constraints. Even a bounded objective can permit a large amount of work. Small, meaningful increments limit the next commitment, while prior consultation reserves consequential architectural and lasting design direction for the requester unless the specific choice is already authorized. The absence of an established architecture does not confer unlimited design authority.
 
@@ -24,35 +93,6 @@ Reports consolidate unreported work at task completion, handoff, or when seeking
 The contract is self-contained. Guides explain it and bridges help tools apply it; neither supplies hidden operating duties. Project facts, build commands, requirements, and architecture come from the adopting project's code and documentation. This separation supports reuse without embedding an application's design in generic instructions.
 
 Requester instructions take priority within the tool's actual hierarchy and permissions. The tool determines discovery, scope, and precedence of directory instructions, which may add subtree rules only when compatible with the root contract. The contract cannot supply capabilities, enforce permissions, or override native approvals. Its protection of instruction files and its authorization rules for external actions keep those limits explicit. It also does not supply a complete product-development process, branching strategy, workflow engine, or framework tutorial. Established methods cannot invent missing requirements or requester authority.
-
-### How the design works in a task
-
-Consider the CSV-import scenario from the [practical walkthrough](../../README-powerusers.md#from-a-request-to-a-result): report invalid rows and continue with valid rows. The **task objective** is that overall outcome. An **increment** is the next deliberately small, bounded step toward it, normally useful, understandable, reviewable, and verifiable on its own.
-
-[PDSA—Plan–Do–Study–Act](https://deming.org/explore/pdsa/) begins with that request. Plan selects and bounds the work; Do performs it; Study assesses completion and the approach; Act uses the findings. Throughout, progression guards determine whether work may proceed, and triggered rules apply when their conditions arise; the [layer design](#three-interacting-layers) explains this division.
-
-1. **Plan:** establish the objective and permitted work, then inspect the relevant project context. Suppose the requirements settle the input format, invalid-row rules, and line-number convention; existing tests support the reader's suitability; and inspection shows that field-count validation is missing. The row-processing code exposes the fields, header, and line number, suggesting a local implementation.
-
-   This evidence supports choosing field-count validation: it advances an agreed requirement, addresses one concern, and can produce a useful, testable result without implementing every remaining invalid-row rule. The scope includes the affected code, tests, and documentation. Its limited dependencies and expected ease of reversal support a small commitment; neither substitutes for validation.
-
-   Define **acceptance conditions**—reject mismatched rows, report their line numbers, and continue with valid rows, including one after a rejection—and a **prediction** that the existing row boundary will support the approach. These derived conditions follow the agreed requirements and define this increment's completion; they are not new system requirements. Selection, scope, conditions, and approach can be refined together as context becomes clear, within the governing instructions and requirements. Later work remains at outline level.
-
-   The initial planning statement in the [practical walkthrough](../../README-powerusers.md#from-a-request-to-a-result) relates the overall task to the first increment's objective and bounds. Preliminary context makes the plan meaningful; communicating it before substantial work lets the requester understand the direction and next action. The statement creates no approval checkpoint.
-2. **Do:** implement the validation using current project conventions and Simple Design. Add relevant tests and update affected documentation at its authoritative location. Significant lasting choices need ADRs; choices requiring prior consultation must receive requester direction before adoption or implementation.
-3. **Study:** check acceptance before completing the increment, including a valid row after a rejection. Separately assess whether the predicted local approach sufficed. Failed, unavailable, or omitted checks remain subject to disclosure under the reporting rules.
-4. **Act:** use the evidence to retain, revise, or discard the approach within authorization. Material findings that are durable project knowledge trigger the [record rule](../../AGENTS.md#32-durable-findings-and-permanent-records). The [composition rules](../../AGENTS.md#4-how-the-layers-compose) then lead to finishing, a handoff, seeking required direction, or planning the next increment already covered by authorization. Continuing to another increment does not require drafting or emitting a routine report; reporting follows [§3.7](../../AGENTS.md#37-reporting).
-
-The initial choice therefore depends on what Plan establishes. Unsettled consequential requirements need requester input; uncertainty about the reader may call for a bounded investigation. A new consequential design direction also needs prior requester direction unless specifically authorized. Within those boundaries, choosing and defining routine increments remains the agent's responsibility.
-
-The example connects the design's parts. Requirements provide intended behavior; inspection and existing checks establish the starting point; Study supplies new evidence; Act uses it to inform subsequent Plan phases. Records preserve durable material findings and lasting choices; transient task facts follow the reporting rules without requiring permanent records. The supported local validation approach may help plan another rule, while evidence of wider parser limitations changes the basis for that next decision.
-
-The field-count result can therefore inform another authorized validation increment before any routine chat report is produced. A local implementation correction can proceed within the existing direction and limits. A proposal to change the shared parser's established error contract instead requires requester direction before adoption or implementation unless that specific change is already authorized. At completion, handoff, or when seeking input, the agent consolidates unreported work. A requested operator guide could be another increment, shaped by its reader's need. Neither a completed step nor a named method automatically creates an ADR, guide, or approval requirement.
-
-The [practical walkthrough](../../README-powerusers.md#from-a-request-to-a-result) shows the user-facing interaction. The following sections explain the reasons and boundaries behind it.
-
-## Design choices
-
-Each choice below connects a design problem with the approach taken, its reasons, and its trade-offs. The linked `AGENTS.md` clauses remain authoritative for exact operating behavior.
 
 ### Workflow design choices
 
@@ -181,6 +221,31 @@ The design permits less routine visibility during autonomous work while requirin
 
 Reports remain proportionate and follow the contract's requirements for content, file delivery, and blocked-edit fallbacks. The [usage guide](../../README-powerusers.md#assess-the-result) explains what the requester receives.
 
+### How the design works in a task
+
+Consider the CSV-import scenario from the [practical walkthrough](../../README-powerusers.md#from-a-request-to-a-result): report invalid rows and continue with valid rows. The **task objective** is that overall outcome. An **increment** is the next deliberately small, bounded step toward it, normally useful, understandable, reviewable, and verifiable on its own.
+
+[PDSA—Plan–Do–Study–Act](https://deming.org/explore/pdsa/) begins with that request. Plan selects and bounds the work; Do performs it; Study assesses completion and the approach; Act uses the findings. Throughout, progression guards determine whether work may proceed, and triggered rules apply when their conditions arise; the [layer design](#three-interacting-layers) explains this division.
+
+1. **Plan:** establish the objective and permitted work, then inspect the relevant project context. Suppose the requirements settle the input format, invalid-row rules, and line-number convention; existing tests support the reader's suitability; and inspection shows that field-count validation is missing. The row-processing code exposes the fields, header, and line number, suggesting a local implementation.
+
+   This evidence supports choosing field-count validation: it advances an agreed requirement, addresses one concern, and can produce a useful, testable result without implementing every remaining invalid-row rule. The scope includes the affected code, tests, and documentation. Its limited dependencies and expected ease of reversal support a small commitment; neither substitutes for validation.
+
+   Define **acceptance conditions**—reject mismatched rows, report their line numbers, and continue with valid rows, including one after a rejection—and a **prediction** that the existing row boundary will support the approach. These derived conditions follow the agreed requirements and define this increment's completion; they are not new system requirements. Selection, scope, conditions, and approach can be refined together as context becomes clear, within the governing instructions and requirements. Later work remains at outline level.
+
+   The initial planning statement in the [practical walkthrough](../../README-powerusers.md#from-a-request-to-a-result) relates the overall task to the first increment's objective and bounds. Preliminary context makes the plan meaningful; communicating it before substantial work lets the requester understand the direction and next action. The statement creates no approval checkpoint.
+2. **Do:** implement the validation using current project conventions and Simple Design. Add relevant tests and update affected documentation at its authoritative location. Significant lasting choices need ADRs; choices requiring prior consultation must receive requester direction before adoption or implementation.
+3. **Study:** check acceptance before completing the increment, including a valid row after a rejection. Separately assess whether the predicted local approach sufficed. Failed, unavailable, or omitted checks remain subject to disclosure under the reporting rules.
+4. **Act:** use the evidence to retain, revise, or discard the approach within authorization. Material findings that are durable project knowledge trigger the [record rule](../../AGENTS.md#32-durable-findings-and-permanent-records). The [composition rules](../../AGENTS.md#4-how-the-layers-compose) then lead to finishing, a handoff, seeking required direction, or planning the next increment already covered by authorization. Continuing to another increment does not require drafting or emitting a routine report; reporting follows [§3.7](../../AGENTS.md#37-reporting).
+
+The initial choice therefore depends on what Plan establishes. Unsettled consequential requirements need requester input; uncertainty about the reader may call for a bounded investigation. A new consequential design direction also needs prior requester direction unless specifically authorized. Within those boundaries, choosing and defining routine increments remains the agent's responsibility.
+
+The example connects the design's parts. Requirements provide intended behavior; inspection and existing checks establish the starting point; Study supplies new evidence; Act uses it to inform subsequent Plan phases. Records preserve durable material findings and lasting choices; transient task facts follow the reporting rules without requiring permanent records. The supported local validation approach may help plan another rule, while evidence of wider parser limitations changes the basis for that next decision.
+
+The field-count result can therefore inform another authorized validation increment before any routine chat report is produced. A local implementation correction can proceed within the existing direction and limits. A proposal to change the shared parser's established error contract instead requires requester direction before adoption or implementation unless that specific change is already authorized. At completion, handoff, or when seeking input, the agent consolidates unreported work. A requested operator guide could be another increment, shaped by its reader's need. Neither a completed step nor a named method automatically creates an ADR, guide, or approval requirement.
+
+The [practical walkthrough](../../README-powerusers.md#from-a-request-to-a-result) shows the user-facing interaction. The following sections explain the reasons and boundaries behind it.
+
 ### Engineering choices
 
 #### Simple Design: choosing what the current solution needs
@@ -259,7 +324,7 @@ This defines the required synchronization work without making every edit a repos
 
 Applicable topics set the target coverage. Architecture content uses known facts and keeps material unknowns visible; empty headings and invented details do not establish coverage. An uncovered topic is a known gap that triggers an improvement proposal, which authorized work should implement and the requester may decline, postpone, or limit, so a partial or minimal architecture document does not itself breach the contract. [Incremental documentation](https://faq.arc42.org/questions/B-14/) and [appropriate depth](https://faq.arc42.org/questions/B-4/) support keeping content useful as the system develops. [Quality scenarios](https://docs.arc42.org/section-10/) make goals assessable: “imports should be fast” still needs an agreed workload and measure.
 
-One architecture document is the initial SHOULD default, using the existing documentation folder stated in `README.md`, otherwise repository-root `docs/`. Because root `docs/` is the standard default, `README.md` needs to state documentation locations only when they differ from it; creating a document in `docs/` therefore needs no `README.md` edit. This keeps early information together. An adequate existing arrangement can remain, and coherent parts can separate as reading and maintenance warrant it. Layout is flexible; known coverage gaps still require proposals and warrant improvements within authorized scope, subject to requester limits or deferral. Summaries link to canonical requirements and ADRs, while implementation detail stays near code and tests.
+One architecture document is the initial SHOULD default, using the existing documentation folder stated in `README.md`, otherwise repository-root `docs/`. Because root `docs/` is the standard default, `README.md` needs to state documentation locations only when they differ from it; creating a document in `docs/` therefore needs no `README.md` edit. This keeps early information together. The accepted [product/internal separation decision](architecture.md#requirements-led-engineering-and-productinternal-separation) owns the scoped README interpretation for this repository. An adequate existing arrangement can remain, and coherent parts can separate as reading and maintenance warrant it. Layout is flexible; known coverage gaps still require proposals and warrant improvements within authorized scope, subject to requester limits or deferral. Summaries link to canonical requirements and ADRs, while implementation detail stays near code and tests.
 
 Topic 11 covers known risks as well as technical debt under the contract's definition. The risk category is not restricted to internal-quality compromises: external dependencies and operational circumstances can create known risks even when implementation quality is adequate. The distinction preserves the scope of [arc42's risks and debt topic](https://docs.arc42.org/section-11/) without classifying every risk as debt or importing an additional risk-management procedure.
 
@@ -291,6 +356,8 @@ New guides require an explicitly requested or agreed need; simple or low-level s
 
 ### Why the bridges differ
 
+The provider explanations here retain their existing source provenance; the [recorded evidence dates](../../README-powerusers.md#evidence-dates) still apply, and this restructuring does not refresh them. Actual support needs checking in the adopting environment.
+
 Both bridges apply the same local contract through their tool's instruction mechanisms. [CLAUDE.md](../../CLAUDE.md) uses `@AGENTS.md`, Claude Code's [native import syntax](https://code.claude.com/docs/en/memory#import-additional-files), to include the referenced content. The single line can therefore perform its loading role.
 
 [Copilot support](https://docs.github.com/en/copilot/reference/custom-instructions-support) varies by interface. A Markdown link identifies a file but is not a universal import mechanism. The supplied bridge explicitly directs reading and following the local contract within the actual hierarchy and permissions. Neither supplied bridge defines independent behavior for a failure to load the contract. The contract cannot govern an agent that never received it, so the package supplies no common stop/report/resume protocol for that case. Actual tool and requester instructions govern the situation. The [practical compatibility guidance](../../README-powerusers.md#tool-compatibility) explains this limitation and adoption diagnostics; it adds no fallback operating policy.
@@ -300,6 +367,57 @@ The bridge-only role and special edit-request protection apply to the three supp
 Discovery, inclusion, precedence, and application are distinct. [VS Code's conflict guidance](https://code.visualstudio.com/docs/agent-customization/custom-instructions#_resolve-conflicting-instructions), its [instruction settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#_custom-instructions-settings), and [GitHub.com's precedence guidance](https://docs.github.com/en/copilot/concepts/prompting/response-customization#precedence-of-custom-instructions) describe different aspects. File order or a link alone cannot establish all four. The [adoption checks](../../README-powerusers.md#check-adoption) and [recorded evidence dates](../../README-powerusers.md#evidence-dates) qualify the integration guidance; exact settings and support depend on the provider's documentation and the actual environment.
 
 The Copilot title and header identify the associated release and upstream origin. Its release date and source URL match `AGENTS.md`. Metadata adds no policy authority, and the adopted local contract remains canonical. Permitting provenance does not require a header on the one-line Claude import. Minimality preserves each bridge's loading and application role.
+
+## Decision status and historical alternatives
+
+### Selected design and retained decisions
+
+This index identifies status and points to the reasons and consequences already owned here. It does not turn each explanation into an ADR or independently accept a product requirement. Engineering-system and evaluation-specific decisions stay with the [architecture decision index](architecture.md#decisions) and [evaluation documentation](evaluations.md); they are not copied here.
+
+| Choice | Status and rationale location |
+| --- | --- |
+| Separate work cycle, progression guards, and triggered rules | **Selected current design.** [Three interacting layers](#three-interacting-layers) explains cross-phase concerns, composition, and the rejected implication that placement confines a duty to a phase. No measured benefit or permanent three-layer requirement is claimed. |
+| Bounded commitments with PDSA and focused practices | **Selected current design; recorded as sufficient for the agreed design.** [Learning](#learning-throughout-the-work), [engineering choices](#engineering-choices), and [method selection](#choosing-or-replacing-methods) explain complementary roles. Additional umbrella frameworks were not needed; future replacement is possible under the selection criteria. |
+| Role-specific knowledge ownership | **Selected current design; earlier total ordering rejected/superseded.** [Documentation choices](#documentation-choices) retains why no global artifact precedence fits different knowledge owners, and how unresolved consequential conflicts are handled. |
+| Provider-specific instruction bridges | **Selected current integration design.** [Why the bridges differ](#why-the-bridges-differ) retains native import versus explicit read/follow, provenance, no common bootstrap policy, and actual-provider limits. A link is not treated as a universal import. |
+| Qualified size target and compact wording | **Retained established constraint; identified wording compromises recorded as accepted in the existing design account.** [Portability](#keeping-the-contract-portable) and [wording trade-offs](#current-wording-trade-offs) retain the exception, review conditions, and limited acceptance. This does not extend acceptance to further precision loss. |
+| Effort baselines, mandatory inquiry framing, and routine-report suppression | **Historical/superseded.** The alternatives below preserve their control and visibility rationale; current §§2.3–2.4 and 3.7 describe different mechanisms. |
+
+### Historical source and interpretation
+
+The historical source is [`README-maintainers.md` on PDSA at `9a078b3`](https://github.com/indisoluble/AGENTS-spec/blob/9a078b3833297ca33357391bb60e6d469bceeff4/README-maintainers.md). The current guide descends from it through accepted-contract alignment and later moves; relevant records include [`c4bc519`](https://github.com/indisoluble/AGENTS-spec/commit/c4bc51938ef7a4890f1f353e46e764f226c3b42f) and [`96947a8`](https://github.com/indisoluble/AGENTS-spec/commit/96947a8a8644e744525c0209dcc2a5b290f3589f). These identify repository evidence, not new external-source verification. Historical explanations below preserve significant mechanisms and reasons without restoring their operative force. The current explanations linked beside them own present interpretation.
+
+### Superseded effort-baseline checkpoint
+
+**Historical mechanism.** The PDSA version established both an increment baseline when planning that increment and a cumulative-task baseline at task start, using requester direction where supplied and otherwise agent judgment without routine notification. Baselines could be qualitative; they were working state rather than token quotas, worksheets, or required project records. New evidence changed current estimates, but growth was assessed against the established baselines rather than the latest estimate. A material increase required reassessment, an explanation of what changed, unfinished work and uncertainty, and the smallest useful complete next step, followed by requester direction before taking on the added work, even within an unchanged broad objective and authorization.
+
+Only requester direction could revise a baseline. Approval of disclosed growth revised the affected baselines to include only that commitment, avoiding repeated consultation for already approved effort while leaving later growth detectable. A new increment baseline could not absorb growth already discovered without direction, and new increments, attempts, and handoffs could not reset the task baseline. Handoffs transferred the task baseline, any unfinished increment's baseline, and still-relevant approved revisions. A continuing agent missing them recovered the state or obtained direction before further effort-bearing work rather than setting fresh baselines.
+
+**Reason and trade-off.** A scope boundary alone did not prevent unexpectedly heavy work within one increment or cumulative growth through many small additions. Keeping original comparison points made those changes visible across attempts and contexts. The mechanism required judgment about qualitative baselines and material growth; it supplied no automatically enforced quota. The historical CSV walkthrough's unexpectedly larger shared-parser redesign therefore triggered a growth checkpoint in whichever phase it was found.
+
+**Current replacement.** [Authorization and requester decisions](#authorization-and-requester-decisions) explains requester-imposed limits, evidence-based cumulative reassessment, and consequential-direction consultation. Current §2.3 does not require agent-created increment/task baselines or consultation solely because an agent estimate grows. The current parser example distinguishes a routine correction from a new consequential direction or material departure. The old baseline state and automatic material-growth checkpoint are not current handoff or continuation requirements.
+
+### Superseded inquiry announcement and stopping rule
+
+**Historical mechanism.** Beyond exempt context gathering, inquiry required advance framing before starting or continuing: question, scope, objective, effort limit, and needed evidence. The agent could choose a useful bound without requester approval of every limit; there was no default amount, unit, or formula. Obtaining the evidence or reaching the declared limit ended that inquiry even if the answer remained unknown. A report then identified unmet acceptance conditions, missing evidence, uncertainty, and any need for broader research or design direction. The report itself was not an approval checkpoint.
+
+Existing scope and authority could permit a newly framed bounded attempt, but requester caps, checkpoints, unresolved consequential intent, missing evidence blocking safe continuation, and the historical material-growth rules still controlled it. Neither an exhausted allowance nor a negative finding granted authority. The declaration made commitment visible before consumption, but judgment about the bound supplied neither a tool-enforced timeout nor a token quota. Context gathering, including reading existing project documentation for a blocking question, remained exempt from that inquiry framing while still subject to scope and effort controls.
+
+**Current replacement.** [Completion, predictions, and bounded investigation](#completion-predictions-and-bounded-investigation) preserves the purpose-based boundary while explaining timely uncertainty/significance notification, including the already-communicated exception, and actual bounded conduct without a five-element announcement or declared allowance. Sufficient evidence ends inquiry; insufficient evidence at an increment's bounds requires reassessment before justified further investigation. There is no automatic inquiry-end report or new announcement per attempt. Optional requester limits remain binding. Removing the older framing mechanism establishes no behavioral equivalence or token-efficiency result.
+
+### Superseded report suppression and consultation strength
+
+**Historical report choice.** Routine report drafting as well as output was prohibited unless requested or required. Suppressing drafting aimed to avoid consuming effort preparing narration merely to withhold it. Reporting consolidated work at completion, handoff, or input requests, with advance disclosures affecting authorization or the next decision and an explicit inquiry-end report. Other disclosures had to join the next consolidated report unless earlier timing was explicit; this was mandatory, unlike the current recommendation that other information should normally join that report. Record maintenance retained its own timing. The trade-off described in that version was less routine visibility while authorized work continued; fewer reports were not measured token savings and reserved no review opportunity.
+
+**Current replacement.** [Reporting and continued execution](#reporting-and-continued-execution) explains the recommendation to minimize routine reports and keep intermediate communication concise and useful, with specific mandatory timings for consolidation, initial framing, inquiry notification, and advance disclosures affecting authorization or a decision requiring input. Useful intermediate updates are possible; the older categorical drafting/output ban and inquiry-end timing are superseded.
+
+**Historical consultation strength.** The PDSA account treated asking before unsettled consequential choices as a SHOULD, while material unresolved intent or permission and the baseline-growth checkpoint had their own mandatory force. The current [requester-interaction account](#authorization-and-requester-decisions) distinguishes the MUST for a new consequential architectural or lasting design direction or material departure unless specifically authorized, from the SHOULD for other unsettled material choices. Historical strength must not be substituted for the current clause. In both designs, a report or ADR could not retroactively authorize a choice.
+
+### Superseded method-reference inquiry exemption
+
+The historical reference account exempted narrow consultation to clarify a material method ambiguity from §2.4 inquiry framing, while requiring disclosure of the ambiguity, source, and interpretation and forbidding imported obligations. This kept a clarification link from becoming a full research assignment.
+
+The current [reference boundaries](#principles-and-reference-boundaries) retain limited consultation and no imported rules, but qualifying consultation now follows the purpose-based context/inquiry distinction and notification/conduct requirements, including the already-communicated exception. Clear rules must not be researched, and broader research needs explanation and requester direction. The former blanket inquiry exemption is historical only.
 
 ## Evolving the contract
 
@@ -312,6 +430,8 @@ The method set was selected for recognized practices, freely accessible material
 These selection criteria remain constraints on future additions or replacements unless explicitly revised. A proposed method change should explain the need it addresses, the accessibility of its required interpretive material, and any overlap or expansion of obligations. Changing a selection criterion is itself a design decision to identify explicitly; these constraints on the contract's evolution add no operating duties to ordinary project tasks.
 
 ### Keeping the contract portable
+
+The provider evidence supporting the choice below retains its recorded **2026-10-04** check date in the [evidence-date owner](../../README-powerusers.md#evidence-dates). It has not been newly verified by this restructuring; applicable limits still depend on the actual provider and environment.
 
 The entire `AGENTS.md` has a **strongly preferred target of about 24,000 UTF-8 bytes after normalizing line endings to LF**. Replace each CRLF pair and any remaining CR with LF before counting the whole file's UTF-8 bytes; do not otherwise trim or reformat its contents. LF and CRLF copies of the same content therefore have the same count. Normalized UTF-8 bytes remain the project's canonical measurement.
 
@@ -348,6 +468,8 @@ Acceptance of the current wording compromises covers only the identified trade-o
 Use this material when reviewing a proposed change or an explanation of the contract: the design scenarios check combinations of rules against their intended distinctions, and the reference assignments preserve attribution and consultation limits.
 
 ### Assessing design changes
+
+**Status: design-assessment scenarios against the current implementation, not independently accepted product requirements or evaluation results.** The rows preserve interpretation distinctions for textual review. The candidate inventory identifies where independent product acceptance remains unresolved. [Architecture](architecture.md#what-evaluation-evidence-can-establish) owns the relationship to behavioral evidence; [evaluations.md](evaluations.md#purpose-and-evaluation-model) owns evaluation strategy and limits. These scenarios establish neither comprehensive coverage nor a new evaluation procedure.
 
 The design can be assessed at two levels: whether the contract works as a self-contained set of instructions, and whether a proposed change preserves or deliberately alters the meaning of its clauses. A standalone reading tests the first; comparison of strength, trigger, scope, exception, and meaning tests the second. The detailed patterns, fields, and obligations remain in `AGENTS.md`.
 

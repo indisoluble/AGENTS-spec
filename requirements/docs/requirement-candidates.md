@@ -2,7 +2,7 @@
 
 This document is the canonical owner of the provisional RC1–RC10 inventory and its unresolved acceptance questions, transferred from [contract-design.md](../../_internal/docs/contract-design.md#requirement-candidates). [product-requirements.md](product-requirements.md) remains the canonical owner of established objectives, PR1, and product constraints; the [requirements entry point](../README.md) provides domain navigation.
 
-The detailed current semantics, mechanisms, rationale, trade-offs, decisions, historical alternatives, evolution, and assessment scenarios remain in [contract-design.md](../../_internal/docs/contract-design.md). Its explanations and the [candidate contract](../../contract/prerelease_AGENTS.md) are evidence of current implementation, not independent evidence of accepted enduring requirements. The candidate contract does not govern development of this repository; [architecture](../../_internal/docs/architecture.md#development-time-and-runtime-authority) owns the authority relationships.
+The detailed current semantics, mechanisms, rationale, trade-offs, decisions, historical alternatives, evolution, and assessment scenarios remain in [contract-design.md](../../_internal/docs/contract-design.md). Its explanations and the [candidate contract](../../contract/prerelease_AGENTS.md) are evidence of current implementation, not independent evidence of accepted enduring requirements. The candidate contract does not govern development of this repository; [architecture](../../docs/architecture.md#development-time-and-runtime-authority) owns the authority relationships.
 
 ## Status and provenance
 

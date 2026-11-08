@@ -1,6 +1,6 @@
 # Local coding-agent evaluations
 
-This document explains how to operate, interpret, and maintain the local evaluation suite. It owns the detailed documentation of the evaluation framework and its engineering decisions; [architecture.md](../../_internal/docs/architecture.md) explains how the framework relates to the specification and the rest of the engineering project, including how contract changes can affect cases and rubrics.
+This document explains how to operate, interpret, and maintain the local evaluation suite. It owns the detailed documentation of the evaluation framework and its engineering decisions; [architecture.md](../../docs/architecture.md) explains how the framework relates to the specification and the rest of the engineering project, including how contract changes can affect cases and rubrics.
 
 - [Purpose and evaluation model](#purpose-and-evaluation-model)
 - [Setup and running evaluations](#setup-and-running-evaluations)
@@ -637,7 +637,7 @@ Inspect the live run's selected case, assertions and reasons, initial/final byte
 
 ## Engineering decisions
 
-This section owns the complete evaluation-specific decision records; the [system-wide architecture](../../_internal/docs/architecture.md#decisions) owns cross-project relationships and system-wide decisions. The records retain their historical names, paths, commands, and migration qualifications. Use [setup and running evaluations](#setup-and-running-evaluations) and [directory layout and ownership](#directory-layout-and-ownership) for current operation.
+This section owns the complete evaluation-specific decision records; the [system-wide architecture](../../docs/architecture.md#decisions) owns cross-project relationships and system-wide decisions. The records retain their historical names, paths, commands, and migration qualifications. Use [setup and running evaluations](#setup-and-running-evaluations) and [directory layout and ownership](#directory-layout-and-ownership) for current operation.
 
 ### Restrictive evaluation-agent command permissions
 
@@ -651,7 +651,7 @@ This section owns the complete evaluation-specific decision records; the [system
 
 ### Evaluation framework package and verification hierarchy
 
-**Status:** Accepted. The requester selected this hierarchy after reviewing read-only assessments of alternatives and an incremental migration plan. The migration proceeds in separately reviewed increments; until each one lands, source and test paths elsewhere in [architecture.md](../../_internal/docs/architecture.md) and in [evaluations.md](evaluations.md) describe the layout that currently exists.
+**Status:** Accepted. The requester selected this hierarchy after reviewing read-only assessments of alternatives and an incremental migration plan. The migration proceeds in separately reviewed increments; until each one lands, source and test paths elsewhere in [architecture.md](../../docs/architecture.md) and in [evaluations.md](evaluations.md) describe the layout that currently exists.
 
 **Current-state note.** The `evals/` and root `tests/` layout, migration qualifications, commands, and path constraints in this record are historical. The later relocation places the project and package under `evaluations/`, with [`evaluations/__main__.py`](../__main__.py) as its entry point and [`CONTRACT_PATH`](../runtime/workspace.py) resolving to `contract/prerelease_AGENTS.md`. See [directory layout and ownership](#directory-layout-and-ownership), [setup and running evaluations](#setup-and-running-evaluations), and [verify a behavior change](#verify-a-behavior-change) for current structure, commands, and verification.
 
@@ -681,7 +681,7 @@ This section owns the complete evaluation-specific decision records; the [system
 - *Moving `offline_smoke.py` and the sandbox probe into subdirectories:* would change their documented commands.
 - *Test substitutes in runtime, or a shared path constant for the fake executable:* test-only code does not belong in production modules, and scenario tests that install the fake as a sandbox locate it directly instead of depending on the CLI harness.
 
-**Relation to the earlier decision.** The subdirectories rejected in [Integrated engineering architecture with focused detailed owners](../../_internal/docs/architecture.md#integrated-engineering-architecture-with-focused-detailed-owners) concerned the documents under `_internal/docs/`. This decision concerns code and test packages and leaves the documentation layout unchanged.
+**Relation to the earlier decision.** The subdirectories rejected in [Integrated engineering architecture with focused detailed owners](../../docs/architecture.md#integrated-engineering-architecture-with-focused-detailed-owners) concerned the documents under `_internal/docs/`. This decision concerns code and test packages and leaves the documentation layout unchanged.
 
 ## Verifiable requirements
 

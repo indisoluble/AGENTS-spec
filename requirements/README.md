@@ -12,7 +12,7 @@ The contract project determines how instructions express those outcomes. An exis
 
 The evaluation project's responsibility is to derive behavioral evaluations from product requirements and own the evaluation machinery and its evaluator requirements E1–E40. The current framework assesses the staged contract; explicit product-requirement traceability remains later work. Evaluation results supply evidence for review without accepting requirements or authorizing changes to them.
 
-Development agents are governed by applicable development instructions and developer direction, not the staged candidate contract. See [development-time and runtime authority](../_internal/docs/architecture.md#development-time-and-runtime-authority) for the authority and instruction-loading boundaries.
+Development agents are governed by applicable development instructions and developer direction, not the staged candidate contract. See [development-time and runtime authority](../docs/architecture.md#development-time-and-runtime-authority) for the authority and instruction-loading boundaries.
 
 ## Current authoritative sources
 
@@ -36,4 +36,4 @@ The established objectives, PR1, and constraints and the provisional RC1–RC10 
 
 The requirements baseline is not complete. Candidate acceptance, further requirements extraction, contract redesign, and requirement-to-evaluation traceability remain separate future work; this entry point performs none of them.
 
-For repository navigation, use the [engineering entry point](../_internal/README.md). [Architecture](../_internal/docs/architecture.md) owns cross-domain relationships; [documentation maintenance](../_internal/docs/documentation-maintenance.md#document-ownership) owns the documentation ownership map and editing guidance.
+For repository navigation, use the [engineering entry point](../_internal/README.md). [Architecture](../docs/architecture.md) owns cross-domain relationships; [documentation maintenance](../_internal/docs/documentation-maintenance.md#document-ownership) owns the documentation ownership map and editing guidance.

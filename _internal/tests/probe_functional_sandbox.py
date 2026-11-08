@@ -2,7 +2,7 @@
 
 Not named test_*.py: the ordinary offline suite must use only fake CLI processes.
 Run this separately when verifying the installed sandbox implementation.
-See [Functional-check execution](../docs/evaluations.md#functional-check-execution)
+See [Functional-check execution](../../evaluations/docs/evaluations.md#functional-check-execution)
 for the longer explanation and execution limits.
 """
 

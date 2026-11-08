@@ -60,7 +60,7 @@ This restates the accepted product boundary in verifiable EARS form, rather than
 | **Method selection** | Recognized practices, freely accessible material sufficient for the assigned role, and distinct responsibilities constrain additions and replacements unless explicitly revised. [Choosing or replacing methods](#choosing-or-replacing-methods) owns the full criteria and their consequences. These criteria do not freeze PDSA, Simple Design, or another named mechanism. |
 | **Portability and standing context** | A strongly preferred target of about 24,000 LF-normalized UTF-8 bytes applies to the whole contract, with qualified excess, deliberate compression review, fidelity/comprehensibility priority, and headroom under applicable combined loading limits. It is not a task-effort allowance or a universal hard ceiling. [Keeping the contract portable](#keeping-the-contract-portable) owns the exact measurement, exceptions, and provider-evidence qualifications. |
 
-The root-product/internal-engineering separation and document ownership are accepted engineering boundaries owned by [architecture.md](architecture.md#requirements-led-engineering-and-productinternal-separation), rather than additional operating requirements for adopting projects. Evaluator requirements [E1–E40](evaluations.md#verifiable-requirements) govern the evaluation machinery. Fictional application requirements in examples or fixtures govern only those illustrated applications; none is an AGENTS-spec product requirement.
+The root-product/internal-engineering separation and document ownership are accepted engineering boundaries owned by [architecture.md](architecture.md#requirements-led-engineering-and-productinternal-separation), rather than additional operating requirements for adopting projects. Evaluator requirements [E1–E40](../../evaluations/docs/evaluations.md#verifiable-requirements) govern the evaluation machinery. Fictional application requirements in examples or fixtures govern only those illustrated applications; none is an AGENTS-spec product requirement.
 
 ### Requirement candidates
 
@@ -508,7 +508,7 @@ The Copilot title and header identify the associated release and upstream origin
 
 ### Selected design and retained decisions
 
-This index identifies status and points to the reasons and consequences already owned here. It does not turn each explanation into an ADR or independently accept a product requirement. Engineering-system and evaluation-specific decisions stay with the [architecture decision index](architecture.md#decisions) and [evaluation documentation](evaluations.md); they are not copied here.
+This index identifies status and points to the reasons and consequences already owned here. It does not turn each explanation into an ADR or independently accept a product requirement. Engineering-system and evaluation-specific decisions stay with the [architecture decision index](architecture.md#decisions) and [evaluation documentation](../../evaluations/docs/evaluations.md); they are not copied here.
 
 | Choice | Status and rationale location |
 | --- | --- |
@@ -605,7 +605,7 @@ Use this material when reviewing a proposed change or an explanation of the cont
 
 ### Assessing design changes
 
-**Status: design-assessment scenarios against the current implementation, not independently accepted product requirements or evaluation results.** The rows preserve interpretation distinctions for textual review. The candidate inventory identifies where independent product acceptance remains unresolved. [Architecture](architecture.md#what-evaluation-evidence-can-establish) owns the relationship to behavioral evidence; [evaluations.md](evaluations.md#purpose-and-evaluation-model) owns evaluation strategy and limits. These scenarios establish neither comprehensive coverage nor a new evaluation procedure.
+**Status: design-assessment scenarios against the current implementation, not independently accepted product requirements or evaluation results.** The rows preserve interpretation distinctions for textual review. The candidate inventory identifies where independent product acceptance remains unresolved. [Architecture](architecture.md#what-evaluation-evidence-can-establish) owns the relationship to behavioral evidence; [evaluations.md](../../evaluations/docs/evaluations.md#purpose-and-evaluation-model) owns evaluation strategy and limits. These scenarios establish neither comprehensive coverage nor a new evaluation procedure.
 
 The design can be assessed at two levels: whether the contract works as a self-contained set of instructions, and whether a proposed change preserves or deliberately alters the meaning of its clauses. A standalone reading tests the first; comparison of strength, trigger, scope, exception, and meaning tests the second. The detailed patterns, fields, and obligations are specified in the [current-semantic topic sections](#current-semantics-vocabulary-and-coverage); `AGENTS.md` remains the normative runtime authority.
 

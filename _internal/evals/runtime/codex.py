@@ -1,6 +1,6 @@
 """Run a selected task with a dedicated, ChatGPT-authenticated Codex profile.
 
-See docs/evaluations.md for requirements, evidence, and execution boundaries.
+See evaluations/docs/evaluations.md for requirements, evidence, and execution boundaries.
 """
 
 import base64

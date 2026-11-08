@@ -1,7 +1,7 @@
 """A fully understood capacity conflict requiring a consequential trade-off.
 
 Automation protects operational state; alternatives and direction need human
-review. See docs/evaluations.md for the scenario and observation limits.
+review. See evaluations/docs/evaluations.md for the scenario and observation limits.
 """
 
 import json

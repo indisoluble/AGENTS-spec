@@ -1,7 +1,7 @@
 """Orchestrate functional checks, retain evidence, and interpret generic results.
 
 Scenarios supply ordered check sources, required files, and timeouts, and keep
-additional acceptance criteria local. See docs/evaluations.md for evidence and
+additional acceptance criteria local. See evaluations/docs/evaluations.md for evidence and
 error semantics; functional.py owns the sandboxed execution of each individual check.
 """
 

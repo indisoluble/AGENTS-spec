@@ -1,6 +1,6 @@
 """Own the dedicated evaluation profile and its authentication lifecycle.
 
-See docs/evaluations.md for credential storage, lifetime, and logout semantics.
+See evaluations/docs/evaluations.md for credential storage, lifetime, and logout semantics.
 """
 
 import json

@@ -1,6 +1,6 @@
 """The text-edit smoke case, exact-content grading, and default execution helper.
 
-See docs/evaluations.md for the suite's requirements and scope.
+See evaluations/docs/evaluations.md for the suite's requirements and scope.
 """
 
 from collections.abc import Callable, Mapping

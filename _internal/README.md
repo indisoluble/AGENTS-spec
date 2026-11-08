@@ -1,6 +1,6 @@
 # AGENTS-spec internal engineering
 
-`_internal/` holds the engineering work behind the [AGENTS.md](../contract/prerelease_AGENTS.md) specification: product requirements and design rationale, behavioral evaluation and verification of its machinery, engineering architecture, and documentation governance. The contract, its tool bridges, and the guides for people adopting it are staged under `contract/` with `prerelease_` filenames, starting with [README.md](../contract/prerelease_README.md).
+`_internal/` holds the engineering work behind the [AGENTS.md](../contract/prerelease_AGENTS.md) specification: product requirements and design rationale, behavioral evaluation and verification of its machinery, engineering architecture, and documentation governance. Evaluation documentation resides under `evaluations/docs/`. The contract, its tool bridges, and the guides for people adopting it are staged under `contract/` with `prerelease_` filenames, starting with [README.md](../contract/prerelease_README.md).
 
 [contract-design.md](docs/contract-design.md) owns engineering requirements and design as the authoritative engineering source. The staged [AGENTS.md](../contract/prerelease_AGENTS.md) remains the self-contained normative runtime contract for consumers, not development instructions for this repository. [architecture.md](docs/architecture.md#development-time-and-runtime-authority) explains authority boundaries and system relationships; [documentation-maintenance.md](docs/documentation-maintenance.md) owns editorial guidance.
 
@@ -11,7 +11,7 @@ This README is for orientation only. Each topic below links to the document that
 | Responsibility | What it covers | Canonical documentation |
 | --- | --- | --- |
 | Product requirements and specification design | The engineering specification of current semantics alongside intended agent behavior, product constraints, distinguishable rationale, design decisions, trade-offs, and review scenarios. RC1–RC10 remain provisional enduring product-requirement candidates awaiting acceptance. | [docs/contract-design.md](docs/contract-design.md), the authoritative engineering source |
-| Behavioral evaluation and evaluator verification | A Python suite runs Codex in fresh workspaces with the unchanged current contract; automated assertions and human review assess selected behaviors. Offline tests verify the machinery; E1–E40 specify evaluator behavior, distinct from product requirements. Results are evidence about the exercised cases, not general compliance. | [docs/evaluations.md](docs/evaluations.md) |
+| Behavioral evaluation and evaluator verification | A Python suite runs Codex in fresh workspaces with the unchanged current contract; automated assertions and human review assess selected behaviors. Offline tests verify the machinery; E1–E40 specify evaluator behavior, distinct from product requirements. Results are evidence about the exercised cases, not general compliance. | [evaluations/docs/evaluations.md](../evaluations/docs/evaluations.md) |
 | Engineering architecture | Authority, responsibilities, boundaries, cross-domain dependencies, and system-wide decisions with an index of narrower decision records. | [docs/architecture.md](docs/architecture.md) |
 | Documentation maintenance | Canonical ownership and editorial guidance for all repository documentation, including the consumer guides. | [docs/documentation-maintenance.md](docs/documentation-maintenance.md) |
 
@@ -21,12 +21,13 @@ The current framework evaluates `contract/prerelease_AGENTS.md`, injected as wor
 
 | Path | Role |
 | --- | --- |
-| `docs/` | Internal engineering documentation: [architecture.md](docs/architecture.md) for the integrated engineering architecture, [contract-design.md](docs/contract-design.md) and [evaluations.md](docs/evaluations.md) for specification design and the evaluation framework, and [documentation-maintenance.md](docs/documentation-maintenance.md) for documentation ownership and editorial guidance across the whole repository, including the consumer guides. |
-| `evals/` | The evaluation package: its command-line entry point and case composition (`__main__.py`), shared execution, workspace, evidence, and grading infrastructure in `runtime/`, and one module per evaluation case in `scenarios/`. [Responsibilities and dependency direction](docs/evaluations.md#responsibilities-and-dependency-direction) assigns each module's role. |
-| `tests/` | The offline unittest suite, grouped by responsibility: `runtime/` for the shared machinery and cross-scenario CLI guarantees, `scenarios/` for one module per evaluation case, and `support/` for a fake Codex executable and CLI test harness that never contact OpenAI. The root keeps an offline smoke substitute and an opt-in probe of the evaluator-owned functional-check sandbox, separate from the evaluated-agent permission profile. See [offline checks](docs/evaluations.md#run-offline-checks) and [functional-check execution](docs/evaluations.md#functional-check-execution). |
+| `docs/` | Internal engineering documentation: [architecture.md](docs/architecture.md) for the integrated engineering architecture, [contract-design.md](docs/contract-design.md) for specification design, and [documentation-maintenance.md](docs/documentation-maintenance.md) for documentation ownership and editorial guidance across the whole repository, including the consumer guides. |
+| `../evaluations/docs/` | Evaluation documentation: [evaluations.md](../evaluations/docs/evaluations.md) owns the evaluation framework guide and evaluator requirements E1–E40. Implementation, tests, and dependencies remain under `_internal/`. |
+| `evals/` | The evaluation package: its command-line entry point and case composition (`__main__.py`), shared execution, workspace, evidence, and grading infrastructure in `runtime/`, and one module per evaluation case in `scenarios/`. [Responsibilities and dependency direction](../evaluations/docs/evaluations.md#responsibilities-and-dependency-direction) assigns each module's role. |
+| `tests/` | The offline unittest suite, grouped by responsibility: `runtime/` for the shared machinery and cross-scenario CLI guarantees, `scenarios/` for one module per evaluation case, and `support/` for a fake Codex executable and CLI test harness that never contact OpenAI. The root keeps an offline smoke substitute and an opt-in probe of the evaluator-owned functional-check sandbox, separate from the evaluated-agent permission profile. See [offline checks](../evaluations/docs/evaluations.md#run-offline-checks) and [functional-check execution](../evaluations/docs/evaluations.md#functional-check-execution). |
 | [requirements.txt](requirements.txt) | The suite's Python dependency range. |
-| `.venv/` | Local virtual environment created during [setup](docs/evaluations.md#install-prerequisites); ignored by Git. |
-| `.eval-runs/` | Evidence directories created by evaluation runs and kept after later runs; ignored by Git. See [retained evidence](docs/evaluations.md#retained-evidence). |
+| `.venv/` | Local virtual environment created during [setup](../evaluations/docs/evaluations.md#install-prerequisites); ignored by Git. |
+| `.eval-runs/` | Evidence directories created by evaluation runs and kept after later runs; ignored by Git. See [retained evidence](../evaluations/docs/evaluations.md#retained-evidence). |
 
 ## Where to find things
 
@@ -35,15 +36,15 @@ The current framework evaluates `contract/prerelease_AGENTS.md`, injected as wor
 | Understand how specification design, evaluation, and documentation maintenance fit together, and how a contract change can affect evaluation | [architecture.md](docs/architecture.md) |
 | Distinguish intended requirements from runtime rules and find decision ownership | [Development-time and runtime authority](docs/architecture.md#development-time-and-runtime-authority) and [Decisions](docs/architecture.md#decisions) |
 | Find the specification of current operating semantics | [Current-semantics vocabulary and coverage](docs/contract-design.md#current-semantics-vocabulary-and-coverage) |
-| Understand what the suite evaluates and the limits of its results | [Purpose and evaluation model](docs/evaluations.md#purpose-and-evaluation-model) |
-| Install prerequisites, authenticate, and run offline checks or cases | [Setup and running evaluations](docs/evaluations.md#setup-and-running-evaluations) |
-| Read outcomes, retained evidence, and investigate a failure | [Results, evidence, and failure investigation](docs/evaluations.md#results-evidence-and-failure-investigation) |
-| Look up a case's situation, assertions, and review interpretation | [Cases and interpretation](docs/evaluations.md#cases-and-interpretation); each case links to the module that owns its exact prompt, fixture, checks, and any rubric |
-| Understand isolation, credentials, deadlines, and cleanup | [Execution and security boundaries](docs/evaluations.md#execution-and-security-boundaries) |
-| Understand the framework's structure and how one run proceeds | [Architecture, extension, and maintenance](docs/evaluations.md#architecture-extension-and-maintenance) |
-| Learn how a scenario is built, run, and tested, starting from the Pydantic Evals concepts used | [Walkthrough: scope-discipline](docs/evaluations.md#walkthrough-scope-discipline) and [Pydantic Evals concepts used here](docs/evaluations.md#pydantic-evals-concepts-used-here) |
-| Find the suite's requirements (E1–E40) and how each is verified | [Verifiable requirements](docs/evaluations.md#verifiable-requirements) |
-| Change or add an evaluation case | [Modify or extend an evaluation](docs/evaluations.md#modify-or-extend-an-evaluation), then [verify a behavior change](docs/evaluations.md#verify-a-behavior-change) |
+| Understand what the suite evaluates and the limits of its results | [Purpose and evaluation model](../evaluations/docs/evaluations.md#purpose-and-evaluation-model) |
+| Install prerequisites, authenticate, and run offline checks or cases | [Setup and running evaluations](../evaluations/docs/evaluations.md#setup-and-running-evaluations) |
+| Read outcomes, retained evidence, and investigate a failure | [Results, evidence, and failure investigation](../evaluations/docs/evaluations.md#results-evidence-and-failure-investigation) |
+| Look up a case's situation, assertions, and review interpretation | [Cases and interpretation](../evaluations/docs/evaluations.md#cases-and-interpretation); each case links to the module that owns its exact prompt, fixture, checks, and any rubric |
+| Understand isolation, credentials, deadlines, and cleanup | [Execution and security boundaries](../evaluations/docs/evaluations.md#execution-and-security-boundaries) |
+| Understand the framework's structure and how one run proceeds | [Architecture, extension, and maintenance](../evaluations/docs/evaluations.md#architecture-extension-and-maintenance) |
+| Learn how a scenario is built, run, and tested, starting from the Pydantic Evals concepts used | [Walkthrough: scope-discipline](../evaluations/docs/evaluations.md#walkthrough-scope-discipline) and [Pydantic Evals concepts used here](../evaluations/docs/evaluations.md#pydantic-evals-concepts-used-here) |
+| Find the suite's requirements (E1–E40) and how each is verified | [Verifiable requirements](../evaluations/docs/evaluations.md#verifiable-requirements) |
+| Change or add an evaluation case | [Modify or extend an evaluation](../evaluations/docs/evaluations.md#modify-or-extend-an-evaluation), then [verify a behavior change](../evaluations/docs/evaluations.md#verify-a-behavior-change) |
 | Understand or assess a change to the contract's design | [contract-design.md](docs/contract-design.md), especially [Evolving the contract](docs/contract-design.md#evolving-the-contract) and [Assessing design changes](docs/contract-design.md#assessing-design-changes) |
 | Edit any documentation, including the consumer guides | [documentation-maintenance.md](docs/documentation-maintenance.md) |
 
@@ -52,9 +53,9 @@ The current framework evaluates `contract/prerelease_AGENTS.md`, injected as wor
 To understand or maintain the evaluation framework:
 
 1. Read the staged [README.md](../contract/prerelease_README.md) and [AGENTS.md](../contract/prerelease_AGENTS.md) to learn what is being evaluated, and [architecture.md](docs/architecture.md) for how the framework relates to the specification.
-2. Read the [purpose and evaluation model](docs/evaluations.md#purpose-and-evaluation-model).
-3. Follow [install prerequisites](docs/evaluations.md#install-prerequisites) and [run the offline checks](docs/evaluations.md#run-offline-checks). They need no login and use no subscription allowance; live runs do, as [Run a case or the suite](docs/evaluations.md#run-a-case-or-the-suite) explains.
-4. Read the [architecture](docs/evaluations.md#architecture-extension-and-maintenance), then the [cases](docs/evaluations.md#cases-and-interpretation) and modules relevant to your work.
+2. Read the [purpose and evaluation model](../evaluations/docs/evaluations.md#purpose-and-evaluation-model).
+3. Follow [install prerequisites](../evaluations/docs/evaluations.md#install-prerequisites) and [run the offline checks](../evaluations/docs/evaluations.md#run-offline-checks). They need no login and use no subscription allowance; live runs do, as [Run a case or the suite](../evaluations/docs/evaluations.md#run-a-case-or-the-suite) explains.
+4. Read the [architecture](../evaluations/docs/evaluations.md#architecture-extension-and-maintenance), then the [cases](../evaluations/docs/evaluations.md#cases-and-interpretation) and modules relevant to your work.
 
 To work on the contract itself, read the [authority model](docs/architecture.md#development-time-and-runtime-authority), then the reading guidance at the top of [contract-design.md](docs/contract-design.md). For the published semantics of edits to `AGENTS.md`, `CLAUDE.md`, or `.github/copilot-instructions.md`, see the candidate contract's [protected-file rule](../contract/prerelease_AGENTS.md#38-instructions-protected-files-and-external-actions).
 

@@ -2,7 +2,7 @@
 
 `requirements/` is the product-requirements home for coding-agent collaboration. This entry point explains the requirements domain, links to its current authoritative sources, and identifies the remaining migration work.
 
-**[docs/product-requirements.md](docs/product-requirements.md) now owns the established objectives, PR1, and product constraints.** [_internal/docs/contract-design.md](../_internal/docs/contract-design.md) retains classification and evidence for its remaining material, provisional RC1–RC10, and all design-specific knowledge. This README provides orientation and navigation; it establishes no competing requirement definitions and changes no acceptance or decision status.
+**[docs/product-requirements.md](docs/product-requirements.md) owns the established objectives, PR1, and product constraints; [docs/requirement-candidates.md](docs/requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions.** [_internal/docs/contract-design.md](../_internal/docs/contract-design.md) retains classification and evidence and all design-specific knowledge. This README provides orientation and navigation; it establishes no competing requirement definitions and changes no acceptance or decision status.
 
 ## Responsibility and boundaries
 
@@ -25,15 +25,15 @@ Read the source sections for their definitions, qualifications, and evidence. Th
 | Established objectives O1 (control token consumption, first) and O2 (requester awareness and consequential control, second), and knowledge continuity | [Established objectives](docs/product-requirements.md#established-objectives) |
 | Established product requirement PR1: self-contained operating contract | [Established product requirement](docs/product-requirements.md#established-product-requirement) |
 | Established product constraints, with their retained strength, scope, exceptions, and revision conditions | [Established constraints](docs/product-requirements.md#established-constraints) |
-| Provisional requirement candidates RC1–RC10 awaiting developer acceptance; their existing explanations do not establish acceptance | [Requirement candidates](../_internal/docs/contract-design.md#requirement-candidates) |
+| Provisional requirement candidates RC1–RC10 awaiting developer acceptance; their existing explanations do not establish acceptance | [Requirement candidates](docs/requirement-candidates.md#requirement-candidates) |
 | Current contract mechanisms and design prescriptions, with distinguishable rationale; current binding status does not establish enduring product-requirement status | [Design choices](../_internal/docs/contract-design.md#design-choices) and [current-semantics vocabulary and coverage](../_internal/docs/contract-design.md#current-semantics-vocabulary-and-coverage) |
 | Historical rationale, retained decisions, and rejected or superseded alternatives, with their source context and status | [Decision status and historical alternatives](../_internal/docs/contract-design.md#decision-status-and-historical-alternatives) |
 | Evaluator requirements E1–E40: requirements for the evaluation machinery, owned by `evaluations/` | [Verifiable requirements](../evaluations/docs/evaluations.md#verifiable-requirements) |
 
 ## Remaining migration work
 
-The established objectives, PR1, and constraints have transferred with their provenance, qualifications, and links to retained design rationale, decisions, and significant historical alternatives. Further transfers require separately reviewed changes that preserve provenance and decision status, keep desired outcomes distinct from current implementation mechanisms, and preserve provisional candidates as provisional unless separately accepted.
+The established objectives, PR1, and constraints and the provisional RC1–RC10 inventory have transferred with their provenance, qualifications, and links to retained design rationale, decisions, and significant historical alternatives. Further requirements extraction requires separately reviewed changes that preserve provenance and decision status, keep desired outcomes distinct from current implementation mechanisms, and preserve provisional candidates as provisional unless separately accepted.
 
-`contract-design.md` remains the owner of the provisional RC1–RC10 inventory pending its separate transfer. Candidate acceptance, further requirements extraction, contract redesign, and requirement-to-evaluation traceability remain separate future work; this entry point performs none of them.
+The requirements baseline is not complete. Candidate acceptance, further requirements extraction, contract redesign, and requirement-to-evaluation traceability remain separate future work; this entry point performs none of them.
 
 For repository navigation, use the [engineering entry point](../_internal/README.md). [Architecture](../_internal/docs/architecture.md) owns cross-domain relationships; [documentation maintenance](../_internal/docs/documentation-maintenance.md#document-ownership) owns the documentation ownership map and editing guidance.

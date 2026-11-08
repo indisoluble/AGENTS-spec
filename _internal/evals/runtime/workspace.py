@@ -16,7 +16,7 @@ import stat
 from tempfile import TemporaryDirectory
 
 
-CONTRACT_PATH = Path(__file__).resolve().parents[3] / "AGENTS.md"
+CONTRACT_PATH = Path(__file__).resolve().parents[3] / "contract" / "prerelease_AGENTS.md"
 
 
 @dataclass(frozen=True)

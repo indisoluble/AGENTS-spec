@@ -1,6 +1,6 @@
 # AGENTS.md Specification
 
-A ready-to-use [AGENTS.md](AGENTS.md) that gives coding agents a consistent way to work in new or established repositories.
+A ready-to-use [AGENTS.md](prerelease_AGENTS.md) that gives coding agents a consistent way to work in new or established repositories.
 
 Its primary aim is to control token consumption through small, meaningful, bounded increments and proportionate work. Its second aim is to keep you informed and in control of consequential direction. Reliable project documentation preserves shared knowledge for you and future agents.
 
@@ -10,25 +10,25 @@ The agent must keep work bounded and proportionate even when no effort allowance
 
 ## Get started
 
-1. **Review existing instructions, then copy [AGENTS.md](AGENTS.md) into your repository root.** If your project already has agent instructions, the person responsible for adoption must review and confirm which practices, conventions, and workflows will remain and which will be replaced before overwriting them.
+1. **Review existing instructions, then copy [AGENTS.md](prerelease_AGENTS.md) into your repository root.** If your project already has agent instructions, the person responsible for adoption must review and confirm which practices, conventions, and workflows will remain and which will be replaced before overwriting them.
 
    Verify and preserve project facts found only in the old instruction files—such as build commands and deployment constraints—in appropriate project documentation before replacement.
 
-   Retained operating rules belong in authoritative instruction files. Keep compatible additions, or explicitly authorize an adaptation of the contract, following the [instruction-file rules](README-powerusers.md#instruction-files-and-external-actions).
+   Retained operating rules belong in authoritative instruction files. Keep compatible additions, or explicitly authorize an adaptation of the contract, following the [instruction-file rules](prerelease_README-powerusers.md#instruction-files-and-external-actions).
 
 2. **Add the bridge for your tool, if applicable.** The supplied bridges direct the tool to the shared root contract, keeping operating policy in `AGENTS.md`. Use the files at the paths below, applying the same review and preservation steps before replacing existing copies.
 
    | Tool | Files to use |
    | --- | --- |
    | Codex | Root `AGENTS.md` |
-   | Claude Code | Root `AGENTS.md` and [CLAUDE.md](CLAUDE.md) |
-   | GitHub Copilot | Root `AGENTS.md` and [.github/copilot-instructions.md](.github/copilot-instructions.md) |
+   | Claude Code | Root `AGENTS.md` and [CLAUDE.md](prerelease_CLAUDE.md) |
+   | GitHub Copilot | Root `AGENTS.md` and [.github/copilot-instructions.md](prerelease_copilot-instructions.md) |
 
-3. **Keep the files in version control and check adoption.** Ask your tool which repository instructions it loaded and check available instruction diagnostics. Then try the [worked adoption check](README-powerusers.md#worked-adoption-check): it combines a loading check with a small assessment task. Finding a file alone does not show that the agent follows it.
+3. **Keep the files in version control and check adoption.** Ask your tool which repository instructions it loaded and check available instruction diagnostics. Then try the [worked adoption check](prerelease_README-powerusers.md#worked-adoption-check): it combines a loading check with a small assessment task. Finding a file alone does not show that the agent follows it.
 
 The supplied contract normally needs no project-specific customization. Keep project facts, build commands, and architecture in your project's documentation and code. The bridges direct the tool to the contract.
 
-Loading depends on the interface and settings. For verification, troubleshooting, and use with ChatGPT or Claude Projects, see [tool compatibility](README-powerusers.md#tool-compatibility).
+Loading depends on the interface and settings. For verification, troubleshooting, and use with ChatGPT or Claude Projects, see [tool compatibility](prerelease_README-powerusers.md#tool-compatibility).
 
 ## Try a first task
 
@@ -40,26 +40,26 @@ For this one-step task, the agent inspects the relevant project files, briefly s
 
 > Corrected the setup command in `README.md` to match the package configuration. Ran the corrected command successfully.
 
-That is an illustration, not a required response template. If a check fails or cannot run, the agent must say so; saying so does not establish completion. See [validation and unavailable checks](README-powerusers.md#assess-the-result). You do not need to repeat these responsibilities in your request.
+That is an illustration, not a required response template. If a check fails or cannot run, the agent must say so; saying so does not establish completion. See [validation and unavailable checks](prerelease_README-powerusers.md#assess-the-result). You do not need to repeat these responsibilities in your request.
 
 For a larger objective, use the same approach:
 
 > Add CSV imports that report invalid rows and continue processing valid rows.
 
-The agent chooses the next small, useful step—called an **increment**—from your request and the project context. It works through Plan–Do–Study–Act (PDSA): plan the step, do the work, assess the result, and use what it learned to decide what follows. Later work stays at outline level until it needs more detail. The [worked example](README-powerusers.md#from-a-request-to-a-result) shows this process from request to report.
+The agent chooses the next small, useful step—called an **increment**—from your request and the project context. It works through Plan–Do–Study–Act (PDSA): plan the step, do the work, assess the result, and use what it learned to decide what follows. Later work stays at outline level until it needs more detail. The [worked example](prerelease_README-powerusers.md#from-a-request-to-a-result) shows this process from request to report.
 
 The agent can complete several increments under your existing authorization before sending a report. It must combine unreported work into a report when the task is complete, when it hands unfinished work back to you or another person or agent, or when it seeks your input. It should minimize routine progress reports and keep intermediate communication concise and useful. The initial task outline and prompt notification of material inquiry uncertainty still have their own timing; neither creates an approval checkpoint. A message is not required for every increment.
 
-A message and a request for approval serve different purposes. The agent pauses when the contract, your instructions, or the tool's rules require direction, including before exceeding a binding limit or making a consequential design choice that needs your decision. You can request status updates or [extra review checkpoints](README-powerusers.md#optional-controls-you-can-add). [When the agent pauses or continues](README-powerusers.md#when-the-agent-pauses-or-continues) explains these distinctions.
+A message and a request for approval serve different purposes. The agent pauses when the contract, your instructions, or the tool's rules require direction, including before exceeding a binding limit or making a consequential design choice that needs your decision. You can request status updates or [extra review checkpoints](prerelease_README-powerusers.md#optional-controls-you-can-add). [When the agent pauses or continues](prerelease_README-powerusers.md#when-the-agent-pauses-or-continues) explains these distinctions.
 
 ## What to expect
 
 - **Focused progress.** The agent selects each step using your objective, relevant project evidence, and earlier findings. Unrelated cleanup and speculative features stay outside the task.
-- **Direction visible before substantial work.** After proportionate preliminary context gathering, the agent briefly states the overall task outline and the first increment's objective and bounds. Informal expectations are not automatically limits; explicit limits and checkpoints remain binding. See [limits and changes in work](README-powerusers.md#when-the-work-grows-unexpectedly).
+- **Direction visible before substantial work.** After proportionate preliminary context gathering, the agent briefly states the overall task outline and the first increment's objective and bounds. Informal expectations are not automatically limits; explicit limits and checkpoints remain binding. See [limits and changes in work](prerelease_README-powerusers.md#when-the-work-grows-unexpectedly).
 - **Complete work within each step.** Small scope still receives the necessary reasoning and validation. Affected code, tests, configuration, and documentation stay consistent. A required stop can leave a step unfinished; it cannot be reported as complete.
 - **Decisions and consolidated results.** Disclosures affecting authorization or decisions requiring your input precede the affected work; other information should normally join the next consolidated report. Reports identify completed work, checks, material assumptions, and unfinished work; one report can cover several increments. Handoffs preserve meaningful results and continuation state: the objective, direction, applicable limits, next-step bounds and acceptance conditions, and relevant inquiry conclusions, evidence, and uncertainty.
 - **Ordinary context gathering.** Reading relevant code, callers, tests, configuration, and directly related dependencies, along with existing project documentation, is part of normal work and needs no inspection-by-inspection announcement. Running an agreed test or measurement also does not become an investigation merely because its result is not yet known.
-- **Bounded investigations.** An **inquiry** investigates material uncertainty about how to proceed that blocks the next decision, such as choosing an approach that fits an agreed memory limit. The agent must promptly make the uncertainty and its significance clear unless already communicated in your request or the initial task framing. It may investigate narrowly within existing authorization, but must consult you before adopting or implementing an unsettled consequential direction requiring your decision. Inquiry uses small, bounded, proportionate increments, ends when evidence is sufficient, and requires reassessment at an increment's bounds before justified continuation. Requester limits still apply, and missing required evidence leaves work incomplete. See the [investigation examples](README-powerusers.md#when-an-investigation-is-needed).
+- **Bounded investigations.** An **inquiry** investigates material uncertainty about how to proceed that blocks the next decision, such as choosing an approach that fits an agreed memory limit. The agent must promptly make the uncertainty and its significance clear unless already communicated in your request or the initial task framing. It may investigate narrowly within existing authorization, but must consult you before adopting or implementing an unsettled consequential direction requiring your decision. Inquiry uses small, bounded, proportionate increments, ends when evidence is sufficient, and requires reassessment at an increment's bounds before justified continuation. Requester limits still apply, and missing required evidence leaves work incomplete. See the [investigation examples](prerelease_README-powerusers.md#when-an-investigation-is-needed).
 - **Project knowledge that develops with the work.** Architecture documentation organized around arc42, clearly expressed requirements, and records of significant decisions preserve understanding for maintainers, users, and future agents. Recording a decision does not replace required consultation. You can limit or defer proposed documentation improvements. Installation does not authorize a project-wide audit or rewrite.
 
 This is an opinionated engineering baseline. Your instructions take priority within the tool's actual instruction hierarchy and permissions. You remain responsible for reviewing and accepting the work.
@@ -68,9 +68,9 @@ Instruction files cannot guarantee compliance. The tool's controls govern permis
 
 ## Get more from it
 
-- **[Getting more from AGENTS.md](README-powerusers.md)** — practical examples, when the agent pauses, and existing-project alignment.
-- **[AGENTS.md](AGENTS.md)** — the complete operating rules, conditions, and exceptions.
+- **[Getting more from AGENTS.md](prerelease_README-powerusers.md)** — practical examples, when the agent pauses, and existing-project alignment.
+- **[AGENTS.md](prerelease_AGENTS.md)** — the complete operating rules, conditions, and exceptions.
 
 ## License
 
-Licensed under [MIT No Attribution (MIT-0)](LICENSE).
+Licensed under [MIT No Attribution (MIT-0)](../LICENSE).

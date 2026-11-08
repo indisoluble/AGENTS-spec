@@ -1,5 +1,6 @@
 from contextlib import redirect_stdout
 from io import StringIO
+from pathlib import Path
 import unittest
 
 from pydantic_evals import Case, Dataset
@@ -78,6 +79,8 @@ class SmokeEvaluationTests(unittest.TestCase):
         self.assertIn("Test execution interrupted", report.failures[0].error_message)
 
     def test_each_run_gets_fresh_fixture_and_unchanged_contract(self):
+        repository = Path(__file__).resolve().parents[3]
+        self.assertEqual(CONTRACT_PATH, repository / "contract" / "prerelease_AGENTS.md")
         original_contract = CONTRACT_PATH.read_bytes()
         observations = []
 
@@ -106,7 +109,7 @@ class SmokeEvaluationTests(unittest.TestCase):
             self.assertEqual(contract, original_contract)
             self.assertEqual(files, ["AGENTS.md", "message.txt"])
             self.assertFalse(workspace.exists())
-            self.assertFalse(workspace.is_relative_to(CONTRACT_PATH.parent))
+            self.assertFalse(workspace.is_relative_to(repository))
         self.assertEqual(CONTRACT_PATH.read_bytes(), original_contract)
 
     def test_terminal_report_shows_case_and_assertion(self):

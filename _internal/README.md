@@ -2,9 +2,7 @@
 
 `_internal/` holds the engineering work behind the [AGENTS.md](../AGENTS.md) specification: product requirements and design rationale, behavioral evaluation and verification of its machinery, engineering architecture, and documentation governance. The contract, its tool bridges, and the guides for people adopting it live at the repository root, starting with [README.md](../README.md).
 
-Migration Steps 1–4 are complete. Final independent verification returned **READY FOR TRANSFER DECISION**, and the requester explicitly authorized engineering authority transfer on November 8, 2026. [contract-design.md](docs/contract-design.md) is now the authoritative engineering source under the [canonical authority model](docs/architecture.md#development-time-and-runtime-authority); the [migration record](docs/architecture.md#temporary-migration-authority) preserves the historical baseline and verification. RC1–RC10 remain provisional; their acceptance and future authorized product redesign remain separate work.
-
-The root [AGENTS.md](../AGENTS.md) remains the self-contained normative runtime contract. Product requirements, accepted engineering decisions, and requester direction guide its evolution. Agents maintaining this repository may receive it through provider-specific instruction-loading mechanisms; when loaded, its applicable instructions govern their conduct within the actual instruction hierarchy and tool permissions. This current arrangement is not a permanent architectural requirement. [Development-time and runtime authority](docs/architecture.md#development-time-and-runtime-authority) owns these distinctions and their operational limits.
+[contract-design.md](docs/contract-design.md) owns engineering requirements and design as the authoritative engineering source. Root [AGENTS.md](../AGENTS.md) remains the self-contained normative runtime contract. [architecture.md](docs/architecture.md#development-time-and-runtime-authority) explains authority boundaries and system relationships; [documentation-maintenance.md](docs/documentation-maintenance.md) owns editorial guidance.
 
 This README is for orientation only. Each topic below links to the document that owns it; if this summary and a linked owner disagree, the owner is authoritative and this README needs correcting.
 
@@ -12,7 +10,7 @@ This README is for orientation only. Each topic below links to the document that
 
 | Responsibility | What it covers | Canonical documentation |
 | --- | --- | --- |
-| Product requirements and specification design | The independently verified engineering specification of current semantics alongside intended agent behavior, product constraints, distinguishable rationale, design decisions, trade-offs, and review scenarios. RC1–RC10 remain provisional enduring product-requirement candidates awaiting acceptance. | [docs/contract-design.md](docs/contract-design.md), the authoritative engineering source |
+| Product requirements and specification design | The engineering specification of current semantics alongside intended agent behavior, product constraints, distinguishable rationale, design decisions, trade-offs, and review scenarios. RC1–RC10 remain provisional enduring product-requirement candidates awaiting acceptance. | [docs/contract-design.md](docs/contract-design.md), the authoritative engineering source |
 | Behavioral evaluation and evaluator verification | A Python suite runs Codex in fresh workspaces with the unchanged current contract; automated assertions and human review assess selected behaviors. Offline tests verify the machinery; E1–E40 specify evaluator behavior, distinct from product requirements. Results are evidence about the exercised cases, not general compliance. | [docs/evaluations.md](docs/evaluations.md) |
 | Engineering architecture | Authority, responsibilities, boundaries, cross-domain dependencies, and system-wide decisions with an index of narrower decision records. | [docs/architecture.md](docs/architecture.md) |
 | Documentation maintenance | Canonical ownership and editorial guidance for all repository documentation, including the root guides. | [docs/documentation-maintenance.md](docs/documentation-maintenance.md) |
@@ -36,7 +34,7 @@ The current framework evaluates the root `AGENTS.md`, and its cases and review c
 | --- | --- |
 | Understand how specification design, evaluation, and documentation maintenance fit together, and how a contract change can affect evaluation | [architecture.md](docs/architecture.md) |
 | Distinguish intended requirements from runtime rules and find decision ownership | [Development-time and runtime authority](docs/architecture.md#development-time-and-runtime-authority) and [Decisions](docs/architecture.md#decisions) |
-| Find the completed migration history and specification of current operating semantics | [Temporary migration authority](docs/architecture.md#temporary-migration-authority) and [Current-semantics vocabulary and coverage](docs/contract-design.md#current-semantics-vocabulary-and-coverage) |
+| Find the specification of current operating semantics | [Current-semantics vocabulary and coverage](docs/contract-design.md#current-semantics-vocabulary-and-coverage) |
 | Understand what the suite evaluates and the limits of its results | [Purpose and evaluation model](docs/evaluations.md#purpose-and-evaluation-model) |
 | Install prerequisites, authenticate, and run offline checks or cases | [Setup and running evaluations](docs/evaluations.md#setup-and-running-evaluations) |
 | Read outcomes, retained evidence, and investigate a failure | [Results, evidence, and failure investigation](docs/evaluations.md#results-evidence-and-failure-investigation) |
@@ -58,7 +56,7 @@ To understand or maintain the evaluation framework:
 3. Follow [install prerequisites](docs/evaluations.md#install-prerequisites) and [run the offline checks](docs/evaluations.md#run-offline-checks). They need no login and use no subscription allowance; live runs do, as [Run a case or the suite](docs/evaluations.md#run-a-case-or-the-suite) explains.
 4. Read the [architecture](docs/evaluations.md#architecture-extension-and-maintenance), then the [cases](docs/evaluations.md#cases-and-interpretation) and modules relevant to your work.
 
-To work on the contract itself, read the [authority model](docs/architecture.md#development-time-and-runtime-authority), then the reading guidance at the top of [contract-design.md](docs/contract-design.md). Its completed current-semantic specification retains the design rationale; reviewing and accepting RC1–RC10 by coherent topic is later work. The temporary migration freeze has concluded; future authorized edits to `AGENTS.md`, `CLAUDE.md`, or `.github/copilot-instructions.md` still follow the contract's [protected-file rule](../AGENTS.md#38-instructions-protected-files-and-external-actions).
+To work on the contract itself, read the [authority model](docs/architecture.md#development-time-and-runtime-authority), then the reading guidance at the top of [contract-design.md](docs/contract-design.md). Authorized edits to `AGENTS.md`, `CLAUDE.md`, or `.github/copilot-instructions.md` follow the contract's [protected-file rule](../AGENTS.md#38-instructions-protected-files-and-external-actions).
 
 ## Documentation ownership
 

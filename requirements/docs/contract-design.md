@@ -2,7 +2,7 @@
 
 **Engineering-only document.** This file is a temporary consolidation document within the requirements project at `requirements/docs/contract-design.md` and remains excluded from the intended consumer release. It is not a runtime instruction file, provider bridge, or adoption guide, and creates no additional consumer operating duties.
 
-This document is the authoritative design source for the reusable, opinionated [AGENTS.md](../../contract/prerelease_AGENTS.md) contract: currently binding design prescriptions and their semantics, selected mechanisms, rationale, trade-offs, significant design history, and subsequent engineering evolution. [Product requirements](product-requirements.md) owns the established objectives, PR1, and product constraints; [requirement candidates](requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions. [Classification and evidence](#classification-and-evidence) remains here alongside the full design explanations and historical alternatives. Internal requirements and explanations add no runtime duties: `AGENTS.md` remains the independently self-contained normative runtime contract delivered to consuming agents.
+This document is the authoritative design source for the reusable, opinionated [AGENTS.md](../../contract/prerelease_AGENTS.md) contract's remaining currently binding design prescriptions and their semantics, selected mechanisms, rationale, trade-offs, significant design history, and subsequent engineering evolution. [Contract architecture](architecture.md) owns the transferred design overview, goals and boundaries, and three-layer interaction and continuation. [Product requirements](product-requirements.md) owns the established objectives, PR1, and product constraints; [requirement candidates](requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions. [Classification and evidence](#classification-and-evidence) remains here alongside the remaining design explanations and historical alternatives. Internal requirements and explanations add no runtime duties: `AGENTS.md` remains the independently self-contained normative runtime contract delivered to consuming agents.
 
 For adoption, use [README.md](../../contract/prerelease_README.md); for practical guidance, use [Getting more from AGENTS.md](../../contract/prerelease_README-powerusers.md). For engineering-system relationships and authority, use [architecture.md](../../docs/architecture.md#development-time-and-runtime-authority); for editorial procedures and canonical ownership, use [documentation-maintenance.md](../../_internal/docs/documentation-maintenance.md#document-ownership). This reference explains product intent and design, rather than supplying a complete product-development process, branching strategy, workflow engine, or framework tutorial.
 
@@ -12,8 +12,8 @@ Read by question:
 | --- | --- |
 | What is intended and established? | [Established product requirements](product-requirements.md), including their qualifications and provenance |
 | What remains provisional, and how is evidence classified? | [Requirement candidates](requirement-candidates.md) and [classification and evidence](#classification-and-evidence) |
-| What does the current contract prescribe? | [Current-semantics vocabulary and coverage](#current-semantics-vocabulary-and-coverage), then the indexed topic sections; essential operating detail is specified here, without requiring a guide or contract link to fill gaps. |
-| Why these mechanisms, and how do they interact? | [Design choices](#design-choices), including the [worked task](#how-the-design-works-in-a-task) |
+| What does the current contract prescribe? | [Current-semantics vocabulary and coverage](#current-semantics-vocabulary-and-coverage), then the indexed topic sections here and in the [contract architecture](architecture.md); essential operating detail is specified in these engineering sources, without requiring a guide or contract link to fill gaps. |
+| Why these mechanisms, and how do they interact? | [Contract architecture](architecture.md), then the remaining [design choices](#design-choices), including the [worked task](#how-the-design-works-in-a-task) |
 | Which decisions and older alternatives affect interpretation? | [Decision status and historical alternatives](#decision-status-and-historical-alternatives) |
 | How should the contract evolve? | [Evolving the contract](#evolving-the-contract) |
 | What distinctions and sources matter in review? | [Design reference](#design-reference) |
@@ -49,11 +49,11 @@ The canonical [PR1 — Self-contained operating contract](product-requirements.m
 
 ### Established constraints
 
-The canonical [established constraints](product-requirements.md#established-constraints) now belong to `requirements/docs/product-requirements.md`: authority and capability boundaries, method selection, and portability and standing context, with their original strengths, qualifications, exceptions, and revision conditions. [Design boundaries](#design-goals-and-boundaries), [method selection](#choosing-or-replacing-methods), [portability](#keeping-the-contract-portable), and [wording trade-offs](#current-wording-trade-offs) retain the full engineering explanations and current design consequences; they are not independent definitions of the transferred constraints.
+The canonical [established constraints](product-requirements.md#established-constraints) now belong to `requirements/docs/product-requirements.md`: authority and capability boundaries, method selection, and portability and standing context, with their original strengths, qualifications, exceptions, and revision conditions. [Design boundaries](architecture.md#design-goals-and-boundaries), [method selection](#choosing-or-replacing-methods), [portability](#keeping-the-contract-portable), and [wording trade-offs](#current-wording-trade-offs) retain the full engineering explanations and current design consequences; they are not independent definitions of the transferred constraints.
 
 ### Requirement candidates
 
-The canonical [provisional RC1–RC10 inventory and unresolved acceptance questions](requirement-candidates.md#requirement-candidates) now belong to `requirements/docs/requirement-candidates.md`, with their [status and provenance](requirement-candidates.md#status-and-provenance). All entries remain provisional; the complete linked design explanations, current semantics, and historical alternatives remain here.
+The canonical [provisional RC1–RC10 inventory and unresolved acceptance questions](requirement-candidates.md#requirement-candidates) now belong to `requirements/docs/requirement-candidates.md`, with their [status and provenance](requirement-candidates.md#status-and-provenance). All entries remain provisional; their complete linked design explanations and current semantics remain in the [contract architecture](architecture.md) and this document, with historical alternatives retained here.
 
 ## Design choices
 
@@ -73,14 +73,14 @@ Unless another actor is explicit, the agent is the subject of operating duties, 
 | Material | Significantly affecting correctness, scope, risk, or whether to proceed. |
 | Permanent record | The canonical project document owning the topic, such as architecture or an ADR; chat and working notes are excluded. |
 
-The following index assigns current-semantic detail within this document. Contract clause references provide traceability; all operating detail is specified here. All rows remain subject to requester and tool authority, the progression guards, and each rule's own conditions.
+The following index assigns current-semantic detail within this document and the [contract architecture](architecture.md). Contract clause references provide traceability; all operating detail is specified in these engineering sources. All rows remain subject to requester and tool authority, the progression guards, and each rule's own conditions.
 
 | Contract clauses | Engineering specification locations |
 | --- | --- |
-| Purpose, model, terms | [Established objectives](#established-objectives), this vocabulary, and [three interacting layers](#three-interacting-layers) |
+| Purpose, model, terms | [Established objectives](#established-objectives), this vocabulary, and [three interacting layers](architecture.md#three-interacting-layers) |
 | §1; §1.1 Plan | [Small commitments](#small-commitments-with-sufficient-depth), [learning](#learning-throughout-the-work), [completion and inquiry](#completion-predictions-and-bounded-investigation), [knowledge roles](#documentation-choices), and [initial framing](#reporting-and-continued-execution) |
 | §1.2 Do | [Engineering choices](#engineering-choices), including Simple Design, preservation, and qualified techniques |
-| §1.3 Study; §1.4 Act | [Completion and predictions](#completion-predictions-and-bounded-investigation), [validation and tests](#validation-and-test-evidence), [learning](#learning-throughout-the-work), and [composition](#three-interacting-layers) |
+| §1.3 Study; §1.4 Act | [Completion and predictions](#completion-predictions-and-bounded-investigation), [validation and tests](#validation-and-test-evidence), [learning](#learning-throughout-the-work), and [composition](architecture.md#three-interacting-layers) |
 | §2.1 Authority; §2.2 decisions | [Decision factors](#small-commitments-with-sufficient-depth) and [authorization and requester decisions](#authorization-and-requester-decisions) |
 | §2.3 effort/limits; §2.5 continuation | [Quality and bounds](#small-commitments-with-sufficient-depth), [authorization and continuation](#authorization-and-requester-decisions), and [handoff/resumption](#reporting-and-continued-execution) |
 | §2.4 context/inquiry | [Completion, predictions, and bounded investigation](#completion-predictions-and-bounded-investigation) and [outcome reporting](#reporting-and-continued-execution) |
@@ -92,50 +92,23 @@ The following index assigns current-semantic detail within this document. Contra
 | §3.7 reporting | [Reporting and continued execution](#reporting-and-continued-execution) |
 | §3.8 instructions/protection/external actions | [Why the bridges differ](#why-the-bridges-differ) |
 | §3.9 references | [Principles and reference boundaries](#principles-and-reference-boundaries) |
-| §4 composition | [Three interacting layers](#three-interacting-layers) |
+| §4 composition | [Three interacting layers](architecture.md#three-interacting-layers) |
 
 ### Design overview
 
+See the requirements-domain [contract architecture — Design overview](architecture.md#design-overview).
+
 #### Design goals and boundaries
 
-The motivating risk is especially visible in a new or poorly documented project. Without established requirements, interfaces, decisions, and conventions, planning and autonomous design have fewer constraints. Even a bounded objective can permit a large amount of work. Small, meaningful increments limit the next commitment, while prior consultation reserves consequential architectural and lasting design direction for the requester unless the specific choice is already authorized. The absence of an established architecture does not confer unlimited design authority.
-
-Small increments are the principal mechanism for controlling work and speculative token use. Developing detail only when needed avoids designing distant work before its decisions can be made. Before expanding planned work or starting another increment or attempt, cumulative reassessment connects the next step to evidence, the task objective, established direction, and limits. Bounded inquiries constrain effort spent on a blocking question even without announced effort allowances: sufficient evidence ends inquiry, and an increment's bounds require reassessment before further investigation. Plan–Do–Study–Act (PDSA) turns results into the next decision. Engineering practices protect quality, while documentation preserves facts and reasons so maintainers, users, and future agents can continue without reconstructing them. Adequate analysis, completeness, and validation constrain every effort-saving choice.
-
-Reports consolidate unreported work at task completion, handoff, or when seeking requester input. The contract recommends minimizing routine progress reports and keeping intermediate communication concise and useful. The brief initial task outline precedes substantial work; material inquiry uncertainty and its significance must be made clear promptly unless already communicated in the request or task framing. These duties keep the requester aware without creating approval checkpoints or requiring an advance effort-limit announcement. Routine execution remains autonomous within authorization and direction; requester-imposed limits and consequential decisions retain their own consultation triggers. These mechanisms provide no token quota or guarantee of savings, and total consumption may remain substantial. The [practical explanation](../../contract/prerelease_README-powerusers.md#understanding-token-use) distinguishes reports from consumption measurements.
-
-The contract is self-contained. Guides explain it and bridges help tools apply it; neither supplies hidden operating duties. Project facts, build commands, requirements, and architecture come from the adopting project's code and documentation. This separation supports reuse without embedding an application's design in generic instructions.
-
-Requester instructions take priority within the tool's actual hierarchy and permissions. The tool determines discovery, scope, and precedence of directory instructions, which may add subtree rules only when compatible with the root contract. The contract cannot supply capabilities, enforce permissions, or override native approvals. Its protection of instruction files and its authorization rules for external actions keep those limits explicit. It also does not supply a complete product-development process, branching strategy, workflow engine, or framework tutorial. Established methods cannot invent missing requirements or requester authority.
+The canonical [design goals and boundaries](architecture.md#design-goals-and-boundaries) now belong to `requirements/docs/architecture.md`.
 
 ### Workflow design choices
 
+See the requirements-domain [contract architecture — Workflow design choices](architecture.md#workflow-design-choices) for layer interaction and continuation. The detailed workflow mechanisms below remain here.
+
 #### Three interacting layers
 
-The contract separates three questions that need answers throughout a task:
-
-| Layer | Question it answers | Role in the design |
-| --- | --- | --- |
-| [Work cycle](../../contract/prerelease_AGENTS.md#1-work-cycle) | What is the agent doing with the current increment? | Organize planning, execution, assessment, and use of the findings. |
-| [Progression guards](../../contract/prerelease_AGENTS.md#2-progression-guards) | May this work proceed, or is requester direction needed? | Check authority, scope, unresolved decisions, requester limits, cumulative reassessment, inquiry bounds, and permission to continue. |
-| [Triggered rules](../../contract/prerelease_AGENTS.md#3-triggered-rules) | Has something happened that creates a duty or permission? | Apply the relevant rule when, for example, a requirement changes, a durable finding emerges, documentation is affected, or a report becomes due. Each rule retains its own strength and conditions. |
-
-The same action can involve all three. While planning an authorized importer change, the agent might discover a material, durable parser limitation and propose changing the parser's established error contract. Planning identifies the issue, the record rule preserves the finding, and the consultation guard requires requester direction before adopting or implementing that departure unless specifically authorized. Naming a cycle phase settles neither the record duty nor decision authority.
-
-The division follows how these concerns behave. Authorization, limits, and requester involvement can matter in any phase, and a durable finding can emerge while planning as easily as while acting. Placing such rules inside one phase would suggest they apply only there, or require readers to reinterpret earlier phases after reaching later material. Presenting the cycle first shows the ordinary path; the guards then make the control state explicit; triggered rules stay independent of phase.
-
-The current [composition rule](../../contract/prerelease_AGENTS.md#4-how-the-layers-compose) starts at Plan, applies progression guards whenever work would advance or a relevant decision is due, and applies each triggered rule whenever its trigger occurs. After Study and Act, the applicable outcome is:
-
-| State | Prescribed next action |
-| --- | --- |
-| Task done | Complete and report. |
-| Stopping before task completion | Hand off with a handoff report. |
-| A guard or other rule requires requester direction, or no existing authorization covers another increment | Report and await direction. |
-| Otherwise | Return to Plan for the next authorized increment, with proportionate intermediate communication. |
-
-No layer grants authorization by itself. A next cycle step, a satisfied guard, or a fulfilled duty never extends what the requester and tool permit, and completing an increment, reporting, recording a decision, discovering a finding, or exhausting an inquiry creates none. Guards are not additional phases; triggered duties authorize no otherwise unauthorized work, and triggered permissions authorize nothing beyond their terms.
-
-This organization expresses design intent: making the operating model and its cross-cutting relationships explicit while preserving normative behavior. The repository holds no measurement showing that it improves human comprehension, agent adherence, or token use.
+The canonical [three interacting layers](architecture.md#three-interacting-layers), their composition, four continuation outcomes, authorization qualifications, and evidence limits now belong to `requirements/docs/architecture.md`.
 
 #### Small commitments with sufficient depth
 
@@ -159,7 +132,7 @@ Under [§2.3](../../contract/prerelease_AGENTS.md#23-effort-estimates-and-reques
 
 The [Deming Institute's PDSA account](https://deming.org/explore/pdsa/) connects an approach and expected result with observation and the next decision. Small increments bound commitments; PDSA's contribution is learning which approach remains suitable and what to do next. Passing tests alone does not establish that learning role: the implications still inform Act and subsequent planning.
 
-The agent MUST apply the contract's [PDSA work cycle](../../contract/prerelease_AGENTS.md#1-work-cycle) proportionally to implementation, investigation, and documentation: Plan the next small authorized increment from context and objectives, Do it, Study the results, and Act on the findings. Plan starts with the request and includes context gathering, the overall objective and permitted work, the four increment elements specified above, and selection of the next increment. Study assesses completion and observations; Act uses those findings to retain, revise, or discard the approach and retains learning for Plan. Act also applies the triggered record rules for durable findings, significant decisions, or technical debt, then follows the [composition outcomes](#three-interacting-layers). Results can reshape later detail without changing the agreed outcome or granting more authority.
+The agent MUST apply the contract's [PDSA work cycle](../../contract/prerelease_AGENTS.md#1-work-cycle) proportionally to implementation, investigation, and documentation: Plan the next small authorized increment from context and objectives, Do it, Study the results, and Act on the findings. Plan starts with the request and includes context gathering, the overall objective and permitted work, the four increment elements specified above, and selection of the next increment. Study assesses completion and observations; Act uses those findings to retain, revise, or discard the approach and retains learning for Plan. Act also applies the triggered record rules for durable findings, significant decisions, or technical debt, then follows the [composition outcomes](architecture.md#three-interacting-layers). Results can reshape later detail without changing the agreed outcome or granting more authority.
 
 Terms and the layer overview precede the work cycle. Methods appear near their principal contribution—engineering practices in Do, validation in Study, and documentation and decision methods among the triggered rules—but apply whenever triggered in any phase, and the progression guards apply throughout. Tests can be planned before implementation; decisions and documentation are maintained as facts emerge. Phases may overlap or repeat. Methods alone require no deliverable; routine work needs no worksheet, formal experiment, or special mode. Separate phase reports are not required; reporting has its own triggers.
 
@@ -268,7 +241,7 @@ The [usage guide](../../contract/prerelease_README-powerusers.md#assess-the-resu
 
 Consider the CSV-import scenario from the [practical walkthrough](../../contract/prerelease_README-powerusers.md#from-a-request-to-a-result): report invalid rows and continue with valid rows. The **task objective** is that overall outcome. An **increment** is the next deliberately small, bounded step toward it, normally useful, understandable, reviewable, and verifiable on its own.
 
-[PDSA—Plan–Do–Study–Act](https://deming.org/explore/pdsa/) begins with that request. Plan selects and bounds the work; Do performs it; Study assesses completion and the approach; Act uses the findings. Throughout, progression guards determine whether work may proceed, and triggered rules apply when their conditions arise; the [layer design](#three-interacting-layers) explains this division.
+[PDSA—Plan–Do–Study–Act](https://deming.org/explore/pdsa/) begins with that request. Plan selects and bounds the work; Do performs it; Study assesses completion and the approach; Act uses the findings. Throughout, progression guards determine whether work may proceed, and triggered rules apply when their conditions arise; the [layer design](architecture.md#three-interacting-layers) explains this division.
 
 1. **Plan:** establish the objective and permitted work, then inspect the relevant project context. Suppose the requirements settle the input format, invalid-row rules, and line-number convention; existing tests support the reader's suitability; and inspection shows that field-count validation is missing. The row-processing code exposes the fields, header, and line number, suggesting a local implementation.
 
@@ -486,7 +459,7 @@ This index identifies status and points to the reasons and consequences already 
 
 | Choice | Status and rationale location |
 | --- | --- |
-| Separate work cycle, progression guards, and triggered rules | **Selected current design.** [Three interacting layers](#three-interacting-layers) explains cross-phase concerns, composition, and the rejected implication that placement confines a duty to a phase. No measured benefit or permanent three-layer requirement is claimed. |
+| Separate work cycle, progression guards, and triggered rules | **Selected current design.** [Three interacting layers](architecture.md#three-interacting-layers) explains cross-phase concerns, composition, and the rejected implication that placement confines a duty to a phase. No measured benefit or permanent three-layer requirement is claimed. |
 | Bounded commitments with PDSA and focused practices | **Selected current design; recorded as sufficient for the agreed design.** [Learning](#learning-throughout-the-work), [engineering choices](#engineering-choices), and [method selection](#choosing-or-replacing-methods) explain complementary roles. Additional umbrella frameworks were not needed; future replacement is possible under the selection criteria. |
 | Role-specific knowledge ownership | **Selected current design; earlier total ordering rejected/superseded.** [Documentation choices](#documentation-choices) retains why no global artifact precedence fits different knowledge owners, and how unresolved consequential conflicts are handled. |
 | Provider-specific instruction bridges | **Selected current integration design.** [Why the bridges differ](#why-the-bridges-differ) retains native import versus explicit read/follow, provenance, no common bootstrap policy, and actual-provider limits. A link is not treated as a universal import. |

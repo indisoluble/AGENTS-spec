@@ -2,7 +2,7 @@
 
 **Engineering-only document.** This file is a temporary consolidation document within the requirements project at `requirements/docs/contract-design.md` and remains excluded from the intended consumer release. It is not a runtime instruction file, provider bridge, or adoption guide, and creates no additional consumer operating duties.
 
-This document is the authoritative design source for the reusable, opinionated [AGENTS.md](../../contract/prerelease_AGENTS.md) contract's remaining currently binding design prescriptions and their semantics, selected mechanisms, rationale, trade-offs, significant design history, and subsequent engineering evolution. [Contract architecture](architecture.md) owns the transferred design overview, goals and boundaries, and three-layer interaction and continuation. [Product requirements](product-requirements.md) owns the established objectives, PR1, and product constraints; [requirement candidates](requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions. [Classification and evidence](#classification-and-evidence) remains here alongside the remaining design explanations and historical alternatives. Internal requirements and explanations add no runtime duties: `AGENTS.md` remains the independently self-contained normative runtime contract delivered to consuming agents.
+This document is the authoritative design source for the reusable, opinionated [AGENTS.md](../../contract/prerelease_AGENTS.md) contract's remaining currently binding design prescriptions and their semantics, selected mechanisms, rationale, trade-offs, significant design history, and subsequent engineering evolution. [Contract architecture](architecture.md) owns the transferred design overview, goals and boundaries, three-layer interaction and continuation, and shared current-semantics vocabulary and contract-clause coverage index. [Product requirements](product-requirements.md) owns the established objectives, PR1, and product constraints; [requirement candidates](requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions. [Classification and evidence](#classification-and-evidence) remains here alongside the remaining design explanations and historical alternatives. Internal requirements and explanations add no runtime duties: `AGENTS.md` remains the independently self-contained normative runtime contract delivered to consuming agents.
 
 For adoption, use [README.md](../../contract/prerelease_README.md); for practical guidance, use [Getting more from AGENTS.md](../../contract/prerelease_README-powerusers.md). For engineering-system relationships and authority, use [architecture.md](../../docs/architecture.md#development-time-and-runtime-authority); for editorial procedures and canonical ownership, use [documentation-maintenance.md](../../_internal/docs/documentation-maintenance.md#document-ownership). This reference explains product intent and design, rather than supplying a complete product-development process, branching strategy, workflow engine, or framework tutorial.
 
@@ -12,7 +12,7 @@ Read by question:
 | --- | --- |
 | What is intended and established? | [Established product requirements](product-requirements.md), including their qualifications and provenance |
 | What remains provisional, and how is evidence classified? | [Requirement candidates](requirement-candidates.md) and [classification and evidence](#classification-and-evidence) |
-| What does the current contract prescribe? | [Current-semantics vocabulary and coverage](#current-semantics-vocabulary-and-coverage), then the indexed topic sections here and in the [contract architecture](architecture.md); essential operating detail is specified in these engineering sources, without requiring a guide or contract link to fill gaps. |
+| What does the current contract prescribe? | [Current-semantics vocabulary and coverage](architecture.md#current-semantics-vocabulary-and-coverage), then the indexed topic sections here and in the [contract architecture](architecture.md); essential operating detail is specified in these engineering sources, without requiring a guide or contract link to fill gaps. |
 | Why these mechanisms, and how do they interact? | [Contract architecture](architecture.md), then the remaining [design choices](#design-choices), including the [worked task](#how-the-design-works-in-a-task) |
 | Which decisions and older alternatives affect interpretation? | [Decision status and historical alternatives](#decision-status-and-historical-alternatives) |
 | How should the contract evolve? | [Evolving the contract](#evolving-the-contract) |
@@ -57,42 +57,11 @@ The canonical [provisional RC1–RC10 inventory and unresolved acceptance questi
 
 ## Design choices
 
-**Status: current binding design, with rationale and historical context distinguished.** The sections below specify the present operating behavior and preserve its reasons, interactions, and qualifications. Statements about what an agent MUST, SHOULD, or MAY do explain `AGENTS.md` at its current strength; they are not an additional operating contract or acceptance of the provisional RC topics. The named methods and exact three-layer arrangement can be reconsidered only through future authorized change under the established objectives and constraints; they remain binding at their current strengths now.
+**Status: current binding design, with rationale and historical context distinguished.** The sections here and in the [contract architecture](architecture.md) specify the present operating behavior and preserve its reasons, interactions, and qualifications. Statements about what an agent MUST, SHOULD, or MAY do explain `AGENTS.md` at its current strength; they are not an additional operating contract or acceptance of the provisional RC topics. The named methods and exact three-layer arrangement can be reconsidered only through future authorized change under the established objectives and constraints; they remain binding at their current strengths now.
 
 ### Current-semantics vocabulary and coverage
 
-Unless another actor is explicit, the agent is the subject of operating duties, recommendations, prohibitions, and permissions below. Uppercase keywords retain [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119.html) / [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174.html) meanings: MUST is mandatory, MUST NOT prohibits, SHOULD and SHOULD NOT are recommendations whose departures need weighed consequences and justification, and MAY permits within its stated terms. Unqualified operative language retains its source meaning; explanatory prose does not change a prescription's strength. Material SHOULD exceptions also need report explanations. No recommendation exception waives a mandatory rule.
-
-| Term | Current meaning |
-| --- | --- |
-| Task objective | The requested overall outcome. |
-| Increment | A small, useful, bounded step, including investigation, normally understandable, reviewable, and verifiable alone. The non-standalone case has explicit coherence and recovery duties below. |
-| Increment objective | The increment's bounded outcome toward the task objective. |
-| Acceptance conditions | Observable criteria for completing the current increment; stating them does not automatically establish system requirements. |
-| Handoff | Stopping before task completion and passing unfinished work to the requester or another person or agent. |
-| Material | Significantly affecting correctness, scope, risk, or whether to proceed. |
-| Permanent record | The canonical project document owning the topic, such as architecture or an ADR; chat and working notes are excluded. |
-
-The following index assigns current-semantic detail within this document and the [contract architecture](architecture.md). Contract clause references provide traceability; all operating detail is specified in these engineering sources. All rows remain subject to requester and tool authority, the progression guards, and each rule's own conditions.
-
-| Contract clauses | Engineering specification locations |
-| --- | --- |
-| Purpose, model, terms | [Established objectives](#established-objectives), this vocabulary, and [three interacting layers](architecture.md#three-interacting-layers) |
-| §1; §1.1 Plan | [Small commitments](#small-commitments-with-sufficient-depth), [learning](#learning-throughout-the-work), [completion and inquiry](#completion-predictions-and-bounded-investigation), [knowledge roles](#documentation-choices), and [initial framing](#reporting-and-continued-execution) |
-| §1.2 Do | [Engineering choices](#engineering-choices), including Simple Design, preservation, and qualified techniques |
-| §1.3 Study; §1.4 Act | [Completion and predictions](#completion-predictions-and-bounded-investigation), [validation and tests](#validation-and-test-evidence), [learning](#learning-throughout-the-work), and [composition](architecture.md#three-interacting-layers) |
-| §2.1 Authority; §2.2 decisions | [Decision factors](#small-commitments-with-sufficient-depth) and [authorization and requester decisions](#authorization-and-requester-decisions) |
-| §2.3 effort/limits; §2.5 continuation | [Quality and bounds](#small-commitments-with-sufficient-depth), [authorization and continuation](#authorization-and-requester-decisions), and [handoff/resumption](#reporting-and-continued-execution) |
-| §2.4 context/inquiry | [Completion, predictions, and bounded investigation](#completion-predictions-and-bounded-investigation) and [outcome reporting](#reporting-and-continued-execution) |
-| §3.1 requirements | [Requirement boundary and revision](#completion-predictions-and-bounded-investigation) and [EARS forms](#ears-making-required-behavior-explicit) |
-| §3.2 findings | [Assessment writes, durability, and permanent records](#authorization-and-requester-decisions) |
-| §3.3 decisions; §3.4 debt | [ADRs](#adrs-preserving-the-reasons-for-lasting-choices) and [technical debt](#recording-technical-debt) |
-| §3.5 canonical knowledge/affected docs | [DRY](#dry-keeping-knowledge-consistent-as-work-progresses) and [documentation synchronization](#documentation-choices) |
-| §3.6 architecture/guides/code docs | [arc42 and README](#arc42-shared-architectural-context-as-the-project-grows) and [Diátaxis and code documentation](#diátaxis-choosing-content-for-the-readers-need) |
-| §3.7 reporting | [Reporting and continued execution](#reporting-and-continued-execution) |
-| §3.8 instructions/protection/external actions | [Why the bridges differ](#why-the-bridges-differ) |
-| §3.9 references | [Principles and reference boundaries](#principles-and-reference-boundaries) |
-| §4 composition | [Three interacting layers](architecture.md#three-interacting-layers) |
+See the requirements-domain [contract architecture — Current-semantics vocabulary and coverage](architecture.md#current-semantics-vocabulary-and-coverage) for the canonical vocabulary and current contract-clause coverage index.
 
 ### Design overview
 

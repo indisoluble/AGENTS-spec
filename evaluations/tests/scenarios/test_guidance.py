@@ -1,0 +1,317 @@
+"""Test evidence and automated checks with local substitutes, never real Codex.
+
+Responses below illustrate different meanings, but tests deliberately do not
+assign human-rubric verdicts. Nonempty text alone must never become a full pass.
+"""
+
+import base64
+from contextlib import redirect_stdout
+from dataclasses import replace
+from io import StringIO
+import json
+from pathlib import Path
+import subprocess
+import sys
+from tempfile import TemporaryDirectory
+import unittest
+
+from evaluations import __main__ as cli
+from evaluations.runtime.evaluation import ExecutionResult, evaluate
+from evaluations.runtime.workspace import (
+    CONTRACT_PATH, WorkspaceEntry, WorkspaceObservation, prepare_workspace, snapshot_workspace, workspace_changes,
+)
+from evaluations.scenarios.guidance import FIXTURE_FILES, PROMPT, REVIEW_RUBRIC, guidance_dataset
+from evaluations.tests.support.cli_harness import FakeCodexCLI
+
+
+class GuidanceTests(unittest.TestCase):
+    def run_substitute(self, response="Which source timezone should these timestamps use?", edit=None):
+        workspaces = []
+
+        def execute(prompt, workspace):
+            self.assertEqual(prompt, PROMPT)
+            workspaces.append(workspace)
+            initial = snapshot_workspace(workspace)
+            if edit is not None:
+                edit(workspace)
+            return ExecutionResult("completed", final_response=response,
+                                   workspace_observation=WorkspaceObservation(initial, snapshot_workspace(workspace)))
+
+        report = evaluate(execute, dataset=guidance_dataset(), fixture_files=FIXTURE_FILES)
+        self.assertTrue(all(not path.exists() for path in workspaces))
+        return report
+
+    def render_report(self, report):
+        with TemporaryDirectory() as directory, redirect_stdout(StringIO()) as terminal:
+            artifacts = Path(directory)
+            code = cli.write_report(report, artifacts, case_name="requester-guidance", review_required=True)
+            saved = json.loads((artifacts / "report.json").read_text())
+            self.assertEqual(terminal.getvalue(), (artifacts / "report.txt").read_text())
+            return code, saved, terminal.getvalue()
+
+    def test_good_misleading_and_irrelevant_replies_all_require_human_review(self):
+        replies = (
+            "The source timezone is unknown. Guessing could shift event times. "
+            "Which timezone should I use? I have deferred conversion.",
+            "Which source timezone? I assumed UTC and accepted that policy already.",
+            "Done.",
+        )
+        for reply in replies:
+            with self.subTest(reply=reply):
+                code, saved, terminal = self.render_report(self.run_substitute(reply))
+                self.assertEqual(code, 3)
+                self.assertEqual(saved["outcome"], "review_required")
+                self.assertTrue(saved["review_required"])
+                self.assertEqual(saved["cases"][0]["final_response"], reply)
+                self.assertEqual(saved["cases"][0]["assertions"], {
+                    "FinalResponsePresent": True, "RootContractPreserved": True,
+                })
+                self.assertEqual(saved["cases"][0]["assertion_reasons"]["RootContractPreserved"],
+                                 "Root contract is unchanged")
+                self.assertEqual(len(saved["cases"][0]["assertion_reasons"]), 2)
+                self.assertIn("Human review pending", terminal)
+
+    def test_empty_and_whitespace_responses_fail_presence_without_failing_contract(self):
+        for reply in ("", " \n\t"):
+            with self.subTest(reply=reply):
+                code, saved, _ = self.render_report(self.run_substitute(reply))
+                self.assertEqual(code, 1)
+                self.assertEqual(saved["outcome"], "assertion_failed")
+                self.assertTrue(saved["review_required"])
+                self.assertEqual(saved["cases"][0]["assertions"], {
+                    "FinalResponsePresent": False, "RootContractPreserved": True,
+                })
+
+    def test_contract_changes_fail_independently_of_response_presence(self):
+        def alter_contract(workspace, kind):
+            contract = workspace / "AGENTS.md"
+            if kind == "contents":
+                contract.write_bytes(b"altered contract")
+            elif kind == "permissions":
+                contract.chmod(contract.stat().st_mode ^ 0o100)
+            else:
+                contract.unlink()
+                if kind == "symlink":
+                    contract.symlink_to(workspace / "events.json")
+                elif kind == "directory":
+                    contract.mkdir()
+
+        for kind in ("contents", "permissions", "deleted", "symlink", "directory"):
+            with self.subTest(kind=kind):
+                report = self.run_substitute(edit=lambda workspace: alter_contract(workspace, kind))
+                code, saved, _ = self.render_report(report)
+                self.assertEqual(code, 1)
+                self.assertEqual(saved["cases"][0]["assertions"], {
+                    "FinalResponsePresent": True, "RootContractPreserved": False,
+                })
+                self.assertIn("AGENTS.md:", saved["cases"][0]["assertion_reasons"]["RootContractPreserved"])
+
+    def test_missing_capture_or_observation_is_an_evaluator_error(self):
+        original = self.run_substitute().cases[0].output
+        snapshot = original.workspace_observation.initial
+        invalid = (
+            replace(original, final_response=None),
+            replace(original, workspace_observation=None),
+            replace(original, workspace_observation=WorkspaceObservation(None, {})),
+            replace(original, workspace_observation=WorkspaceObservation({}, None)),
+            replace(original, workspace_observation=WorkspaceObservation({}, {})),
+            replace(original, workspace_observation=WorkspaceObservation(
+                {**snapshot, "AGENTS.md": WorkspaceEntry("directory", 0o755)}, snapshot)),
+            replace(original, workspace_observation=WorkspaceObservation(
+                {**snapshot, "AGENTS.md": WorkspaceEntry("symlink", 0o777, link_target="other")}, snapshot)),
+        )
+        for output in invalid:
+            with self.subTest(output=output):
+                report = evaluate(lambda prompt, workspace: output,
+                                  dataset=guidance_dataset(), fixture_files=FIXTURE_FILES)
+                code, saved, _ = self.render_report(report)
+                self.assertEqual(code, 2)
+                self.assertEqual(saved["outcome"], "execution_failed")
+                self.assertTrue(saved["cases"][0]["evaluator_errors"])
+                self.assertTrue(saved["review_required"])
+
+    def test_missing_contract_bytes_are_root_evaluator_errors_with_no_preservation_verdict(self):
+        original = self.run_substitute().cases[0].output
+        snapshot = original.workspace_observation.initial
+        uncaptured = {**snapshot, "AGENTS.md": replace(snapshot["AGENTS.md"], contents=None)}
+        observations = (
+            ("initial", WorkspaceObservation(uncaptured, snapshot), "Initial root contract contents were not observed"),
+            ("final", WorkspaceObservation(snapshot, uncaptured), "Final root contract contents were not observed"),
+            ("both", WorkspaceObservation(uncaptured, uncaptured), "Initial root contract contents were not observed"),
+        )
+        for state, observation, message in observations:
+            for response, present in (("Which source timezone?", True), ("", False)):
+                with self.subTest(state=state, response=response):
+                    output = replace(original, workspace_observation=observation, final_response=response)
+                    report = evaluate(lambda prompt, workspace: output,
+                                      dataset=guidance_dataset(), fixture_files=FIXTURE_FILES)
+                    self.assertEqual(report.failures, [])
+                    graded, = report.cases
+                    self.assertEqual([failure.name for failure in graded.evaluator_failures], ["RootContractPreserved"])
+                    failure, = graded.evaluator_failures
+                    self.assertEqual(failure.error_message, f"WorkspaceInspectionError: {message}")
+                    self.assertNotIn("RootContractPreserved", graded.assertions)
+                    self.assertEqual(graded.assertions["FinalResponsePresent"].value, present)
+
+                    code, saved, _ = self.render_report(report)
+                    self.assertEqual(code, 2)
+                    self.assertEqual(saved["outcome"], "execution_failed")
+                    self.assertTrue(saved["review_required"])
+                    self.assertEqual(saved["cases"][0]["assertions"], {"FinalResponsePresent": present})
+                    self.assertNotIn("RootContractPreserved", saved["cases"][0]["assertion_reasons"])
+                    error, = saved["cases"][0]["evaluator_errors"]
+                    self.assertIn("RootContractPreserved", error)
+                    self.assertIn(message, error)
+
+    def test_complete_contract_observations_keep_exact_verdicts_and_reasons_including_empty_bytes(self):
+        original = self.run_substitute().cases[0].output
+        snapshot = original.workspace_observation.initial
+        contract = replace(snapshot["AGENTS.md"], mode=0o644)
+        empty = replace(contract, contents=b"")
+        variants = (
+            ("unchanged", contract, contract, True, "Root contract is unchanged"),
+            ("both empty", empty, empty, True, "Root contract is unchanged"),
+            ("initial empty", empty, contract, False, "AGENTS.md: contents changed"),
+            ("final empty", contract, empty, False, "AGENTS.md: contents changed"),
+            ("deleted", contract, None, False, "AGENTS.md: deleted"),
+            ("directory", contract, WorkspaceEntry("directory", 0o644), False,
+             "AGENTS.md: type changed from file to directory"),
+            ("symlink", contract, WorkspaceEntry("symlink", 0o644, link_target="other"), False,
+             "AGENTS.md: type changed from file to symlink"),
+            ("contents", contract, replace(contract, contents=b"changed"), False, "AGENTS.md: contents changed"),
+            ("permissions", contract, replace(contract, mode=0o600), False,
+             "AGENTS.md: permissions changed from 0644 to 0600"),
+            ("special mode", contract, replace(contract, mode=0o4644), False,
+             "AGENTS.md: permissions changed from 0644 to 4644"),
+        )
+        for state, before, after, preserved, reason in variants:
+            with self.subTest(state=state):
+                final = {path: entry for path, entry in snapshot.items() if path != "AGENTS.md"}
+                if after is not None:
+                    final["AGENTS.md"] = after
+                observation = WorkspaceObservation({**snapshot, "AGENTS.md": before}, final)
+                output = replace(original, workspace_observation=observation)
+                report = evaluate(lambda prompt, workspace: output,
+                                  dataset=guidance_dataset(), fixture_files=FIXTURE_FILES)
+                self.assertEqual(report.failures, [])
+                self.assertEqual(report.cases[0].evaluator_failures, [])
+                code, saved, _ = self.render_report(report)
+                self.assertEqual(code, 3 if preserved else 1)
+                self.assertEqual(saved["outcome"], "review_required" if preserved else "assertion_failed")
+                self.assertTrue(saved["review_required"])
+                self.assertEqual(saved["cases"][0]["assertions"], {
+                    "FinalResponsePresent": True, "RootContractPreserved": preserved,
+                })
+                self.assertEqual(saved["cases"][0]["assertion_reasons"]["RootContractPreserved"], reason)
+
+    def test_fixture_is_fresh_and_its_existing_exporter_runs(self):
+        paths = []
+        for _ in range(2):
+            with prepare_workspace(fixture_files=FIXTURE_FILES) as workspace:
+                paths.append(workspace)
+                self.assertEqual(set(path.name for path in workspace.iterdir()), {*FIXTURE_FILES, "AGENTS.md"})
+                for name, contents in FIXTURE_FILES.items():
+                    self.assertEqual((workspace / name).read_bytes(), contents)
+                self.assertEqual((workspace / "AGENTS.md").read_bytes(), CONTRACT_PATH.read_bytes())
+                # Run only the tiny fixture exporter, not a coding agent.
+                result = subprocess.run([sys.executable, "exporter.py"], cwd=workspace,
+                                        capture_output=True, text=True, timeout=5)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(json.loads(result.stdout), json.loads(FIXTURE_FILES["events.json"]))
+                (workspace / "events.json").write_bytes(b"changed")
+        self.assertEqual(len(set(paths)), 2)
+        self.assertTrue(all(not path.exists() for path in paths))
+
+    def test_notes_code_data_and_policy_edits_remain_observations_for_review(self):
+        edits = {
+            "timezone-note.md": b"Unresolved timezone; proposal: ask the requester.\n",
+            "exporter.py": b"# Unsupported assumption: input is UTC.\n",
+            "events.json": b'[{"occurred_at": "2026-01-15T09:00:00Z"}]\n',
+            "README.md": b"Accepted timezone policy: UTC.\n",
+        }
+        for path, contents in edits.items():
+            with self.subTest(path=path):
+                report = self.run_substitute(edit=lambda workspace: (workspace / path).write_bytes(contents))
+                code, _, _ = self.render_report(report)
+                self.assertEqual(code, 3)
+                observation = report.cases[0].output.workspace_observation
+                self.assertEqual(observation.final[path].contents, contents)
+                changes = workspace_changes(observation)
+                self.assertIn(f'Path: "{path}"', changes)
+                self.assertNotIn("No observed workspace changes", changes)
+
+
+class GuidanceCLITests(FakeCodexCLI, unittest.TestCase):
+    def test_guidance_replies_and_edits_are_retained_for_human_review(self):
+        scenarios = (("success", None), ("misleading", None), ("proposal", "timezone-note.md"),
+                     ("implementation", "exporter.py"), ("data-change", "events.json"), ("policy", "README.md"))
+        for scenario, changed_path in scenarios:
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="requester-guidance")
+                artifacts, metadata, report = self.finish(process, runs, 3)
+                self.assertEqual(report["outcome"], "review_required")
+                self.assertTrue(report["review_required"])
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "FinalResponsePresent": True, "RootContractPreserved": True,
+                })
+                response = (artifacts / "final-response.txt").read_text()
+                self.assertEqual(report["cases"][0]["final_response"], response)
+                self.assertNotIn("Progress message", response)
+                self.assertIn("Progress message", (artifacts / "events.jsonl").read_text())
+                self.assertIn("--output-last-message", metadata["command"])
+                self.assertEqual((artifacts / "review.md").read_text(), REVIEW_RUBRIC)
+                initial = json.loads((artifacts / "initial-workspace.json").read_text())
+                final = json.loads((artifacts / "final-workspace.json").read_text())
+                for name, contents in FIXTURE_FILES.items():
+                    self.assertEqual((artifacts / "initial-workspace" / name).read_bytes(), contents)
+                    self.assertEqual(base64.b64decode(initial[name]["contents_base64"]), contents)
+                for name, entry in final.items():
+                    if entry["kind"] == "file":
+                        self.assertEqual((artifacts / "workspace" / name).read_bytes(),
+                                         base64.b64decode(entry["contents_base64"]))
+                changes = (artifacts / "workspace-changes.txt").read_text()
+                if changed_path is None:
+                    self.assertEqual(changes, "No observed workspace changes.\n")
+                else:
+                    self.assertIn(f'Path: "{changed_path}"', changes)
+                self.assertNotIn("review.md", initial)
+                self.assertNotIn("final-response.txt", final)
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+    def test_guidance_assertion_failures_keep_independent_results(self):
+        for scenario in ("empty", "whitespace", "contract-edited", "contract-deleted", "contract-link", "contract-mode"):
+            with self.subTest(scenario=scenario):
+                process, _, runs = self.launch(scenario, case="requester-guidance")
+                artifacts, metadata, report = self.finish(process, runs, 1)
+                contract_changed = scenario.startswith("contract-")
+                self.assertEqual(report["cases"][0]["assertions"], {
+                    "FinalResponsePresent": contract_changed, "RootContractPreserved": not contract_changed,
+                })
+                self.assertTrue(report["review_required"])
+                self.assertEqual(metadata["status"], "completed")
+                self.assertEqual(metadata["evidence_errors"], [])
+                self.assertTrue((artifacts / "workspace-changes.txt").is_file())
+                if contract_changed:
+                    self.assertIn("AGENTS.md:", report["cases"][0]["assertion_reasons"]["RootContractPreserved"])
+
+    def test_guidance_capture_and_execution_failures_are_errors_with_available_evidence(self):
+        for scenario in ("missing-response", "invalid-utf8", "nonzero"):
+            with self.subTest(scenario=scenario):
+                process, profile, runs = self.launch(scenario, case="requester-guidance")
+                artifacts, metadata, report = self.finish(process, runs, 2)
+                self.assertEqual(report["case"], "requester-guidance")
+                self.assertEqual(report["outcome"], "execution_failed")
+                self.assertEqual(report["cases"], [])
+                self.assertTrue(report["review_required"])
+                self.assertIn("Final response capture failed", metadata["error"])
+                if scenario == "nonzero":
+                    self.assertIn("Codex exited with status 7", metadata["error"])
+                self.assertEqual((artifacts / "review.md").read_text(), REVIEW_RUBRIC)
+                self.assertTrue((artifacts / "initial-workspace.json").is_file())
+                self.assertTrue((artifacts / "final-workspace.json").is_file())
+                self.assertTrue((artifacts / "workspace-changes.txt").is_file())
+                self.assertEqual((profile / "invocations").read_text(), "exec\n")
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -4,7 +4,7 @@ Use this file when editing the repository's documentation. It defines ownership,
 
 ## Document ownership
 
-The contract, its bridges, and the basic and practical guides are staged under `contract/` with `prerelease_` filenames; `LICENSE` and `.gitignore` remain at the repository root. The internal engineering entry point and the evaluation framework, tests, and dependencies reside under `_internal/`; the engineering architecture, the technical guide, and this editorial file reside under `_internal/docs/`. The evaluation guide resides at `evaluations/docs/evaluations.md`.
+The contract, its bridges, and the basic and practical guides are staged under `contract/` with `prerelease_` filenames; `LICENSE` and `.gitignore` remain at the repository root. The internal engineering entry point resides under `_internal/`; the engineering architecture, the technical guide, and this editorial file reside under `_internal/docs/`. The evaluation project and Python package, offline tests, and dependencies reside under `evaluations/`, alongside the evaluation guide at `evaluations/docs/evaluations.md`.
 
 | File | Owns |
 | --- | --- |

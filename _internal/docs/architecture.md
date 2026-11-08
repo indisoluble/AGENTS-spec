@@ -8,7 +8,7 @@ The repository delivers a specification: the root `AGENTS.md` contract and two i
 
 `_internal/` holds the engineering work used to develop and assess the specification. Adopters do not install it, and it adds no operating duties to the delivered contract. The [authority model below](#development-time-and-runtime-authority) distinguishes engineering authority from the instructions currently governing maintenance work. The engineering project has three related responsibilities:
 
-1. **Product requirements, design, and evolution.** Defining intended agent behavior and product constraints, and explaining the mechanisms, decisions, and trade-offs selected to realize them. [contract-design.md](contract-design.md) is the designated canonical owner of both requirements and rationale, with those responsibilities distinguishable in one document. Its Stage 2 restructuring, requirements classification, and provisional inventory are complete. Independent semantic verification is complete, with no blocking or significant defects identified. RC1–RC10 await acceptance; existing contract clauses are not automatically accepted product requirements.
+1. **Product requirements, design, and evolution.** Defining intended agent behavior and product constraints, and explaining the mechanisms, decisions, and trade-offs selected to realize them. [contract-design.md](contract-design.md) is the designated canonical owner of both requirements and rationale, with those responsibilities distinguishable in one document. Its Stage 2 restructuring, requirements classification, and provisional inventory are complete. The earlier independent semantic verification confirmed preservation during that restructuring; it did not establish complete operative-semantic coverage or readiness for engineering authority transfer. Those remain pending under the [temporary migration authority](#temporary-migration-authority). RC1–RC10 await acceptance; existing contract clauses are not automatically accepted product requirements.
 2. **Behavioral evaluation and evaluator verification.** A local Python framework runs Codex on finite cases against the current contract and produces evidence about those cases. Offline tests verify the evaluation machinery. [evaluations.md](evaluations.md) owns the subsystem documentation, including evaluator requirements E1–E40, which are distinct from product requirements.
 3. **Knowledge maintenance.** Keeping each fact, rule, explanation, and decision with one canonical owner and keeping its dependents consistent, across the whole repository including the root guides. [documentation-maintenance.md](documentation-maintenance.md) owns the ownership map and editorial guidance.
 
@@ -16,7 +16,7 @@ Its readers are people who engineer, evaluate, evolve, operate, and maintain the
 
 ### Development-time and runtime authority
 
-**Engineering authority.** Product objectives, established product requirements, accepted engineering decisions, and requester direction determine the product's intended behavior, design, evolution, and acceptance criteria, including intended evaluation expectations. Design rationale explains why selected mechanisms realize that intent. Existing `AGENTS.md` wording is implementation evidence, not an independent justification for preserving every mechanism or automatic proof of accepted product intent. Inferred requirement candidates remain separate from established requirements and await review and acceptance by coherent topic; a complete independently accepted product-requirements baseline is not yet established.
+**Engineering authority.** Product objectives, established product requirements, accepted engineering decisions, and requester direction determine the product's intended behavior, design, evolution, and acceptance criteria, including intended evaluation expectations. Design rationale explains why selected mechanisms realize that intent. Existing `AGENTS.md` wording is implementation evidence, not an independent justification for preserving every mechanism or automatic proof of accepted product intent. Inferred requirement candidates remain separate from established requirements and await review and acceptance by coherent topic; a complete independently accepted product-requirements baseline is not yet established. During migration, preservation of existing operating semantics follows the [temporary authority rule below](#temporary-migration-authority).
 
 **Product authority.** `AGENTS.md` is the self-contained normative operating contract delivered to consuming agents, within the applicable instruction hierarchy and tool permissions. Requirements and rationale in internal documentation create no additional operating duties or runtime dependencies. A mismatch between intended requirements and contract wording calls for human review and authorized correction, not an implicit change to the rules applied to an agent. Existing runs remain interpreted under their captured contract and rubric until approved changes are implemented; revised criteria do not silently revise historical conclusions.
 
@@ -27,6 +27,22 @@ An authorized redesign may reconsider or replace an existing mechanism, includin
 The contract prescribes intended conduct; it does not independently enforce or guarantee compliance. Technical enforcement depends on the tool's actual controls, and observed behavior requires evidence.
 
 Verifying the contract against intended requirements examines whether its text expresses the intended obligations, permissions, conditions, exceptions, and constraints. Behavioral evaluation instead examines what agents receiving that text actually do. Evaluator tests verify the machinery's own specified execution, observation, grading, reporting, and failure behavior; they do not establish agent compliance or the semantic validity of the expectations. These are separate evidence relationships. Requirement-to-contract and requirement-to-evaluation traceability remain pending, and this architecture does not claim they are already implemented.
+
+#### Temporary migration authority
+
+The requester has frozen the root `AGENTS.md` as the authority for **all current operating semantics** throughout the source-of-truth migration, within the actual instruction hierarchy, permissions, and requester authority. The frozen baseline is identified by its exact Git blob:
+
+| Identity | Value |
+| --- | --- |
+| `AGENTS.md` Git blob | `289a31a644d7ab1b816c873f244566ab632a330f` |
+| File SHA-256 | `3d7b6c240e0f4b02713d166662d7d95ec74985b9939b23838863acd596407e81` |
+| Reference commit on `refactor` | `184c7d5b26bfa78762c77e72381df9e408ac370b` |
+
+`AGENTS.md` must remain byte-for-byte unchanged throughout migration. The freeze applies to the contract bytes, not the entire repository commit; subsequent documentation-only commits do not change this baseline.
+
+`contract-design.md` is being prepared to become the authoritative engineering source of product requirements, current binding design choices, constraints, and rationale. It must represent every existing obligation, prohibition, permission, recommendation, trigger, condition, exception, and relevant semantic interaction without weakening, strengthening, extending, or omitting them. All other documentation must remain consistent with the frozen contract. No product redesign or change in operating behavior is authorized during migration.
+
+**Engineering authority transfer remains pending.** It requires complete operative-semantic coverage and cross-document consistency, successful independent verification of the completed migration, and subsequent explicit requester authorization. Verification alone does not transfer authority. After that authorized transfer, `contract-design.md` governs engineering evolution while `AGENTS.md` remains the self-contained normative runtime contract delivered to adopters; internal engineering documents never become runtime dependencies. This freeze is temporary: future authorized product evolution follows the general authority model above after transfer.
 
 ## Context and relationships
 

@@ -18,6 +18,10 @@ Read by question:
 
 ### Classification and evidence
 
+**Migration status.** Stage 2 restructuring and classification are complete, but the current requirements inventory remains provisional and incomplete as an independent representation of all frozen operative semantics. The source-of-truth transfer has not occurred. Under the [temporary migration authority](architecture.md#temporary-migration-authority), the frozen `AGENTS.md` governs any ambiguity about existing operating behavior, regardless of separately accepted requirement status.
+
+Currently mandatory methods and other prescribed mechanisms retain their present normative force during migration, including PDSA, explicit predictions, decomposition rules, and EARS. Future revisability makes none of these optional now and changes neither recommendations nor permissions. Prospective RC proposals and D1–D10 alternatives must not redefine the migration baseline; future requirements acceptance and authorized redesign are separate from preserving the existing specification.
+
 The classification concerns engineering intent, not whether a currently loaded instruction applies to an agent. Existing clauses prove what the runtime contract presently specifies; they do not independently prove that every behavior or selected method is an accepted product requirement. An authorized redesign can reconsider mechanisms, including PDSA and the three-layer organization. The engineering architecture is provider-neutral; the current loading of this repository's contract during maintenance is not a permanent self-governance requirement. [Development-time and runtime authority](architecture.md#development-time-and-runtime-authority) owns that distinction.
 
 | Status | Evidence and interpretation in this document |

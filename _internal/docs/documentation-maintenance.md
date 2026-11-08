@@ -24,6 +24,8 @@ The [engineering authority model](architecture.md#development-time-and-runtime-a
 
 ### Check the authority or evidence for each kind of statement
 
+**During migration.** For work under the [temporary migration authority](architecture.md#temporary-migration-authority), check edits to current-behavior descriptions against the frozen `AGENTS.md` baseline identified there. Preserve actor and modality; trigger and timing; scope and authorization; conditions and exceptions; permissions versus obligations; and relevant cross-clause interactions. Missing separately accepted requirements do not make existing contract obligations optional or reduce a prescribed mechanism's current normative force. The general future-evolution guidance below concerns separately authorized future changes; it does not authorize redesign or operating-behavior changes during migration.
+
 When editing a guide, check each statement against the authority, reference, or evidence that governs that kind of statement:
 
 | Statement being edited | Where to check |

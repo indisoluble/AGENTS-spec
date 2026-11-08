@@ -1,6 +1,6 @@
 # Local coding-agent evaluations
 
-This document explains how to operate, interpret, and maintain the local evaluation suite. It owns the detailed documentation of the evaluation framework; [architecture.md](../../_internal/docs/architecture.md) explains how the framework relates to the specification and the rest of the engineering project, including how contract changes can affect cases and rubrics.
+This document explains how to operate, interpret, and maintain the local evaluation suite. It owns the detailed documentation of the evaluation framework and its engineering decisions; [architecture.md](../../_internal/docs/architecture.md) explains how the framework relates to the specification and the rest of the engineering project, including how contract changes can affect cases and rubrics.
 
 - [Purpose and evaluation model](#purpose-and-evaluation-model)
 - [Setup and running evaluations](#setup-and-running-evaluations)
@@ -8,6 +8,7 @@ This document explains how to operate, interpret, and maintain the local evaluat
 - [Cases and interpretation](#cases-and-interpretation)
 - [Execution and security boundaries](#execution-and-security-boundaries)
 - [Architecture, extension, and maintenance](#architecture-extension-and-maintenance)
+- [Engineering decisions](#engineering-decisions)
 - [Verifiable requirements](#verifiable-requirements) and [technical references](#technical-references)
 
 ## Purpose and evaluation model
@@ -450,7 +451,7 @@ Implementation and canonical rubric: [findings.py](../scenarios/findings.py). Fi
 
 ### Agent execution
 
-The native restrictive permission profile is the [accepted design](../../_internal/docs/architecture.md#restrictive-evaluation-agent-command-permissions) for [E7](#verifiable-requirements). Design acceptance does not establish runtime enforcement or authenticated `codex exec` integration; those require the separate validation described below.
+The native restrictive permission profile is the [accepted design](#restrictive-evaluation-agent-command-permissions) for [E7](#verifiable-requirements). Design acceptance does not establish runtime enforcement or authenticated `codex exec` integration; those require the separate validation described below.
 
 The exact invocation is owned by [codex.py](../runtime/codex.py). It selects `agents-spec-eval` through `default_permissions` and supplies the named profile entirely through repeatable `--config` arguments. The configured boundary permits reads/writes inside the disposable workspace, retaining Codex's protected-subpath safeguards through `extends=":workspace"`. It denies unrelated filesystem reads/writes through `:root="deny"`, with Codex-defined `:minimal="read"` runtime access outside the workspace. Explicit `:tmpdir="deny"` and `:slash_tmp="deny"` overrides remove inherited temporary-directory access, and `network.enabled=false` disables command networking. These are configured restrictions, not evidence that every access path has been verified. See the official [permission-profile documentation](https://learn.chatgpt.com/docs/permissions).
 
@@ -520,7 +521,7 @@ The probe runs trusted local code through the actual helper, checking readable f
 
 ### Directory layout and ownership
 
-The `evaluations/` directory is both the evaluation engineering project and the Python package. It contains implementation, offline tests, `requirements.txt`, and this guide under `docs/`. Paths below are relative to the repository root. The package hierarchy separates composition, shared machinery, scenario policy, and verification. The historical [hierarchy decision](../../_internal/docs/architecture.md#evaluation-framework-package-and-verification-hierarchy) records why those responsibilities were separated; its original package and command names predate the relocation to `evaluations/`.
+The `evaluations/` directory is both the evaluation engineering project and the Python package. It contains implementation, offline tests, `requirements.txt`, and this guide under `docs/`. Paths below are relative to the repository root. The package hierarchy separates composition, shared machinery, scenario policy, and verification. The historical [hierarchy decision](#evaluation-framework-package-and-verification-hierarchy) records why those responsibilities were separated; its original package and command names predate the relocation to `evaluations/`.
 
 | Path | Owns |
 | --- | --- |
@@ -633,6 +634,54 @@ For a case change, run the [offline checks](#run-offline-checks). The case and r
 Live verification requires inspecting one separately authorized run. If authorization covers only offline work, stop after that verification and report live assessment as pending. The [functional-check sandbox probe](#functional-check-execution) checks that separate boundary's runtime enforcement. Verification of the evaluated-agent permission profile and authenticated integration follows the distinct scopes in [agent execution](#agent-execution).
 
 Inspect the live run's selected case, assertions and reasons, initial/final bytes and available manifests, contract hash, model settings, and cleaned workspace path. For human-review cases, also inspect response capture, readable differences, the retained rubric, and pending-review reporting, and assess the rubric with the requester. For independent-execution and contract-change-followthrough, include functional-check evidence. Each executed case should produce a distinct workspace and evidence directory. Keep run-specific results with that evidence rather than duplicating them here.
+
+## Engineering decisions
+
+This section owns the complete evaluation-specific decision records; the [system-wide architecture](../../_internal/docs/architecture.md#decisions) owns cross-project relationships and system-wide decisions. The records retain their historical names, paths, commands, and migration qualifications. Use [setup and running evaluations](#setup-and-running-evaluations) and [directory layout and ownership](#directory-layout-and-ownership) for current operation.
+
+### Restrictive evaluation-agent command permissions
+
+**Status:** Accepted. Authenticated `codex exec` integration and environment-specific enforcement still require validation.
+
+**Context.** Evaluation-agent commands need workspace reads/writes while denying unrelated host access and shell networking. Pydantic Evals manages execution and grading; Codex runs the evaluated agent using a dedicated authentication profile. Evaluator-owned functional checks use a separate sandbox. [Agent execution](#agent-execution) owns the configured command boundary, official references, and verification limits.
+
+**Decision.** Configure evaluated-agent commands through one restrictive native permission profile passed inline to `codex exec`, as required by [E7](#verifiable-requirements). The parent Codex client's authentication and provider communication and the Python evaluator operate outside that command sandbox.
+
+**Consequences.** The configured profile limits command access to the workspace and the runtime reads documented under [agent execution](#agent-execution), with command networking disabled. Tools needing broader access may be unavailable. CLI support, runtime enforcement, and authenticated integration require environment-specific validation; offline tests establish configuration and orchestration only. The profile neither confines the parent client or Python evaluator nor establishes complete host isolation. Inline permission configuration requires no persistent user settings.
+
+### Evaluation framework package and verification hierarchy
+
+**Status:** Accepted. The requester selected this hierarchy after reviewing read-only assessments of alternatives and an incremental migration plan. The migration proceeds in separately reviewed increments; until each one lands, source and test paths elsewhere in [architecture.md](../../_internal/docs/architecture.md) and in [evaluations.md](evaluations.md) describe the layout that currently exists.
+
+**Current-state note.** The `evals/` and root `tests/` layout, migration qualifications, commands, and path constraints in this record are historical. The later relocation places the project and package under `evaluations/`, with [`evaluations/__main__.py`](../__main__.py) as its entry point and [`CONTRACT_PATH`](../runtime/workspace.py) resolving to `contract/prerelease_AGENTS.md`. See [directory layout and ownership](#directory-layout-and-ownership), [setup and running evaluations](#setup-and-running-evaluations), and [verify a behavior change](#verify-a-behavior-change) for current structure, commands, and verification.
+
+**Context.** `evals/` held the command-line entry point, eight shared execution modules, and ten scenario modules side by side, so its listing did not distinguish what is evaluated from how a case runs. `tests/` was equally flat: shared-mechanism tests, scenario tests, the fake Codex executable, the CLI test harness, and two standalone entry points. `test_codex_failures.py` combined 13 cross-scenario CLI guarantees with 24 tests belonging to individual scenarios, two of which imported values from other test modules; discovery therefore loaded `test_followthrough.py` and `test_inquiry.py` under two module names each, although no test ran twice. A developer unfamiliar with Pydantic Evals could not tell from the tree where a scenario is defined, where it is verified, or which code runs every case. Constraints: keep `python -m evals`, `python -m unittest discover -s tests -v`, `python -m tests.offline_smoke`, and `python -m tests.probe_functional_sandbox` working; preserve E1–E40, grading semantics, and the documented smoke convenience; add no aliases for incidental internal module paths, as [interfaces used by scenarios](#interfaces-used-by-scenarios-and-substitutes) states; keep `_check_process.py` beside `functional.py`, which locates it by file position; and keep `CONTRACT_PATH` resolving to the root `AGENTS.md`.
+
+**Decision.**
+
+- `evals/__main__.py` remains the command-line entry point and composes the scenarios (`CASES`); `python -m evals` requires it at that path.
+- `evals/runtime/` owns the shared execution machinery: `evaluation`, `workspace`, `codex`, `auth`, `process`, `functional`, `functional_checks`, and `_check_process`. It imports no scenario.
+- `evals/scenarios/` owns evaluation definitions and grading policy: one module per scenario with its prompt, fixture, dataset, evaluators, any functional checks, and any review rubric. Scenarios depend on runtime; reuse between scenarios stays explicit, as when independent-execution reuses the requester-guidance fixture.
+- `tests/runtime/` verifies shared mechanisms and cross-scenario CLI guarantees in `test_cli.py`, which is `test_codex_failures.py` after its scenario-specific tests move out.
+- `tests/scenarios/` verifies individual scenarios: each `test_<module>.py` holds that scenario's grading tests and its CLI tests.
+- `tests/support/` holds the fake Codex executable and the CLI test harness. `tests/offline_smoke.py` and `tests/probe_functional_sandbox.py` stay at the `tests/` root so their documented commands are unchanged.
+- A component becomes a directory only when several independently meaningful files justify it; otherwise it stays one module. Test layout corresponds to production by responsibility, not file for file.
+- Internal imports are absolute and package-qualified, and moved modules leave no compatibility re-exports.
+- Live evaluation, which runs Codex through `python -m evals`, stays separate from offline verification under `tests/`, which uses substitutes and the fake CLI to establish evaluator correctness rather than agent behavior.
+
+**Consequences.** The tree separates composition, shared machinery, scenario policy, and verification by responsibility. A scenario's definition and its complete offline verification are each one file, and with no imports between test modules, no module is loaded under two names. Costs are a one-time update of imports, string mock-patch targets, child-process import strings, and documentation links, and path calculations one level deeper: `CONTRACT_PATH`, the CLI harness's working directory, and the fake-executable path in scenario tests. Discovery reports test IDs relative to `tests/`, such as `scenarios.test_scope…`, which differ from the package-qualified names used to run one module, such as `python -m unittest tests.scenarios.test_scope`; during discovery `runtime`, `scenarios`, and `support` are importable as top-level names, as test modules already are. Adding a scenario touches its module, its `CASES` entry, its test module, the fake executable's responses, and the case lists in the cross-scenario CLI tests. Requirement wording is unaffected; only source links and verification references move.
+
+**Rejected alternatives.**
+
+- *Keep both trees flat and explain them in documentation:* least churn, but the listings would still mix shared machinery with scenarios, and scenario-specific CLI tests would stay combined with cross-scenario ones.
+- *Scenarios package only, with flat tests:* fewer moves, but tests would remain distinguishable only by file name.
+- *Shared modules left at the `evals/` root, with tests grouped under `tests/infrastructure/`:* groups tests by responsibility, but leaves shared modules interleaved with the entry point and gives production and verification different names for the same responsibility.
+- *One directory per scenario, such as `evals/scenarios/scope/scenario.py`:* adds a level with no second substantive file to hold.
+- *Compatibility modules at the old paths:* no documented contract or demonstrated consumer depends on internal module paths; aliases would preserve accidental interfaces and hide stale imports that otherwise fail loudly.
+- *Moving `offline_smoke.py` and the sandbox probe into subdirectories:* would change their documented commands.
+- *Test substitutes in runtime, or a shared path constant for the fake executable:* test-only code does not belong in production modules, and scenario tests that install the fake as a sandbox locate it directly instead of depending on the CLI harness.
+
+**Relation to the earlier decision.** The subdirectories rejected in [Integrated engineering architecture with focused detailed owners](../../_internal/docs/architecture.md#integrated-engineering-architecture-with-focused-detailed-owners) concerned the documents under `_internal/docs/`. This decision concerns code and test packages and leaves the documentation layout unchanged.
 
 ## Verifiable requirements
 

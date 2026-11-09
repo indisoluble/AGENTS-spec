@@ -2,7 +2,7 @@
 
 **Engineering-only document.** This file is a temporary consolidation document within the requirements project at `requirements/docs/contract-design.md` and remains excluded from the intended consumer release. It is not a runtime instruction file, provider bridge, or adoption guide, and creates no additional consumer operating duties.
 
-This document is the authoritative design source for the reusable, opinionated [AGENTS.md](../../contract/prerelease_AGENTS.md) contract's remaining currently binding design prescriptions and their semantics, selected mechanisms, rationale, trade-offs, significant design history, and subsequent engineering evolution. [Contract architecture](architecture.md) owns the transferred design overview, goals and boundaries, three-layer interaction and continuation, bounded-work design, PDSA learning design, completion and prediction distinctions, bounded-inquiry design, authorization and requester decisions, reporting and continued execution, Simple Design, DRY, component boundaries, refactoring, validation, focused techniques, arc42 documentation design, worked task example, and shared current-semantics vocabulary and contract-clause coverage index. [Product requirements](product-requirements.md) owns the established objectives, PR1, and product constraints; [requirement candidates](requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions. [Classification and evidence](#classification-and-evidence) remains here alongside the remaining design explanations and historical alternatives. Internal requirements and explanations add no runtime duties: `AGENTS.md` remains the independently self-contained normative runtime contract delivered to consuming agents.
+This document is the authoritative design source for the reusable, opinionated [AGENTS.md](../../contract/prerelease_AGENTS.md) contract's remaining currently binding design prescriptions and their semantics, selected mechanisms, rationale, trade-offs, significant design history, and subsequent engineering evolution. [Contract architecture](architecture.md) owns the transferred design overview, goals and boundaries, three-layer interaction and continuation, bounded-work design, PDSA learning design, completion and prediction distinctions, bounded-inquiry design, authorization and requester decisions, reporting and continued execution, Simple Design, DRY, component boundaries, refactoring, validation, focused techniques, arc42 documentation design, EARS requirements-writing design, worked task example, and shared current-semantics vocabulary and contract-clause coverage index. [Product requirements](product-requirements.md) owns the established objectives, PR1, and product constraints; [requirement candidates](requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions. [Classification and evidence](#classification-and-evidence) remains here alongside the remaining design explanations and historical alternatives. Internal requirements and explanations add no runtime duties: `AGENTS.md` remains the independently self-contained normative runtime contract delivered to consuming agents.
 
 For adoption, use [README.md](../../contract/prerelease_README.md); for practical guidance, use [Getting more from AGENTS.md](../../contract/prerelease_README-powerusers.md). For engineering-system relationships and authority, use [architecture.md](../../docs/architecture.md#development-time-and-runtime-authority); for editorial procedures and canonical ownership, use [documentation-maintenance.md](../../_internal/docs/documentation-maintenance.md#document-ownership). This reference explains product intent and design, rather than supplying a complete product-development process, branching strategy, workflow engine, or framework tutorial.
 
@@ -137,21 +137,7 @@ See the requirements-domain [contract architecture — arc42: shared architectur
 
 #### EARS: making required behavior explicit
 
-[EARS (Easy Approach to Requirements Syntax)](https://alistairmavin.com/ears/) gives natural-language requirements consistent condition-and-response patterns. The [practical guide's CSV example](../../contract/prerelease_README-powerusers.md#make-expected-behavior-explicit) illustrates this:
-
-> If an input row has a different number of fields from the header, then the importer shall reject that row and report its line number.
-
-The pattern exposes behavior to implement and check. It cannot decide whether to reject one row or the whole file, or define a row's line number for a particular format. Those remain project decisions. EARS applies to new or revised in-scope system requirements; unchanged requirements need no automatic conversion. Under the [current rule](../../contract/prerelease_AGENTS.md#31-new-or-revised-system-requirements), new or revised in-scope requirements MUST have canonical owners and consistently express verifiable behavior in the form `<prefix> the <system> shall <response>.` Restating a canonical requirement MUST NOT create a duplicate. The five prefixes and their applicability are:
-
-| Pattern | Prefix before `the <system> shall <response>.` |
-| --- | --- |
-| Unconditional behavior | None |
-| State | `While <state>,` |
-| Event | `When <event>,` |
-| Optional feature | `Where <feature is included>,` |
-| Unwanted condition | `If <unwanted condition>, then` |
-
-Conditions MAY combine, with state before event: `While <state>, when <event>, the <system> shall <response>.` The [system-requirement boundary and revision rules](architecture.md#completion-predictions-and-bounded-investigation) determine what needs this form and who may change it. Rationale belongs with significant choices; EARS adds no mandatory rationale field to each requirement.
+See the requirements-domain [contract architecture — EARS: making required behavior explicit](architecture.md#ears-making-required-behavior-explicit) for the canonical current-design explanation.
 
 #### ADRs: preserving the reasons for lasting choices
 

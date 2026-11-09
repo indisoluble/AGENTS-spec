@@ -121,17 +121,7 @@ See the requirements-domain [contract architecture — Component boundaries, ref
 
 #### Validation and test evidence
 
-Completion MUST require correctness, consistency, and validation across affected artifacts; required stops MAY leave work incomplete. Before completing an increment, the agent MUST run relevant available acceptance checks, independently of whether a report is produced then. Checks MUST cover affected behavior, risk, and hard performance and operational limits. Passing tests MUST NOT replace requirements or necessary checks. Failed, unavailable, and omitted checks MUST be disclosed under the [reporting rule](architecture.md#reporting-and-continued-execution); any need for requester involvement still follows the [progression guards](../../contract/prerelease_AGENTS.md#2-progression-guards).
-
-Behavior changes, defect repairs, and clarified edge cases SHOULD have appropriate tests, including regression checks. Their names, examples, setup, actions, and assertions should explain the expected observable behavior as part of that recommendation. This does not require code or unit tests for their own sake during documentation-only work; the acceptance checks appropriate to that work still apply.
-
-Distinguishing check availability from acceptance prevents a tooling limitation from being treated as successful validation. It also allows sufficient alternative evidence to establish a condition when the contract's substitution rules permit it.
-
-Sufficient alternative evidence MAY substitute only when the original check is unavailable and is not specifically required. A check is available if runnable under current authorization, tool access, permissions, credentials or resources, and prerequisites with ordinary expected setup. An easier alternative MUST NOT make it unavailable: a relevant available acceptance check still runs even if an alternative could provide equally sufficient evidence. If a check needs missing authority, access, or resources, or materially more work, the agent MUST disclose this rather than silently obtain or absorb it, applying the authorization, limit, and reassessment rules. More work alone does not create a checkpoint.
-
-Conditions lacking sufficient evidence MUST be reported unverified, and validation incomplete, unless validly revised under existing authority. Disclosure alone cannot establish them. A pre-existing failure is assessed for relevance and disclosed, without automatically blocking unrelated work. The [practical validation examples](../../contract/prerelease_README-powerusers.md#assess-the-result) distinguish available checks, equivalent local checks, insufficient mocked evidence, and a specifically required CI result.
-
-Unit tests SHOULD use [Given/When/Then](https://martinfowler.com/bliki/GivenWhenThen.html): starting conditions, action under test, and expected result. For a quoted field containing a comma, those parts are the sample, the parser call, and the intact-field assertion. The contract prescribes neither literal labels nor a testing framework. The agent MUST NOT weaken tests just to pass.
+See the requirements-domain [contract architecture — Validation and test evidence](architecture.md#validation-and-test-evidence) for the canonical current-design explanation.
 
 #### Focused techniques and how they work together
 

@@ -73,7 +73,7 @@ The canonical [design goals and boundaries](architecture.md#design-goals-and-bou
 
 ### Workflow design choices
 
-See the requirements-domain [contract architecture — Workflow design choices](architecture.md#workflow-design-choices) for layer interaction, continuation, and bounded-work design. The remaining detailed workflow mechanisms below stay here.
+See the requirements-domain [contract architecture — Workflow design choices](architecture.md#workflow-design-choices) for layer interaction and continuation within [Solution Strategy](architecture.md#solution-strategy), and [Crosscutting Concepts](architecture.md#crosscutting-concepts) for the reusable rules and mechanisms, including bounded-work design. The remaining detailed workflow mechanisms below stay here.
 
 #### Three interacting layers
 

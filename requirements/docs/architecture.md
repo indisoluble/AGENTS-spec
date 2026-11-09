@@ -4,7 +4,9 @@ This requirements-domain document explains the architecture of the reusable [AGE
 
 **Status: current binding design, with rationale and historical context distinguished.** Selected mechanisms and their rationale are distinct from independently accepted enduring product requirements. [product-requirements.md](product-requirements.md) owns established objectives, PR1, and product constraints; [requirement-candidates.md](requirement-candidates.md) owns provisional RC1–RC10 and unresolved acceptance questions. [Classification and evidence](contract-design.md#classification-and-evidence) and [design choices](contract-design.md#design-choices) retain the shared status distinctions and current design's authority and revision qualifications. This document adds no operating duties beyond the delivered contract.
 
-Following the [selected arc42 approach](contract-design.md#arc42-shared-architectural-context-as-the-project-grows), [Current-semantics vocabulary and coverage](#current-semantics-vocabulary-and-coverage) supplies shared terminology and navigation under **Glossary and Crosscutting Concepts**, [Design overview](#design-overview) supplies the **Solution Strategy**, and [Workflow design choices](#workflow-design-choices) and the [worked task example](#how-the-design-works-in-a-task) supply the **Runtime View** of layer interaction, continuation, bounded work, requester decisions, and reporting, including crosscutting authorization, record, communication, and continuity concerns. The remaining current semantics, detailed mechanisms, rationale, decisions, history, and assessment scenarios stay in [contract-design.md](contract-design.md).
+Following the [selected arc42 approach](contract-design.md#arc42-shared-architectural-context-as-the-project-grows), **[Glossary](#glossary)** contains [Current-semantics vocabulary and coverage](#current-semantics-vocabulary-and-coverage) for shared terminology and contract-clause coverage. **[Solution Strategy](#solution-strategy)** contains [Design overview](#design-overview) and [Workflow design choices](#workflow-design-choices): the design goals and boundaries, three interacting layers, and their composition and continuation outcomes. **[Crosscutting Concepts](#crosscutting-concepts)** contains the reusable bounded-work, learning, completion and prediction, bounded-inquiry, authorization, requester-decision, reporting, record, communication, and continuity mechanisms that apply across phases. **[Runtime View](#runtime-view)** contains the [worked task example](#how-the-design-works-in-a-task), illustrating the design's behavior through the CSV-import Plan–Do–Study–Act sequence. The remaining current semantics, detailed mechanisms, rationale, decisions, history, and assessment scenarios stay in [contract-design.md](contract-design.md).
+
+## Glossary
 
 ### Current-semantics vocabulary and coverage
 
@@ -40,6 +42,8 @@ The following index assigns current-semantic detail within this contract archite
 | §3.8 instructions/protection/external actions | [Why the bridges differ](contract-design.md#why-the-bridges-differ) |
 | §3.9 references | [Principles and reference boundaries](contract-design.md#principles-and-reference-boundaries) |
 | §4 composition | [Three interacting layers](#three-interacting-layers) |
+
+## Solution Strategy
 
 ### Design overview
 
@@ -84,7 +88,9 @@ No layer grants authorization by itself. A next cycle step, a satisfied guard, o
 
 This organization expresses design intent: making the operating model and its cross-cutting relationships explicit while preserving normative behavior. The repository holds no measurement showing that it improves human comprehension, agent adherence, or token use.
 
-#### Small commitments with sufficient depth
+## Crosscutting Concepts
+
+### Small commitments with sufficient depth
 
 The requester supplies goals, permission, and relevant constraints. The agent supplies decomposition, acceptance conditions, proportionate planning, validation, cumulative reassessment, and recognition of required consultation. These standing responsibilities let an ordinary outcome-oriented request start useful work without requiring the requester to monitor tokens or supervise every correction. A requester may still select a step or add review points.
 
@@ -102,7 +108,7 @@ Completeness is assessed within the increment's scope. Evidence, enabling infras
 
 Under [§2.3](../../contract/prerelease_AGENTS.md#23-effort-estimates-and-requester-limits), correctness, completeness, consistency, and adequate reasoning, implementation, and validation MUST precede saving lines, files, or tokens and context. Among workable solutions, clarity, canonical ownership, and reversibility SHOULD precede fewer parts. These priorities apply cumulatively, including to decomposition and repeated attempts; compactness is not a reason to leave required work out.
 
-#### Learning throughout the work
+### Learning throughout the work
 
 The [Deming Institute's PDSA account](https://deming.org/explore/pdsa/) connects an approach and expected result with observation and the next decision. Small increments bound commitments; PDSA's contribution is learning which approach remains suitable and what to do next. Passing tests alone does not establish that learning role: the implications still inform Act and subsequent planning.
 
@@ -112,7 +118,7 @@ Terms and the layer overview precede the work cycle. Methods appear near their p
 
 PDSA's Plan phase organizes reasoning. A tool's Plan mode has its own proposal and approval procedures. Neither expands authorization. These distinctions let the workflow apply proportionally to implementation, investigation, and documentation without inventing separate mandatory deliverables.
 
-#### Completion, predictions, and bounded investigation
+### Completion, predictions, and bounded investigation
 
 The contract keeps three ideas separate because they answer different questions:
 
@@ -146,7 +152,7 @@ Further attempts must be justified by preceding findings and stay within existin
 
 Narrow investigation within existing authorization may establish facts for consultation. When it exposes an unsettled decision requiring requester direction under §2.2, the agent must consult before adopting or implementing that direction. Notification neither provides that authority nor adds an approval checkpoint to otherwise authorized investigation. The design therefore preserves technical autonomy while reserving consequential choices for the requester. Removing a mandatory announcement structure does not establish equivalent agent behavior or improved token efficiency; those are evaluation questions, not conclusions from wording alone.
 
-#### Authorization and requester decisions
+### Authorization and requester decisions
 
 An increment limits work undertaken at once; a report can summarize several increments; a checkpoint reserves a decision for the requester. Another increment needs existing authorization or a new request; completion MUST NOT authorize further work. Ordinary increments can [continue under existing authorization](../../contract/prerelease_AGENTS.md#25-continuing-to-another-increment) without routine reports. Their completion supplies no additional permission and creates no automatic pause.
 
@@ -181,7 +187,7 @@ Verified factual corrections are a separate permission because they align an exi
 
 Precisely, analysis or review alone permits **only** material, durable finding records; ADR and debt maintenance; and verified corrections aligning existing descriptions of current project facts (such as commands or paths) in the assessed scope with their owner. The correction permission excludes requirements, decision records, and the three protected instruction files. It MUST NOT authorize implementation, new or changed system requirements, accepting or changing decisions beyond existing authority, unrelated documentation repairs, or backfills. A record trigger does not remove any of these limits.
 
-#### Reporting and continued execution
+### Reporting and continued execution
 
 Completing an increment and reporting to the requester serve different purposes. PDSA requires the work to be assessed and its findings used, even when no chat report follows. Under [AGENTS.md §3.7](../../contract/prerelease_AGENTS.md#37-reporting), the agent MUST consolidate unreported work into a report at task completion, handoff, or when seeking requester input. It SHOULD minimize routine progress reports; intermediate communication SHOULD be concise and useful. This does not categorically prohibit drafting or sending an intermediate update.
 
@@ -210,6 +216,8 @@ The current [reporting rule](../../contract/prerelease_AGENTS.md#37-reporting) s
 | Blocked tools | The agent MUST report tool limits blocking edits, checks, or instruction loading and, where possible, supply exact changes with paths and application context. A fallback explanation does not establish that the edit or check occurred. |
 
 The [usage guide](../../contract/prerelease_README-powerusers.md#assess-the-result) illustrates what the requester receives; these duties are specified here without relying on that illustration.
+
+## Runtime View
 
 ### How the design works in a task
 

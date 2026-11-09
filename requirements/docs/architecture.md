@@ -27,7 +27,7 @@ The following index assigns current-semantic detail within this contract archite
 | Contract clauses | Engineering specification locations |
 | --- | --- |
 | Purpose, model, terms | [Established objectives](product-requirements.md#established-objectives), this vocabulary, and [three interacting layers](#three-interacting-layers) |
-| §1; §1.1 Plan | [Small commitments](#small-commitments-with-sufficient-depth), [learning](#learning-throughout-the-work), [completion and inquiry](#completion-predictions-and-bounded-investigation), [knowledge roles](contract-design.md#documentation-choices), and [initial framing](#reporting-and-continued-execution) |
+| §1; §1.1 Plan | [Small commitments](#small-commitments-with-sufficient-depth), [learning](#learning-throughout-the-work), [completion and inquiry](#completion-predictions-and-bounded-investigation), [knowledge roles](#documentation-choices), and [initial framing](#reporting-and-continued-execution) |
 | §1.2 Do | [Simple Design](#simple-design-choosing-what-the-current-solution-needs), [component boundaries, refactoring, and validation](#component-boundaries-refactoring-and-validation), [qualified techniques](#focused-techniques-and-how-they-work-together), and remaining [Engineering choices](contract-design.md#engineering-choices) |
 | §1.3 Study; §1.4 Act | [Completion and predictions](#completion-predictions-and-bounded-investigation), [validation and tests](#validation-and-test-evidence), [learning](#learning-throughout-the-work), and [composition](#three-interacting-layers) |
 | §2.1 Authority; §2.2 decisions | [Decision factors](#small-commitments-with-sufficient-depth) and [authorization and requester decisions](#authorization-and-requester-decisions) |
@@ -36,7 +36,7 @@ The following index assigns current-semantic detail within this contract archite
 | §3.1 requirements | [Requirement boundary and revision](#completion-predictions-and-bounded-investigation) and [EARS forms](contract-design.md#ears-making-required-behavior-explicit) |
 | §3.2 findings | [Assessment writes, durability, and permanent records](#authorization-and-requester-decisions) |
 | §3.3 decisions; §3.4 debt | [ADRs](contract-design.md#adrs-preserving-the-reasons-for-lasting-choices) and [technical debt](contract-design.md#recording-technical-debt) |
-| §3.5 canonical knowledge/affected docs | [DRY](#dry-keeping-knowledge-consistent-as-work-progresses) and [documentation synchronization](contract-design.md#documentation-choices) |
+| §3.5 canonical knowledge/affected docs | [DRY](#dry-keeping-knowledge-consistent-as-work-progresses) and [documentation synchronization](#documentation-choices) |
 | §3.6 architecture/guides/code docs | [arc42 and README](contract-design.md#arc42-shared-architectural-context-as-the-project-grows) and [Diátaxis and code documentation](contract-design.md#diátaxis-choosing-content-for-the-readers-need) |
 | §3.7 reporting | [Reporting and continued execution](#reporting-and-continued-execution) |
 | §3.8 instructions/protection/external actions | [Why the bridges differ](contract-design.md#why-the-bridges-differ) |
@@ -286,6 +286,22 @@ The agent SHOULD prefer interfaces, protocols, and composition when they reduce 
 **Fowler's [dependency injection](https://martinfowler.com/articles/injection.html), “Separating Configuration from Use”**
 
 The agent SHOULD supply dependencies externally when this improves separation, clarity, or testing. Configuration SHOULD stay at assembly, initialization, or external-system boundaries. Supplying a clock as a parameter can suffice; no container or new dependency is required.
+
+### Documentation choices
+
+Different project artifacts answer different questions. Requirements describe intended behavior. Accepted decisions retain choices and reasons. Architecture describes boundaries and guarantees. Schemas and package metadata declare their own constraints. Code, tests, and execution provide evidence of implemented behavior. Examples and notes govern only when explicitly labeled as rules.
+
+These roles explain why executable behavior does not automatically overrule a requirement. If an implementation behaves differently from a required format, that disagreement is evidence to assess. The existence of the implementation does not by itself authorize changing the requirement. The contract intentionally has no global precedence ladder among these artifacts. An earlier total ordering was removed because a single ranking cannot fit artifacts that own different kinds of knowledge.
+
+The agent MUST report contradictions, distinguish evidence from inference, and follow the knowledge's owner. If ownership leaves a consequential conflict unresolved, it MUST take that conflict to the requester under the requester-interaction rules instead of inventing a fallback order. Instruction files govern agent conduct rather than proving project facts. Requirements, constraints, and facts stated by the requester remain legitimate task context.
+
+Documentation preserves a shared account of the project for maintainers, users, and future agents. Reading canonical facts and reasons supports Plan; producing a guide or updating affected documentation is Do work. Study checks acceptance; Act uses the findings and retains relevant learning. Requirement, record, decision, debt, documentation, and architecture duties are [triggered rules](../../contract/prerelease_AGENTS.md#3-triggered-rules) because their conditions can arise in any phase. They preserve knowledge as it emerges without authorizing work beyond their terms.
+
+Updates follow **affected documentation**: the canonical owners of changed knowledge and the known documents that directly depend on it, whether linked or not and read or not. These documents MUST track code, tests, configuration, interfaces, architecture, and operations. A README repeating a changed value is affected even if it has no link to the owner and has not yet been read. Such dependents are typically known from the task, artifacts being inspected, explicit references, ownership, or established source/update relationships. Links alone warrant checks, not necessarily edits.
+
+Documentation work MUST stay bounded under the increment and inquiry rules and within that affected set unless broader work is authorized. Dependents and coverage expectations MUST NOT authorize searches for unknown dependents, repository-wide audits, backfills, or reorganization; wider checks MAY be proposed. This defines the required synchronization work without making every edit a repository-wide documentation project. Documentation-only work uses the same increment, validation, and review rules as other work.
+
+At review boundaries, the agent MUST fix stale, conflicting, duplicated, or misplaced content and links within authorized scope; analysis or review alone remains limited to the [permitted assessment writes](#authorization-and-requester-decisions). Current-system documents MUST describe what exists and label unfinished or proposed work. Finding an out-of-scope gap does not override scope or protected-file limits.
 
 ## Runtime View
 

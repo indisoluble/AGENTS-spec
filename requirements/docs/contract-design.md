@@ -2,7 +2,7 @@
 
 **Engineering-only document.** This file is a temporary consolidation document within the requirements project at `requirements/docs/contract-design.md` and remains excluded from the intended consumer release. It is not a runtime instruction file, provider bridge, or adoption guide, and creates no additional consumer operating duties.
 
-This document is the authoritative design source for the reusable, opinionated [AGENTS.md](../../contract/prerelease_AGENTS.md) contract's remaining currently binding design prescriptions and their semantics, selected mechanisms, rationale, trade-offs, significant design history, and subsequent engineering evolution. [Contract architecture](architecture.md) owns the transferred design overview, goals and boundaries, three-layer interaction and continuation, bounded-work design, PDSA learning design, completion and prediction distinctions, bounded-inquiry design, authorization and requester decisions, reporting and continued execution, Simple Design, DRY, component boundaries, refactoring, validation, worked task example, and shared current-semantics vocabulary and contract-clause coverage index. [Product requirements](product-requirements.md) owns the established objectives, PR1, and product constraints; [requirement candidates](requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions. [Classification and evidence](#classification-and-evidence) remains here alongside the remaining design explanations and historical alternatives. Internal requirements and explanations add no runtime duties: `AGENTS.md` remains the independently self-contained normative runtime contract delivered to consuming agents.
+This document is the authoritative design source for the reusable, opinionated [AGENTS.md](../../contract/prerelease_AGENTS.md) contract's remaining currently binding design prescriptions and their semantics, selected mechanisms, rationale, trade-offs, significant design history, and subsequent engineering evolution. [Contract architecture](architecture.md) owns the transferred design overview, goals and boundaries, three-layer interaction and continuation, bounded-work design, PDSA learning design, completion and prediction distinctions, bounded-inquiry design, authorization and requester decisions, reporting and continued execution, Simple Design, DRY, component boundaries, refactoring, validation, focused techniques, worked task example, and shared current-semantics vocabulary and contract-clause coverage index. [Product requirements](product-requirements.md) owns the established objectives, PR1, and product constraints; [requirement candidates](requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions. [Classification and evidence](#classification-and-evidence) remains here alongside the remaining design explanations and historical alternatives. Internal requirements and explanations add no runtime duties: `AGENTS.md` remains the independently self-contained normative runtime contract delivered to consuming agents.
 
 For adoption, use [README.md](../../contract/prerelease_README.md); for practical guidance, use [Getting more from AGENTS.md](../../contract/prerelease_README-powerusers.md). For engineering-system relationships and authority, use [architecture.md](../../docs/architecture.md#development-time-and-runtime-authority); for editorial procedures and canonical ownership, use [documentation-maintenance.md](../../_internal/docs/documentation-maintenance.md#document-ownership). This reference explains product intent and design, rather than supplying a complete product-development process, branching strategy, workflow engine, or framework tutorial.
 
@@ -125,27 +125,7 @@ See the requirements-domain [contract architecture — Validation and test evide
 
 #### Focused techniques and how they work together
 
-These techniques support Simple Design when their benefits justify their costs. Their selection grants no authority for unrelated restructuring or new dependencies.
-
-**Gross's [Locality of Behaviour](https://htmx.org/essays/locality-of-behaviour/)**
-
-Behavior SHOULD be understandable near its implementation; the agent MUST balance this with separate responsibilities and canonical ownership. A clearly named validation call can keep the control flow readable while the rule stays in its canonical owner. The contract does not require inlining everything or adopting htmx.
-
-**The [Law of Demeter](https://www2.ccs.neu.edu/research/demeter/demeter-method/LawOfDemeter/general-formulation.html)**
-
-The agent SHOULD use direct collaborators' interfaces, avoiding reach-through when this reduces coupling and weighing clarity and interface costs; it MUST NOT ban all chained access. The trade-off is reduced coupling versus interface complexity: forwarding methods that add no useful boundary can make the code harder to follow. The contract therefore weighs coupling and clarity rather than imposing a blanket ban on chained access or requiring an aspect-oriented solution.
-
-**Fowler's [Value Object](https://martinfowler.com/bliki/ValueObject.html)**
-
-Value objects (equal by contents) or other domain structures SHOULD replace primitives when they clarify meaning or validation. The agent SHOULD favor immutability where practical, preserving required identity and state changes. The contract makes this a conditional design recommendation; it requires neither wrapping every primitive nor adopting Domain-Driven Design.
-
-**The [inheritance extract](https://media.pragprog.com/titles/tpp20/inheritance-tax.pdf)**
-
-The agent SHOULD prefer interfaces, protocols, and composition when they reduce coupling, and polymorphism over complex conditional dispatch when clearer, without banning justified inheritance. The conditions matter: these preferences do not justify abstractions based on speculation alone or prohibit suitable inheritance.
-
-**Fowler's [dependency injection](https://martinfowler.com/articles/injection.html), “Separating Configuration from Use”**
-
-The agent SHOULD supply dependencies externally when this improves separation, clarity, or testing. Configuration SHOULD stay at assembly, initialization, or external-system boundaries. Supplying a clock as a parameter can suffice; no container or new dependency is required.
+See the requirements-domain [contract architecture — Focused techniques and how they work together](architecture.md#focused-techniques-and-how-they-work-together) for the canonical current-design explanation.
 
 ### Documentation choices
 

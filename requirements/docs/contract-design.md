@@ -2,7 +2,7 @@
 
 **Engineering-only document.** This file is a temporary consolidation document within the requirements project at `requirements/docs/contract-design.md` and remains excluded from the intended consumer release. It is not a runtime instruction file, provider bridge, or adoption guide, and creates no additional consumer operating duties.
 
-This document is the authoritative design source for the reusable, opinionated [AGENTS.md](../../contract/prerelease_AGENTS.md) contract's remaining currently binding design prescriptions and their semantics, selected mechanisms, rationale, trade-offs, significant design history, and subsequent engineering evolution. [Contract architecture](architecture.md) owns the transferred design overview, goals and boundaries, three-layer interaction and continuation, bounded-work design, PDSA learning design, completion and prediction distinctions, bounded-inquiry design, authorization and requester decisions, reporting and continued execution, Simple Design, DRY, component boundaries, refactoring, validation, focused techniques, worked task example, and shared current-semantics vocabulary and contract-clause coverage index. [Product requirements](product-requirements.md) owns the established objectives, PR1, and product constraints; [requirement candidates](requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions. [Classification and evidence](#classification-and-evidence) remains here alongside the remaining design explanations and historical alternatives. Internal requirements and explanations add no runtime duties: `AGENTS.md` remains the independently self-contained normative runtime contract delivered to consuming agents.
+This document is the authoritative design source for the reusable, opinionated [AGENTS.md](../../contract/prerelease_AGENTS.md) contract's remaining currently binding design prescriptions and their semantics, selected mechanisms, rationale, trade-offs, significant design history, and subsequent engineering evolution. [Contract architecture](architecture.md) owns the transferred design overview, goals and boundaries, three-layer interaction and continuation, bounded-work design, PDSA learning design, completion and prediction distinctions, bounded-inquiry design, authorization and requester decisions, reporting and continued execution, Simple Design, DRY, component boundaries, refactoring, validation, focused techniques, arc42 documentation design, worked task example, and shared current-semantics vocabulary and contract-clause coverage index. [Product requirements](product-requirements.md) owns the established objectives, PR1, and product constraints; [requirement candidates](requirement-candidates.md) owns provisional RC1–RC10 and their unresolved acceptance questions. [Classification and evidence](#classification-and-evidence) remains here alongside the remaining design explanations and historical alternatives. Internal requirements and explanations add no runtime duties: `AGENTS.md` remains the independently self-contained normative runtime contract delivered to consuming agents.
 
 For adoption, use [README.md](../../contract/prerelease_README.md); for practical guidance, use [Getting more from AGENTS.md](../../contract/prerelease_README-powerusers.md). For engineering-system relationships and authority, use [architecture.md](../../docs/architecture.md#development-time-and-runtime-authority); for editorial procedures and canonical ownership, use [documentation-maintenance.md](../../_internal/docs/documentation-maintenance.md#document-ownership). This reference explains product intent and design, rather than supplying a complete product-development process, branching strategy, workflow engine, or framework tutorial.
 
@@ -133,30 +133,7 @@ See the requirements-domain [contract architecture — Documentation choices](ar
 
 #### arc42: shared architectural context as the project grows
 
-[arc42](https://arc42.org/overview/) supplies the following twelve topics. Applicable topics set target coverage, rather than a mandatory empty template:
-
-| Topic | Target subject |
-| --- | --- |
-| 1 | Goals, stakeholders, and fundamental requirements |
-| 2 | Design and implementation constraints |
-| 3 | Context and scope |
-| 4 | Solution strategy |
-| 5 | Building blocks |
-| 6 | Runtime behavior |
-| 7 | Deployment |
-| 8 | Crosscutting concepts |
-| 9 | Decisions |
-| 10 | Quality goals and scenarios |
-| 11 | Risks and technical debt, under the debt rule's qualifications |
-| 12 | Glossary |
-
-Shared content expectations aim to reduce reinvention and relearning across repositories. They give an empty project questions to answer as evidence develops, without requiring the entire design to be settled first.
-
-Content MUST use known facts, not empty sections or invention, and detailed requirement links. For known gaps, the agent MUST propose improvements and SHOULD make them within authorized scope; conventions MUST NOT excuse gaps. The requester MAY decline, postpone, or limit changes, and material unknowns and gaps MUST stay visible. A partial or minimal architecture document does not itself breach the contract when these qualifications are respected. [Incremental documentation](https://faq.arc42.org/questions/B-14/) and [appropriate depth](https://faq.arc42.org/questions/B-4/) support keeping content useful as the system develops. [Quality scenarios](https://docs.arc42.org/section-10/) make goals assessable: “imports should be fast” still needs an agreed workload and measure.
-
-`README.md` MUST concisely give purpose, getting started, and any documentation locations other than root `docs/`. Architecture SHOULD start in one document in the existing documentation folder (the README-stated location, otherwise root `docs/`); sections MAY split for readability or maintenance, and names and layout MAY vary. Because root `docs/` is the standard default, creating a document there requires no README location update solely for that reason. This keeps early information together. The accepted [product/internal separation decision](../../docs/architecture.md#requirements-led-engineering-and-productinternal-separation) owns the scoped README interpretation for this repository: root README navigation concerns user-facing documentation, and the internal README identifies engineering documentation. That is a compatible engineering boundary, not an extra operating duty for adopting projects. An adequate existing arrangement can remain. Known coverage gaps still require proposals and warrant improvements within authorized scope, subject to requester limits or deferral. Summaries link to canonical requirements and ADRs, while implementation detail stays near code and tests.
-
-Topic 11 covers known risks as well as technical debt under the contract's definition. The risk category is not restricted to internal-quality compromises: external dependencies and operational circumstances can create known risks even when implementation quality is adequate. The distinction preserves the scope of [arc42's risks and debt topic](https://docs.arc42.org/section-11/) without classifying every risk as debt or importing an additional risk-management procedure.
+See the requirements-domain [contract architecture — arc42: shared architectural context as the project grows](architecture.md#arc42-shared-architectural-context-as-the-project-grows) for the canonical current-design explanation.
 
 #### EARS: making required behavior explicit
 

@@ -51,7 +51,7 @@ The current framework evaluates `contract/prerelease_AGENTS.md`, injected as wor
 | Learn how a scenario is built, run, and tested, starting from the Pydantic Evals concepts used | [Walkthrough: scope-discipline](../evaluations/docs/evaluations.md#walkthrough-scope-discipline) and [Pydantic Evals concepts used here](../evaluations/docs/evaluations.md#pydantic-evals-concepts-used-here) |
 | Find the suite's requirements (E1–E40) and how each is verified | [Verifiable requirements](../evaluations/docs/evaluations.md#verifiable-requirements) |
 | Change or add an evaluation case | [Modify or extend an evaluation](../evaluations/docs/evaluations.md#modify-or-extend-an-evaluation), then [verify a behavior change](../evaluations/docs/evaluations.md#verify-a-behavior-change) |
-| Understand or assess a change to the contract's design | [contract-design.md](../requirements/docs/contract-design.md), especially [Evolving the contract](../requirements/docs/contract-design.md#evolving-the-contract) and [Assessing design changes](../requirements/docs/contract-design.md#assessing-design-changes) |
+| Understand or assess a change to the contract's design | [Method selection](../requirements/docs/architecture.md#choosing-or-replacing-methods), [portability rationale](../requirements/docs/architecture.md#keeping-the-contract-portable), [wording trade-offs](../requirements/docs/architecture.md#current-wording-trade-offs), and [Assessing design changes](../requirements/docs/contract-design.md#assessing-design-changes) |
 | Edit any documentation, including the consumer guides | [documentation-maintenance.md](docs/documentation-maintenance.md) |
 
 ## Getting started

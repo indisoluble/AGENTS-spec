@@ -90,11 +90,13 @@ Current realization: [learning throughout the work](../design/contract-design.md
 
 ### BR7 — Proportionate communication and actionable handoffs
 
+When preparing to begin substantial work, the agent shall, after gathering sufficient initial context, briefly explain its intended approach and first step before starting. This communication shall not create an approval checkpoint unless another rule requires one.
+
 At task completion, handoff, or when seeking requester input, the agent shall consolidate unreported work into an actionable account of changes and reasons, relevant paths, decisions, and canonical links, evidence and checks including failures or omissions, material assumptions, conflicts, risks and choices, and unfinished work. It shall distinguish evidence from inference and step completion from task completion, and explain material departures from recommendations. Disclosures affecting authorization or decisions requiring requester input shall precede the affected work. Communication should fit the task; minimizing routine reports is a recommendation, not a prohibition on useful updates or a report requirement for every step.
 
 When handing off unfinished work, the agent shall transfer the task objective and established direction; applicable limits and checkpoints, including consumed allowances; the next or unfinished step's objective, bounds, and acceptance conditions; and relevant findings, evidence, and unresolved uncertainty. On resumption, it shall use that state and recover missing authorization or limit information, or obtain requester direction, before dependent work. A handoff shall not create a fresh allowance.
 
-Current realization: [reporting and continued execution](../design/contract-design.md#reporting-and-continued-execution), contract §§1.1, 2.3, 2.4, and 3.7. The initial framing duty, distinct inquiry notification, exact delivery conventions, and tool-limit disclosures retain their current force. No mandatory report template, routine approval interval, or ban on intermediate communication is introduced.
+Current realization: [reporting and continued execution](../design/contract-design.md#reporting-and-continued-execution), contract §§1.1, 2.3, 2.4, and 3.7. The contract's more detailed planning and framing elements, including the task outline and first increment's objective and bounds, remain selected design at their current strength. Distinct inquiry notification, exact delivery conventions, and tool-limit disclosures retain their current force. No mandatory report template, routine approval interval, or ban on intermediate communication is introduced.
 
 ### BR8 — Durable knowledge without expanded editing authority
 

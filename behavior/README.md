@@ -53,7 +53,7 @@ Read the source sections for their definitions, qualifications, and evidence. Th
 
 BR1–BR10 and the accepted clarifications are formalized in the baseline; PR1, objectives, and constraints retain their established status. The owner supplied an acceptance summary rather than the original wording, so [editorial provenance](baseline.md#phase-2-acceptance-and-editorial-provenance) and [remaining example detail](discovery.md#formulation-questions-and-evidence-limits) stay explicit. No BR11 is introduced.
 
-All 60 Phase 2 scenarios are proposed, including 48 direct demonstrations and 12 whose detailed design expectations need review before becoming defining examples. Owner review of these formulations and examples, requirements-derived automation, and any separately authorized contract redesign remain future work. The 28 non-normative design illustrations remain unchanged; existing rubrics and captured evaluations are not retroactively accepted as product criteria. No exhaustive behavioral or evaluation coverage is claimed.
+All 60 Phase 2 scenarios are proposed, including 51 direct demonstrations and 9 whose detailed design expectations need review before becoming defining examples. Owner review of these formulations and examples, requirements-derived automation, and any separately authorized contract redesign remain future work. The 28 non-normative design illustrations remain unchanged; existing rubrics and captured evaluations are not retroactively accepted as product criteria. No exhaustive behavioral or evaluation coverage is claimed.
 
 ## Working with requirements and design documentation
 

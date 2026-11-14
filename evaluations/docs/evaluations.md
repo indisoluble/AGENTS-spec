@@ -619,7 +619,7 @@ Begin with the scenario's intended behavior, its source module, linked tests, an
 
 To add a scenario, apply those principles in these places:
 
-1. Create `evaluations/scenarios/<module>.py` with `PROMPT`, the fixture bytes, its evaluators, and a dataset factory returning a one-case `Dataset`. Add `REVIEW_RUBRIC` and a `check_execution` wrapper over `functional_checks.run_checks` only if the case needs them. Import shared mechanisms from `evals.runtime`.
+1. Create `evaluations/scenarios/<module>.py` with `PROMPT`, the fixture bytes, its evaluators, and a dataset factory returning a one-case `Dataset`. Add `REVIEW_RUBRIC` and a `check_execution` wrapper over `functional_checks.run_checks` only if the case needs them. Import shared mechanisms from `evaluations.runtime`.
 2. Add a `CaseConfig` entry to `CASES` in `evaluations/__main__.py` at its catalogue position. The `--case` choices and the `all` order come from that collection.
 3. Teach `evaluations/tests/support/fake_codex.py` to recognize the case from its prompt or fixture and to produce the scripted responses its tests need.
 4. Add `evaluations/tests/scenarios/test_<module>.py` with grading tests through `evaluate()` and a `<Name>CLITests(FakeCodexCLI, unittest.TestCase)` class for CLI composition, evidence, and failure classification.

@@ -1,6 +1,6 @@
 # Local coding-agent evaluations
 
-This document explains how to operate, interpret, and maintain the local evaluation suite. It owns the detailed documentation of the evaluation framework and its engineering decisions; [architecture.md](../../docs/architecture.md) explains how the framework relates to the specification and the rest of the engineering project, including how contract changes can affect cases and rubrics.
+This document explains how to operate, interpret, and maintain the local evaluation suite. It owns the detailed documentation of the evaluation framework and its engineering decisions; [architecture.md](../../docs/architecture.md) explains how the framework relates to the specification and the rest of the engineering project; [change-impact guidance](../../docs/authority-and-change.md#change-impact) explains how contract changes can affect cases and rubrics.
 
 For a first maintenance pass, read the staged [adoption guide](../../contract/prerelease_README.md) and [contract](../../contract/prerelease_AGENTS.md) to understand what is evaluated, then the engineering architecture and [evaluation model](#purpose-and-evaluation-model). Follow [setup](#install-prerequisites) and [offline checks](#run-offline-checks), which need no login or model allowance, before exploring the [framework architecture](#architecture-extension-and-maintenance), [cases](#cases-and-interpretation), and source modules relevant to the work. Live runs require authentication and consume allowance as [running a case](#run-a-case-or-the-suite) explains. The sections below own evaluation navigation, evidence interpretation, evaluator verification, and maintenance; scenario modules retain exact case and rubric content.
 
@@ -639,7 +639,7 @@ Inspect the live run's selected case, assertions and reasons, initial/final byte
 
 ## Engineering decisions
 
-This section owns the complete evaluation-specific decision records; the [system-wide architecture](../../docs/architecture.md#decisions) owns cross-project relationships and system-wide decisions. The records retain their historical names, paths, commands, and migration qualifications. Use [setup and running evaluations](#setup-and-running-evaluations) and [directory layout and ownership](#directory-layout-and-ownership) for current operation.
+This section owns the complete evaluation-specific decision records; [architecture.md](../../docs/architecture.md) owns cross-project relationships and the decision index, while [engineering history](../../docs/engineering-history.md#decisions) owns system-wide decision records. The records retain their historical names, paths, commands, and migration qualifications. Use [setup and running evaluations](#setup-and-running-evaluations) and [directory layout and ownership](#directory-layout-and-ownership) for current operation.
 
 ### Restrictive evaluation-agent command permissions
 
@@ -683,7 +683,7 @@ This section owns the complete evaluation-specific decision records; the [system
 - *Moving `offline_smoke.py` and the sandbox probe into subdirectories:* would change their documented commands.
 - *Test substitutes in runtime, or a shared path constant for the fake executable:* test-only code does not belong in production modules, and scenario tests that install the fake as a sandbox locate it directly instead of depending on the CLI harness.
 
-**Relation to the earlier decision.** The subdirectories rejected in [Integrated engineering architecture with focused detailed owners](../../docs/architecture.md#integrated-engineering-architecture-with-focused-detailed-owners) concerned the documents under `_internal/docs/`. This decision concerns code and test packages and leaves the documentation layout unchanged.
+**Relation to the earlier decision.** The subdirectories rejected in [Integrated engineering architecture with focused detailed owners](../../docs/engineering-history.md#integrated-engineering-architecture-with-focused-detailed-owners) concerned the documents under `_internal/docs/`. This decision concerns code and test packages and leaves the documentation layout unchanged.
 
 ## Verifiable requirements
 

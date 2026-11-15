@@ -8,7 +8,7 @@ The owner's Phase 2 assignment supplied on 14 November 2026 establishes the BR a
 
 The [current contract](../contract/prerelease_AGENTS.md) and [design accounts](../design/contract-design.md#current-semantics-vocabulary-and-coverage) supply implementation evidence and precise existing qualifications, not independent acceptance of every mechanism. [Global status boundaries](../docs/authority-and-change.md#status-and-evidence-boundaries) distinguish those roles. The staged contract does not govern repository development; [architecture](../docs/authority-and-change.md#development-time-and-runtime-authority) owns that authority boundary. This phase changes no consumer artifact or evaluation expectation.
 
-The historical RCx-Py proposals, their nine in-principle acceptances, and D1–D10 alternatives, including D2-A/D3-A selected for planning, retain their distinct status. BR approval is not a blanket acceptance of that earlier material. [Selected decisions](../design/contract-design.md#selected-design-and-retained-decisions), [historical interpretation](../design/contract-design.md#historical-source-and-interpretation), and the unchanged [28 design illustrations](../design/design-review.md#assessing-design-changes) keep their own authority and rationale.
+The historical RCx-Py proposals, their nine in-principle acceptances, and D1–D10 alternatives, including D2-A/D3-A selected for planning, retain their distinct status. BR approval is not a blanket acceptance of that earlier material. [Selected decisions](../design/decisions-and-alternatives.md#selected-design-and-retained-decisions), [historical interpretation](../design/decisions-and-alternatives.md#historical-source-and-interpretation), and the unchanged [28 design illustrations](../design/design-review.md#assessing-design-changes) keep their own authority and rationale.
 
 ## Disposition of the earlier candidates
 
@@ -33,16 +33,16 @@ The [inventory at `87a8933`](https://github.com/indisoluble/AGENTS-spec/blob/87a
 
 | Historical candidate topic | Evidence and current explanation | Question recorded at Phase 1 |
 | --- | --- | --- |
-| **RC1 — Bounded, complete commitments** | [Small commitments with sufficient depth](../design/contract-design.md#small-commitments-with-sufficient-depth); current §§1.1 and 2.3. Supports O1, including decision-level depth, cumulative reassessment, and coherence/recovery. | Which detailed decomposition, continuation, and recovery expectations are enduring product requirements, and which are the selected implementation? No numeric budget, score, or unique sequence is established. |
-| **RC2 — Evidence-led planning and knowledge ownership** | [Documentation choices](../design/contract-design.md#documentation-choices) and [completion/prediction distinctions](../design/contract-design.md#completion-predictions-and-bounded-investigation); current §1.1. | Determine which evidence/intent distinctions and unresolved-conflict responses are product requirements, and at what strength, without making every artifact category or current ordering permanent. |
-| **RC3 — Authorization and consequential consultation** | [Authorization and requester decisions](../design/contract-design.md#authorization-and-requester-decisions); current §§2.1–2.3, 2.5, and 3.8. | Confirm detailed scope boundaries, routine permissions, prior-direction triggers and exceptions, requester limits versus expectations, and protection of supplied paths. Current MUST/SHOULD/MAY distinctions cannot be inferred from the broad objective alone. |
-| **RC4 — Purpose-based inquiry and timely awareness** | [Completion, predictions, and bounded investigation](../design/contract-design.md#completion-predictions-and-bounded-investigation); current §§1.1, 2.4. | Confirm context-gathering exclusions, notification timing and its already-communicated exception, evidence sufficiency, bounds, and justified continuation, without reinstating the historical announcement/baseline mechanism. |
-| **RC5 — Completion evidence and learning** | [Learning throughout the work](../design/contract-design.md#learning-throughout-the-work) and [validation and test evidence](../design/contract-design.md#validation-and-test-evidence); current §§1, 1.3. | Determine desired learning and completion outcomes separately, including the status of checks, availability/substitution rules, and appropriate-test recommendations. A disproved prediction does not alone establish incomplete research or fulfilled implementation. PDSA and Given/When/Then remain selected techniques. |
-| **RC6 — Proportionate reports and continuity** | [Reporting and continued execution](../design/contract-design.md#reporting-and-continued-execution); current §§2.3, 3.7. | Confirm consolidation occasions, advance disclosures, initial framing, optional useful updates, and handoff/resumption content at their current distinct strengths; no automatic report or pause per increment follows from O2. |
-| **RC7 — Durable knowledge and decision authority** | [Authorization and requester decisions](../design/contract-design.md#authorization-and-requester-decisions), [ADRs](../design/contract-design.md#adrs-preserving-the-reasons-for-lasting-choices), and [debt](../design/contract-design.md#recording-technical-debt); current §§2.1, 3.2–3.4. | Confirm material-and-durable record triggers, assessment-write permissions/exclusions, significant-proposal timing/status, optional debt recording and related duties. Recording and acceptance of a decision remain distinct from permission to implement it. |
-| **RC8 — Engineering quality and preservation** | [Engineering scope boundaries](../design/contract-design.md#engineering-scope-boundaries) and the following engineering practices; current §§1.2–1.3. | Determine which quality/preservation outcomes and qualified recommendations are product requirements without freezing each technique, adding speculative complexity, or treating line count as simplicity. |
-| **RC9 — Requirements and documentation maintenance** | [Documentation choices](../design/contract-design.md#documentation-choices); current §§3.1, 3.5–3.6. | Confirm new/revised-requirement handling, affected-owner/direct-dependent scope, architectural coverage, and reader needs. EARS, arc42, ADRs, and Diátaxis are selected methods, not independently permanent product obligations. No repository-wide audit or new guide follows automatically. |
-| **RC10 — Reference and bridge behavior** | [Why the bridges differ](../design/contract-design.md#why-the-bridges-differ) and [reference boundaries](../design/contract-design.md#principles-and-reference-boundaries); current §§3.8–3.9 and supplied bridges. | Confirm detailed compatibility, provenance, failure-to-load, and narrow-consultation expectations. Tool-specific loading mechanisms and the absence of a common bootstrap protocol are current design choices, not universal provider behavior. |
+| **RC1 — Bounded, complete commitments** | [Small commitments with sufficient depth](../design/mechanisms/work-cycle-and-inquiry.md#small-commitments-with-sufficient-depth); current §§1.1 and 2.3. Supports O1, including decision-level depth, cumulative reassessment, and coherence/recovery. | Which detailed decomposition, continuation, and recovery expectations are enduring product requirements, and which are the selected implementation? No numeric budget, score, or unique sequence is established. |
+| **RC2 — Evidence-led planning and knowledge ownership** | [Documentation choices](../design/mechanisms/knowledge-and-documentation.md#documentation-choices) and [completion/prediction distinctions](../design/mechanisms/work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation); current §1.1. | Determine which evidence/intent distinctions and unresolved-conflict responses are product requirements, and at what strength, without making every artifact category or current ordering permanent. |
+| **RC3 — Authorization and consequential consultation** | [Authorization and requester decisions](../design/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions); current §§2.1–2.3, 2.5, and 3.8. | Confirm detailed scope boundaries, routine permissions, prior-direction triggers and exceptions, requester limits versus expectations, and protection of supplied paths. Current MUST/SHOULD/MAY distinctions cannot be inferred from the broad objective alone. |
+| **RC4 — Purpose-based inquiry and timely awareness** | [Completion, predictions, and bounded investigation](../design/mechanisms/work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation); current §§1.1, 2.4. | Confirm context-gathering exclusions, notification timing and its already-communicated exception, evidence sufficiency, bounds, and justified continuation, without reinstating the historical announcement/baseline mechanism. |
+| **RC5 — Completion evidence and learning** | [Learning throughout the work](../design/mechanisms/work-cycle-and-inquiry.md#learning-throughout-the-work) and [validation and test evidence](../design/mechanisms/engineering-and-validation.md#validation-and-test-evidence); current §§1, 1.3. | Determine desired learning and completion outcomes separately, including the status of checks, availability/substitution rules, and appropriate-test recommendations. A disproved prediction does not alone establish incomplete research or fulfilled implementation. PDSA and Given/When/Then remain selected techniques. |
+| **RC6 — Proportionate reports and continuity** | [Reporting and continued execution](../design/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution); current §§2.3, 3.7. | Confirm consolidation occasions, advance disclosures, initial framing, optional useful updates, and handoff/resumption content at their current distinct strengths; no automatic report or pause per increment follows from O2. |
+| **RC7 — Durable knowledge and decision authority** | [Authorization and requester decisions](../design/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [ADRs](../design/mechanisms/knowledge-and-documentation.md#adrs-preserving-the-reasons-for-lasting-choices), and [debt](../design/mechanisms/knowledge-and-documentation.md#recording-technical-debt); current §§2.1, 3.2–3.4. | Confirm material-and-durable record triggers, assessment-write permissions/exclusions, significant-proposal timing/status, optional debt recording and related duties. Recording and acceptance of a decision remain distinct from permission to implement it. |
+| **RC8 — Engineering quality and preservation** | [Engineering scope boundaries](../design/mechanisms/engineering-and-validation.md#engineering-scope-boundaries) and the following engineering practices; current §§1.2–1.3. | Determine which quality/preservation outcomes and qualified recommendations are product requirements without freezing each technique, adding speculative complexity, or treating line count as simplicity. |
+| **RC9 — Requirements and documentation maintenance** | [Documentation choices](../design/mechanisms/knowledge-and-documentation.md#documentation-choices); current §§3.1, 3.5–3.6. | Confirm new/revised-requirement handling, affected-owner/direct-dependent scope, architectural coverage, and reader needs. EARS, arc42, ADRs, and Diátaxis are selected methods, not independently permanent product obligations. No repository-wide audit or new guide follows automatically. |
+| **RC10 — Reference and bridge behavior** | [Why the bridges differ](../design/delivery-and-portability.md#why-the-bridges-differ) and [reference boundaries](../design/methods-and-references.md#principles-and-reference-boundaries); current §§3.8–3.9 and supplied bridges. | Confirm detailed compatibility, provenance, failure-to-load, and narrow-consultation expectations. Tool-specific loading mechanisms and the absence of a common bootstrap protocol are current design choices, not universal provider behavior. |
 
 ## Formulation questions and evidence limits
 
@@ -78,11 +78,11 @@ The proposed examples illustrating accepted clarifications are BR1.3/BR1.5 (cohe
 
 ## Proposed acceptance scenarios
 
-Source for current-contract qualifications: [the contract at `87a8933`](https://github.com/indisoluble/AGENTS-spec/blob/87a89333c4d2db8f888f2fd0683454d31777ce8b/contract/prerelease_AGENTS.md), unchanged in Phase 2. Historical [change `ca4ebee`](https://github.com/indisoluble/AGENTS-spec/commit/ca4ebee6cb579f0a622a58ab69918b7ec9c405ab) and the design's [superseded mechanisms](../design/contract-design.md#superseded-effort-baseline-checkpoint) distinguish current inquiry/reporting behavior from earlier announcements, effort baselines, and categorical report suppression. History explains evolution; it does not independently accept these examples.
+Source for current-contract qualifications: [the contract at `87a8933`](https://github.com/indisoluble/AGENTS-spec/blob/87a89333c4d2db8f888f2fd0683454d31777ce8b/contract/prerelease_AGENTS.md), unchanged in Phase 2. Historical [change `ca4ebee`](https://github.com/indisoluble/AGENTS-spec/commit/ca4ebee6cb579f0a622a58ab69918b7ec9c405ab) and the design's [superseded mechanisms](../design/decisions-and-alternatives.md#superseded-effort-baseline-checkpoint) distinguish current inquiry/reporting behavior from earlier announcements, effort baselines, and categorical report suppression. History explains evolution; it does not independently accept these examples.
 
 ## BR1 — Focused, proportionate, authorized work
 
-Requirement: [BR1](baseline.md#br1--focused-proportionate-authorized-work). Current qualification evidence: [design explanation](../design/contract-design.md#small-commitments-with-sufficient-depth), [contract](../contract/prerelease_AGENTS.md) §§1.1, 2.3, 2.5.
+Requirement: [BR1](baseline.md#br1--focused-proportionate-authorized-work). Current qualification evidence: [design explanation](../design/mechanisms/work-cycle-and-inquiry.md#small-commitments-with-sufficient-depth), [contract](../contract/prerelease_AGENTS.md) §§1.1, 2.3, 2.5.
 
 ### BR1.1 — Fix the defect and its necessary dependents
 
@@ -134,7 +134,7 @@ Requirement: [BR1](baseline.md#br1--focused-proportionate-authorized-work). Curr
 
 ## BR2 — Evidence-based planning and knowledge ownership
 
-Requirement: [BR2](baseline.md#br2--evidence-based-planning-and-knowledge-ownership). Current qualification evidence: [design explanation](../design/contract-design.md#documentation-choices), [contract](../contract/prerelease_AGENTS.md) §1.1.
+Requirement: [BR2](baseline.md#br2--evidence-based-planning-and-knowledge-ownership). Current qualification evidence: [design explanation](../design/mechanisms/knowledge-and-documentation.md#documentation-choices), [contract](../contract/prerelease_AGENTS.md) §1.1.
 
 ### BR2.1 — Inspect what matters before choosing the fix
 
@@ -170,7 +170,7 @@ Requirement: [BR2](baseline.md#br2--evidence-based-planning-and-knowledge-owners
 
 ## BR3 — Autonomy within authorization and prior direction
 
-Requirement: [BR3](baseline.md#br3--autonomy-within-authorization-and-prior-direction). Current qualification evidence: [design explanation](../design/contract-design.md#authorization-and-requester-decisions), [contract](../contract/prerelease_AGENTS.md) §§2.1–2.3, 2.5, 3.8.
+Requirement: [BR3](baseline.md#br3--autonomy-within-authorization-and-prior-direction). Current qualification evidence: [design explanation](../design/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [contract](../contract/prerelease_AGENTS.md) §§2.1–2.3, 2.5, 3.8.
 
 ### BR3.1 — A routine local choice needs no new requester decision
 
@@ -230,7 +230,7 @@ Under [BR3](baseline.md#br3--autonomy-within-authorization-and-prior-direction),
 - **When** the agent considers that trade-off.
 - **Then** it should seek requester direction before choosing, considering impact and reversibility. A departure from this recommendation needs weighed consequences and justification. This SHOULD does not create a mandatory approval gate or waive any separate requirement for prior direction.
 
-**Current design:** [Reporting and continued execution](../design/contract-design.md#reporting-and-continued-execution) specifies when and how material SHOULD exceptions are reported. Those reporting mechanics remain selected design, outside this example's proposed defining outcome.
+**Current design:** [Reporting and continued execution](../design/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution) specifies when and how material SHOULD exceptions are reported. Those reporting mechanics remain selected design, outside this example's proposed defining outcome.
 
 ### BR3.8 — Distinguish an expectation from a binding limit
 
@@ -250,7 +250,7 @@ Under [BR3](baseline.md#br3--autonomy-within-authorization-and-prior-direction),
 
 ## BR4 — Bounded investigation and timely reassessment
 
-Requirement: [BR4](baseline.md#br4--bounded-investigation-and-timely-reassessment). Current qualification evidence: [design explanation](../design/contract-design.md#completion-predictions-and-bounded-investigation), [contract](../contract/prerelease_AGENTS.md) §2.4; §§1.1, 2.3.
+Requirement: [BR4](baseline.md#br4--bounded-investigation-and-timely-reassessment). Current qualification evidence: [design explanation](../design/mechanisms/work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation), [contract](../contract/prerelease_AGENTS.md) §2.4; §§1.1, 2.3.
 
 ### BR4.1 — Tell the requester what is blocking progress
 
@@ -318,7 +318,7 @@ Requirement: [BR4](baseline.md#br4--bounded-investigation-and-timely-reassessmen
 
 ## BR5 — Completion supported by validation
 
-Requirement: [BR5](baseline.md#br5--completion-supported-by-validation). Current qualification evidence: [design explanation](../design/contract-design.md#validation-and-test-evidence), [contract](../contract/prerelease_AGENTS.md) §1.3.
+Requirement: [BR5](baseline.md#br5--completion-supported-by-validation). Current qualification evidence: [design explanation](../design/mechanisms/engineering-and-validation.md#validation-and-test-evidence), [contract](../contract/prerelease_AGENTS.md) §1.3.
 
 ### BR5.1 — Run relevant checks that are available
 
@@ -352,7 +352,7 @@ Requirement: [BR5](baseline.md#br5--completion-supported-by-validation). Current
 - **When** the agent reviews the failure.
 - **Then** it fixes the issue within scope or reports the failure and unfinished work. It does not weaken requirements, acceptance conditions, or tests, or reinterpret them merely to claim completion.
 
-**Current design:** [Validation and test evidence](../design/contract-design.md#validation-and-test-evidence) retains the qualified recommendations for appropriate tests, regression checks, and test-writing conventions. [Reporting and continued execution](../design/contract-design.md#reporting-and-continued-execution) retains the mechanics for reporting material departures from recommendations. These selected design details remain outside this example's proposed defining outcome.
+**Current design:** [Validation and test evidence](../design/mechanisms/engineering-and-validation.md#validation-and-test-evidence) retains the qualified recommendations for appropriate tests, regression checks, and test-writing conventions. [Reporting and continued execution](../design/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution) retains the mechanics for reporting material departures from recommendations. These selected design details remain outside this example's proposed defining outcome.
 
 ### BR5.5 — Validate research against its own objective
 
@@ -372,7 +372,7 @@ Requirement: [BR5](baseline.md#br5--completion-supported-by-validation). Current
 
 ## BR6 — Learning from observed results
 
-Requirement: [BR6](baseline.md#br6--learning-from-observed-results). Current qualification evidence: [design explanation](../design/contract-design.md#learning-throughout-the-work), [contract](../contract/prerelease_AGENTS.md) §§1, 1.3–1.4.
+Requirement: [BR6](baseline.md#br6--learning-from-observed-results). Current qualification evidence: [design explanation](../design/mechanisms/work-cycle-and-inquiry.md#learning-throughout-the-work), [contract](../contract/prerelease_AGENTS.md) §§1, 1.3–1.4.
 
 ### BR6.1 — Change the approach without changing the goal
 
@@ -400,7 +400,7 @@ Requirement: [BR6](baseline.md#br6--learning-from-observed-results). Current qua
 
 ## BR7 — Proportionate communication and actionable handoffs
 
-Requirement: [BR7](baseline.md#br7--proportionate-communication-and-actionable-handoffs). Current qualification evidence: [design explanation](../design/contract-design.md#reporting-and-continued-execution), [contract](../contract/prerelease_AGENTS.md) §§1.1, 2.3–2.4, 3.7.
+Requirement: [BR7](baseline.md#br7--proportionate-communication-and-actionable-handoffs). Current qualification evidence: [design explanation](../design/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution), [contract](../contract/prerelease_AGENTS.md) §§1.1, 2.3–2.4, 3.7.
 
 ### BR7.1 — Frame substantial work without creating an approval gate
 
@@ -410,7 +410,7 @@ Requirement: [BR7](baseline.md#br7--proportionate-communication-and-actionable-h
 - **When** the agent has gathered sufficient initial context and is about to start substantial work.
 - **Then** it briefly explains its intended approach and first step before starting, then proceeds unless another rule requires an approval checkpoint. The explanation itself creates no approval checkpoint.
 
-**Current design:** [Reporting and continued execution](../design/contract-design.md#reporting-and-continued-execution) specifies the task outline and first increment's objective and bounds in chat. Those more detailed framing elements remain selected design at their current strength, outside this example's proposed defining outcome.
+**Current design:** [Reporting and continued execution](../design/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution) specifies the task outline and first increment's objective and bounds in chat. Those more detailed framing elements remain selected design at their current strength, outside this example's proposed defining outcome.
 
 ### BR7.2 — Report results and disclose blockers in time
 
@@ -446,8 +446,8 @@ Requirement: [BR7](baseline.md#br7--proportionate-communication-and-actionable-h
 
 ## BR8 — Durable knowledge without expanded editing authority
 
-Requirement: [BR8](baseline.md#br8--durable-knowledge-without-expanded-editing-authority). Current qualification evidence: [design explanation](../design/contract-design.md#authorization-and-requester-decisions), [contract](../contract/prerelease_AGENTS.md) §§2.1, 3.2–3.4, 3.8.
-Decision and debt detail: [ADRs](../design/contract-design.md#adrs-preserving-the-reasons-for-lasting-choices), [technical debt](../design/contract-design.md#recording-technical-debt).
+Requirement: [BR8](baseline.md#br8--durable-knowledge-without-expanded-editing-authority). Current qualification evidence: [design explanation](../design/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [contract](../contract/prerelease_AGENTS.md) §§2.1, 3.2–3.4, 3.8.
+Decision and debt detail: [ADRs](../design/mechanisms/knowledge-and-documentation.md#adrs-preserving-the-reasons-for-lasting-choices), [technical debt](../design/mechanisms/knowledge-and-documentation.md#recording-technical-debt).
 
 ### BR8.1 — Record a lasting finding where it belongs
 
@@ -507,7 +507,7 @@ Decision and debt detail: [ADRs](../design/contract-design.md#adrs-preserving-th
 
 ## BR9 — Engineering quality and preservation
 
-Requirement: [BR9](baseline.md#br9--engineering-quality-and-preservation). Current qualification evidence: [design explanation](../design/contract-design.md#component-boundaries-refactoring-and-validation), [contract](../contract/prerelease_AGENTS.md) §§1.2–1.3.
+Requirement: [BR9](baseline.md#br9--engineering-quality-and-preservation). Current qualification evidence: [design explanation](../design/mechanisms/engineering-and-validation.md#component-boundaries-refactoring-and-validation), [contract](../contract/prerelease_AGENTS.md) §§1.2–1.3.
 
 ### BR9.1 — Refactor without changing observable behavior
 
@@ -551,7 +551,7 @@ Requirement: [BR9](baseline.md#br9--engineering-quality-and-preservation). Curre
 
 ## BR10 — Affected requirements and documentation
 
-Requirement: [BR10](baseline.md#br10--affected-requirements-and-documentation). Current qualification evidence: [design explanation](../design/contract-design.md#documentation-choices), [contract](../contract/prerelease_AGENTS.md) §§3.1, 3.5–3.6.
+Requirement: [BR10](baseline.md#br10--affected-requirements-and-documentation). Current qualification evidence: [design explanation](../design/mechanisms/knowledge-and-documentation.md#documentation-choices), [contract](../contract/prerelease_AGENTS.md) §§3.1, 3.5–3.6.
 
 ### BR10.1 — Separate lasting behavior from task-only checks
 

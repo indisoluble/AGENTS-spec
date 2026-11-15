@@ -94,7 +94,7 @@ Solid arrows are current references or mechanisms; dashed arrows are engineering
 
 The system-wide records below retain their historical paths and constraints. Later structural relocations, including `contract/prerelease_*`, `contract/docs/prerelease_contract-design.md`, `evaluations/`, and `docs/architecture.md`, and the development instruction loading described in the [authority model](authority-and-change.md#development-time-and-runtime-authority), do not rewrite those decisions' rationale or the intended consumer filenames. Current ownership is described in the [engineering overview](architecture.md); earlier location-based descriptions of the product boundary below remain historical. The [evaluation guide](../evaluations/docs/evaluations.md#setup-and-running-evaluations) owns current evaluation paths and commands.
 
-Specification-design decisions remain in [contract design](../design/contract-design.md#architecture-decisions), and evaluation-specific decisions remain in [the evaluation guide](../evaluations/docs/evaluations.md#engineering-decisions). The [cross-domain decision index](architecture.md#decisions) links these owners.
+Specification-design decisions reside in [decisions and alternatives](../design/decisions-and-alternatives.md#architecture-decisions), and evaluation-specific decisions remain in [the evaluation guide](../evaluations/docs/evaluations.md#engineering-decisions). The [cross-domain decision index](architecture.md#decisions) links these owners.
 
 ### Integrated engineering architecture with focused detailed owners
 

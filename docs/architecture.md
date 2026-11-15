@@ -20,7 +20,15 @@ The [13 November 2026 architecture decision](engineering-history.md#bdd-first-re
 │   └── discovery.md
 ├── design/
 │   ├── contract-design.md
-│   └── design-review.md
+│   ├── design-review.md
+│   ├── delivery-and-portability.md
+│   ├── methods-and-references.md
+│   ├── decisions-and-alternatives.md
+│   └── mechanisms/
+│       ├── work-cycle-and-inquiry.md
+│       ├── requester-decisions-and-reporting.md
+│       ├── engineering-and-validation.md
+│       └── knowledge-and-documentation.md
 ├── contract/
 │   ├── prerelease_AGENTS.md
 │   ├── prerelease_CLAUDE.md
@@ -44,7 +52,7 @@ The [13 November 2026 architecture decision](engineering-history.md#bdd-first-re
 | Owner | Durable responsibility and entry point |
 | --- | --- |
 | `behavior/` | [Navigation and editing](../behavior/README.md); [established objectives, PR1, constraints, and accepted behavior](../behavior/baseline.md); [proposed acceptance examples, coverage, historical candidates, and open formulation questions](../behavior/discovery.md). Established intent and proposals keep separate status. |
-| `design/` | [Current binding mechanisms, selection rationale, alternatives, method assignments, clause coverage, and history](../design/contract-design.md); [editorial guidance and the 28 non-normative design illustrations](../design/design-review.md). Selected design authority is distinct from independent product acceptance. |
+| `design/` | [Contract architecture, vocabulary, and clause coverage](../design/contract-design.md), with [detailed mechanisms](../design/contract-design.md#crosscutting-concepts), [delivery](../design/delivery-and-portability.md), [methods and references](../design/methods-and-references.md), and [decisions and history](../design/decisions-and-alternatives.md); [editorial guidance and the 28 non-normative design illustrations](../design/design-review.md). Selected design authority is distinct from independent product acceptance. |
 | `contract/` | Five staged consumer artifacts: the self-contained instructions, provider bridges, and adoption guides. Their [release-relative meanings](#staged-sources-and-release-relative-references) remain intact. |
 | `evaluations/` | [Evaluator requirements, operational expectations, cases, evidence interpretation, and operations](../evaluations/docs/evaluations.md), with scenario policy, runtime machinery, and offline tests at their existing paths. Retained evidence stays in its [documented locations](../evaluations/docs/evaluations.md#retained-evidence). |
 | `docs/` | This current system overview; [shared authority, ownership, BDD interfaces, traceability, and change guidance](authority-and-change.md); [engineering history and system decisions](engineering-history.md). Detailed definitions remain with their domain owners. |
@@ -114,7 +122,7 @@ The [temporary migration-authority record](engineering-history.md#temporary-migr
 
 ## Decisions
 
-This index links complete records at their canonical owners. [Engineering history](engineering-history.md#decisions) owns system-wide records and their historical qualifications; [contract design](../design/contract-design.md#architecture-decisions) owns specification-design decisions and historical alternatives; [the evaluation guide](../evaluations/docs/evaluations.md#engineering-decisions) owns evaluation-subsystem decisions. Domain documentation links to those records rather than duplicating them. Named decision anchors, including the earlier evaluation-record forwarding anchors, remain available here.
+This index links complete records at their canonical owners. [Engineering history](engineering-history.md#decisions) owns system-wide records and their historical qualifications; [contract-design decisions and alternatives](../design/decisions-and-alternatives.md#architecture-decisions) owns specification-design decisions and historical alternatives; [the evaluation guide](../evaluations/docs/evaluations.md#engineering-decisions) owns evaluation-subsystem decisions. Domain documentation links to those records rather than duplicating them. Named decision anchors, including the earlier evaluation-record forwarding anchors, remain available here.
 
 | Decision | Scope and canonical record |
 | --- | --- |

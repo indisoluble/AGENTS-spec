@@ -28,8 +28,8 @@ The supplied `AGENTS-spec-BDD-scenarios.md` is a 44-example **review draft**, no
 
 | Objective | Intended outcome and qualifications |
 | --- | --- |
-| **O1 — Control token consumption, first** | Bound the next commitment and keep work proportionate. The current design uses small, meaningful increments and progressive detail. Necessary reasoning, completeness, consistency, and validation remain part of the work; a smaller commitment is not permission for insufficient depth. This is a qualitative objective, with no token quota or guarantee of savings. |
-| **O2 — Requester awareness and consequential control, second** | Keep the requester informed and in control of consequential direction without constant supervision. Routine execution can remain autonomous within authorization. The exact consultation, notification, reporting, and limit mechanisms are explained in the [authorization and requester decisions](../design/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [inquiry design](../design/mechanisms/work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation), and [reporting design](../design/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution); this objective alone does not establish each mechanism's permanent trigger or strength. |
+| **[O1 — Control token consumption, first](#r1)** | Bound the next commitment and keep work proportionate. The current design uses small, meaningful increments and progressive detail. Necessary reasoning, completeness, consistency, and validation remain part of the work; a smaller commitment is not permission for insufficient depth. This is a qualitative objective, with no token quota or guarantee of savings. |
+| **[O2 — Requester awareness and consequential control, second](#r2)** | Keep the requester informed and in control of consequential direction without constant supervision. Routine execution can remain autonomous within authorization. The exact consultation, notification, reporting, and limit mechanisms are explained in the [authorization and requester decisions](../design/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [inquiry design](../design/mechanisms/work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation), and [reporting design](../design/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution); this objective alone does not establish each mechanism's permanent trigger or strength. |
 | **Knowledge continuity** | Preserve project facts and reasons for maintainers, users, and future agents through reliable canonical documentation. This supports both ordered objectives without making every discussion a permanent record or every method a deliverable. |
 
 These are intended effects. Textual consistency, file size, message counts, and selected methods do not establish measured token savings, comprehension, or agent adherence. Quantitative thresholds and comprehensive behavioral acceptance criteria have not been independently established here.
@@ -38,13 +38,35 @@ These are intended effects. Textual consistency, file size, message counts, and 
 
 This map explains the accepted requirements without changing their wording or status. R1–R5 are stable navigation IDs, not new objectives or requirements. Direct contributions refer to the intended [O1/O2 outcomes](#established-objectives), not measured benefits; supporting reasons need not map one-to-one to those objectives. Each requirement links back here. Its current-realization links lead to mechanism rationale and contract coverage, which remain owned by design.
 
-| ID | Why it exists and relationship to intent | Accepted requirements |
-| --- | --- | --- |
-| <a id="r1"></a>**R1** | **Direct contribution to O1:** proportionate commitments and bounded inquiry control the next commitment while retaining sufficient depth, coherence, and evidence-based reassessment. | [BR1](#br1--focused-proportionate-authorized-work), [BR4](#br4--bounded-investigation-and-timely-reassessment) |
-| <a id="r2"></a>**R2** | **Direct contribution to O2:** routine autonomy, timely awareness, and prior direction for consequential choices keep the requester in control without constant supervision. | [BR3](#br3--autonomy-within-authorization-and-prior-direction), [BR4](#br4--bounded-investigation-and-timely-reassessment), [BR7](#br7--proportionate-communication-and-actionable-handoffs) |
-| <a id="r3"></a>**R3** | **Supporting evidence and quality:** distinguish intent from observations, learn from results, validate completion, and preserve engineering guarantees so proportionate work remains correct and complete. These support O1/O2 without establishing savings or adherence. | [BR2](#br2--evidence-based-planning-and-knowledge-ownership), [BR5](#br5--completion-supported-by-validation), [BR6](#br6--learning-from-observed-results), [BR9](#br9--engineering-quality-and-preservation) |
-| <a id="r4"></a>**R4** | **Supporting knowledge continuity:** canonical facts, lasting reasons, affected documentation, and actionable handoffs let maintainers, users, and future agents continue with the relevant evidence and authority state. | [BR2](#br2--evidence-based-planning-and-knowledge-ownership), [BR7](#br7--proportionate-communication-and-actionable-handoffs), [BR8](#br8--durable-knowledge-without-expanded-editing-authority), [BR10](#br10--affected-requirements-and-documentation) |
-| <a id="r5"></a>**R5** | **Established self-contained delivery boundary:** the delivered contract contains all generic operating duties; guides, bridges, and internal records supply no hidden policy. Verify the [delivered contract](../contract/prerelease_AGENTS.md) by standalone inspection, using the [proposed PR1 inspection examples](discovery.md#pr1--self-contained-operating-contract); provider loading and agent behavior require separate evidence. | [PR1](#established-product-requirement) |
+### R1
+
+**Direct contribution to O1:** proportionate commitments and bounded inquiry control the next commitment while retaining sufficient depth, coherence, and evidence-based reassessment.
+
+Accepted requirements: [BR1](#br1--focused-proportionate-authorized-work), [BR4](#br4--bounded-investigation-and-timely-reassessment).
+
+### R2
+
+**Direct contribution to O2:** routine autonomy, timely awareness, and prior direction for consequential choices keep the requester in control without constant supervision.
+
+Accepted requirements: [BR3](#br3--autonomy-within-authorization-and-prior-direction), [BR4](#br4--bounded-investigation-and-timely-reassessment), [BR7](#br7--proportionate-communication-and-actionable-handoffs).
+
+### R3
+
+**Supporting evidence and quality:** distinguish intent from observations, learn from results, validate completion, and preserve engineering guarantees so proportionate work remains correct and complete. These support O1/O2 without establishing savings or adherence.
+
+Accepted requirements: [BR2](#br2--evidence-based-planning-and-knowledge-ownership), [BR5](#br5--completion-supported-by-validation), [BR6](#br6--learning-from-observed-results), [BR9](#br9--engineering-quality-and-preservation).
+
+### R4
+
+**Supporting knowledge continuity:** canonical facts, lasting reasons, affected documentation, and actionable handoffs let maintainers, users, and future agents continue with the relevant evidence and authority state.
+
+Accepted requirements: [BR2](#br2--evidence-based-planning-and-knowledge-ownership), [BR7](#br7--proportionate-communication-and-actionable-handoffs), [BR8](#br8--durable-knowledge-without-expanded-editing-authority), [BR10](#br10--affected-requirements-and-documentation).
+
+### R5
+
+**Established self-contained delivery boundary:** the delivered contract contains all generic operating duties; guides, bridges, and internal records supply no hidden policy. Verify the [delivered contract](../contract/prerelease_AGENTS.md) by standalone inspection, using the [proposed PR1 inspection examples](discovery.md#pr1--self-contained-operating-contract); provider loading and agent behavior require separate evidence.
+
+Accepted requirements: [PR1](#established-product-requirement).
 
 ## Established product requirement
 

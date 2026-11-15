@@ -63,18 +63,16 @@ Start an objective, question, design concern, or evaluation finding through [beh
 
 Accepted product intent in `behavior/` guides contract design and intended evaluation expectations. `design/` explains the mechanisms implemented by the staged contract; `evaluations/` exercises that candidate and retains evidence for human review. The [traceability account](authority-and-change.md#cross-domain-traceability-and-feedback) distinguishes these relationships, their reverse paths, and the remaining requirements-to-evaluation gaps. Consumer artifacts remain independent of engineering documentation.
 
-The following links lead to the canonical guidance. Anchors retain known incoming references and the published specification-to-evaluation dependency entry without duplicating the moved explanations.
+The following links lead to the canonical authority and change guidance:
 
-| Canonical guidance |
-| --- |
-| <a id="bdd-activities-and-complementary-responsibilities"></a>[BDD activities and complementary responsibilities](authority-and-change.md#bdd-activities-and-complementary-responsibilities) |
-| <a id="cross-domain-traceability-and-feedback"></a>[Cross-domain traceability and feedback](authority-and-change.md#cross-domain-traceability-and-feedback) |
-| <a id="development-time-and-runtime-authority"></a>[Development-time and runtime authority](authority-and-change.md#development-time-and-runtime-authority) |
-| <a id="status-and-evidence-boundaries"></a>[Status and evidence boundaries](authority-and-change.md#status-and-evidence-boundaries) |
-| <a id="what-evaluation-evidence-can-establish"></a>[What evaluation evidence can establish](authority-and-change.md#what-evaluation-evidence-can-establish) |
-| <a id="documentation-ownership-boundaries"></a>[Documentation ownership boundaries](authority-and-change.md#documentation-ownership-boundaries) |
-| <a id="specification-to-evaluation-dependencies"></a>[Specification-to-evaluation dependencies](authority-and-change.md#specification-to-evaluation-dependencies) |
-| <a id="change-impact"></a>[Change impact](authority-and-change.md#change-impact) |
+- [BDD activities and complementary responsibilities](authority-and-change.md#bdd-activities-and-complementary-responsibilities)
+- [Cross-domain traceability and feedback](authority-and-change.md#cross-domain-traceability-and-feedback)
+- [Development-time and runtime authority](authority-and-change.md#development-time-and-runtime-authority)
+- [Status and evidence boundaries](authority-and-change.md#status-and-evidence-boundaries)
+- [What evaluation evidence can establish](authority-and-change.md#what-evaluation-evidence-can-establish)
+- [Documentation ownership boundaries](authority-and-change.md#documentation-ownership-boundaries)
+- [Specification-to-evaluation dependencies](authority-and-change.md#specification-to-evaluation-dependencies)
+- [Change impact](authority-and-change.md#change-impact)
 
 ## Principal boundaries
 
@@ -115,20 +113,19 @@ This architecture refines into the existing owners rather than replacing them:
 
 ## Historical context
 
-For the arrangement preceding BDD-first organization, read the <a id="historical-responsibility-arrangement-at-the-phase-1-baseline"></a>[Phase 1 responsibility account](engineering-history.md#historical-responsibility-arrangement-at-the-phase-1-baseline) and its <a id="historical-context-graph-at-the-phase-1-baseline"></a>[historical context graph and relationships](engineering-history.md#historical-context-graph-at-the-phase-1-baseline). These describe the former `requirements/` organization, not today's tree.
+For the arrangement preceding BDD-first organization, read the [Phase 1 responsibility account](engineering-history.md#historical-responsibility-arrangement-at-the-phase-1-baseline) and its [historical context graph and relationships](engineering-history.md#historical-context-graph-at-the-phase-1-baseline). These describe the former `requirements/` organization, not today's tree.
 
-<a id="temporary-migration-authority"></a>
 The [temporary migration-authority record](engineering-history.md#temporary-migration-authority) preserves the frozen-contract baseline, independent verification, and the requester's 8 November authority-transfer decision.
 
 ## Decisions
 
-This index links complete records at their canonical owners. [Engineering history](engineering-history.md#decisions) owns system-wide records and their historical qualifications; [contract-design decisions and alternatives](../design/decisions-and-alternatives.md#architecture-decisions) owns specification-design decisions and historical alternatives; [the evaluation guide](../evaluations/docs/evaluations.md#engineering-decisions) owns evaluation-subsystem decisions. Domain documentation links to those records rather than duplicating them. Named decision anchors, including the earlier evaluation-record forwarding anchors, remain available here.
+This index links complete records at their canonical owners. [Engineering history](engineering-history.md#decisions) owns system-wide records and their historical qualifications; [contract-design decisions and alternatives](../design/decisions-and-alternatives.md#architecture-decisions) owns specification-design decisions and historical alternatives; [the evaluation guide](../evaluations/docs/evaluations.md#engineering-decisions) owns evaluation-subsystem decisions. Domain documentation links to those records rather than duplicating them.
 
 | Decision | Scope and canonical record |
 | --- | --- |
-| <a id="restrictive-evaluation-agent-command-permissions"></a>[Restrictive evaluation-agent command permissions](../evaluations/docs/evaluations.md#restrictive-evaluation-agent-command-permissions) | Evaluation project. |
-| <a id="integrated-engineering-architecture-with-focused-detailed-owners"></a>[Integrated engineering architecture with focused detailed owners](engineering-history.md#integrated-engineering-architecture-with-focused-detailed-owners) | Engineering system; original rationale and subsequent refinements. |
-| <a id="evaluation-framework-package-and-verification-hierarchy"></a>[Evaluation framework package and verification hierarchy](../evaluations/docs/evaluations.md#evaluation-framework-package-and-verification-hierarchy) | Evaluation project. |
-| <a id="requirements-led-engineering-and-productinternal-separation"></a>[Requirements-led engineering and product/internal separation](engineering-history.md#requirements-led-engineering-and-productinternal-separation) | Engineering system; authority, ownership, and product/internal separation. |
-| <a id="bdd-first-reorganization-13-november-2026"></a>[BDD-first reorganization (13 November 2026)](engineering-history.md#bdd-first-reorganization-13-november-2026) | Engineering system; approved responsibility owners, BDD interfaces, and Phase 1 preservation boundary. |
+| [Restrictive evaluation-agent command permissions](../evaluations/docs/evaluations.md#restrictive-evaluation-agent-command-permissions) | Evaluation project. |
+| [Integrated engineering architecture with focused detailed owners](engineering-history.md#integrated-engineering-architecture-with-focused-detailed-owners) | Engineering system; original rationale and subsequent refinements. |
+| [Evaluation framework package and verification hierarchy](../evaluations/docs/evaluations.md#evaluation-framework-package-and-verification-hierarchy) | Evaluation project. |
+| [Requirements-led engineering and product/internal separation](engineering-history.md#requirements-led-engineering-and-productinternal-separation) | Engineering system; authority, ownership, and product/internal separation. |
+| [BDD-first reorganization (13 November 2026)](engineering-history.md#bdd-first-reorganization-13-november-2026) | Engineering system; approved responsibility owners, BDD interfaces, and Phase 1 preservation boundary. |
 | [Shared engineering documentation extraction (15 November 2026)](engineering-history.md#shared-engineering-documentation-extraction-15-november-2026) | Structural successor for this three-document arrangement; remaining migrations are outside this step. |

@@ -2,7 +2,7 @@
 
 This document owns installation, authentication, case execution, retained evidence, report interpretation, failure investigation, and human review. Start with the [evaluation model](evaluations.md#purpose-and-evaluation-model) for the suite's scope and interpretation limits.
 
-Use the [case catalogue and acceptance definitions](../cases-and-requirements.md#cases-and-interpretation) to find the selected case's source module and exact rubric, and [E1–E40](../cases-and-requirements.md#verifiable-requirements) for evaluator requirements. [Framework design](framework-design.md) owns execution, observation, cleanup, and functional-check boundaries; the links below connect operational results to those mechanisms. A historical run is interpreted using its captured contract and rubric, as the [review procedure](#response-presence-and-human-review) explains.
+Use the [case catalogue and acceptance definitions](../deliverables/cases-and-requirements.md#cases-and-interpretation) to find the selected case's source module and exact rubric, and [E1–E40](../deliverables/cases-and-requirements.md#verifiable-requirements) for evaluator requirements. [Framework design](framework-design.md) owns execution, observation, cleanup, and functional-check boundaries; the links below connect operational results to those mechanisms. A historical run is interpreted using its captured contract and rubric, as the [review procedure](#response-presence-and-human-review) explains.
 
 ## Setup and running evaluations
 
@@ -15,10 +15,10 @@ cd 04-evaluations
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install --upgrade -r requirements.txt
+python -m pip install --upgrade -r deliverables/requirements.txt
 ```
 
-[requirements.txt](../requirements.txt) owns the dependency range. It allows Pydantic Evals minor and patch upgrades within major version 2. Dependencies are not locked, so installations can resolve different versions; rerun the offline checks after upgrading.
+[requirements.txt](../deliverables/requirements.txt) owns the dependency range. It allows Pydantic Evals minor and patch upgrades within major version 2. Dependencies are not locked, so installations can resolve different versions; rerun the offline checks after upgrading.
 
 **Codex is a separate prerequisite for live runs and the functional-check sandbox probe.** Installing Python dependencies does not install it. Follow the [official Codex CLI installation instructions](https://learn.chatgpt.com/docs/codex/cli), then check it in the same terminal that will run the suite:
 
@@ -27,18 +27,18 @@ command -v codex
 codex --version
 ```
 
-The runner finds `codex` on `PATH`. An editor can provide its own executable without making it available in your terminal; add that executable's directory to `PATH` or install the CLI separately. `--codex-home` selects credential/configuration storage, not the executable. The selected build must support the flags, features, and permission overrides in [execution_command](../evaluations/runtime/codex.py), including native permission profiles and `skip_host_skill_discovery`. See [agent execution](framework-design.md#agent-execution) for the configured boundary and verification limits.
+The runner finds `codex` on `PATH`. An editor can provide its own executable without making it available in your terminal; add that executable's directory to `PATH` or install the CLI separately. `--codex-home` selects credential/configuration storage, not the executable. The selected build must support the flags, features, and permission overrides in [execution_command](../deliverables/runtime/codex.py), including native permission profiles and `skip_host_skill_discovery`. See [agent execution](framework-design.md#agent-execution) for the configured boundary and verification limits.
 
 ### Run offline checks
 
 Check the infrastructure without signing in or using your subscription:
 
 ```sh
-python -m unittest discover -s evaluations/tests -t . -v
-python -m evaluations.tests.offline_smoke
+python -m unittest discover -s deliverables/tests -t . -v
+python -m deliverables.tests.offline_smoke
 ```
 
-Discovery uses `-t .` to import tests through the `evaluations.tests` package. To run one module, name it by package from `04-evaluations/`, for example `python -m unittest evaluations.tests.scenarios.test_scope -v`. Each scenario's grading and CLI tests are in `evaluations/tests/scenarios/test_<module>.py`; tests of the shared machinery and cross-scenario CLI guarantees are in `evaluations/tests/runtime/`.
+Discovery uses `-t .` to import tests through the `deliverables.tests` package. To run one module, name it by package from `04-evaluations/`, for example `python -m unittest deliverables.tests.scenarios.test_scope -v`. Each scenario's grading and CLI tests are in `deliverables/tests/scenarios/test_<module>.py`; tests of the shared machinery and cross-scenario CLI guarantees are in `deliverables/tests/runtime/`.
 
 These checks use substitutes or fake CLI processes with dummy credentials in temporary directories. They never launch real Codex or contact OpenAI. Tests inspect their own child processes with `/bin/ps`, create Unix sockets, and verify POSIX special mode bits; an enclosing agent sandbox may require permission for those operations. They do not establish live provider compatibility, actual sandbox enforcement, or coding-agent behavior. The separate [functional sandbox probe](framework-design.md#functional-check-execution) uses the real CLI without a model call.
 
@@ -49,7 +49,7 @@ Use a dedicated profile outside the repository. The default is `~/.codex-evals`;
 Sign in once:
 
 ```sh
-python -m evaluations --login
+python -m deliverables --login
 ```
 
 Login uses device authentication, forcing ChatGPT authentication and file storage. Enable device-code sign-in in your ChatGPT security settings if requested. Codex writes plaintext credentials to `auth.json` in the selected profile and manages token refresh. The suite does not read or copy their contents. See [Codex authentication](https://learn.chatgpt.com/docs/auth).
@@ -57,7 +57,7 @@ Login uses device authentication, forcing ChatGPT authentication and file storag
 **Credentials remain until explicit logout.** Finishing, failing, or timing out does not remove them. There is no suite-defined expiration period; provider expiry or revocation may require signing in again.
 
 ```sh
-python -m evaluations --logout
+python -m deliverables --logout
 ```
 
 Logout delegates to Codex for the selected profile, preserving its configuration and evaluation evidence. Local deletion does not guarantee server-side revocation. New profile directories use owner-only permissions; the suite does not repair permissions on an existing directory. Interactive login/logout are separate from automated evaluation and its timeout.
@@ -69,15 +69,15 @@ Each live case consumes ChatGPT subscription allowance. The suite rejects API au
 Run the default smoke case, select a behavioral case, or run all cases:
 
 ```sh
-python -m evaluations --model gpt-6.1-sol --reasoning-effort medium
-python -m evaluations --case scope-discipline --model gpt-6.1-sol --reasoning-effort medium
-python -m evaluations --case contract-change-followthrough --model gpt-6.1-sol --reasoning-effort medium
-python -m evaluations --case bounded-inquiry --model gpt-6.1-sol --reasoning-effort medium
-python -m evaluations --case durable-finding-review --model gpt-6.1-sol --reasoning-effort medium
-python -m evaluations --case all --model gpt-6.1-sol --reasoning-effort medium
+python -m deliverables --model gpt-6.1-sol --reasoning-effort medium
+python -m deliverables --case scope-discipline --model gpt-6.1-sol --reasoning-effort medium
+python -m deliverables --case contract-change-followthrough --model gpt-6.1-sol --reasoning-effort medium
+python -m deliverables --case bounded-inquiry --model gpt-6.1-sol --reasoning-effort medium
+python -m deliverables --case durable-finding-review --model gpt-6.1-sol --reasoning-effort medium
+python -m deliverables --case all --model gpt-6.1-sol --reasoning-effort medium
 ```
 
-For another individual case, use its name from the [catalogue](../cases-and-requirements.md#cases-and-interpretation) with `--case`. Omitting that option is equivalent to `--case smoke`.
+For another individual case, use its name from the [catalogue](../deliverables/cases-and-requirements.md#cases-and-interpretation) with `--case`. Omitting that option is equivalent to `--case smoke`.
 
 `all` follows the catalogue order, waiting for each case and its cleanup to finish. Each has an independent workspace, Codex session, report, and evidence directory. Ordinary failures do not skip later cases; Ctrl-C or SIGTERM stops the sequence. There are no automatic retries or concurrent cases.
 
@@ -112,7 +112,7 @@ An assertion failure can be valid evidence about the observed task, such as a wr
 Three kinds of failure reach these outcomes differently; the [evaluation lifecycle](framework-design.md#responsibilities-and-dependency-direction) shows where each occurs.
 
 - **Execution failure.** When the execution callback returns an error status, the evaluation task raises an execution error before grading; an exception raised by the callback has the same effect. Agent, prerequisite, capture, inspection, interruption, and functional-check launcher errors take this path, as do evidence-write failures, which the launcher or check step folds into that status. Pydantic Evals records the raised error as a case failure instead of a graded case, so no assertions exist for that run. The report lists the error, the outcome is `execution_failed`, and the exit code is 2. This means verification is missing; it is not a failed behavioral assertion.
-- **Individual evaluator failure.** Execution completed, but one evaluator raises an error while grading, for example because an observation it requires is missing or incomplete. That evaluator produces no Boolean verdict. The other evaluators still assess the same result and keep their independent assertions and reasons. The report records the evaluator error separately for that case, and the outcome is still `execution_failed` with exit code 2. As an illustration, the requester-guidance regression test `test_missing_contract_bytes_are_root_evaluator_errors_with_no_preservation_verdict` in [test_guidance.py](../evaluations/tests/scenarios/test_guidance.py) substitutes an observation in which the root contract's bytes were not captured. `RootContractPreserved` cannot compare missing bytes, so it raises and records neither preservation nor a change; `FinalResponsePresent` still reports whether the captured response has text, and `review_required` remains true. This offline test establishes grading and reporting behavior, not the result of a live run.
+- **Individual evaluator failure.** Execution completed, but one evaluator raises an error while grading, for example because an observation it requires is missing or incomplete. That evaluator produces no Boolean verdict. The other evaluators still assess the same result and keep their independent assertions and reasons. The report records the evaluator error separately for that case, and the outcome is still `execution_failed` with exit code 2. As an illustration, the requester-guidance regression test `test_missing_contract_bytes_are_root_evaluator_errors_with_no_preservation_verdict` in [test_guidance.py](../deliverables/tests/scenarios/test_guidance.py) substitutes an observation in which the root contract's bytes were not captured. `RootContractPreserved` cannot compare missing bytes, so it raises and records neither preservation nor a change; `FinalResponsePresent` still reports whether the captured response has text, and `review_required` remains true. This offline test establishes grading and reporting behavior, not the result of a live run.
 - **Behavioral assertion failure.** An evaluator that completes and returns `False` with a reason records evidence about the observed result; it is not an infrastructure error. A functional check that completes with a nonzero exit is such an observation, and the shared interpretation turns it into a failed assertion under the scenario's rules. A check that does not complete is an infrastructure error. Assertion failures produce `assertion_failed` and exit code 1 only when no error applies.
 
 `report.json` keeps these categories apart: task-level execution errors, per-case evaluator errors, assertion values with their separate reasons, and failures writing the reports themselves; the [`report.json` evidence entry](#retained-evidence) names the fields. Earlier evidence-write failures, during execution or functional checks, become part of the execution error; execution-evidence failures are also listed in `execution.json` when it can be written. Any recorded error takes precedence over assertion results, so a case can show passing or failing sibling assertions and still be `execution_failed`.
@@ -129,7 +129,7 @@ Apply the captured contract's rule strengths, triggers, and exceptions. Required
 
 Assess technical correctness and completeness separately from compliance with exercised obligations. Unexercised duties receive no compliance pass. Where available evidence cannot support a judgment, record insufficient evidence; preserve infrastructure failures as errors. Missing visible reassessment does not itself prove that reassessment was omitted. Traces support review of observable conduct, not access to private reasoning or exact token consumption; usage claims need actual telemetry whose scope supports them.
 
-The scenario module owns the rubric text; `review.md` preserves the rubric used for that run. Historical conclusions remain associated with their captured contract and rubric. Updating current criteria does not establish a new verdict for an earlier run. The [case explanations](../cases-and-requirements.md#cases-and-interpretation) identify each rubric's purpose and interpretation limits without replacing it.
+The scenario module owns the rubric text; `review.md` preserves the rubric used for that run. Historical conclusions remain associated with their captured contract and rubric. Updating current criteria does not establish a new verdict for an earlier run. The [case explanations](../deliverables/cases-and-requirements.md#cases-and-interpretation) identify each rubric's purpose and interpretation limits without replacing it.
 
 ### Retained evidence
 

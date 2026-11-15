@@ -17,7 +17,16 @@ The [13 November 2026 architecture decision](engineering-history.md#bdd-first-re
 ├── behavior/
 │   ├── README.md
 │   ├── baseline.md
-│   └── discovery.md
+│   ├── discovery.md
+│   ├── candidate-and-example-history.md
+│   └── proposed-examples/
+│       ├── planning-and-scope.md
+│       ├── authorization-and-communication.md
+│       ├── bounded-inquiry.md
+│       ├── validation-and-learning.md
+│       ├── knowledge-and-documentation.md
+│       ├── engineering-quality.md
+│       └── self-contained-delivery.md
 ├── design/
 │   ├── contract-design.md
 │   ├── design-review.md
@@ -51,7 +60,7 @@ The [13 November 2026 architecture decision](engineering-history.md#bdd-first-re
 
 | Owner | Durable responsibility and entry point |
 | --- | --- |
-| `behavior/` | [Navigation and editing](../behavior/README.md); [established objectives, PR1, constraints, and accepted behavior](../behavior/baseline.md); [proposed acceptance examples, coverage, historical candidates, and open formulation questions](../behavior/discovery.md). Established intent and proposals keep separate status. |
+| `behavior/` | [Navigation and editing](../behavior/README.md); [established objectives, PR1, constraints, and accepted behavior](../behavior/baseline.md); [proposal status, coverage, and open formulation questions](../behavior/discovery.md); [proposed example suites](../behavior/discovery.md#proposed-example-suites); [candidate and example history](../behavior/candidate-and-example-history.md). Established intent and proposals keep separate status. |
 | `design/` | [Contract architecture, vocabulary, and clause coverage](../design/contract-design.md), with [detailed mechanisms](../design/contract-design.md#crosscutting-concepts), [delivery](../design/delivery-and-portability.md), [methods and references](../design/methods-and-references.md), and [decisions and history](../design/decisions-and-alternatives.md); [editorial guidance and the 28 non-normative design illustrations](../design/design-review.md). Selected design authority is distinct from independent product acceptance. |
 | `contract/` | Five staged consumer artifacts: the self-contained instructions, provider bridges, and adoption guides. Their [release-relative meanings](#staged-sources-and-release-relative-references) remain intact. |
 | `evaluations/` | [Evaluator requirements, operational expectations, cases, evidence interpretation, and operations](../evaluations/docs/evaluations.md), with scenario policy, runtime machinery, and offline tests at their existing paths. Retained evidence stays in its [documented locations](../evaluations/docs/evaluations.md#retained-evidence). |
@@ -79,7 +88,7 @@ The following links lead to the canonical authority and change guidance:
 | Boundary | What it separates | Detail |
 | --- | --- | --- |
 | Product intent and runtime implementation | Product requirements guide development; rationale explains design choices. `AGENTS.md` implements the intended behavior as the complete runtime contract. BR1–BR10 are accepted; their proposed examples and residual candidate detail retain separate status. Guides and examples cannot enact behavior. | [Development-time and runtime authority](authority-and-change.md#development-time-and-runtime-authority) |
-| Product requirements and evaluator requirements | Product requirements concern intended agent behavior and product constraints. E1–E40 specify the suite's required behavior, including how cases are executed and assessed; they do not independently establish product intent. Fictional application requirements in fixtures concern those applications. | [Established product requirements](../behavior/baseline.md), [candidate history and disposition](../behavior/discovery.md#disposition-of-the-earlier-candidates), [verifiable requirements](../evaluations/docs/evaluations.md#verifiable-requirements) |
+| Product requirements and evaluator requirements | Product requirements concern intended agent behavior and product constraints. E1–E40 specify the suite's required behavior, including how cases are executed and assessed; they do not independently establish product intent. Fictional application requirements in fixtures concern those applications. | [Established product requirements](../behavior/baseline.md), [candidate history and disposition](../behavior/candidate-and-example-history.md#disposition-of-the-earlier-candidates), [verifiable requirements](../evaluations/docs/evaluations.md#verifiable-requirements) |
 | Shared evaluation infrastructure and scenarios | Shared modules in `evaluations/runtime/` have no dependency on individual scenarios. Each scenario module in `evaluations/scenarios/` owns its prompt, fixture, assertions, any functional checks, and any human-review rubric. The CLI in `evaluations/__main__.py` composes the two. | [Responsibilities and dependency direction](../evaluations/docs/evaluations.md#responsibilities-and-dependency-direction) |
 | Execution, observation, grading, and human assessment | Agent commands use the restrictive permission profile for a disposable workspace. The parent Codex client and Python evaluator operate outside that command sandbox. Observations are captured outside the workspace; automated grading reads those observations, and human assessment uses the retained rubric and evidence. | [Purpose and evaluation model](../evaluations/docs/evaluations.md#purpose-and-evaluation-model), [execution and security boundaries](../evaluations/docs/evaluations.md#execution-and-security-boundaries) |
 | Implementation and verification | The offline suite verifies configuration and orchestration with substitutes. The repository's sandbox probe checks only the evaluator-owned functional-check boundary. Agent-command enforcement and authenticated integration need separate environment-specific validation. | [Agent execution](../evaluations/docs/evaluations.md#agent-execution), [verify a behavior change](../evaluations/docs/evaluations.md#verify-a-behavior-change) |

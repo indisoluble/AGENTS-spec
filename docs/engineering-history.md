@@ -157,7 +157,7 @@ Splitting requirements from rationale into separate files, relocating existing d
 | --- | --- |
 | `requirements/README.md` | [behavior/README.md](../behavior/README.md) |
 | `requirements/docs/product-requirements.md` | [behavior/baseline.md](../behavior/baseline.md) |
-| `requirements/docs/requirement-candidates.md` | [behavior/discovery.md](../behavior/discovery.md) |
+| `requirements/docs/requirement-candidates.md` | [Candidate and example history](../behavior/candidate-and-example-history.md), with current formulation questions and coverage in [Discovery](../behavior/discovery.md) |
 | `requirements/docs/architecture.md`, introduction and design views through Architecture Decisions | [design/contract-design.md](../design/contract-design.md) |
 | Same source, Status and evidence boundaries | [Global classification](authority-and-change.md#status-and-evidence-boundaries) |
 | Same source, complete Design Reference | [design/design-review.md](../design/design-review.md) |
@@ -169,7 +169,7 @@ Splitting requirements from rationale into separate files, relocating existing d
 
 This successor changes engineering organization and explains BDD's responsibilities; it does not impose BDD on the consumer contract, accept or reject RC1–RC10, promote the 28 illustrations, revise E1–E40, select new consumer mechanisms, or complete the requirements baseline. Historical clause-based evaluations and captured runs keep their actual interpretation. No standing exception to Automation is adopted. Subsequent requirements engineering, requirements-derived checks, product redesign, and release need separately authorized work after migration review. The owner's independent acceptance remains distinct from this implementation assignment.
 
-**Subsequent status (14 November 2026).** The owner's Phase 2 assignment states that Phase 1 is complete and accepted. [Baseline provenance](../behavior/baseline.md#phase-2-acceptance-and-editorial-provenance) records the separately authorized BR formalization; [Discovery](../behavior/discovery.md#proposed-acceptance-scenarios) holds its still-proposed examples. The Phase 1 decision and preservation evidence above remain historical, and its architecture and authority boundaries remain intact.
+**Subsequent status (14 November 2026).** The owner's Phase 2 assignment states that Phase 1 is complete and accepted. [Baseline provenance](../behavior/baseline.md#phase-2-acceptance-and-editorial-provenance) records the separately authorized BR formalization; [Discovery](../behavior/discovery.md#proposed-example-suites) indexes its still-proposed example suites. The Phase 1 decision and preservation evidence above remain historical, and its architecture and authority boundaries remain intact.
 
 ### Shared engineering documentation extraction (15 November 2026)
 

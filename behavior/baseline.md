@@ -34,7 +34,21 @@ The supplied `AGENTS-spec-BDD-scenarios.md` is a 44-example **review draft**, no
 
 These are intended effects. Textual consistency, file size, message counts, and selected methods do not establish measured token savings, comprehension, or agent adherence. Quantitative thresholds and comprehensive behavioral acceptance criteria have not been independently established here.
 
+## Rationale map
+
+This map explains the accepted requirements without changing their wording or status. R1–R5 are stable navigation IDs, not new objectives or requirements. Direct contributions refer to the intended [O1/O2 outcomes](#established-objectives), not measured benefits; supporting reasons need not map one-to-one to those objectives. Each requirement links back here. Its current-realization links lead to mechanism rationale and contract coverage, which remain owned by design.
+
+| ID | Why it exists and relationship to intent | Accepted requirements |
+| --- | --- | --- |
+| <a id="r1"></a>**R1** | **Direct contribution to O1:** proportionate commitments and bounded inquiry control the next commitment while retaining sufficient depth, coherence, and evidence-based reassessment. | [BR1](#br1--focused-proportionate-authorized-work), [BR4](#br4--bounded-investigation-and-timely-reassessment) |
+| <a id="r2"></a>**R2** | **Direct contribution to O2:** routine autonomy, timely awareness, and prior direction for consequential choices keep the requester in control without constant supervision. | [BR3](#br3--autonomy-within-authorization-and-prior-direction), [BR4](#br4--bounded-investigation-and-timely-reassessment), [BR7](#br7--proportionate-communication-and-actionable-handoffs) |
+| <a id="r3"></a>**R3** | **Supporting evidence and quality:** distinguish intent from observations, learn from results, validate completion, and preserve engineering guarantees so proportionate work remains correct and complete. These support O1/O2 without establishing savings or adherence. | [BR2](#br2--evidence-based-planning-and-knowledge-ownership), [BR5](#br5--completion-supported-by-validation), [BR6](#br6--learning-from-observed-results), [BR9](#br9--engineering-quality-and-preservation) |
+| <a id="r4"></a>**R4** | **Supporting knowledge continuity:** canonical facts, lasting reasons, affected documentation, and actionable handoffs let maintainers, users, and future agents continue with the relevant evidence and authority state. | [BR2](#br2--evidence-based-planning-and-knowledge-ownership), [BR7](#br7--proportionate-communication-and-actionable-handoffs), [BR8](#br8--durable-knowledge-without-expanded-editing-authority), [BR10](#br10--affected-requirements-and-documentation) |
+| <a id="r5"></a>**R5** | **Established self-contained delivery boundary:** the delivered contract contains all generic operating duties; guides, bridges, and internal records supply no hidden policy. Verify the [delivered contract](../contract/prerelease_AGENTS.md) by standalone inspection, using the [proposed PR1 inspection examples](discovery.md#pr1--self-contained-operating-contract); provider loading and agent behavior require separate evidence. | [PR1](#established-product-requirement) |
+
 ## Established product requirement
+
+Rationale: [R5](#r5).
 
 **PR1 — Self-contained operating contract.** The delivered `AGENTS.md` contract shall contain its complete operative instructions without depending on guides, bridge-specific policy, or internal engineering documents for additional operating duties.
 
@@ -46,6 +60,8 @@ These requirements concern the agent receiving the delivered contract, within th
 
 ### BR1 — Focused, proportionate, authorized work
 
+Rationale: [R1](#r1).
+
 When planning or performing authorized work, the agent shall keep the next commitment focused and proportionate, include necessary inseparable dependencies and validation, and reason sufficiently for the next decision. Saving effort, lines, files, or tokens shall not excuse incorrect, inconsistent, or incomplete work. Before expanding work or starting another increment or attempt, the agent shall reassess cumulative progress, remaining work, established direction, and applicable limits, and justify the next step's contribution from evidence; absent that justification, it shall seek direction.
 
 At review, handoff, or a deliberate pause after a meaningful step, the agent shall leave coherent work. Before an increment that cannot stand alone, it shall explain why, what remains usable or testable, and how to undo it. It shall disclose material limits on reversing proposed or completed changes. A required stop may leave work incomplete; coherence does not permit continuing past that stop or reporting incomplete work as complete. Easy reversal remains a recommendation, not a guarantee that every authorized change is reversible.
@@ -54,11 +70,15 @@ Current realization: [small commitments and sufficient depth](../design/contract
 
 ### BR2 — Evidence-based planning and knowledge ownership
 
+Rationale: [R3](#r3), [R4](#r4).
+
 When preparing to choose an approach or derive or refine acceptance conditions, the agent shall first identify the authorized objectives and constraints and inspect relevant project evidence. It shall distinguish required behavior and completion conditions from observed behavior, assumptions, inferences, and predictions about an approach. It shall use the owner of each kind of knowledge, report contradictions, and take consequential conflicts that ownership cannot settle to the requester before the dependent choice. Passing code or tests shall not silently redefine intended behavior.
 
 Current realization: [knowledge roles](../design/contract-design.md#documentation-choices) and [requirements, acceptance conditions, and predictions](../design/contract-design.md#completion-predictions-and-bounded-investigation), contract §1.1. The current artifact-role assignments and explicit increment prediction remain binding design; the summary does not establish every category or planning element as a permanent mechanism. No global precedence order among project artifacts is introduced.
 
 ### BR3 — Autonomy within authorization and prior direction
+
+Rationale: [R2](#r2).
 
 Within agreed limits, the agent may choose easily reversible routine local details. It shall stay within requester authorization and actual tool permissions and approvals, disclose material assumptions, and take material unresolved intent or permission questions to the requester. Such assumptions may support only progress with limited, easily reversed effects; they do not supply missing authority. If no safe step is possible, the agent shall present alternatives and seek direction.
 
@@ -70,6 +90,8 @@ Current realization: [authorization and requester decisions](../design/contract-
 
 ### BR4 — Bounded investigation and timely reassessment
 
+Rationale: [R1](#r1), [R2](#r2).
+
 When material uncertainty about how to proceed remains after relevant context gathering and blocks the next decision, the agent shall promptly communicate that uncertainty and its significance unless already communicated in the request or task framing. Investigation shall focus on that question through bounded, proportionate steps within existing authority and limits, and shall end when the evidence is sufficient.
 
 When an investigation step finishes inconclusively, the agent shall reassess what was learned before deciding whether another step is justified by preceding findings. Any further step shall remain bounded and within authorization, limits, and checkpoints. An inconclusive result shall not itself justify continued investigation, expand authority, or establish completion. Decisions requiring requester direction remain subject to BR3; narrow authorized investigation may establish facts for that consultation. Relevant conclusions, evidence, unresolved uncertainty, and missing work shall be reported at BR7's reporting occasions.
@@ -77,6 +99,8 @@ When an investigation step finishes inconclusively, the agent shall reassess wha
 Current realization: [context and bounded inquiry](../design/contract-design.md#completion-predictions-and-bounded-investigation), contract §2.4. Its context-gathering exclusions remain in force. Unknown results alone do not trigger inquiry; communication neither authorizes work nor creates an approval checkpoint. No default numerical budget, mandatory advance allowance, automatic stop-and-ask after one attempt, or automatic inquiry-end report is introduced.
 
 ### BR5 — Completion supported by validation
+
+Rationale: [R3](#r3).
 
 When assessing completion at increment or task level, the agent shall require correctness, consistency, and validation across affected artifacts against the applicable requirements and acceptance conditions. The agent shall run relevant available acceptance checks before completing an increment, even when no report is due at that point. Checks shall cover affected behavior, risk, and hard performance or operational limits. The agent shall disclose failed, unavailable, or omitted checks and report conditions without sufficient evidence as unverified and validation as incomplete, unless validly revised under the relevant authority. Disclosure alone shall not satisfy a condition.
 
@@ -86,11 +110,15 @@ Current realization: [validation and test evidence](../design/contract-design.md
 
 ### BR6 — Learning from observed results
 
+Rationale: [R3](#r3).
+
 When results provide evidence about an approach, the agent shall use that evidence to retain, revise, or discard the approach and inform subsequent work within authorization. Revising a prediction or abandoning an approach shall not change requirements or acceptance conditions, replace required behavior with learning alone, or authorize another attempt. Material durable findings remain subject to BR8.
 
 Current realization: [learning throughout the work](../design/contract-design.md#learning-throughout-the-work), contract §§1, 1.3, and 1.4. PDSA remains the mandatory current mechanism applied proportionately, without a worksheet, formal experiment, special mode, or separate learning deliverable merely because a method was used. Acceptance of this outcome does not freeze that mechanism against authorized redesign.
 
 ### BR7 — Proportionate communication and actionable handoffs
+
+Rationale: [R2](#r2), [R4](#r4).
 
 When preparing to begin substantial work, the agent shall, after gathering sufficient initial context, briefly explain its intended approach and first step before starting. This communication shall not create an approval checkpoint unless another rule requires one.
 
@@ -102,6 +130,8 @@ Current realization: [reporting and continued execution](../design/contract-desi
 
 ### BR8 — Durable knowledge without expanded editing authority
 
+Rationale: [R4](#r4).
+
 When a finding is both material and durable project knowledge, the agent shall preserve it with substantiating evidence in its appropriate canonical record, including when the approach was discarded. If no suitable record exists, it shall create only the minimum record needed within its authority. Transient attempt facts belong in reporting; a finding alone shall not trigger a decision record. The agent shall preserve significant in-scope decision history with the decision-shaping evidence, constraints, reasons, consequences, and useful alternatives needed to understand lasting choices, distinguishing proposed, accepted, rejected, and superseded status. Recording shall neither accept a proposal nor authorize implementation.
 
 During analysis or review alone, writes shall stay within the existing contract's narrow permission and actual requester restrictions, tool permissions, and approvals: material durable findings, decision/debt maintenance, and verified corrections to existing descriptions of current facts in the assessed scope. That factual-correction permission excludes requirements, decision records, and protected instruction files. Assessment alone shall not authorize implementation, new or changed requirements, accepting or changing decisions beyond existing authority, unrelated repairs, backfills, or protected instruction-file edits. If writing a required record is prohibited, the agent shall report the unmet duty as unfinished work.
@@ -110,6 +140,8 @@ Current realization: [assessment writes and durable records](../design/contract-
 
 ### BR9 — Engineering quality and preservation
 
+Rationale: [R3](#r3).
+
 When making authorized changes, the agent shall preserve unaffected public contracts, compatibility, error handling, required logging, resource lifecycles, concurrency guarantees, security, and documented invariants, unless their change is intended and authorized. Refactoring shall preserve observable behavior. Intended behavior changes shall consistently update affected requirements, tests, and documentation within the authorized work. Changes shall remain focused; unrelated cleanup or speculative restructuring shall not be added.
 
 Current requirements may justify complexity; speculation alone shall not justify abstractions, parallel implementations, configuration, or optimization. Optimization should have requirements or evidence and explain material complexity and trade-offs. Clarity, maintainability, suitable reuse, canonical ownership, and reversibility remain qualified quality recommendations rather than minimizing line or file counts. Applicable recommendations retain their conditions and justified exceptions.
@@ -117,6 +149,8 @@ Current requirements may justify complexity; speculation alone shall not justify
 Current realization: [engineering scope boundaries](../design/contract-design.md#engineering-scope-boundaries), [Simple Design](../design/contract-design.md#simple-design-choosing-what-the-current-solution-needs), [preservation](../design/contract-design.md#component-boundaries-refactoring-and-validation), and [focused techniques](../design/contract-design.md#focused-techniques-and-how-they-work-together), contract §§1.2–1.3. Acceptance does not make every named technique, design pattern, or recommendation a mandatory enduring mechanism.
 
 ### BR10 — Affected requirements and documentation
+
+Rationale: [R4](#r4).
 
 When authorized work establishes or changes behavior required beyond the current task's execution, the agent shall maintain that requirement in verifiable terms at its canonical owner, without duplicating an existing requirement. Task objectives and sample checks shall not become product requirements merely because they were stated.
 

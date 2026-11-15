@@ -1,7 +1,9 @@
 """A disposable date preview with human review of material-assumption disclosure.
 
 Automated assertions check the artifact, scope, and response presence only.
-See evaluations/docs/evaluations.md for grading, evidence, and observation boundaries.
+See evaluations/docs/cases-and-requirements.md#assumption-disclosure for grading,
+evaluations/docs/running-and-reviewing.md#retained-evidence for evidence, and
+evaluations/docs/framework-design.md#observation-and-capture-boundaries for observation boundaries.
 """
 
 import csv

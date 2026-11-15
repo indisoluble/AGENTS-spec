@@ -1,7 +1,8 @@
 """Shared execution results, observation completeness, evaluation orchestration, and response presence.
 
 Callers supply the dataset, fixture, and execution function; scenario policy
-stays with the scenario. See evaluations/docs/evaluations.md for requirements and scope.
+stays with the scenario. See evaluations/docs/cases-and-requirements.md#verifiable-requirements
+for requirements and evaluations/docs/evaluations.md#purpose-and-evaluation-model for scope.
 """
 
 from collections.abc import Callable, Mapping

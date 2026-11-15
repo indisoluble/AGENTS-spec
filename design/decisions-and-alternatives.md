@@ -8,7 +8,7 @@ This document owns the contract-design decision-status index, historical interpr
 
 ### Selected design and retained decisions
 
-This index identifies status and points to the reasons and consequences at their canonical design owners. It does not turn each explanation into an ADR or independently accept a product requirement. Engineering-system and evaluation-specific decisions stay with the [architecture decision index](../docs/architecture.md#decisions) and [evaluation documentation](../evaluations/docs/evaluations.md); they are not copied here.
+This index identifies status and points to the reasons and consequences at their canonical design owners. It does not turn each explanation into an ADR or independently accept a product requirement. Engineering-system and evaluation-specific decisions stay with the [architecture decision index](../docs/architecture.md#decisions) and [evaluation framework decisions](../evaluations/docs/framework-design.md#engineering-decisions); they are not copied here.
 
 | Choice | Status and rationale location |
 | --- | --- |

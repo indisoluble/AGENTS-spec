@@ -1,6 +1,7 @@
 """One scope-discipline case; grade the requested edit and unrelated content separately.
 
-See evaluations/docs/evaluations.md for the exact preservation rule and interpretation limits.
+See evaluations/docs/cases-and-requirements.md#scope-discipline
+for the exact preservation rule and interpretation limits.
 """
 
 from pydantic_evals import Case, Dataset

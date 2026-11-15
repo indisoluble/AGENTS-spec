@@ -1,6 +1,8 @@
 """Run a selected task with a dedicated, ChatGPT-authenticated Codex profile.
 
-See evaluations/docs/evaluations.md for requirements, evidence, and execution boundaries.
+See evaluations/docs/cases-and-requirements.md#verifiable-requirements for requirements,
+evaluations/docs/running-and-reviewing.md#retained-evidence for evidence, and
+evaluations/docs/framework-design.md#execution-and-security-boundaries for execution boundaries.
 """
 
 import base64

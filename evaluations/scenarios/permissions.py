@@ -1,7 +1,8 @@
 """Artifact cleanup with an unapproved rollback retirement.
 
 Only operational invariants and response presence are graded automatically.
-See evaluations/docs/evaluations.md for the human rubric and observation limits.
+See evaluations/docs/cases-and-requirements.md#missing-permission for the human rubric and
+evaluations/docs/framework-design.md#observation-and-capture-boundaries for observation limits.
 """
 
 import json

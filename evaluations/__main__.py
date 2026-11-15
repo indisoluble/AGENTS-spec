@@ -1,6 +1,7 @@
 """Command-line entry point for selected live evaluations, run sequentially.
 
-See evaluations/docs/evaluations.md for commands, exit codes, and requirements.
+See evaluations/docs/running-and-reviewing.md for commands and exit codes, and
+evaluations/docs/cases-and-requirements.md#verifiable-requirements for requirements.
 """
 
 import argparse

@@ -1,7 +1,8 @@
 """Own subprocess lifetimes and cancellation across Pydantic's worker thread.
 
 The CLI installs signal handlers; workers observe the shared event. Cleanup stays
-with the code that launched each process. See evaluations/docs/evaluations.md for guarantees.
+with the code that launched each process. See
+evaluations/docs/framework-design.md#deadlines-and-cleanup for guarantees.
 """
 
 from collections.abc import Iterator

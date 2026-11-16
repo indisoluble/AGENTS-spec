@@ -1,8 +1,6 @@
 # Proposed examples: planning and scope
 
-These examples cover planning and scope under BR1, BR2. All remain **proposed and unaccepted**; [classification definitions and shared qualifications](../discovery.md#formulation-questions-and-evidence-limits) govern their interpretation.
-
-Return to [Discovery](../discovery.md) and its [coverage matrix](../discovery.md#requirement-to-scenario-coverage). [Historical qualification sources](../../docs/candidate-and-example-history.md#scenario-qualification-provenance) and [draft corrections](../../docs/candidate-and-example-history.md#changes-from-the-supplied-draft) retain their provenance.
+All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../discovery.md#formulation-questions-and-evidence-limits) and the [coverage matrix](../discovery.md#requirement-to-scenario-coverage).
 
 ## BR1 — Focused, proportionate, authorized work
 

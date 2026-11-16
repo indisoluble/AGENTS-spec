@@ -1,34 +1,30 @@
 # Behavioral discovery and coverage
 
-This document owns current proposal status, classification definitions, unresolved formulation questions, and the requirement-to-scenario coverage matrix. The [proposed example suites](#proposed-example-suites) own the examples; [candidate and example history](../docs/candidate-and-example-history.md) owns the RC1–RC10 inventory, its disposition, and draft provenance. [baseline.md](baseline.md) owns the accepted BR1–BR10, established PR1, objectives, and constraints. The [behavior entry point](../README.md) provides navigation.
+The [baseline](baseline.md) defines accepted requirements; this document tracks proposed examples, classifications, coverage, and remaining formulation work.
 
 ## Status and provenance
 
-The formulations linked here are proposed for owner review, including those directly demonstrating accepted behavior. No example is an accepted defining example, executable test, observed result, evaluator rubric, or additional runtime instruction.
+All linked examples remain proposed for owner review, including Direct examples. None is an accepted defining example, executable test, observed result, evaluator rubric, or additional runtime instruction. Current [contract](../../03-contract/prerelease_AGENTS.md) and [design](../../02-design/deliverables/contract-design.md#current-semantics-vocabulary-and-coverage) qualifications supply implementation evidence, not independent product acceptance.
 
-The [current contract](../../03-contract/prerelease_AGENTS.md) and [design accounts](../../02-design/deliverables/contract-design.md#current-semantics-vocabulary-and-coverage) supply implementation evidence and precise existing qualifications, not independent acceptance of every mechanism. [Global status boundaries](../../docs/authority-and-change.md#status-and-evidence-boundaries) distinguish those roles. The staged contract does not govern repository development; [architecture](../../docs/authority-and-change.md#development-time-and-runtime-authority) owns that authority boundary. This phase changes no consumer artifact or evaluation expectation.
-
-Acceptance and editorial provenance, including the original 44-example review draft and historical proposal distinctions, is retained in [candidate and example history](../docs/candidate-and-example-history.md#status-and-provenance) and [baseline provenance](baseline.md#phase-2-acceptance-and-editorial-provenance).
+[Baseline provenance](baseline.md#phase-2-acceptance-and-editorial-provenance) records acceptance and the limits of editorial formalization from an acceptance summary rather than original approved wording. [Candidate and example history](../docs/candidate-and-example-history.md) records earlier proposals, their disposition, and the unaccepted 44-example source draft.
 
 ## Formulation questions and evidence limits
 
-No contradictory decision or missing authorization rule was found in the accepted outcomes, the five listed clarifications, and BR4's wording clarification. The original approved wording was not supplied, so this work does not claim to recover it. The [baseline](baseline.md#phase-2-acceptance-and-editorial-provenance) records that editorial limit. Established decisions are not being submitted for reconfirmation.
-
-What remains for example review is concrete: must a future equivalent contract classify *all* reading of existing project documentation as context gathering (BR4.7), or retain the detailed debt and dead-code rules (BR8.3/BR8.7/BR9.5) as defining product expectations? The current contract already settles those actions today. The acceptance summary does not independently settle whether every such detail must constrain a future design. Until accepted as defining, these and the other linked **Detail review** examples retain only their existing design basis; they propose no behavioral change. No provider-policy requirement or BR11 is inferred from the residual RC10 topic.
+Example review must distinguish accepted outcomes from details that would constrain a future equivalent contract: for example, classifying *all* reading of existing project documentation as context gathering (BR4.7), or retaining detailed debt and dead-code rules (BR8.3/BR8.7/BR9.5). The acceptance summary does not independently settle those details' enduring product status. Established decisions are not submitted for reconfirmation, and no provider-policy requirement or BR11 is inferred from RC10.
 
 **Direct** means the example demonstrates an accepted requirement with its source-supported qualifications. **Detail review** means some detailed expectation relies on a current design prescription whose enduring product status is not established by the supplied summary; each such case states why. **Both labels describe proposed examples, not acceptance status.** Neither omission of a mechanism nor a Detail review label suspends its current contractual force. Permission cases distinguish allowed outcomes without requiring the agent to exercise every permission; recommendations retain justified exceptions and mandatory rules remain mandatory.
 
 Separate design notes beside Direct examples retain mechanism traceability without adding those details to the proposed Given/When/Then outcome or promoting them to accepted product requirements. Those current design prescriptions keep their existing force.
 
-The scenarios use illustrative project facts, not new AGENTS-spec requirements. Terms such as material, sufficient, proportionate, significant, and available retain their contextual meaning; automation will need fixtures and evidence that discriminate the stated outcomes without inventing universal numeric thresholds. The inventory is not exhaustive, does not validate agent adherence, and does not claim evaluator coverage. Existing E1–E40 requirements, rubrics, and captured runs retain their actual interpretation. Requirements-derived automation remains subsequent work in `04-evaluations/`; no standing exception to it is introduced.
+Scenario project facts are illustrative. Terms such as material, sufficient, proportionate, significant, and available remain contextual; automation needs distinguishing fixtures and evidence without invented universal numeric thresholds. This inventory is not exhaustive and establishes neither agent adherence nor evaluator coverage. Existing E1–E40, rubrics, and captured runs retain their interpretation.
 
 ### Remaining requirements work
 
-BR1–BR10 and the accepted clarifications are formalized in the [baseline](baseline.md); PR1, objectives, and constraints retain their established status. The owner supplied an acceptance summary rather than the original wording, so [editorial provenance](baseline.md#phase-2-acceptance-and-editorial-provenance) remains explicit. No BR11 is introduced. Owner review of the proposed formulations and examples, requirements-derived automation, and any separately authorized contract redesign remain future work. The 28 non-normative [design illustrations](../../02-design/docs/design-review.md#assessing-design-changes) remain unchanged; existing rubrics and captured evaluations are not retroactively accepted as product criteria. No exhaustive behavioral or evaluation coverage is claimed.
+Owner review of the proposed formulations and examples, requirements-derived automation, and any separately authorized contract redesign remain future work under the [shared BDD responsibilities](../../docs/authority-and-change.md#bdd-activities-and-complementary-responsibilities), with no standing exception to Automation. The 28 non-normative [design illustrations](../../02-design/docs/design-review.md#assessing-design-changes) and existing evaluations are not retroactively accepted as product criteria.
 
 ## Requirement-to-scenario coverage
 
-Each ID links to one proposed Given/When/Then example. Primary trace links are in this matrix; the last column shows important cross-requirement interactions, not independent copies or extra obligations. The source sections beside each scenario group identify the current design and contract support. All 60 examples remain proposed: 51 Direct and 9 Detail review.
+All 60 examples remain proposed: 51 Direct and 9 Detail review. Each ID links to one Given/When/Then example; the last column identifies cross-requirement interactions, not extra obligations. Scenario-group source links identify current design and contract support.
 
 | Accepted requirement | Direct examples | Detail review examples | Also exercised by |
 | --- | --- | --- | --- |
@@ -48,7 +44,7 @@ The proposed examples illustrating accepted clarifications are BR1.3/BR1.5 (cohe
 
 ## Proposed example suites
 
-Each suite links to its accepted requirements, current design and contract support, and the shared [historical qualification sources](../docs/candidate-and-example-history.md#scenario-qualification-provenance). Use the matrix above for individual examples and cross-requirement coverage.
+Suites link accepted requirements and current design/contract support. [Candidate and example history](../docs/candidate-and-example-history.md#scenario-qualification-provenance) retains shared qualification sources and draft provenance.
 
 | Suite | Example groups | Count |
 | --- | --- | ---: |

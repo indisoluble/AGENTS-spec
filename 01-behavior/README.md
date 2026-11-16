@@ -1,13 +1,9 @@
 # 01 — Behavior
 
-Behavior owns the desired collaboration outcomes, their reasons, product constraints, and the distinction between accepted intent and proposed detail. These remain independent of the current contract implementation and evaluator machinery.
+Behavior defines desired collaboration outcomes and product constraints independently of their implementation and evaluation.
 
-`deliverables/` contains the accepted baseline, discovery, and proposed example suites; `docs/` preserves their supporting history. This README provides orientation and navigation.
+- [Baseline](deliverables/baseline.md): accepted O1/O2, BR1–BR10, PR1, rationale, constraints, and acceptance provenance.
+- [Discovery](deliverables/discovery.md): proposed example suites, classifications, coverage, unresolved questions, and remaining requirements work. No example is accepted as defining.
+- [Candidate and example history](docs/candidate-and-example-history.md): earlier proposals, their disposition, and source records.
 
-- [baseline.md](deliverables/baseline.md) owns O1/O2, the rationale map, constraints, and accepted BR1–BR10 and PR1. All eleven requirements have equal product authority; their subjects and verification methods differ.
-- [discovery.md](deliverables/discovery.md) owns proposal status, classification definitions, coverage, formulation questions, and [remaining requirements work](deliverables/discovery.md#remaining-requirements-work). Its [seven example suites](deliverables/discovery.md#proposed-example-suites) contain 60 proposed examples: 51 Direct, nine Detail review, none accepted as defining.
-- [docs/candidate-and-example-history.md](docs/candidate-and-example-history.md) retains the historical RC inventory, disposition, qualifications, and draft corrections. Local `docs/` holds this supporting history; requirements and examples stay in the stage artifacts above.
-
-For a behavioral question, start with the baseline's [objectives and rationale](deliverables/baseline.md#rationale-map), then [example coverage](deliverables/discovery.md#requirement-to-scenario-coverage) and the [design clause index](../02-design/deliverables/contract-design.md#current-semantics-vocabulary-and-coverage). Selected methods do not become enduring requirements through implementation alone.
-
-[Shared BDD responsibilities](../docs/authority-and-change.md#bdd-activities-and-complementary-responsibilities), [traceability and feedback](../docs/authority-and-change.md#cross-domain-traceability-and-feedback), and [editing guidance](../docs/authority-and-change.md#working-with-requirements-and-design-documentation) own cross-stage interfaces, authority, evidence limits, and maintenance procedure. This entry point adds no requirements or acceptance status. Return to the [project README](../README.md) for other stages.
+Follow a requirement's current-realization links or the [design clause index](../02-design/deliverables/contract-design.md#current-semantics-vocabulary-and-coverage) to its selected mechanism. Use [authority and change](../docs/authority-and-change.md) for BDD responsibilities, status distinctions, traceability, and editing guidance.

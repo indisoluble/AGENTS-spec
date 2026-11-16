@@ -1,8 +1,6 @@
 # Proposed examples: bounded inquiry
 
-These examples cover bounded inquiry under BR4. All remain **proposed and unaccepted**; [classification definitions and shared qualifications](../discovery.md#formulation-questions-and-evidence-limits) govern their interpretation.
-
-Return to [Discovery](../discovery.md) and its [coverage matrix](../discovery.md#requirement-to-scenario-coverage). [Historical qualification sources](../../docs/candidate-and-example-history.md#scenario-qualification-provenance) and [draft corrections](../../docs/candidate-and-example-history.md#changes-from-the-supplied-draft) retain their provenance.
+All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../discovery.md#formulation-questions-and-evidence-limits) and the [coverage matrix](../discovery.md#requirement-to-scenario-coverage).
 
 ## BR4 — Bounded investigation and timely reassessment
 

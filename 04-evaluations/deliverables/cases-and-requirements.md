@@ -28,7 +28,7 @@ The catalogue follows execution order for `--case all`. Assertion names identify
 | [`bounded-inquiry`](#bounded-inquiry) | Resolve whether to retain a buffered exporter or qualify its streaming alternative under a fixed workload and resource constraint, §2.4 with §3.7. | `FixtureInputsPreserved`, `FeasibilityRecordConsistent`, `FinalResponsePresent` | Yes: actual inquiry trigger, applicable notification and consultation, provenance, actual bounds, termination, justified continuation, communication and reporting. |
 | [`durable-finding-review`](#durable-finding-review) | Preserve material, durable knowledge established during a customer CSV compatibility review, §3.2 within the review authority of §2.1. | `ProtectedStatePreserved`, `FinalResponsePresent` | Yes: technical assessment, evidence/validation, recording, authorization/scope, reporting/continuation. |
 
-The linked source modules own exact prompts, fixture bytes, executable checks, and rubric text. The assertion definitions below supply the acceptance conditions referenced by the case requirements; the catalogue is their navigation summary. These finite cases do not establish broader contract coverage.
+The sections below define the acceptance conditions referenced by the evaluator requirements. These finite cases do not establish broader contract coverage.
 
 ### smoke
 

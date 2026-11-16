@@ -1,19 +1,6 @@
 # Local coding-agent evaluations
 
-This guide owns the evaluation model and detailed navigation for the local suite. The [stage README](../README.md) provides concise orientation. [Running and reviewing](running-and-reviewing.md) owns operations and evidence interpretation; [cases and requirements](../deliverables/cases-and-requirements.md) keeps case acceptance definitions with evaluator requirements E1–E40; [framework design](framework-design.md) owns execution boundaries, architecture, maintenance, and engineering decisions. Scenario modules remain canonical for exact prompts, fixtures, assertions, functional checks, and human-review rubrics.
-
-[Engineering architecture](../../docs/architecture.md) explains how the framework relates to the specification and the rest of the engineering project; [change-impact guidance](../../docs/authority-and-change.md#change-impact) explains how contract changes can affect cases and rubrics.
-
-For a first maintenance pass, read the staged [adoption guide](../../03-contract/prerelease_README.md) and [contract](../../03-contract/prerelease_AGENTS.md) to understand what is evaluated, then the engineering architecture and [evaluation model](#purpose-and-evaluation-model). Follow [setup](running-and-reviewing.md#install-prerequisites) and [offline checks](running-and-reviewing.md#run-offline-checks), which need no login or model allowance, before exploring the [framework architecture](framework-design.md#architecture-extension-and-maintenance), [cases](../deliverables/cases-and-requirements.md#cases-and-interpretation), and source modules relevant to the work. Live runs require authentication and consume allowance as [running a case](running-and-reviewing.md#run-a-case-or-the-suite) explains.
-
-| Task | Canonical route |
-| --- | --- |
-| Run one case or the suite | [Prerequisites and offline checks](running-and-reviewing.md#setup-and-running-evaluations), [authentication](running-and-reviewing.md#authentication-and-credential-lifetime), and [commands and configuration](running-and-reviewing.md#run-a-case-or-the-suite). |
-| Investigate a failed or incomplete result | [Outcomes and exit codes](running-and-reviewing.md#outcomes-and-exit-codes), [retained evidence](running-and-reviewing.md#retained-evidence), and [failure investigation](running-and-reviewing.md#investigate-a-failure-or-incomplete-result). |
-| Evaluate a case and review its evidence | [Case acceptance definitions and source-owned rubrics](../deliverables/cases-and-requirements.md#cases-and-interpretation), [human-review procedure](running-and-reviewing.md#response-presence-and-human-review), and [E1–E40](../deliverables/cases-and-requirements.md#verifiable-requirements). |
-| Trace accepted intent and coverage limits | The [model below](#purpose-and-evaluation-model), [product and coverage navigation](../deliverables/cases-and-requirements.md#product-and-coverage-navigation), and [cross-domain traceability](../../docs/authority-and-change.md#cross-domain-traceability-and-feedback). |
-| Extend or maintain the framework | [Architecture and ownership](framework-design.md#architecture-extension-and-maintenance), [execution and security boundaries](framework-design.md#execution-and-security-boundaries), [extension procedure](framework-design.md#modify-or-extend-an-evaluation), and [verification](framework-design.md#verify-a-behavior-change). |
-| Review framework decisions and references | [Engineering decisions](framework-design.md#engineering-decisions) and [technical references](framework-design.md#technical-references). |
+This document explains what the suite assesses and what its evidence can establish. Use the [stage README](../README.md) for routes to case definitions, operations, and framework maintenance.
 
 ## Purpose and evaluation model
 

@@ -1,16 +1,16 @@
 # Engineering history and decisions
 
-These records retain system-wide decisions whose reasons or consequences still guide maintenance. [Architecture](architecture.md) describes the current system; [authority and change](authority-and-change.md) defines current maintenance guidance. Earlier layouts, full migration records, and intermediate ownership transfers remain in [the pre-extraction architecture at `62a407e`](https://github.com/indisoluble/AGENTS-spec/blob/62a407ea4d4177c67c39d7a761645f6d3bbd1abc/docs/architecture.md) and Git history.
+These records explain the system-wide decisions that still guide maintenance. [Architecture](architecture.md) describes the current system, and [authority and change](authority-and-change.md) defines the responsibilities of its owners.
 
 ## Temporary migration authority
 
-During the source-of-truth migration, a frozen root `AGENTS.md` fixed current operating semantics; transfer required byte preservation and independent semantic and cross-document verification. After independent verification reported **READY FOR TRANSFER DECISION**, the requester explicitly replied **“Authorized”** on **8 November 2026**, transferring engineering authority to `contract-design.md`. The transfer is recorded in [`809e231`](https://github.com/indisoluble/AGENTS-spec/commit/809e231919c349b1ec3039ad3669dc88cf8b6e35).
+The frozen root `AGENTS.md` governed operating semantics during the transfer to an engineering specification. Transfer required byte-for-byte preservation of the contract and independent verification of semantic coverage and cross-document consistency, including evaluation relationships. The requester-supplied independent review reported **READY FOR TRANSFER DECISION**. On **8 November 2026**, after that review, the requester explicitly replied **“Authorized”**, transferring engineering authority to `contract-design.md`.
 
-The temporary freeze ended; it was not a permanent prohibition on separately authorized evolution. The transfer neither redesigned behavior nor accepted provisional product requirements or design alternatives. Delivered `AGENTS.md` retained self-contained runtime authority. The [current authority model](authority-and-change.md#development-time-and-runtime-authority) maintains that distinction.
+That authorization ended the freeze. Its scope excluded product redesign, acceptance of provisional requirements, and selection of design alternatives. The review assessed preservation of the existing contract and its engineering description. The delivered `AGENTS.md` retained self-contained runtime authority. The [current authority model](authority-and-change.md#development-time-and-runtime-authority) identifies the owners of product intent and design and the authority needed for changes.
 
 ## Decisions
 
-Design-specific decisions remain in [decisions and alternatives](../02-design/docs/decisions-and-alternatives.md#architecture-decisions); evaluator decisions remain in [framework design](../04-evaluations/docs/framework-design.md#engineering-decisions). Structural implementation authorization below does not itself establish independent acceptance of the completed migration.
+Design-specific decisions remain in [decisions and alternatives](../02-design/docs/decisions-and-alternatives.md#architecture-decisions). Evaluator decisions remain in [framework design](../04-evaluations/docs/framework-design.md#engineering-decisions). Each status below identifies what the requester approved and any separately recorded review or acceptance of the implementation.
 
 ### Integrated engineering architecture with focused detailed owners
 
@@ -20,38 +20,38 @@ Evaluation documentation was initially kept integrated so case criteria, evaluat
 
 ### Requirements-led engineering and product/internal separation
 
-**Status: accepted.** Cases and rubrics referred to implemented clauses without separately identifying product intent. The decision made product requirements the basis for development and intended evaluation expectations, distinguished from design, runtime instructions, observations, and evaluator verification. Treating implemented wording wholesale as accepted intent was rejected. Requirements were initially colocated with design; later transfers established the current Behavior and Design owners.
+**Status: accepted.** Cases and rubrics referred to implemented clauses without separately identifying product intent. The requester established product requirements as the basis for development and intended evaluation expectations. Treating implemented wording wholesale as accepted intent was rejected because it would bypass review of the individual requirements. [Behavior](../01-behavior/deliverables/baseline.md) owns accepted intent, and [Design](../02-design/deliverables/contract-design.md) owns the selected mechanisms. Observing agent behavior and verifying the evaluator answer separate questions.
 
 Consumer artifacts must remain independently usable, with no references or dependencies into engineering documentation, including optional navigation. Internal requirements cannot supply hidden runtime policy. The scoped interpretation of contract §3.6 gives each audience its own navigation: consumer READMEs locate product documentation, while engineering entry points locate engineering knowledge. The clause's reference to `README.md` does not require a single root entry for both audiences. This interpretation adds no consumer duties.
 
 ### BDD-first reorganization (13 November 2026)
 
-**Status: architecture and Phase 1 implementation approved; Phase 1 later recorded as complete and accepted.** The owner's 13 November assignment adopted *AGENTS-spec · BDD-first development with files grouped by responsibility* against [`4e44bd2`](https://github.com/indisoluble/AGENTS-spec/commit/4e44bd2c03d2e708654f5060705398e630d0dace). The 14 November Phase 2 assignment records Phase 1 acceptance; [baseline provenance](../01-behavior/deliverables/baseline.md#phase-2-acceptance-and-editorial-provenance) records its separately accepted BR formalization.
+**Architecture approved and local implementation authorized.** On 13 November the owner adopted BDD-first development with files grouped by responsibility. On 14 November the owner recorded that this reorganization was complete and accepted. The separate [behavioral acceptance summary](../01-behavior/deliverables/baseline.md#behavioral-acceptance-and-editorial-provenance) identifies the product outcomes the owner reported as accepted.
 
 Group files by durable responsibility while using iterative BDD activities to develop behavior. A directory per activity would scatter subjects and encourage stage handoffs or competing definitions. A purely knowledge-oriented tree would preserve owners but obscure where a behavioral question starts. Responsibility owners with a short BDD entry path address both concerns. The organization supports iteration without imposing BDD on consumers or granting acceptance through passing checks.
 
-The evaluator initially stayed in its existing package to avoid disturbing fixture, package, and evidence relationships merely to create an `automation/` stage. The numbered and uniform-stage decisions below later changed placement deliberately.
+A dedicated `automation/` stage was considered. Moving the evaluator solely to mirror a BDD activity would disrupt package, fixture, and evidence relationships without improving ownership.
 
 ### Shared engineering documentation extraction (15 November 2026)
 
-**Status: structure accepted and local implementation authorized; completion and independent review recorded by the later navigation assignment.** The requester approved extraction against [`62a407e`](https://github.com/indisoluble/AGENTS-spec/commit/62a407ea4d4177c67c39d7a761645f6d3bbd1abc).
+**Structure accepted and local implementation authorized.** The requester's navigation decision subsequently recorded both the shared engineering split and the [contract-design split](../02-design/docs/decisions-and-alternatives.md#contract-design-documentation-extraction-15-november-2026) as complete and independently reviewed.
 
-Separate three reading tasks: current architecture, authority/change guidance, and useful history. Keeping them together reduced links but made returning maintainers read unrelated material. The split retains one canonical explanation per concept, at the cost of maintaining direct references; it refines physical ownership rather than product or runtime authority.
+The shared documents serve three reading tasks. Maintainers can look up the current system, determine who can authorize a change and which owners it affects, or recover the reasons for a decision. One document reduced links but mixed reading tasks. The split gives each subject a canonical home at the cost of maintaining direct references.
 
-The subsequent *Remove Unnecessary HTML Anchors* assignment records documentation Steps 1 and 2 as complete and independently reviewed. It superseded the original compatibility-path and fragment-preservation constraint: navigation uses ordinary Markdown headings and direct canonical links, without requiring compatibility forwarding.
+The requester also superseded the requirement to preserve obsolete paths and fragments through forwarding links. Navigation uses ordinary Markdown headings and links directly to canonical owners.
 
 ### Numbered pipeline and documentation ownership (15 November 2026)
 
-**Status: structure accepted; local implementation authorized** against [`2104f19`](https://github.com/indisoluble/AGENTS-spec/commit/2104f19c9e45d44127beee4584e9d4c3e661d34c).
+**Structure accepted and local implementation authorized by the requester.** The authorization covers stage placement and documentation ownership. It does not record independent acceptance of the finished implementation.
 
-Number Behavior, Design, Contract, and Evaluations to expose conceptual progression while retaining iterative feedback. Concise root and stage READMEs orient readers; supporting metadata is separated from substantive artifacts. This improves entry paths at the cost of path and working-directory updates. Shared editing guidance belongs with cross-stage authority, rather than Behavior alone.
+Numbering Behavior, Design, Contract, and Evaluations makes conceptual progression visible while allowing iterative feedback. Concise root and stage READMEs orient readers. Keeping all documents at the same level would save navigation steps but obscure the distinction between deliverables and supporting guidance. Shared editing guidance belongs with cross-stage authority because changes can affect several owners.
 
-The evaluator was nested under `04-evaluations/` with its original `evaluations` namespace to preserve its import interface without compatibility packages or launchers. That namespace choice was explicitly superseded by the uniform-stage decision below; it is not a current compatibility constraint.
+The decision retained the `evaluations` package name to preserve imports without a compatibility package. The [uniform stage decision](#uniform-stage-structure-and-deliverables-15-november-2026) superseded that part of the design.
 
 ### Uniform stage structure and deliverables (15 November 2026)
 
-**Status: structure accepted; local implementation and package rename authorized** against [`71f1cf4`](https://github.com/indisoluble/AGENTS-spec/commit/71f1cf4ebb13c5214fb884524e47cc78f0afaa16).
+**Structure accepted and local implementation authorized, including the package rename.** The requester explicitly authorized changing the import interface. The decision record establishes no separate acceptance of the completed implementation.
 
 Give engineering stages a README, supporting `docs/`, and substantive `deliverables/`, as shown in [current architecture](architecture.md#current-bdd-first-organization). Keep prescriptions with their necessary rationale. Contract remains the five-file exception: engineering navigation or container directories would obscure its consumer staging boundary.
 
-Rename the evaluation package to `deliverables`, superseding namespace preservation above. Wrapping an unchanged inner package would add a hierarchy level without a separate responsibility; compatibility packages, launchers, aliases, and symlinks were not introduced. The package stayed at the same depth, preserving parent calculations for contract lookup, subprocess working directories, and evidence. Commands run from `04-evaluations/`; new evidence stays outside the package in `.eval-runs/`, and historical evidence remains in place. [Operations](../04-evaluations/docs/running-and-reviewing.md#setup-and-running-evaluations) owns current commands, including `python -m deliverables`.
+The evaluation package itself is named `deliverables`. Wrapping the old package in a directory of that name would add a level without a distinct responsibility. The approved rename dispensed with compatibility packages, launchers, aliases, and symlinks. Keeping the same package depth preserves relative lookups for the contract, subprocess working directories, and evidence. [Operations](../04-evaluations/docs/running-and-reviewing.md#setup-and-running-evaluations) owns the current commands and [locations of retained evidence](../04-evaluations/docs/running-and-reviewing.md#retained-evidence).

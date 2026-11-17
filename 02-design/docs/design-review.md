@@ -1,6 +1,6 @@
 # Design Reference
 
-These editorial checks and 28 non-normative illustrations descend from the [baseline Design Reference](https://github.com/indisoluble/AGENTS-spec/blob/4e44bd2c03d2e708654f5060705398e630d0dace/requirements/docs/architecture.md#design-reference). They explain the current design, adding no runtime duties, accepted requirements, evaluator criteria, or approval step. [Proposed BDD examples](../../01-behavior/deliverables/discovery.md#proposed-example-suites) remain separate. [Shared authority](../../docs/authority-and-change.md#status-and-evidence-boundaries) governs those distinctions.
+Use these editorial checks and [28 non-normative illustrations](#assessing-design-changes) to review how the current design is explained. They add no runtime duties, accepted requirements, evaluator criteria, or approval step. [Proposed BDD examples](../../01-behavior/deliverables/discovery.md#proposed-example-suites) remain separate. [Shared authority](../../docs/authority-and-change.md#status-and-evidence-boundaries) governs those distinctions.
 
 ### Reviewing contract explanations
 

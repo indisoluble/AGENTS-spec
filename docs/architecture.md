@@ -46,7 +46,7 @@ Engineering links target the staged sources. Display names and adopting-project 
 
 Standard instruction and documentation filenames in the contract describe adopting projects. Claude's `@AGENTS.md` import and Copilot's `../AGENTS.md` link resolve at their intended consumer locations, not from the staged files. The consumer README's license link targets the repository-root `LICENSE`. Preserve these release-relative meanings when editing or checking links.
 
-The recorded provider check for nonstandard staging names is **8 November 2026** ([Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md), [Claude Code](https://code.claude.com/docs/en/memory), [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions)); this editorial work does not refresh it. The [authority model](authority-and-change.md#development-time-and-runtime-authority) distinguishes development instruction loading from explicit source reading and isolated evaluation injection.
+The recorded provider check for nonstandard staging names dates to **8 November 2026** and covers [Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md), [Claude Code](https://code.claude.com/docs/en/memory), and [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions). The [authority model](authority-and-change.md#development-time-and-runtime-authority) distinguishes development instruction loading from explicit source reading and isolated evaluation injection.
 
 ## Where detailed knowledge lives
 

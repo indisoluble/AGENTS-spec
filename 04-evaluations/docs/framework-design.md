@@ -192,7 +192,7 @@ Inspect the live run's selected case, assertions and reasons, initial/final byte
 
 ## Engineering decisions
 
-These records retain evaluation-specific decisions and their successors. [Engineering history](../../docs/engineering-history.md#decisions) owns system-wide decisions. Use the current [layout](#directory-layout-and-ownership) and [operations guide](running-and-reviewing.md) rather than historical commands.
+These records explain the evaluation-specific decisions and their scope. [Engineering history](../../docs/engineering-history.md#decisions) owns system-wide decisions.
 
 ### Restrictive evaluation-agent command permissions
 
@@ -206,21 +206,19 @@ These records retain evaluation-specific decisions and their successors. [Engine
 
 ### Evaluation framework package and verification hierarchy
 
-**Status:** Accepted by the requester after review of alternatives and an incremental migration plan. The original `evals/` and root `tests/` paths are historical; the [uniform-stage successor](../../docs/engineering-history.md#uniform-stage-structure-and-deliverables-15-november-2026) establishes `04-evaluations/deliverables/`, its `deliverables.*` commands, and the staged contract path.
+**Status:** The requester accepted the package and verification hierarchy after reviewing alternatives and an incremental implementation plan. The [uniform stage decision](../../docs/engineering-history.md#uniform-stage-structure-and-deliverables-15-november-2026) separately authorized the package name and placement used in the [current layout](#directory-layout-and-ownership).
 
-**Context and decision.** Flat production and test trees mixed composition, shared machinery, scenario policy, and verification. Cross-scenario CLI tests also shared a file with scenario-specific tests, and imports between test modules loaded two modules under duplicate names without running tests twice. Separate these responsibilities into runtime, scenarios, and test-support packages, keeping each scenario and its complete offline tests in one module each. The CLI composes cases; runtime imports no scenario. Scenario reuse stays explicit, as with the requester-guidance fixture reused by independent-execution.
+**Context and decision.** Flat production and test trees mixed composition, shared machinery, scenario policy, and verification. Imports between test modules also caused discovery to load some modules under two names. Group shared machinery, scenarios, and test support by responsibility. Keep each scenario's definition in one module and its offline tests together in a corresponding module. The CLI composes cases, and runtime imports no scenario. Scenario reuse stays explicit, as with the requester-guidance fixture reused by independent-execution.
 
 Keep standalone offline-smoke and sandbox-probe entry points. A component becomes a directory only when several independently meaningful files justify it; production and tests correspond by responsibility. Use absolute package-qualified imports without compatibility re-exports. Preserve documented CLI and callable/result contracts, the smoke convenience, E1–E40, and grading semantics. `_check_process.py` stays beside `functional.py`, which locates it by position; the contract path must resolve correctly after moves. Live evaluation remains distinct from offline machinery verification.
 
-**Consequences.** The tree makes responsibilities visible and removes duplicate module loading. Migration requires updating imports, mock targets, child-process imports, documentation, and path calculations. Adding a scenario affects its module, registration, test module, fake responses, and cross-scenario case lists. The original discovery command exposed top-level test-package names; current discovery uses `-t .` as documented in [offline checks](running-and-reviewing.md#run-offline-checks).
+**Consequences.** The tree makes responsibilities visible and avoids duplicate module loading. Package paths matter to imports, mock targets, subprocesses, and contract lookup. Adding a scenario affects its module, registration, test module, fake responses, and cross-scenario case lists. The [offline discovery command](running-and-reviewing.md#run-offline-checks) sets the stage directory as the import root so tests load under their package names.
 
 **Rejected alternatives.** Flat trees plus documentation leave responsibilities mixed; grouping only scenarios or only tests leaves the other tree ambiguous. Grouping tests under `infrastructure/` while leaving shared production modules at the root also gives the same responsibility different names. One directory per single-file scenario adds a level without a second substantive owner. Compatibility aliases preserve accidental internal interfaces and hide stale imports. Moving standalone checks changes documented commands. Test substitutes do not belong in runtime; scenario tests locate their fake executable directly rather than depending on the CLI harness or a shared path constant.
 
-The earlier rejection of subdirectories in the [integrated documentation decision](../../docs/engineering-history.md#integrated-engineering-architecture-with-focused-detailed-owners) concerned documents, not code packages. The [full hierarchy record at `be1b4ce`](https://github.com/indisoluble/AGENTS-spec/blob/be1b4ce9e329995a474146eeca68415356fa067c/04-evaluations/docs/framework-design.md#evaluation-framework-package-and-verification-hierarchy) preserves original paths, commands, counts, and migration constraints.
-
 ### Evaluation documentation by maintenance responsibility (15 November 2026)
 
-**Status:** Accepted documentation-only successor to the [integrated-architecture decision](../../docs/engineering-history.md#integrated-engineering-architecture-with-focused-detailed-owners).
+**Status:** Accepted. The requester authorized the documentation split by maintenance responsibility, superseding the decision to keep the [evaluation documentation integrated](../../docs/engineering-history.md#integrated-engineering-architecture-with-focused-detailed-owners).
 
 **Decision and rationale.** Give operators, case maintainers, and framework maintainers direct entry points: `evaluations.md` explains the model, `running-and-reviewing.md` covers operations and evidence, `cases-and-requirements.md` keeps all ten definitions with E1–E40, and `framework-design.md` covers boundaries, architecture, maintenance, decisions, and references. Length alone does not justify a split: these concerns remain interdependent.
 
@@ -228,7 +226,7 @@ Use direct reciprocal links between cases, observation boundaries, review proced
 
 **Consequences and scope.** Readers can start with their task, at the cost of following and maintaining cross-document links. Review affected case, requirement, evidence, and lifecycle owners together; splitting can hide a qualification if reading stops before its owner. This layout changes no evaluator semantics, E1–E40, case order or criteria, rubric ownership, security behavior, historical evidence interpretation, product authority, or contract design. Captured contracts and rubrics still govern historical runs; prior decisions retain their status, rationale, alternatives, and limitations.
 
-The [numbered-pipeline successor](../../docs/engineering-history.md#numbered-pipeline-and-documentation-ownership-15-november-2026) establishes stage placement and README navigation. The [full original record at `be1b4ce`](https://github.com/indisoluble/AGENTS-spec/blob/be1b4ce9e329995a474146eeca68415356fa067c/04-evaluations/docs/framework-design.md#evaluation-documentation-by-maintenance-responsibility-15-november-2026) retains the migration account.
+The [stage README](../README.md) directs readers to these owners under the [numbered pipeline decision](../../docs/engineering-history.md#numbered-pipeline-and-documentation-ownership-15-november-2026).
 
 ## Technical references
 

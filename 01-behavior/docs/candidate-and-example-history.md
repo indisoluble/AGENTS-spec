@@ -4,13 +4,11 @@ Accepted requirements are in the [baseline](../deliverables/baseline.md); curren
 
 ## Status and provenance
 
-The owner's Phase 2 assignment supplied on 14 November 2026 establishes the BR acceptance summarized in [baseline provenance](../deliverables/baseline.md#phase-2-acceptance-and-editorial-provenance). It explicitly leaves the supplied 44-scenario `AGENTS-spec-BDD-scenarios.md` draft unaccepted.
-
-The historical RCx-Py proposals, their nine in-principle acceptances, and D1–D10 alternatives, including D2-A/D3-A selected for planning, retain their distinct status. BR approval is not a blanket acceptance of that earlier material. [Selected decisions](../../02-design/docs/decisions-and-alternatives.md#selected-design-and-retained-decisions), [historical interpretation](../../02-design/docs/decisions-and-alternatives.md#historical-source-and-interpretation), and the unchanged [28 design illustrations](../../02-design/docs/design-review.md#assessing-design-changes) keep their own authority and rationale.
+The record of the earlier proposals identifies 30 proposals under the RCx-Py identifiers, of which nine received in-principle acceptance. It also identifies design alternatives D1–D10 and records selection of D2-A and D3-A for planning only. The record does not identify which nine proposals received that status or describe the selected alternatives in enough detail to implement them. Neither decision authorized a redesign. The owner's [behavioral acceptance summary](../deliverables/baseline.md#behavioral-acceptance-and-editorial-provenance) separately establishes the scope of BR approval.
 
 ## Disposition of the earlier candidates
 
-The wholly provisional [Phase 1 inventory at `87a8933`](https://github.com/indisoluble/AGENTS-spec/blob/87a89333c4d2db8f888f2fd0683454d31777ce8b/behavior/discovery.md) retains the original questions and design-evidence links. The table records subsequent accepted outcomes without promoting every earlier detail. RC and BR numbers are not interchangeable: RC5 split, later topics shifted, and RC10 did not become BR10 or BR11. Missing acceptance evidence establishes neither rejection nor the absence of an earlier decision.
+RC1–RC10 were provisional questions about which outcomes and mechanisms should endure. Each linked baseline requirement gives the accepted outcome and points to the current design evidence. RC5 spans two behavioral requirements, and RC10 maps to PR1 and two authority boundaries. Where acceptance evidence for a detail is missing, its product status remains unverified. That gap does not establish rejection.
 
 | Earlier candidate | Accepted outcome now owned by the baseline | Retained boundary |
 | --- | --- | --- |
@@ -27,10 +25,6 @@ The wholly provisional [Phase 1 inventory at `87a8933`](https://github.com/indis
 
 ## Scenario qualification provenance
 
-Source for current-contract qualifications: [the contract at `87a8933`](https://github.com/indisoluble/AGENTS-spec/blob/87a89333c4d2db8f888f2fd0683454d31777ce8b/contract/prerelease_AGENTS.md), unchanged in Phase 2. Historical [change `ca4ebee`](https://github.com/indisoluble/AGENTS-spec/commit/ca4ebee6cb579f0a622a58ab69918b7ec9c405ab) and the design's [superseded mechanisms](../../02-design/docs/decisions-and-alternatives.md#superseded-effort-baseline-checkpoint) distinguish current inquiry/reporting behavior from earlier announcements, effort baselines, and categorical report suppression. History explains evolution; it does not independently accept these examples.
+The owner supplied 44 draft scenarios for review and explicitly left them unaccepted. The [coverage matrix](../deliverables/discovery.md#requirement-to-scenario-coverage) includes those IDs and 16 additional proposals. Each suite cites the requirement and the contract or design detail used to qualify its examples. The [28 design illustrations](../../02-design/docs/design-review.md#assessing-design-changes) serve a separate editorial purpose.
 
-## Changes from the supplied draft
-
-The original 44 IDs remain, with 16 additions for missing distinctions; none is accepted. Corrections preserve permissions and recommendations, authority boundaries, disclosure timing, evidence conditions, and affected-dependent scope. Current wording, classifications, design notes, and traceability are maintained beside each example and in the [coverage matrix](../deliverables/discovery.md#requirement-to-scenario-coverage).
-
-The [detailed correction and addition tables at `be1b4ce`](https://github.com/indisoluble/AGENTS-spec/blob/be1b4ce9e329995a474146eeca68415356fa067c/01-behavior/docs/candidate-and-example-history.md#changes-from-the-supplied-draft) retain the draft-by-draft audit trail. The 28 non-normative design illustrations remain separate from these proposals.
+For example, the inquiry and reporting proposals draw on [requester limits (§2.3)](../../03-contract/prerelease_AGENTS.md#23-effort-estimates-and-requester-limits), [notification and reassessment (§2.4)](../../03-contract/prerelease_AGENTS.md#24-context-gathering-and-bounded-inquiry), and [report timing (§3.7)](../../03-contract/prerelease_AGENTS.md#37-reporting). The [design decisions](../../02-design/docs/decisions-and-alternatives.md#superseded-effort-baseline-checkpoint) explain which controls superseded the effort checkpoints, advance inquiry declarations, and routine-report ban. Contract detail qualifies a proposal without establishing its acceptance.

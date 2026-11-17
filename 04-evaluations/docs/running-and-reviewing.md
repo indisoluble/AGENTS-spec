@@ -133,7 +133,7 @@ The scenario module owns the rubric text; `review.md` preserves the rubric used 
 
 ### Retained evidence
 
-Each case prints its name and a distinct git-ignored `04-evaluations/.eval-runs/<timestamp>-<id>/` (repository-relative) directory. Historical evidence under `evaluations/.eval-runs/` or `_internal/.eval-runs/` remains in place; the relocation does not move or delete it. Execution and workspace evidence is retained outside the temporary workspace before it is removed; grading reports follow assessment. Earlier evidence directories are not deleted.
+Each case prints its name and a distinct git-ignored `04-evaluations/.eval-runs/<timestamp>-<id>/` directory, relative to the repository root. For older local runs, also look under `evaluations/.eval-runs/` and `_internal/.eval-runs/`. Each run keeps its own evidence directory. Execution and workspace evidence is retained outside the temporary workspace before that workspace is removed. Grading reports follow assessment.
 
 | File | Contents |
 | --- | --- |

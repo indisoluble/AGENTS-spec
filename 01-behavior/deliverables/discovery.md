@@ -6,7 +6,7 @@ The [baseline](baseline.md) defines accepted requirements; this document tracks 
 
 All linked examples remain proposed for owner review, including Direct examples. None is an accepted defining example, executable test, observed result, evaluator rubric, or additional runtime instruction. Current [contract](../../03-contract/prerelease_AGENTS.md) and [design](../../02-design/deliverables/contract-design.md#current-semantics-vocabulary-and-coverage) qualifications supply implementation evidence, not independent product acceptance.
 
-[Baseline provenance](baseline.md#phase-2-acceptance-and-editorial-provenance) records acceptance and the limits of editorial formalization from an acceptance summary rather than original approved wording. [Candidate and example history](../docs/candidate-and-example-history.md) records earlier proposals, their disposition, and the unaccepted 44-example source draft.
+[Baseline provenance](baseline.md#behavioral-acceptance-and-editorial-provenance) records what the owner accepted and the limits of formalizing a summary of the approval. [Candidate and example history](../docs/candidate-and-example-history.md) records earlier proposals, their disposition, and the status of the 44-example source draft.
 
 ## Formulation questions and evidence limits
 

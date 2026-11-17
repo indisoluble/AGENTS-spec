@@ -4,9 +4,9 @@ These records explain the system-wide decisions that still guide maintenance. [A
 
 ## Temporary migration authority
 
-The frozen root `AGENTS.md` governed operating semantics during the transfer to an engineering specification. Transfer required byte-for-byte preservation of the contract and independent verification of semantic coverage and cross-document consistency, including evaluation relationships. The requester-supplied independent review reported **READY FOR TRANSFER DECISION**. On **8 November 2026**, after that review, the requester explicitly replied **“Authorized”**, transferring engineering authority to `contract-design.md`.
+The frozen root `AGENTS.md` governed operating semantics during the transfer to an engineering specification. Transfer required byte-for-byte preservation of the contract, semantic preservation in the specification, and independent verification of both and of cross-document consistency, including evaluation relationships. The requester-supplied independent review reported **READY FOR TRANSFER DECISION**, with all eight migration criteria passing and no corrective findings. On **8 November 2026**, after that review, the requester explicitly replied **“Authorized”**, transferring engineering authority to `contract-design.md`.
 
-That authorization ended the freeze. Its scope excluded product redesign, acceptance of provisional requirements, and selection of design alternatives. The review assessed preservation of the existing contract and its engineering description. The delivered `AGENTS.md` retained self-contained runtime authority. The [current authority model](authority-and-change.md#development-time-and-runtime-authority) identifies the owners of product intent and design and the authority needed for changes.
+That authorization ended the freeze. Its scope excluded product redesign, acceptance of provisional requirements, and selection of design alternatives. The review covered migration fidelity. Live-agent compliance and token savings require separate evidence. The delivered `AGENTS.md` retained self-contained runtime authority. The [current authority model](authority-and-change.md#development-time-and-runtime-authority) identifies the owners of product intent and design and the authority needed for changes.
 
 ## Decisions
 
@@ -21,6 +21,8 @@ Evaluation documentation was initially kept integrated so case criteria, evaluat
 ### Requirements-led engineering and product/internal separation
 
 **Status: accepted.** Cases and rubrics referred to implemented clauses without separately identifying product intent. The requester established product requirements as the basis for development and intended evaluation expectations. Treating implemented wording wholesale as accepted intent was rejected because it would bypass review of the individual requirements. [Behavior](../01-behavior/deliverables/baseline.md) owns accepted intent, and [Design](../02-design/deliverables/contract-design.md) owns the selected mechanisms. Observing agent behavior and verifying the evaluator answer separate questions.
+
+The initial decision kept requirements distinguishable from rationale within the same design document. Later, separately authorized transfers gave the established requirements and then the provisional candidates their own documents. Those transfers changed ownership while retaining their existing decision statuses. The BDD-first reorganization established the separate Behavior and Design owners.
 
 Consumer artifacts must remain independently usable, with no references or dependencies into engineering documentation, including optional navigation. Internal requirements cannot supply hidden runtime policy. The scoped interpretation of contract §3.6 gives each audience its own navigation: consumer READMEs locate product documentation, while engineering entry points locate engineering knowledge. The clause's reference to `README.md` does not require a single root entry for both audiences. This interpretation adds no consumer duties.
 

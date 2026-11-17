@@ -1,6 +1,6 @@
 # Decisions and alternatives
 
-Current choices and superseded controls are distinguished below. [Shared authority](../../docs/authority-and-change.md#status-and-evidence-boundaries) defines their status; the [clause index](../deliverables/contract-design.md#current-semantics-vocabulary-and-coverage) relates mechanisms to accepted intent. Engineering-system and evaluator decisions remain in [engineering history](../../docs/architecture.md#decisions) and [framework design](../../04-evaluations/docs/framework-design.md#engineering-decisions).
+Current choices and superseded controls are distinguished below. [Shared authority](../../docs/authority-and-change.md#status-and-evidence-boundaries) defines their status; the [clause index](../deliverables/contract-design.md#current-semantics-vocabulary-and-coverage) relates mechanisms to accepted intent. Engineering-system and evaluator decisions remain in [engineering history](../../docs/engineering-history.md#decisions) and [framework design](../../04-evaluations/docs/framework-design.md#engineering-decisions).
 
 ## Architecture Decisions
 
@@ -19,7 +19,7 @@ The index points to canonical reasons and consequences without turning every exp
 
 ### Historical source and interpretation
 
-The project's maintainer guide described how effort estimates, inquiry declarations, and reporting restrictions were intended to bound work and keep it visible. The following records preserve those controls, their costs, and their replacements. They document design intent. Independent evidence would be needed to establish product acceptance of each detail, agent adherence, or token savings. Current operating rules are in the [staged contract](../../03-contract/prerelease_AGENTS.md).
+The PDSA-era maintainer guide (`README-maintainers.md`) described how effort estimates, inquiry declarations, and reporting restrictions were intended to bound work and keep it visible. Later contract changes replaced those controls and the guides were aligned with the replacement. The records below preserve the earlier design intent and trade-offs. Independent evidence would be needed to establish product acceptance of each detail, agent adherence, or token savings. Current operating rules are in the [staged contract](../../03-contract/prerelease_AGENTS.md).
 
 ### Superseded effort-baseline checkpoint
 
@@ -27,7 +27,7 @@ The project's maintainer guide described how effort estimates, inquiry declarati
 
 Only requester direction could revise baselines. Approval covered only disclosed growth, avoiding repeated consultation while keeping later growth detectable. New increments could not absorb unapproved growth; attempts/handoffs could not reset the task baseline. Handoffs transferred relevant baseline/revision state; missing state required recovery or direction before effort-bearing continuation.
 
-The mechanism aimed to catch unexpectedly heavy work within one increment and cumulative growth across small additions. It required judgment about qualitative estimates and material growth, with no automatic enforcement.
+The mechanism aimed to catch unexpectedly heavy work within one increment and cumulative growth across small additions. It required judgment about qualitative estimates and material growth, with no automatic enforcement. In the historical CSV example, an unexpectedly larger shared-parser redesign triggered the material-growth checkpoint in any phase. The [current walkthrough](../deliverables/mechanisms/work-cycle-and-inquiry.md#how-the-design-works-in-a-task) ties prior direction to the consequential change to the parser's error contract.
 
 **Replacement.** [Current authorization/limits](../deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions) uses requester-imposed limits, evidence-based cumulative reassessment, and consequential consultation. §2.3 requires neither agent-created baselines nor consultation solely because an agent estimate grows. Old baseline state and automatic material-growth checkpoints are not current handoff/continuation duties.
 

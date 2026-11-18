@@ -68,7 +68,7 @@ Under [BR3](../baseline.md#br3--autonomy-within-authorization-and-prior-directio
 
 ### BR3.8 — Distinguish an expectation from a binding limit
 
-**Detail review — proposed.** The treatment of informal expectations preserves the current limit mechanism; no former effort-baseline rule is restored.
+**Detail review — proposed.** The distinction between an informal expectation and a requester-imposed limit illustrates the current design.
 
 - **Given** the requester says they expect a small fix but sets no attempt cap or checkpoint; new evidence supports a second local correction within the same authority, direction, and risk boundaries.
 - **When** the agent reassesses cumulative work before continuing.

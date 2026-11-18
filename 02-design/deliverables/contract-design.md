@@ -107,4 +107,4 @@ The organization aims to make these relationships understandable. No measurement
 
 ## Architecture Decisions
 
-[Decisions and alternatives](../docs/decisions-and-alternatives.md#architecture-decisions) records current choices, superseded controls, and the [documentation split](../docs/decisions-and-alternatives.md#contract-design-documentation-extraction-15-november-2026).
+[Decisions and alternatives](../docs/decisions-and-alternatives.md#architecture-decisions) records current choices, superseded controls, and the [ownership of contract-design documentation](../docs/decisions-and-alternatives.md#ownership-of-contract-design-documentation).

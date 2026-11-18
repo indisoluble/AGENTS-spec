@@ -10,7 +10,7 @@ The agent MUST stay within requester-authorized scope; requester instructions MU
 
 Before exceeding requester-imposed effort/scope limits or passing checkpoints, the agent MUST obtain requester direction; only that direction MAY revise them. Increments, retries, and handoffs MUST NOT reset them. Informal expectations are not automatically limits; material ambiguity MUST be resolved through requester interaction. This preserves explicit requester controls without making every failed approach or increased agent estimate an approval gate.
 
-Before expanding planned work or starting another increment/attempt, the agent MUST reassess cumulative progress, remaining work, established direction, and applicable limits, and justify the next increment's contribution to the task objective from evidence; otherwise it MUST seek direction. Assessing increments cumulatively prevents small additions from concealing unrelated work or a material departure. Small increments and bounded inquiry do not guarantee low total consumption. [Historical baselines](../../docs/decisions-and-alternatives.md#superseded-effort-baseline-checkpoint) used a different growth checkpoint.
+Before expanding planned work or starting another increment/attempt, the agent MUST reassess cumulative progress, remaining work, established direction, and applicable limits, and justify the next increment's contribution to the task objective from evidence; otherwise it MUST seek direction. Assessing increments cumulatively prevents small additions from concealing unrelated work or a material departure. Small increments and bounded inquiry do not guarantee low total consumption.
 
 The [decision guard](../../../03-contract/prerelease_AGENTS.md#22-decisions-and-requester-interaction) preserves distinct strengths:
 
@@ -24,7 +24,7 @@ The [decision guard](../../../03-contract/prerelease_AGENTS.md#22-decisions-and-
 
 A broad outcome does not specifically authorize every consequential way to achieve it; absent architecture is not unrestricted design authority. Conversely, an unsuccessful approach does not make a local correction within established direction a mandatory consultation. Routine choices and SHOULD exceptions waive no mandatory duty.
 
-An ADR or retrospective report cannot replace prior direction. Consequential choices made without it MUST be prominently reported with reasons, effects, uncertainty, and revision/reversal options; reporting MUST NOT count as advance authorization. Native permissions and approvals remain enforceable boundaries. The [superseded consultation rule](../../docs/decisions-and-alternatives.md#superseded-report-suppression-and-consultation-strength) must not supply current modality.
+An ADR or retrospective report cannot replace prior direction. Consequential choices made without it MUST be prominently reported with reasons, effects, uncertainty, and revision/reversal options; reporting MUST NOT count as advance authorization. Native permissions and approvals remain enforceable boundaries.
 
 ### Assessment writes and durable findings
 

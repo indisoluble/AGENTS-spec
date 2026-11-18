@@ -46,7 +46,7 @@ Engineering links target the staged sources. Display names and adopting-project 
 
 Standard instruction and documentation filenames in the contract describe adopting projects. Claude's `@AGENTS.md` import and Copilot's `../AGENTS.md` link resolve at their intended consumer locations, not from the staged files. The consumer README's license link targets the repository-root `LICENSE`. Preserve these release-relative meanings when editing or checking links.
 
-The recorded provider check for nonstandard staging names dates to **8 November 2026** and covers [Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md), [Claude Code](https://code.claude.com/docs/en/memory), and [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions). The [authority model](authority-and-change.md#development-time-and-runtime-authority) distinguishes development instruction loading from explicit source reading and isolated evaluation injection.
+These staged instruction filenames fall outside the default discovery paths documented for [Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md), [Claude Code](https://code.claude.com/docs/en/memory), and [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions), as checked on **8 November 2026**. The [authority model](authority-and-change.md#development-time-and-runtime-authority) distinguishes development instruction loading from explicit source reading and isolated evaluation injection.
 
 ## Where detailed knowledge lives
 
@@ -61,4 +61,4 @@ The recorded provider check for nonstandard staging names dates to **8 November 
 
 ## Decisions
 
-[Engineering history](engineering-history.md#decisions) records system-wide choices. [Design decisions and alternatives](../02-design/docs/decisions-and-alternatives.md#architecture-decisions) and [evaluation engineering decisions](../04-evaluations/docs/framework-design.md#engineering-decisions) retain their domain-specific reasons, alternatives, and successors. The [8 November authority transfer](engineering-history.md#temporary-migration-authority) explains why the former frozen contract no longer fixes engineering design.
+[Engineering history](engineering-history.md#decisions) records system-wide choices. [Design decisions and alternatives](../02-design/docs/decisions-and-alternatives.md#architecture-decisions) and [evaluation engineering decisions](../04-evaluations/docs/framework-design.md#engineering-decisions) retain their domain-specific reasons, alternatives, and successors. The [engineering authority and runtime contract decision](engineering-history.md#engineering-authority-and-the-runtime-contract) explains the basis for engineering ownership of requirements and design and the scope of the delivered contract's authority.

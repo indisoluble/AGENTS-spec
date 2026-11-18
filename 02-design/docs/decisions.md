@@ -1,8 +1,8 @@
-# Decisions and alternatives
+# Contract design decisions and alternatives
 
-Current choices and superseded controls are distinguished below. [Shared authority](../../docs/authority-and-change.md#status-and-evidence-boundaries) defines their status; the [clause index](../deliverables/contract-design.md#current-semantics-vocabulary-and-coverage) relates mechanisms to accepted intent. Engineering-system and evaluator decisions remain in [engineering history](../../docs/engineering-history.md#decisions) and [framework design](../../04-evaluations/docs/framework-design.md#engineering-decisions).
+Current choices and superseded controls are distinguished below. [Shared authority](../../docs/authority-and-change.md#status-and-evidence-boundaries) defines their status; the [clause index](../deliverables/contract-design.md#contract-clause-index) relates mechanisms to accepted intent. Engineering-system and evaluator decisions remain in [system-wide engineering decisions](../../docs/decisions.md#architecture-decisions) and [framework design](../../04-evaluations/docs/framework-design.md#architecture-decisions).
 
-## Architecture Decisions
+## Architecture decisions
 
 ### Selected design and retained decisions
 
@@ -47,7 +47,7 @@ Narrow consultation to clarify material method ambiguity was exempt from inquiry
 
 ### Ownership of contract-design documentation
 
-**The requester approved the documentation structure and authorized local implementation.** The requester's [navigation decision](../../docs/engineering-history.md#separate-owners-for-architecture-authority-and-decision-rationale) records completion and independent review of the documentation split. That review supplies evidence about organization only. Acceptance of the underlying mechanisms or contract behavior requires separate evidence.
+**The requester approved the documentation structure and authorized local implementation.** The requester's [navigation decision](../../docs/decisions.md#separate-owners-for-architecture-authority-and-decision-rationale) records completion and independent review of the documentation split. That review supplies evidence about organization only. Acceptance of the underlying mechanisms or contract behavior requires separate evidence.
 
 [Contract design](../deliverables/contract-design.md) explains the architecture and leads to four mechanism owners, delivery and portability, and methods and references. Each keeps prescriptions with the rationale needed to apply them. This record owns decisions and alternatives. [Design review](design-review.md) owns editorial guidance and non-normative illustrations. A single file would save links but mix these reading and maintenance tasks. Direct references let readers go to the owner of a question and require maintenance when owners move.
 

@@ -1,22 +1,22 @@
-# Engineering history and decisions
+# System-wide engineering decisions and rationale
 
 These records explain the system-wide decisions that still guide maintenance. [Architecture](architecture.md) describes the current system, and [authority and change](authority-and-change.md) defines the responsibilities of its owners.
 
-## Engineering authority and the runtime contract
+## Architecture decisions
+
+Design-specific decisions remain in [decisions and alternatives](../02-design/docs/decisions.md#architecture-decisions). Evaluator decisions remain in [framework design](../04-evaluations/docs/framework-design.md#architecture-decisions).
+
+### Engineering authority and the runtime contract
 
 Under the [current authority model](authority-and-change.md#development-time-and-runtime-authority), the [behavioral baseline](../01-behavior/deliverables/baseline.md) owns accepted product intent and constraints, and [contract design](../02-design/deliverables/contract-design.md) owns their selected realization. The delivered `AGENTS.md` retains self-contained runtime authority within the consuming tool's instruction hierarchy and permissions.
 
 The requester authorized the transfer of engineering authority from the frozen contract to `contract-design.md` after an independent migration-fidelity review. The requester-supplied review checked byte-for-byte preservation of the contract, preservation of its operating semantics in the specification, and consistency across documents, including evaluation relationships. It reported **READY FOR TRANSFER DECISION**, with all eight criteria passing and no corrective findings. The requester's explicit reply, **“Authorized”**, covered the transfer alone. Its scope excluded product redesign, acceptance of provisional requirements, and selection of design alternatives. Live-agent compliance and token savings require evidence beyond either the review or the authorization.
 
-## Decisions
-
-Design-specific decisions remain in [decisions and alternatives](../02-design/docs/decisions-and-alternatives.md#architecture-decisions). Evaluator decisions remain in [framework design](../04-evaluations/docs/framework-design.md#engineering-decisions).
-
 ### Integrated engineering architecture with focused detailed owners
 
 **Accepted.** The shared architecture explains relationships, boundaries, and dependencies across the project. The root README orients readers and links to that overview. Design, evaluation, and knowledge maintenance each need a focused owner for their detail. A directory listing alone cannot explain how changes in one domain affect another, and rearranging directories solely for navigation disrupts links.
 
-The evaluator lifecycle belongs with the cases, requirements, and evidence needed to interpret a run. [Evaluation documentation ownership](../04-evaluations/docs/framework-design.md#evaluation-documentation-by-maintenance-responsibility) explains how those connections are maintained across operator and maintainer entry points.
+The evaluator lifecycle belongs with the cases, requirements, and evidence needed to interpret a run. The original decision kept them in one guide. The later [evaluation documentation decision](../04-evaluations/docs/framework-design.md#evaluation-documentation-by-maintenance-responsibility) keeps those connections through direct links between the responsible owners.
 
 ### Requirements-led engineering and product/internal separation
 
@@ -34,7 +34,7 @@ The dedicated `automation/` stage was a rejected alternative. Moving the evaluat
 
 ### Separate owners for architecture, authority, and decision rationale
 
-**The requester accepted the structure and authorized local implementation.** The requester's navigation decision records the shared and [contract-design documentation](../02-design/docs/decisions-and-alternatives.md#ownership-of-contract-design-documentation) structures as complete and independently reviewed. The review concerned documentation organization.
+**The requester accepted the structure and authorized local implementation.** The requester's navigation decision records the shared and [contract-design documentation](../02-design/docs/decisions.md#ownership-of-contract-design-documentation) structures as complete and independently reviewed. The review concerned documentation organization.
 
 [Architecture](architecture.md) explains how the system fits together. [Authority and change](authority-and-change.md) identifies who may decide a change and which owners it affects. This record explains why system-wide choices were made. A single document would reduce cross-references but mix those reading tasks. The requester selected direct links to canonical owners through ordinary Markdown headings. When material moves, maintainers update incoming links without preserving obsolete paths or fragments through forwarding references.
 
@@ -53,3 +53,9 @@ Root and engineering stage READMEs orient readers. A flat structure would save n
 Behavior, Design, and Evaluations each have a README for orientation, `docs/` for supporting explanations, and `deliverables/` for substantive artifacts. Prescriptions stay with the rationale needed to apply them. Contract stages exactly five consumer files at its root. Engineering navigation or an extra container there would obscure the delivery boundary. See the [stage layout](architecture.md#current-bdd-first-organization).
 
 The evaluation package itself is `deliverables`. Wrapping a package named `evaluations` in a `deliverables/` directory would add a level with no distinct responsibility. The requester explicitly authorized the import-interface change from `evaluations.*` to `deliverables.*` without compatibility packages, launchers, aliases, or symlinks. Callers must use the current name. Keeping package depth stable preserves relative lookups for the contract, subprocess working directories, and evidence. The operations guide documents the [invocation](../04-evaluations/docs/running-and-reviewing.md#setup-and-running-evaluations) and [retained evidence locations](../04-evaluations/docs/running-and-reviewing.md#retained-evidence).
+
+### Documentation conventions within existing owners
+
+The requester authorized local implementation of the [engineering documentation convention](authority-and-change.md#engineering-documentation-convention) after the documentation audit and architectural review. AGENTS-spec adopts this convention for its own engineering documentation under the existing stage and authority decisions.
+
+Predictable names and topic headings give each README a direct route to an architecture, decision, or guide. A central collection would separate stage-specific decisions from the artifacts they explain. A fixed set of architecture files or guide categories would split coherent tasks and could create competing specifications. Keeping canonical details with their owners requires maintaining incoming references when a document moves.

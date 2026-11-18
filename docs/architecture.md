@@ -1,6 +1,6 @@
 # AGENTS-spec engineering architecture
 
-AGENTS-spec develops a reusable, self-contained [operating contract](../03-contract/prerelease_AGENTS.md) for coding agents. Behavior establishes product intent, Design selects its realization, Contract stages the consumer files, and Evaluations assess the candidate. This document explains that structure; [authority and change](authority-and-change.md) explains how to change it, and [engineering history](engineering-history.md) preserves consequential decisions and their reasons.
+AGENTS-spec develops a reusable, self-contained [operating contract](../03-contract/prerelease_AGENTS.md) for coding agents. Behavior establishes product intent, Design selects its realization, Contract stages the consumer files, and Evaluations assess the candidate. This overview maps stage boundaries and owners. See [authority and change](authority-and-change.md) for change guidance and [system-wide engineering decisions](decisions.md) for rationale.
 
 ## Purpose and scope
 
@@ -56,9 +56,15 @@ These staged instruction filenames fall outside the default discovery paths docu
 | What remains proposed or unresolved? | [Discovery](../01-behavior/deliverables/discovery.md): example suites, classifications, coverage, formulation questions, and remaining work; [candidate history](../01-behavior/docs/candidate-and-example-history.md): earlier proposals and their disposition. |
 | How does the contract realize intent? | [Contract design](../02-design/deliverables/contract-design.md): vocabulary, clause index, layer composition, and links to mechanisms, delivery, methods, and rationale. [Design review](../02-design/docs/design-review.md) supplies explanation checks and non-normative illustrations. |
 | What instructions reach consumers? | [Staged AGENTS.md](../03-contract/prerelease_AGENTS.md); the [adoption guide](../03-contract/prerelease_README.md) explains installation. |
-| What do evaluations assess, and how are they operated? | [Evaluation model](../04-evaluations/docs/evaluations.md), [cases and E1–E40](../04-evaluations/deliverables/cases-and-requirements.md), [operations and evidence](../04-evaluations/docs/running-and-reviewing.md), and [framework design](../04-evaluations/docs/framework-design.md). Exact case policy stays in scenario modules. Run commands from `04-evaluations/`; new evidence goes to its `.eval-runs/`, with older evidence in its [documented locations](../04-evaluations/docs/running-and-reviewing.md#retained-evidence). |
+| What do evaluations assess, and how are they operated? | [Evaluation model](../04-evaluations/docs/evaluation-model.md), [cases and E1–E40](../04-evaluations/deliverables/cases-and-requirements.md), [operations and evidence](../04-evaluations/docs/running-and-reviewing.md), and [framework design](../04-evaluations/docs/framework-design.md). Exact case policy stays in scenario modules. Run commands from `04-evaluations/`; new evidence goes to its `.eval-runs/`, with older evidence in its [documented locations](../04-evaluations/docs/running-and-reviewing.md#retained-evidence). |
 | What authority and maintenance rules cross stages? | [Authority and change](authority-and-change.md): BDD responsibilities, status, traceability, documentation ownership, and change impact. |
 
-## Decisions
+## Architecture decisions
 
-[Engineering history](engineering-history.md#decisions) records system-wide choices. [Design decisions and alternatives](../02-design/docs/decisions-and-alternatives.md#architecture-decisions) and [evaluation engineering decisions](../04-evaluations/docs/framework-design.md#engineering-decisions) retain their domain-specific reasons, alternatives, and successors. The [engineering authority and runtime contract decision](engineering-history.md#engineering-authority-and-the-runtime-contract) explains the basis for engineering ownership of requirements and design and the scope of the delivered contract's authority.
+The [system-wide decision record](decisions.md#architecture-decisions) explains choices affecting multiple stages. [Design decisions and alternatives](../02-design/docs/decisions.md#architecture-decisions) and [evaluation framework decisions](../04-evaluations/docs/framework-design.md#architecture-decisions) retain their domain-specific reasons, alternatives, and successors. The [engineering authority and runtime contract decision](decisions.md#engineering-authority-and-the-runtime-contract) explains the basis for engineering ownership of requirements and design and the scope of the delivered contract's authority.
+
+## Risks and technical debt
+
+- Design records the [interpretation risks of accepted wording compromises](../02-design/deliverables/delivery-and-portability.md#current-wording-trade-offs).
+- [Traceability gaps](authority-and-change.md#cross-domain-traceability-and-feedback) and [evaluation coverage limits](../04-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) bound claims about requirements-derived acceptance.
+- The framework records [which command restrictions have been verified and where enforcement and integration remain unverified](../04-evaluations/docs/framework-design.md#agent-execution).

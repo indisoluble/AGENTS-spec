@@ -2,7 +2,7 @@
 
 Callers supply the dataset, fixture, and execution function; scenario policy
 stays with the scenario. See 04-evaluations/deliverables/cases-and-requirements.md#verifiable-requirements
-for requirements and 04-evaluations/docs/evaluations.md#purpose-and-evaluation-model for scope.
+for requirements and 04-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model for scope.
 """
 
 from collections.abc import Callable, Mapping

@@ -1,6 +1,6 @@
 # Evaluation framework design
 
-This document explains execution/security boundaries, runtime architecture, maintenance, and engineering decisions. [Running and reviewing](running-and-reviewing.md) covers operations and evidence; the [evaluation model](evaluations.md) defines scope and limits. [Cases and E1–E40](../deliverables/cases-and-requirements.md) specify assessment responsibilities; scenario modules own exact policy and rubrics.
+This document explains execution/security boundaries, runtime architecture, maintenance, and engineering decisions. [Running and reviewing](running-and-reviewing.md) covers operations and evidence; the [evaluation model](evaluation-model.md) defines scope and limits. [Cases and E1–E40](../deliverables/cases-and-requirements.md) specify assessment responsibilities; scenario modules own exact policy and rubrics.
 
 ## Execution and security boundaries
 
@@ -72,11 +72,11 @@ python -m deliverables.tests.probe_functional_sandbox -v
 
 The probe runs trusted local code through the actual helper, checking readable fixture contents and denied fixture writes, outside-workspace writes, and loopback network access. It needs no login or subscription usage and may need to run outside an enclosing agent sandbox. The sandbox still permits host reads: a fresh profile does not make other host credentials unreadable or provide complete host isolation.
 
-## Architecture, extension, and maintenance
+## Framework architecture
 
 ### Directory layout and ownership
 
-Paths below are relative to `04-evaluations/`, where evaluator commands run. `deliverables/` is the Python package; generated evidence stays outside it in `.eval-runs/`. The [hierarchy decision](#evaluation-framework-package-and-verification-hierarchy) explains code and test ownership. The [stage layout decision](../../docs/engineering-history.md#stage-deliverables-and-the-contract-staging-exception) records the package name, placement, and import compatibility boundary.
+Paths below are relative to `04-evaluations/`, where evaluator commands run. `deliverables/` is the Python package; generated evidence stays outside it in `.eval-runs/`. The [hierarchy decision](#evaluation-framework-package-and-verification-hierarchy) explains code and test ownership. The [stage layout decision](../../docs/decisions.md#stage-deliverables-and-the-contract-staging-exception) records the package name, placement, and import compatibility boundary.
 
 | Path | Owns |
 | --- | --- |
@@ -106,7 +106,7 @@ Pydantic Evals runs the task and the evaluators. It does not launch Codex, inspe
 
 The two activities share code but answer different questions:
 
-- **Evaluating an agent:** `python -m deliverables` runs the real Codex CLI on a scenario's fixture, consumes subscription allowance, and produces evidence about that run. The [evaluation model](evaluations.md#purpose-and-evaluation-model) bounds what that evidence establishes.
+- **Evaluating an agent:** `python -m deliverables` runs the real Codex CLI on a scenario's fixture, consumes subscription allowance, and produces evidence about that run. The [evaluation model](evaluation-model.md#purpose-and-evaluation-model) bounds what that evidence establishes.
 - **Testing the evaluator:** the offline suite never runs a model. Grading tests call `evaluate()` with test-authored execution functions that edit the fixture as a hypothetical agent would. CLI tests run the real command against `deliverables/tests/support/fake_codex.py`. Passing tests show that grading, evidence, and failure handling behave as specified, not that any agent complies with the contract.
 - **Checking the functional-check sandbox:** the opt-in probe exercises that sandbox's filesystem and network restrictions using the installed Codex CLI. It does not verify the evaluated-agent permission profile; see [agent execution](#agent-execution) for the separate verification scopes.
 
@@ -149,7 +149,7 @@ This case shows each owner in a run without optional stages: no functional check
 
 Scope-discipline grades only captured observations. Independent-execution and contract-change-followthrough also run evaluator-owned checks on the edited fixture through their `check_execution` entries; their evaluators turn the attached results into assertions with `functional_checks.check_assertion`. [Functional-check execution](#functional-check-execution) explains that path.
 
-### Interfaces used by scenarios and substitutes
+## Interfaces used by scenarios and substitutes
 
 The shared evaluation runner accepts an explicit dataset, a `fixture_files` mapping, and an execution callable `(prompt, workspace) -> ExecutionResult`. Both the Codex launcher and offline substitutes use that callable boundary.
 
@@ -160,6 +160,8 @@ Scenario `check_execution` wrappers bind their sources, required files, timeout,
 Fixture mappings use relative paths and exact bytes. Workspace preparation creates their parent directories and separately injects the unchanged root contract; absolute paths, parent traversal, and root-contract overrides are rejected. An explicit mapping replaces the default fixture, and an empty mapping adds no files beyond the contract. The documented [smoke convenience](../deliverables/scenarios/smoke.py), `smoke.evaluate`, retains its optional dataset, `initial_contents`, and `fixture_files` arguments: without a mapping it supplies `message.txt` using the selected initial contents; shared workspace preparation itself requires an explicit mapping.
 
 Internal module locations and imports are implementation details unless a documented contract or demonstrated external consumer requires compatibility. Preserve the documented CLI, execution callable/result semantics, and smoke convenience when changing internal ownership; do not add aliases solely to retain accidental internal interfaces.
+
+## Framework maintenance
 
 ### Modify or extend an evaluation
 
@@ -190,9 +192,9 @@ Live verification requires inspecting one separately authorized run. If authoriz
 
 Inspect the live run's selected case, assertions and reasons, initial/final bytes and available manifests, contract hash, model settings, and cleaned workspace path. For human-review cases, also inspect response capture, readable differences, the retained rubric, and pending-review reporting, and assess the rubric with the requester. For independent-execution and contract-change-followthrough, include functional-check evidence. Each executed case should produce a distinct workspace and evidence directory. Keep run-specific results with that evidence rather than duplicating them here.
 
-## Engineering decisions
+## Architecture decisions
 
-These records explain the evaluation-specific decisions and their scope. [Engineering history](../../docs/engineering-history.md#decisions) owns system-wide decisions.
+These records explain the evaluation-specific decisions and their scope. The [system-wide decision record](../../docs/decisions.md#architecture-decisions) covers choices across stages.
 
 ### Restrictive evaluation-agent command permissions
 
@@ -206,7 +208,7 @@ These records explain the evaluation-specific decisions and their scope. [Engine
 
 ### Evaluation framework package and verification hierarchy
 
-**The requester accepted the code and test hierarchy** on the basis of the alternatives and incremental implementation plan. The [stage layout decision](../../docs/engineering-history.md#stage-deliverables-and-the-contract-staging-exception) separately authorizes the `deliverables` package name and placement.
+**The requester accepted the code and test hierarchy** on the basis of the alternatives and incremental implementation plan. The [stage layout decision](../../docs/decisions.md#stage-deliverables-and-the-contract-staging-exception) separately authorizes the `deliverables` package name and placement.
 
 The CLI composes cases. Shared runtime machinery imports no scenario. Each scenario owns its prompt, fixture, assessment policy, and any functional checks or rubric. Reuse between scenarios is explicit, as when independent-execution uses the requester-guidance fixture. The [directory layout](#directory-layout-and-ownership) gives each scenario one module and a corresponding offline test module. Runtime tests cover shared guarantees, including cross-scenario CLI behavior. Test substitutes have their own owner outside production code.
 
@@ -218,9 +220,9 @@ Adding a scenario affects its module, registration, tests, fake responses, and c
 
 ### Evaluation documentation by maintenance responsibility
 
-**The requester accepted this structure and authorized organizing the documentation by maintenance responsibility.** The decision concerns where to maintain evaluation knowledge. It grants no authority to change evaluator semantics, E1–E40, case order or criteria, rubric ownership, security behavior, product intent, or contract design.
+**The requester accepted this structure and authorized organizing the documentation by maintenance responsibility.** It superseded the [earlier choice to keep evaluation documentation in one guide](../../docs/decisions.md#integrated-engineering-architecture-with-focused-detailed-owners). The shared architecture and its division of ownership continue to apply. The documentation decision grants no authority to change evaluator semantics, E1–E40, case order or criteria, rubric ownership, security behavior, product intent, or contract design.
 
-The [evaluation model](evaluations.md) explains what a run can establish. [Operations](running-and-reviewing.md) covers execution, review, and retained evidence. The [case catalogue](../deliverables/cases-and-requirements.md) keeps the ten definitions together with E1–E40. This document owns framework boundaries, architecture, maintenance, decisions, and technical references. The [stage README](../README.md) connects those entry points under the [numbered stage decision](../../docs/engineering-history.md#four-numbered-stages-and-their-responsibilities).
+The [evaluation model](evaluation-model.md) explains what a run can establish. [Operations](running-and-reviewing.md) covers execution, review, and retained evidence. The [case catalogue](../deliverables/cases-and-requirements.md) keeps the ten definitions together with E1–E40. This document owns framework boundaries, architecture, maintenance, decisions, and technical references. The [stage README](../README.md) connects those entry points under the [numbered stage decision](../../docs/decisions.md#four-numbered-stages-and-their-responsibilities).
 
 An integrated guide keeps case criteria, requirements, lifecycle, and evidence close together but mixes the tasks of operators, case maintainers, and framework maintainers. Separate owners give each reader a direct entry point. Length alone would not justify the cost of maintaining links or the risk of overlooking a qualification. Review affected case, requirement, lifecycle, and evidence owners together. Keep direct reciprocal links to the observation boundaries, rubrics, checks, review procedures, and outcomes needed to interpret each case. When a section moves, update incoming links to its owner. The [shared architecture](../../docs/architecture.md#where-detailed-knowledge-lives) locates these owners. Historical runs retain the interpretation supported by their own contract, fixtures, rubrics, and captured evidence.
 

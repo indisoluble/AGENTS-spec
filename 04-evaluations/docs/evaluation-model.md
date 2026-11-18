@@ -1,4 +1,4 @@
-# Local coding-agent evaluations
+# Evaluation model and evidence limits
 
 This document explains what the suite assesses and what its evidence can establish. Use the [stage README](../README.md) for routes to case definitions, operations, and framework maintenance.
 

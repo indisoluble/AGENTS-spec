@@ -1,12 +1,12 @@
-# Design Reference
+# Contract design review
 
 Use these editorial checks and [28 non-normative illustrations](#assessing-design-changes) to review how the current design is explained. They add no runtime duties, accepted requirements, evaluator criteria, or approval step. [Proposed BDD examples](../../01-behavior/deliverables/discovery.md#proposed-example-suites) remain separate. [Shared authority](../../docs/authority-and-change.md#status-and-evidence-boundaries) governs those distinctions.
 
-### Reviewing contract explanations
+## Reviewing contract explanations
 
 Use the [shared editing and ownership guidance](../../docs/authority-and-change.md#working-with-requirements-and-design-documentation) for maintenance boundaries and [contract design](../deliverables/contract-design.md) for mechanisms and rationale. The checks below concern explanation and comprehension, not behavioral evidence.
 
-#### Reader paths
+### Reader paths
 
 The reference reader knows Git and coding agents. A junior developer should be able to adopt the contract without studying its methods first; “power users” seek practical depth rather than possessing method expertise.
 
@@ -20,7 +20,7 @@ Use plain Markdown, descriptive headings, direct links, and comparison tables. I
 
 Neither guide nor Design documentation has a numeric length target or limit. Detail and useful repetition serve understanding; assess navigation and the combined impression of headings/examples, keeping consequential qualifications near claims. Avoid empty categories, obligatory templates, and formalism without explanatory value. The contract's [standing-context constraint](../../01-behavior/deliverables/baseline.md#portability-and-standing-context-qualifications) applies separately to `AGENTS.md`.
 
-#### Explanatory ownership and evidence
+### Explanatory ownership and evidence
 
 Guides and design can explain the same subject at different depths for distinct reader needs under the [summary boundary](../../docs/authority-and-change.md#documentation-ownership-boundaries). Link to canonical detail rather than copying complete procedures, reference-assignment tables, or lifecycles; necessary copies retain owners/update relationships. The practical guide owns requester-facing explanations; mechanism documents own design rationale.
 
@@ -29,14 +29,14 @@ The [practical CSV walkthrough](../../03-contract/prerelease_README-powerusers.m
 Match claims to their sources:
 
 - Intended outcomes: [accepted baseline](../../01-behavior/deliverables/baseline.md), keeping candidates/proposals distinct.
-- Current operating rules: [delivered contract](../../03-contract/prerelease_AGENTS.md), with the [clause index](../deliverables/contract-design.md#current-semantics-vocabulary-and-coverage) for detail/rationale. Current design remains binding without detailed product acceptance, and authorized redesign may replace it.
+- Current operating rules: [delivered contract](../../03-contract/prerelease_AGENTS.md), with the [clause index](../deliverables/contract-design.md#contract-clause-index) for detail/rationale. Current design remains binding without detailed product acceptance, and authorized redesign may replace it.
 - Methods: operational contract meaning and [reference assignments/consultation boundaries](../deliverables/methods-and-references.md#principles-and-reference-boundaries), without importing whole frameworks or stronger source rhetoric. Clear rules need no routine method research.
 - Evaluator claims: [E1–E40](../../04-evaluations/deliverables/cases-and-requirements.md#verifiable-requirements), applicable case interpretation, and captured contract/rubric.
 - Provider discovery/application: official provider documentation and actual environment. Preserve [provider evidence dates](../../03-contract/prerelease_README-powerusers.md#evidence-dates) and the separate [staging check date](../../docs/architecture.md#staged-sources-and-release-relative-references); new dates require newly verified/changed claims. Editorial work refreshes none.
 
 Do not imply that contract text overrides higher-priority instructions, grants permissions, bypasses approvals, or technically guarantees compliance.
 
-#### Meaning and evidence checks
+### Meaning and evidence checks
 
 Review the complete reader task, including headings and walkthroughs:
 
@@ -46,7 +46,7 @@ Review the complete reader task, including headings and walkthroughs:
 4. **Continuity:** retain distinct framing, notification, advance-disclosure, and consolidation timings. Routine-report recommendations are neither a ban nor a per-increment duty. Handoffs transfer results, authorization/limits including consumed allowances, direction, next-step bounds/conditions, evidence, and uncertainty rather than activity logs.
 5. **Evidence/delivery:** distinguish intended effects from demonstrated results; text consistency proves neither comprehension, behavioral equivalence, nor savings. Check Markdown, paths, anchors, incoming references, and [release-relative meanings](../../docs/architecture.md#staged-sources-and-release-relative-references). Consumer artifacts retain no engineering dependencies, including navigation. Apply artifact-specific criteria and keep transient measurements/validation records in working or review records.
 
-#### Reader comprehension questions
+### Reader comprehension questions
 
 | After reading | The reader should explain |
 | --- | --- |
@@ -58,11 +58,11 @@ Review the complete reader task, including headings and walkthroughs:
 
 For reader testing, ask members of the reference audience to perform/explain these tasks in their own words. Distinguish inability to find an answer from misunderstanding it, and observed comprehension from editorial prediction. Keep observations in working/review records; editorial review alone does not establish usability.
 
-### Assessing design changes
+## Assessing design changes
 
-**Non-normative illustrations of the current implementation, pending requirements-led review.** All 28 distinctions below are retained separately from accepted requirements, proposed BDD defining examples, executable checks, and behavioral results. They establish neither comprehensive coverage nor an evaluation procedure. Future review must decide each illustration's role in requirement clarification, evaluation expectations, design explanation, or history; no promotion is performed here. [Candidate disposition](../../01-behavior/docs/candidate-and-example-history.md#disposition-of-the-earlier-candidates) and [formulation limits](../../01-behavior/deliverables/discovery.md#formulation-questions-and-evidence-limits) retain acceptance boundaries; the [evaluation model](../../04-evaluations/docs/evaluations.md#purpose-and-evaluation-model) owns behavioral evidence limits.
+**Non-normative illustrations of the current implementation, pending requirements-led review.** All 28 distinctions below are retained separately from accepted requirements, proposed BDD defining examples, executable checks, and behavioral results. They establish neither comprehensive coverage nor an evaluation procedure. Future review must decide each illustration's role in requirement clarification, evaluation expectations, design explanation, or history; no promotion is performed here. [Candidate disposition](../../01-behavior/docs/candidate-and-example-history.md#disposition-of-the-earlier-candidates) and [formulation limits](../../01-behavior/deliverables/discovery.md#formulation-questions-and-evidence-limits) retain acceptance boundaries; the [evaluation model](../../04-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) owns behavioral evidence limits.
 
-Assess self-containment by standalone reading, and preservation or deliberate change of clause meaning by comparing strength, trigger, scope, conditions, and exceptions. The [clause index](../deliverables/contract-design.md#current-semantics-vocabulary-and-coverage) locates detailed mechanisms; the delivered contract remains runtime authority.
+Assess self-containment by standalone reading, and preservation or deliberate change of clause meaning by comparing strength, trigger, scope, conditions, and exceptions. The [clause index](../deliverables/contract-design.md#contract-clause-index) locates detailed mechanisms; the delivered contract remains runtime authority.
 
 | Scenario | Design distinction to assess |
 | --- | --- |

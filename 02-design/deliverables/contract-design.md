@@ -6,8 +6,6 @@ This document explains the selected architecture of the [AGENTS.md operating con
 
 ## Glossary
 
-### Current-semantics vocabulary and coverage
-
 The agent is the subject of operating rules unless another actor is explicit. Uppercase keywords follow [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119.html) / [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174.html): MUST requires, MUST NOT prohibits, SHOULD (NOT) recommends with weighed, justified departures, and MAY permits within stated terms. Unqualified operative language retains its source strength; explanation does not alter it. Material SHOULD exceptions need report explanations and waive no mandatory duty.
 
 | Term | Current meaning |
@@ -20,11 +18,13 @@ The agent is the subject of operating rules unless another actor is explicit. Up
 | Material | Significantly affecting correctness, scope, risk, or whether to proceed. |
 | Permanent record | The canonical project document owning the topic, such as architecture or an ADR; chat and working notes are excluded. |
 
+## Contract clause index
+
 This index relates contract clauses, canonical mechanism explanations, and accepted intent. It does not establish acceptance of every prescription, complete realization, or evaluation coverage. All rows retain their own conditions and remain subject to requester/tool authority and progression guards. [Proposed-example coverage](../../01-behavior/deliverables/discovery.md#requirement-to-scenario-coverage) remains separate.
 
 | Contract clauses | Engineering specification locations | Accepted intent supported |
 | --- | --- | --- |
-| [Purpose](../../03-contract/prerelease_AGENTS.md), [model](../../03-contract/prerelease_AGENTS.md#how-this-contract-works), [terms](../../03-contract/prerelease_AGENTS.md#terms-and-requirement-keywords) | [Established objectives](../../01-behavior/deliverables/baseline.md#established-objectives), this vocabulary, and [three interacting layers](#three-interacting-layers) | Established objectives (linked at left) |
+| [Purpose](../../03-contract/prerelease_AGENTS.md), [model](../../03-contract/prerelease_AGENTS.md#how-this-contract-works), [terms](../../03-contract/prerelease_AGENTS.md#terms-and-requirement-keywords) | [Established objectives](../../01-behavior/deliverables/baseline.md#established-objectives), the [glossary](#glossary), and [three interacting layers](#three-interacting-layers) | Established objectives (linked at left) |
 | [Whole delivered contract](../../03-contract/prerelease_AGENTS.md) | [Design goals and boundaries](#design-goals-and-boundaries) | [PR1](../../01-behavior/deliverables/baseline.md#established-product-requirement) |
 | [§1](../../03-contract/prerelease_AGENTS.md#1-work-cycle); [§1.1 Plan](../../03-contract/prerelease_AGENTS.md#11-plan--define-the-next-increment) | [Small commitments](mechanisms/work-cycle-and-inquiry.md#small-commitments-with-sufficient-depth), [learning](mechanisms/work-cycle-and-inquiry.md#learning-throughout-the-work), [completion and inquiry](mechanisms/work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation), [knowledge roles](mechanisms/knowledge-and-documentation.md#documentation-choices), and [initial framing](mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution) | [BR1](../../01-behavior/deliverables/baseline.md#br1--focused-proportionate-authorized-work), [BR2](../../01-behavior/deliverables/baseline.md#br2--evidence-based-planning-and-knowledge-ownership), [BR4](../../01-behavior/deliverables/baseline.md#br4--bounded-investigation-and-timely-reassessment), [BR6](../../01-behavior/deliverables/baseline.md#br6--learning-from-observed-results), [BR7](../../01-behavior/deliverables/baseline.md#br7--proportionate-communication-and-actionable-handoffs) |
 | [§1.2 Do](../../03-contract/prerelease_AGENTS.md#12-do--perform-the-authorized-work) | [Engineering scope boundaries](mechanisms/engineering-and-validation.md#engineering-scope-boundaries), [Simple Design](mechanisms/engineering-and-validation.md#simple-design-choosing-what-the-current-solution-needs), [component boundaries, refactoring, and validation](mechanisms/engineering-and-validation.md#component-boundaries-refactoring-and-validation), [qualified techniques](mechanisms/engineering-and-validation.md#focused-techniques-and-how-they-work-together) | [BR9](../../01-behavior/deliverables/baseline.md#br9--engineering-quality-and-preservation) |
@@ -99,7 +99,7 @@ The organization aims to make these relationships understandable. No measurement
 | [Knowledge and documentation](mechanisms/knowledge-and-documentation.md) | Canonical knowledge, documentation roles, EARS, arc42, ADRs, debt, and Diátaxis. |
 | [Delivery and portability](delivery-and-portability.md) | Provider bridges, portability rationale and evidence, standing context, and wording trade-offs. |
 | [Methods and references](methods-and-references.md) | Selection and replacement rationale, exact source assignments and exclusions, and consultation limits. |
-| [Decisions and alternatives](../docs/decisions-and-alternatives.md) | Decision status, historical interpretation, alternatives, superseded mechanisms, and documentation organization. |
+| [Decisions and alternatives](../docs/decisions.md) | Decision status, historical interpretation, alternatives, superseded mechanisms, and documentation organization. |
 
 ## Runtime View
 
@@ -107,4 +107,4 @@ The organization aims to make these relationships understandable. No measurement
 
 ## Architecture Decisions
 
-[Decisions and alternatives](../docs/decisions-and-alternatives.md#architecture-decisions) records current choices, superseded controls, and the [ownership of contract-design documentation](../docs/decisions-and-alternatives.md#ownership-of-contract-design-documentation).
+The [design decision index](../docs/decisions.md#architecture-decisions) records current choices, superseded controls, and the [ownership of contract-design documentation](../docs/decisions.md#ownership-of-contract-design-documentation).

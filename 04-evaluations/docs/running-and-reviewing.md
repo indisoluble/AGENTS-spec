@@ -1,6 +1,6 @@
 # Running and reviewing evaluations
 
-This document owns installation, authentication, case execution, retained evidence, report interpretation, failure investigation, and human review. Start with the [evaluation model](evaluations.md#purpose-and-evaluation-model) for the suite's scope and interpretation limits.
+This document owns installation, authentication, case execution, retained evidence, report interpretation, failure investigation, and human review. Start with the [evaluation model](evaluation-model.md#purpose-and-evaluation-model) for the suite's scope and interpretation limits.
 
 Use the [case catalogue and acceptance definitions](../deliverables/cases-and-requirements.md#cases-and-interpretation) to find the selected case's source module and exact rubric, and [E1–E40](../deliverables/cases-and-requirements.md#verifiable-requirements) for evaluator requirements. [Framework design](framework-design.md) owns execution, observation, cleanup, and functional-check boundaries; the links below connect operational results to those mechanisms. A historical run is interpreted using its captured contract and rubric, as the [review procedure](#response-presence-and-human-review) explains.
 

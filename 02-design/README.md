@@ -1,7 +1,7 @@
 # 02 — Design
 
-Design selects mechanisms and rationale for realizing [accepted product intent and constraints](../01-behavior/deliverables/baseline.md). The [contract architecture](deliverables/contract-design.md) explains boundaries, vocabulary, and layer composition. Use the [contract clause index](deliverables/contract-design.md#contract-clause-index) to trace a clause to its mechanism and the accepted intent it supports.
+Design takes [accepted product intent and constraints](../01-behavior/deliverables/baseline.md) and specifies the mechanisms for the [staged contract](../03-contract/prerelease_AGENTS.md), including how they fit together and why they were selected. Accepting a selected mechanism as an enduring product requirement requires a separate decision under the [shared authority rules](../docs/authority-and-change.md#status-and-evidence-boundaries).
 
-`deliverables/` keeps selected prescriptions with their explanations. Supporting `docs/` contains [contract design decisions and alternatives](docs/decisions.md) and [review guidance with 28 non-normative illustrations](docs/design-review.md).
-
-The [staged contract](../03-contract/prerelease_AGENTS.md) contains the complete runtime instructions. [Shared authority and editing guidance](../docs/authority-and-change.md) governs maintenance and distinguishes design selection from product acceptance; the [project README](../README.md) locates other stages.
+- To investigate a mechanism, find the clause in the [contract clause index](deliverables/contract-design.md#contract-clause-index) and follow the links to its specification, rationale, and the accepted intent it supports.
+- To understand how mechanisms work together, start with the [contract architecture](deliverables/contract-design.md).
+- To consider changing a mechanism, check the [selected and superseded design decisions](docs/decisions.md#architecture-decisions) for reasons and trade-offs, then use the [design review guidance](docs/design-review.md#assessing-design-changes) to assess the affected behavior.

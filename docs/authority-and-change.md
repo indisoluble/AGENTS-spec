@@ -54,7 +54,7 @@ Store each relationship once at its dependent or the clause index, using exact I
 
 **Engineering decisions.** Product objectives, established requirements and constraints, accepted engineering decisions, and requester direction govern contract evolution and intended evaluation expectations. The requester or explicitly authorized delegate decides outcomes, priorities, and product acceptance. Record the authorized scope, version, and decision authority; requirement acceptance, design selection, implementation permission, and release permission are distinct. BDD agreement, documentation edits, and evaluation results grant none automatically.
 
-The [baseline](../01-behavior/deliverables/baseline.md) establishes product intent; [contract design](../02-design/deliverables/contract-design.md) specifies its selected realization. Their status and provenance are distinguished [below](#status-and-evidence-boundaries).
+Behavior records the [established objectives](../01-behavior/deliverables/objectives-and-rationale.md#established-objectives) and the [accepted requirements and constraints](../01-behavior/deliverables/baseline.md). [Contract design](../02-design/deliverables/contract-design.md) specifies their selected realization. See [status and evidence boundaries](#status-and-evidence-boundaries) for their authority and provenance.
 
 **Repository applicability.** Established engineering direction adopts [bounded work with sufficient depth](../02-design/deliverables/mechanisms/work-cycle-and-inquiry.md#small-commitments-with-sufficient-depth), [adequate validation](../02-design/deliverables/mechanisms/engineering-and-validation.md#validation-and-test-evidence), [behavior preservation](../02-design/deliverables/mechanisms/engineering-and-validation.md#component-boundaries-refactoring-and-validation), [canonical knowledge ownership](../02-design/deliverables/mechanisms/knowledge-and-documentation.md#dry-keeping-knowledge-consistent-as-work-progresses), and appropriate [documentation](../02-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices) and [decision records](../02-design/deliverables/mechanisms/knowledge-and-documentation.md#adrs-preserving-the-reasons-for-lasting-choices). This scoped adoption is subject to developer direction, higher-priority instructions, and actual permissions; it does not adopt the entire candidate or automatically apply consumer-specific loading or protected-file rules to this repository.
 
@@ -68,7 +68,7 @@ Authorized redesign can reconsider PDSA, the three-layer organization, or anothe
 
 | Status | Meaning |
 | --- | --- |
-| **Established objective or product requirement** | Supported by requester direction or accepted records beyond implementation wording. Objectives state desired outcomes. BR1–BR10 and PR1 have equal accepted product authority; the former concern agent behavior, the latter self-contained contract delivery. [Baseline provenance](../01-behavior/deliverables/baseline.md#status-and-provenance) records their sources and editorial limits. |
+| **Established objective or product requirement** | Supported by requester direction or accepted records beyond implementation wording. The [objectives](../01-behavior/deliverables/objectives-and-rationale.md#established-objectives) state desired outcomes and record the sources for their priority. BR1–BR10 and PR1 have equal accepted product authority. BR1–BR10 concern agent behavior, and PR1 concerns self-contained contract delivery. [Baseline provenance](../01-behavior/deliverables/baseline.md#status-and-provenance) records requirement sources and editorial limits. |
 | **Established constraint** | A compatibility, portability, or design boundary retaining its original strength, exceptions, measurement, and revision conditions. A preferred target is not a hard ceiling. |
 | **Design rationale or selected decision** | A mechanism's reasons, interactions, costs, and alternatives. Selection does not make it a permanent product requirement; the [decision index](../02-design/docs/decisions.md#selected-design-and-retained-decisions) distinguishes acceptance and supersession. |
 | **Current binding design prescription** | An operative mechanism specified by design and delivered through `AGENTS.md`, retaining modality, actor, trigger, timing, scope, conditions, and exceptions. Binding now does not imply enduring product acceptance. |
@@ -122,12 +122,12 @@ For a substantial rewrite, keep a temporary old-to-new content map with reasons 
 
 | Starting question | Route |
 | --- | --- |
-| Why is an outcome required? | [Objectives, constraints, and rationale map](../01-behavior/deliverables/baseline.md#rationale-map), then the relevant requirement and its current-realization links. |
+| Why is an outcome required? | Follow the [rationale map](../01-behavior/deliverables/objectives-and-rationale.md#rationale-map) to the objectives or the relevant requirement and its current-realization links. The baseline also lists the [established constraints](../01-behavior/deliverables/baseline.md#established-constraints). |
 | What distinguishes the requirement in concrete cases? | [Proposed-example coverage](../01-behavior/deliverables/discovery.md#requirement-to-scenario-coverage) and unresolved formulation questions. |
 | Why does a contract clause use this mechanism? | [Clause index](../02-design/deliverables/contract-design.md#contract-clause-index), linked design reasons, and accepted-intent backlinks. |
 | What does an evaluation result show? | [Case catalogue](../04-evaluations/deliverables/cases-and-requirements.md#cases-and-interpretation), then the run's [captured contract, rubric, and evidence](../04-evaluations/docs/running-and-reviewing.md#results-evidence-and-failure-investigation). Clause references locate active cases. Tracing a clause to a case does not establish requirements-derived coverage. |
 
-Before changing an owner, identify affected direct dependents, applicable decision authority, and evidence that would verify the change, using the distinctions above. For PR1, follow [R5's artifact-inspection route](../01-behavior/deliverables/baseline.md#r5).
+Before changing an owner, identify affected direct dependents, applicable decision authority, and evidence that would verify the change, using the distinctions above. For PR1, follow [R5's artifact-inspection route](../01-behavior/deliverables/objectives-and-rationale.md#r5).
 
 ## Specification-to-evaluation dependencies
 

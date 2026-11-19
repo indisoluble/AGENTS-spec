@@ -9,7 +9,7 @@ Engineering documentation supports understanding, changing, and verifying the pr
 ### Current BDD-first organization
 
 ```text
-01-behavior/       accepted baseline, discovery, proposed examples
+01-behavior/       objectives and rationale, accepted requirements, discovery, proposed examples
 02-design/         contract design, mechanisms, rationale
 03-contract/       five staged consumer artifacts
 04-evaluations/    case definitions, evaluator requirements, Python package
@@ -52,7 +52,8 @@ These staged instruction filenames fall outside the default discovery paths docu
 
 | Question | Canonical owner |
 | --- | --- |
-| What behavior is accepted, and why? | [Baseline](../01-behavior/deliverables/baseline.md): objectives, rationale, BR1–BR10, PR1, constraints, and acceptance provenance. |
+| What are we trying to achieve, and why? | [Objectives](../01-behavior/deliverables/objectives-and-rationale.md#established-objectives) and the [rationale map](../01-behavior/deliverables/objectives-and-rationale.md#rationale-map) explain the intended outcomes and why the requirements support them. |
+| What product behavior and constraints are accepted? | The [baseline](../01-behavior/deliverables/baseline.md) records BR1–BR10, PR1, established constraints, and acceptance provenance. |
 | What remains proposed or unresolved? | [Discovery](../01-behavior/deliverables/discovery.md): example suites, classifications, coverage, formulation questions, and remaining work; [candidate history](../01-behavior/docs/candidate-and-example-history.md): earlier proposals and their disposition. |
 | How does the contract realize intent? | [Contract design](../02-design/deliverables/contract-design.md): vocabulary, clause index, layer composition, and links to mechanisms, delivery, methods, and rationale. [Design review](../02-design/docs/design-review.md) supplies explanation checks and non-normative illustrations. |
 | What instructions reach consumers? | [Staged AGENTS.md](../03-contract/prerelease_AGENTS.md); the [adoption guide](../03-contract/prerelease_README.md) explains installation. |

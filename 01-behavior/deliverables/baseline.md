@@ -1,16 +1,16 @@
 # Established product requirements for AGENTS-spec
 
-This baseline defines accepted objectives O1/O2, product requirements BR1–BR10 and PR1, their rationale, and product constraints. [Discovery](discovery.md) owns proposed examples and unresolved formulation questions; [contract design](../../02-design/deliverables/contract-design.md) owns selected mechanisms, rationale, and clause traceability.
+This baseline defines accepted product requirements BR1–BR10 and PR1 and established product constraints. [Objectives and rationale](objectives-and-rationale.md) explains the intended outcomes and why the requirements support them. [Discovery](discovery.md) owns proposed examples and unresolved formulation questions; [contract design](../../02-design/deliverables/contract-design.md) owns selected mechanisms, rationale, and clause traceability.
 
 [Authority and change](../../docs/authority-and-change.md#development-time-and-runtime-authority) distinguishes engineering authority from runtime instructions: internal requirements add no operating duties, and the staged contract does not govern repository development. The delivered `AGENTS.md` is the complete operating contract for consumers and isolated evaluations.
 
 ## Status and provenance
 
-Established objectives and product requirements are supported by explicit requester direction or accepted project records beyond the implemented clause alone. Objectives state desired outcomes. **BR1–BR10 and PR1 are all accepted product requirements with equal authority in the same baseline.** BR1–BR10 are behavioral product requirements specifying the behavior expected of coding agents. PR1 specifies a property of the delivered `AGENTS.md` artifact: self-contained operating instructions. Their different subjects and verification methods do not imply different authority or acceptance status. Established constraints retain their original strength, exceptions, measurement, and revision conditions; a preferred target is not a hard ceiling. The source [classification and evidence](../../docs/authority-and-change.md#status-and-evidence-boundaries) distinguishes these from selected design mechanisms, current binding prescriptions, provisional candidates, and historical reasoning.
+Established product requirements are supported by explicit requester direction or accepted project records beyond the implemented clause alone. **BR1–BR10 and PR1 are all accepted product requirements with equal authority in the same baseline.** BR1–BR10 are behavioral product requirements specifying the behavior expected of coding agents. PR1 specifies a property of the delivered `AGENTS.md` artifact: self-contained operating instructions. Their different subjects and verification methods do not imply different authority or acceptance status. Established constraints retain their original strength, exceptions, measurement, and revision conditions; a preferred target is not a hard ceiling. The source [classification and evidence](../../docs/authority-and-change.md#status-and-evidence-boundaries) distinguishes these from selected design mechanisms, current binding prescriptions, provisional candidates, and historical reasoning.
 
 PR1 is verified primarily through inspection of the delivered contract. Verifying BR1–BR10 requires behavioral evidence from agents using that contract; inspecting its text alone does not establish that agents exhibit the required behavior. The separate sections below organize requirements by subject without changing any requirement's scope or strength.
 
-The [contract design](../../02-design/deliverables/contract-design.md#design-goals-and-boundaries) identifies token control as the first objective and requester awareness and consequential control as the second. The documentation-maintenance guide independently specified the same priority for the [adoption guide](../../03-contract/prerelease_README.md), as reflected in the [reader guidance](../../02-design/docs/design-review.md#reader-paths). The requester established the self-contained product boundary through the [requirements-led engineering decision](../../docs/decisions.md#requirements-led-engineering-and-productinternal-separation) and directed that the existing method-selection and portability constraints be preserved.
+The requester established the self-contained product boundary through the [requirements-led engineering decision](../../docs/decisions.md#requirements-led-engineering-and-productinternal-separation) and directed that the existing method-selection and portability constraints be preserved.
 
 Currently prescribed methods retain their contractual force. Treating a mechanism as enduring product intent requires separate acceptance evidence. The [design decision index](../../02-design/docs/decisions.md#selected-design-and-retained-decisions) records selected mechanisms, the limited acceptance of wording compromises, and superseded controls. The [engineering authority decision](../../docs/decisions.md#engineering-authority-and-the-runtime-contract) records the scope of the migration-fidelity review and the requester's authorization. The [candidate record](../docs/candidate-and-example-history.md#status-and-provenance) distinguishes proposal decisions from acceptance of behavioral requirements.
 
@@ -24,53 +24,9 @@ The five clarifications are incorporated in BR1 (coherence and recovery), BR3 (u
 
 The owner left the example draft unaccepted. All [examples indexed by Discovery](discovery.md#proposed-example-suites) remain proposed. PDSA, EARS, ADR, arc42, Diátaxis, provider integration, the [28 design illustrations](../../02-design/docs/design-review.md#assessing-design-changes), and existing evaluator expectations retain their respective design or evidence status.
 
-## Established objectives
-
-| Objective | Intended outcome and qualifications |
-| --- | --- |
-| **[O1 — Control token consumption, first](#r1)** | Bound the next commitment and keep work proportionate. The current design uses small, meaningful increments and progressive detail. Necessary reasoning, completeness, consistency, and validation remain part of the work; a smaller commitment is not permission for insufficient depth. This is a qualitative objective, with no token quota or guarantee of savings. |
-| **[O2 — Requester awareness and consequential control, second](#r2)** | Keep the requester informed and in control of consequential direction without constant supervision. Routine execution can remain autonomous within authorization. The exact consultation, notification, reporting, and limit mechanisms are explained in the [authorization and requester decisions](../../02-design/deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [inquiry design](../../02-design/deliverables/mechanisms/work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation), and [reporting design](../../02-design/deliverables/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution); this objective alone does not establish each mechanism's permanent trigger or strength. |
-| **Knowledge continuity** | Preserve project facts and reasons for maintainers, users, and future agents through reliable canonical documentation. This supports both ordered objectives without making every discussion a permanent record or every method a deliverable. |
-
-These are intended effects. Textual consistency, file size, message counts, and selected methods do not establish measured token savings, comprehension, or agent adherence. Quantitative thresholds and comprehensive behavioral acceptance criteria have not been independently established here.
-
-## Rationale map
-
-This map explains the accepted requirements without changing their wording or status. R1–R5 are stable navigation IDs, not new objectives or requirements. Direct contributions refer to the intended [O1/O2 outcomes](#established-objectives), not measured benefits; supporting reasons need not map one-to-one to those objectives. Each requirement links back here. Its current-realization links lead to mechanism rationale and contract coverage, which remain owned by design.
-
-### R1
-
-**Direct contribution to O1:** proportionate commitments and bounded inquiry control the next commitment while retaining sufficient depth, coherence, and evidence-based reassessment.
-
-Accepted requirements: [BR1](#br1--focused-proportionate-authorized-work), [BR4](#br4--bounded-investigation-and-timely-reassessment).
-
-### R2
-
-**Direct contribution to O2:** routine autonomy, timely awareness, and prior direction for consequential choices keep the requester in control without constant supervision.
-
-Accepted requirements: [BR3](#br3--autonomy-within-authorization-and-prior-direction), [BR4](#br4--bounded-investigation-and-timely-reassessment), [BR7](#br7--proportionate-communication-and-actionable-handoffs).
-
-### R3
-
-**Supporting evidence and quality:** distinguish intent from observations, learn from results, validate completion, and preserve engineering guarantees so proportionate work remains correct and complete. These support O1/O2 without establishing savings or adherence.
-
-Accepted requirements: [BR2](#br2--evidence-based-planning-and-knowledge-ownership), [BR5](#br5--completion-supported-by-validation), [BR6](#br6--learning-from-observed-results), [BR9](#br9--engineering-quality-and-preservation).
-
-### R4
-
-**Supporting knowledge continuity:** canonical facts, lasting reasons, affected documentation, and actionable handoffs let maintainers, users, and future agents continue with the relevant evidence and authority state.
-
-Accepted requirements: [BR2](#br2--evidence-based-planning-and-knowledge-ownership), [BR7](#br7--proportionate-communication-and-actionable-handoffs), [BR8](#br8--durable-knowledge-without-expanded-editing-authority), [BR10](#br10--affected-requirements-and-documentation).
-
-### R5
-
-**Established self-contained delivery boundary:** the delivered contract contains all generic operating duties; guides, bridges, and internal records supply no hidden policy. Verify the [delivered contract](../../03-contract/prerelease_AGENTS.md) by standalone inspection, using the [proposed PR1 inspection examples](proposed-examples/self-contained-delivery.md#pr1--self-contained-operating-contract); provider loading and agent behavior require separate evidence.
-
-Accepted requirements: [PR1](#established-product-requirement).
-
 ## Established product requirement
 
-Rationale: [R5](#r5).
+Rationale: [R5](objectives-and-rationale.md#r5).
 
 **PR1 — Self-contained operating contract.** The delivered `AGENTS.md` contract shall contain its complete operative instructions without depending on guides, bridge-specific policy, or internal engineering documents for additional operating duties.
 
@@ -86,7 +42,7 @@ For the reverse route from a current mechanism to its contract clauses and accep
 
 ### BR1 — Focused, proportionate, authorized work
 
-Rationale: [R1](#r1).
+Rationale: [R1](objectives-and-rationale.md#r1).
 
 When planning or performing authorized work, the agent shall keep the next commitment focused and proportionate, include necessary inseparable dependencies and validation, and reason sufficiently for the next decision. Saving effort, lines, files, or tokens shall not excuse incorrect, inconsistent, or incomplete work. Before expanding work or starting another increment or attempt, the agent shall reassess cumulative progress, remaining work, established direction, and applicable limits, and justify the next step's contribution from evidence; absent that justification, it shall seek direction.
 
@@ -96,7 +52,7 @@ Current realization: [small commitments and sufficient depth](../../02-design/de
 
 ### BR2 — Evidence-based planning and knowledge ownership
 
-Rationale: [R3](#r3), [R4](#r4).
+Rationale: [R3](objectives-and-rationale.md#r3), [R4](objectives-and-rationale.md#r4).
 
 When preparing to choose an approach or derive or refine acceptance conditions, the agent shall first identify the authorized objectives and constraints and inspect relevant project evidence. It shall distinguish required behavior and completion conditions from observed behavior, assumptions, inferences, and predictions about an approach. It shall use the owner of each kind of knowledge, report contradictions, and take consequential conflicts that ownership cannot settle to the requester before the dependent choice. Passing code or tests shall not silently redefine intended behavior.
 
@@ -104,7 +60,7 @@ Current realization: [knowledge roles](../../02-design/deliverables/mechanisms/k
 
 ### BR3 — Autonomy within authorization and prior direction
 
-Rationale: [R2](#r2).
+Rationale: [R2](objectives-and-rationale.md#r2).
 
 Within agreed limits, the agent may choose easily reversible routine local details. It shall stay within requester authorization and actual tool permissions and approvals, disclose material assumptions, and take material unresolved intent or permission questions to the requester. Such assumptions may support only progress with limited, easily reversed effects; they do not supply missing authority. If no safe step is possible, the agent shall present alternatives and seek direction.
 
@@ -116,7 +72,7 @@ Current realization: [authorization and requester decisions](../../02-design/del
 
 ### BR4 — Bounded investigation and timely reassessment
 
-Rationale: [R1](#r1), [R2](#r2).
+Rationale: [R1](objectives-and-rationale.md#r1), [R2](objectives-and-rationale.md#r2).
 
 When material uncertainty about how to proceed remains after relevant context gathering and blocks the next decision, the agent shall promptly communicate that uncertainty and its significance unless already communicated in the request or task framing. Investigation shall focus on that question through bounded, proportionate steps within existing authority and limits, and shall end when the evidence is sufficient.
 
@@ -126,7 +82,7 @@ Current realization: [context and bounded inquiry](../../02-design/deliverables/
 
 ### BR5 — Completion supported by validation
 
-Rationale: [R3](#r3).
+Rationale: [R3](objectives-and-rationale.md#r3).
 
 When assessing completion at increment or task level, the agent shall require correctness, consistency, and validation across affected artifacts against the applicable requirements and acceptance conditions. The agent shall run relevant available acceptance checks before completing an increment, even when no report is due at that point. Checks shall cover affected behavior, risk, and hard performance or operational limits. The agent shall disclose failed, unavailable, or omitted checks and report conditions without sufficient evidence as unverified and validation as incomplete, unless validly revised under the relevant authority. Disclosure alone shall not satisfy a condition.
 
@@ -136,7 +92,7 @@ Current realization: [validation and test evidence](../../02-design/deliverables
 
 ### BR6 — Learning from observed results
 
-Rationale: [R3](#r3).
+Rationale: [R3](objectives-and-rationale.md#r3).
 
 When results provide evidence about an approach, the agent shall use that evidence to retain, revise, or discard the approach and inform subsequent work within authorization. Revising a prediction or abandoning an approach shall not change requirements or acceptance conditions, replace required behavior with learning alone, or authorize another attempt. Material durable findings remain subject to BR8.
 
@@ -144,7 +100,7 @@ Current realization: [learning throughout the work](../../02-design/deliverables
 
 ### BR7 — Proportionate communication and actionable handoffs
 
-Rationale: [R2](#r2), [R4](#r4).
+Rationale: [R2](objectives-and-rationale.md#r2), [R4](objectives-and-rationale.md#r4).
 
 When preparing to begin substantial work, the agent shall, after gathering sufficient initial context, briefly explain its intended approach and first step before starting. This communication shall not create an approval checkpoint unless another rule requires one.
 
@@ -156,7 +112,7 @@ Current realization: [reporting and continued execution](../../02-design/deliver
 
 ### BR8 — Durable knowledge without expanded editing authority
 
-Rationale: [R4](#r4).
+Rationale: [R4](objectives-and-rationale.md#r4).
 
 When a finding is both material and durable project knowledge, the agent shall preserve it with substantiating evidence in its appropriate canonical record, including when the approach was discarded. If no suitable record exists, it shall create only the minimum record needed within its authority. Transient attempt facts belong in reporting; a finding alone shall not trigger a decision record. The agent shall preserve significant in-scope decision history with the decision-shaping evidence, constraints, reasons, consequences, and useful alternatives needed to understand lasting choices, distinguishing proposed, accepted, rejected, and superseded status. Recording shall neither accept a proposal nor authorize implementation.
 
@@ -166,7 +122,7 @@ Current realization: [assessment writes and durable records](../../02-design/del
 
 ### BR9 — Engineering quality and preservation
 
-Rationale: [R3](#r3).
+Rationale: [R3](objectives-and-rationale.md#r3).
 
 When making authorized changes, the agent shall preserve unaffected public contracts, compatibility, error handling, required logging, resource lifecycles, concurrency guarantees, security, and documented invariants, unless their change is intended and authorized. Refactoring shall preserve observable behavior. Intended behavior changes shall consistently update affected requirements, tests, and documentation within the authorized work. Changes shall remain focused; unrelated cleanup or speculative restructuring shall not be added.
 
@@ -176,7 +132,7 @@ Current realization: [engineering scope boundaries](../../02-design/deliverables
 
 ### BR10 — Affected requirements and documentation
 
-Rationale: [R4](#r4).
+Rationale: [R4](objectives-and-rationale.md#r4).
 
 When authorized work establishes or changes behavior required beyond the current task's execution, the agent shall maintain that requirement in verifiable terms at its canonical owner, without duplicating an existing requirement. Task objectives and sample checks shall not become product requirements merely because they were stated.
 

@@ -1,6 +1,6 @@
 # Evaluation framework design
 
-This document explains execution/security boundaries, runtime architecture, maintenance, and engineering decisions. [Running and reviewing](running-and-reviewing.md) covers operations and evidence; the [evaluation model](evaluation-model.md) defines scope and limits. [Cases and E1–E40](../deliverables/cases-and-requirements.md) specify assessment responsibilities; scenario modules own exact policy and rubrics.
+This document explains execution/security boundaries, runtime architecture, interfaces, and engineering decisions. Use [Maintaining evaluations](maintaining-evaluations.md) to add, change, or verify a case or shared evaluator component. [Running and reviewing](running-and-reviewing.md) covers operations and evidence; the [evaluation model](evaluation-model.md) defines scope and limits. [Cases and E1–E40](../deliverables/cases-and-requirements.md) specify assessment responsibilities; scenario modules own exact policy and rubrics.
 
 ## Execution and security boundaries
 
@@ -165,39 +165,6 @@ Internal module locations and imports are implementation details unless a docume
 
 Fixture mappings use relative paths and exact bytes. Workspace preparation creates their parent directories and rejects absolute paths, parent traversal, and root-contract overrides. An explicit mapping replaces the default fixture, and an empty mapping adds no files beyond the contract. The documented [smoke convenience](../deliverables/scenarios/smoke.py), `smoke.evaluate`, retains its optional dataset, `initial_contents`, and `fixture_files` arguments: without a mapping it supplies `message.txt` using the selected initial contents; shared workspace preparation itself requires an explicit mapping.
 
-## Framework maintenance
-
-### Modify or extend an evaluation
-
-Begin with the scenario's intended behavior, its source module, linked tests, and [acceptance definitions](../deliverables/cases-and-requirements.md#cases-and-interpretation). A scenario change should normally involve those local owners, one `CASES` entry where configuration changes, and affected documentation.
-
-1. **Keep policy with the scenario.** Its module owns the task, fixture, dataset/evaluators, and optional human rubric. Reuse shared execution, workspace observation, response capture, and evidence mechanisms; do not reproduce them inside a case. A common mechanism belongs with a cohesive owner, not in a generic utility collection merely because two callers use it.
-2. **Compose through the existing CLI entry.** Register a dataset factory, not an eagerly constructed dataset. Select the existing observation/review settings and, only where needed, the post-execution functional check. Keep that check after agent cleanup and before fixture removal.
-3. **Test observable contracts at the affected boundary.** Use the existing substitutes and fake CLI to verify outcomes, independent assertions, error classification, evidence, and resource cleanup. Preserve meaningful negative cases and independent expected results; do not mirror production grading or configuration logic in tests. Keep scenario-specific expectations local, sharing setup only when it clarifies the tests.
-4. **Synchronize the knowledge owners.** Update the catalogue and affected acceptance/interpretation definitions when behavior changes; update [E1–E40](../deliverables/cases-and-requirements.md#verifiable-requirements) only through an authorized requirement change. Source remains canonical for exact fixture bytes, prompts, check scripts, and rubric text. Check direct documentation links and retain run-specific findings in evidence rather than turning this guide into a record of individual runs.
-
-To add a scenario, apply those principles in these places:
-
-1. Create `deliverables/scenarios/<module>.py` with `PROMPT`, the fixture bytes, its evaluators, and a dataset factory returning a one-case `Dataset`. Add `REVIEW_RUBRIC` and a `check_execution` wrapper over `functional_checks.run_checks` only if the case needs them. Import shared mechanisms from `deliverables.runtime`.
-2. Add a `CaseConfig` entry to `CASES` in `deliverables/__main__.py` at its catalogue position. The `--case` choices and the `all` order come from that collection.
-3. Teach `deliverables/tests/support/fake_codex.py` to recognize the case from its prompt or fixture and to produce the scripted responses its tests need.
-4. Add `deliverables/tests/scenarios/test_<module>.py` with grading tests through `evaluate()` and a `<Name>CLITests(FakeCodexCLI, unittest.TestCase)` class for CLI composition, evidence, and failure classification.
-5. Update the tests in `deliverables/tests/runtime/test_cli.py` that enumerate every case: the all-cases order and evidence, late-case precedence, and aggregate exit codes.
-6. Add the case to the [catalogue](../deliverables/cases-and-requirements.md#cases-and-interpretation) with a case section linking its module and test module. The case lists in [E12 and E15](../deliverables/cases-and-requirements.md#verifiable-requirements) are requirements, so adding a case also needs an authorized requirement change.
-7. Run the [offline checks](running-and-reviewing.md#run-offline-checks).
-
-When applied in a consuming project, the candidate contract's [engineering rules](../../03-contract/prerelease_AGENTS.md#12-do--perform-the-authorized-work) and [validation rules](../../03-contract/prerelease_AGENTS.md#13-study--assess-completion-and-learning) cover production modules, tests, fixtures, and testing utilities alike. The staged candidate is source material, not development instructions for this repository. Use ordinary functions and existing typed result records for composition, `Path` for filesystem boundaries, and bytes where exact fixture/evidence preservation matters. Supply execution dependencies at the existing callable boundary for offline tests. Keep missing observations distinct from empty state and infrastructure errors distinct from false assertions.
-
-### Verify a behavior change
-
-The catalogue links cases to contract clauses. Rubrics in [assumptions.py](../deliverables/scenarios/assumptions.py), [inquiry.py](../deliverables/scenarios/inquiry.py), and [findings.py](../deliverables/scenarios/findings.py) cite section numbers and rule strengths. Other rubrics refer to retained rules without numbering them. Assertions can encode a clause implicitly, as `ScopePreserved` does for §1.2 in [scope.py](../deliverables/scenarios/scope.py). No repository check detects when renumbering, a heading change, or a change in meaning leaves those expectations stale.
-
-For a case change, run the [offline checks](running-and-reviewing.md#run-offline-checks). The [case and requirement tables](../deliverables/cases-and-requirements.md) link the relevant regression tests; shared-infrastructure tests cover authentication, cancellation, filesystem observation, and evidence failures. For human-rubric changes, also compare the revised criteria with the applicable contract provisions, preserving rule strengths, triggers, exceptions, evidence limits, and unaffected technical checks. Offline tests verify infrastructure and technical assertions; they do not establish rubric semantic validity or live contractual compliance.
-
-Live verification requires inspecting one separately authorized run. If authorization covers only offline work, stop after that verification and report live assessment as pending. The [functional-check sandbox probe](#functional-check-execution) checks that separate boundary's runtime enforcement. Verification of the evaluated-agent permission profile and authenticated integration follows the distinct scopes in [agent execution](#agent-execution).
-
-Inspect the live run's selected case, assertions and reasons, initial/final bytes and available manifests, contract hash, model settings, and cleaned workspace path. For human-review cases, also inspect response capture, readable differences, the retained rubric, and pending-review reporting, and assess the rubric with the requester. For independent-execution and contract-change-followthrough, include functional-check evidence. Each executed case should produce a distinct workspace and evidence directory. Keep run-specific results with that evidence rather than duplicating them here.
-
 ## Architecture decisions
 
 These records explain the evaluation-specific decisions and their scope. The [system-wide decision record](../../docs/decisions.md#architecture-decisions) covers choices across stages.
@@ -228,7 +195,7 @@ Adding a scenario affects its module, registration, tests, fake responses, and c
 
 **The requester accepted this structure and authorized organizing the documentation by maintenance responsibility.** It superseded the [earlier choice to keep evaluation documentation in one guide](../../docs/decisions.md#integrated-engineering-architecture-with-focused-detailed-owners). The shared architecture and its division of ownership continue to apply. The documentation decision grants no authority to change evaluator semantics, E1–E40, case order or criteria, rubric ownership, security behavior, product intent, or contract design.
 
-The [evaluation model](evaluation-model.md) explains what a run can establish. [Operations](running-and-reviewing.md) covers execution, review, and retained evidence. The [case catalogue](../deliverables/cases-and-requirements.md) keeps the ten definitions together with E1–E40. This document owns framework boundaries, architecture, maintenance, decisions, and technical references. The [stage README](../README.md) connects those entry points under the [numbered stage decision](../../docs/decisions.md#four-numbered-stages-and-their-responsibilities).
+The [evaluation model](evaluation-model.md) explains what a run can establish. [Operations](running-and-reviewing.md) covers execution, review, and retained evidence. The [case catalogue](../deliverables/cases-and-requirements.md) keeps the ten definitions together with E1–E40. The requester authorized moving maintenance procedures from framework design to [Maintaining evaluations](maintaining-evaluations.md), which owns the workflow for changing scenarios and shared evaluator code and verifying those changes. This document owns framework boundaries, architecture, interfaces, decisions, and technical references. The [stage README](../README.md) connects those entry points under the [numbered stage decision](../../docs/decisions.md#four-numbered-stages-and-their-responsibilities).
 
 An integrated guide keeps case criteria, requirements, lifecycle, and evidence close together but mixes the tasks of operators, case maintainers, and framework maintainers. Separate owners give each reader a direct entry point. Length alone would not justify the cost of maintaining links or the risk of overlooking a qualification. Review affected case, requirement, lifecycle, and evidence owners together. Keep direct reciprocal links to the observation boundaries, rubrics, checks, review procedures, and outcomes needed to interpret each case. When a section moves, update incoming links to its owner. The [Evaluations README](../README.md) locates these owners. Historical runs retain the interpretation supported by their own contract, fixtures, rubrics, and captured evidence.
 

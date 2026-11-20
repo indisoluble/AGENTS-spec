@@ -2,7 +2,7 @@
 
 This document owns installation, authentication, case execution, retained evidence, report interpretation, failure investigation, and human review. Start with the [evaluation model](evaluation-model.md#purpose-and-evaluation-model) for the suite's scope and interpretation limits.
 
-Use the [case catalogue and acceptance definitions](../deliverables/cases-and-requirements.md#cases-and-interpretation) to find the selected case's source module and exact rubric. The [stage README](../README.md#evaluator-requirements) links the case-specific and shared evaluator requirements. [Framework design](framework-design.md) owns execution, observation, cleanup, and functional-check boundaries; the links below connect operational results to those mechanisms. A historical run is interpreted using its captured contract and rubric, as the [review procedure](#response-presence-and-human-review) explains.
+Use the [case specifications](../README.md#case-specifications) to find the selected case's source module and exact rubric. The [stage README](../README.md#evaluator-requirements) links the case-specific and shared evaluator requirements. [Framework design](framework-design.md) owns execution, observation, cleanup, and functional-check boundaries; the links below connect operational results to those mechanisms. A historical run is interpreted using its captured contract and rubric, as the [review procedure](#response-presence-and-human-review) explains.
 
 ## Setup and running evaluations
 
@@ -83,7 +83,7 @@ For another individual case, use its name from the [accepted case selections](..
 
 | Option | Use |
 | --- | --- |
-| `--case NAME` | One catalogue entry or `all`; defaults to `smoke`. Unknown names are rejected before execution. |
+| `--case NAME` | A registered case name or `all`. The default is `smoke`. Unknown names are rejected before execution. |
 | `--model ID`, `--reasoning-effort VALUE` | Required for evaluations; the same settings apply to every selected case. |
 | `--timeout SECONDS` | Positive finite agent-execution timeout per case, default 180. Other allowances are separate; see [deadlines and cleanup](framework-design.md#deadlines-and-cleanup). |
 | `--codex-home PATH` | Dedicated profile selection; see [authentication](#authentication-and-credential-lifetime). |
@@ -119,7 +119,7 @@ Three kinds of failure reach these outcomes differently; the [evaluation lifecyc
 
 ### Response presence and human review
 
-All cases marked for human review in the catalogue use `FinalResponsePresent`: a captured final response must contain non-whitespace text. Empty or whitespace-only text fails that assertion. Missing capture is an infrastructure error. Presence alone grades no meaning, regardless of how plausible the response sounds.
+Cases requiring human review use `FinalResponsePresent`, which requires a captured final response containing non-whitespace text. Empty or whitespace-only text fails that assertion. Missing capture is an infrastructure error. Presence alone grades no meaning, regardless of how plausible the response sounds.
 
 Under [E26](../deliverables/requirements/suite-execution-and-results.md#e26), `review_required: true` remains in the report for these cases after an assertion failure or infrastructure error. Human assessment happens outside the CLI; there is no keyword classifier, model judge, verdict-ingestion step, or automatic answer to an agent's question.
 
@@ -129,7 +129,7 @@ Apply the captured contract's rule strengths, triggers, and exceptions. Required
 
 Assess technical correctness and completeness separately from compliance with exercised obligations. Unexercised duties receive no compliance pass. Where available evidence cannot support a judgment, record insufficient evidence; preserve infrastructure failures as errors. Missing visible reassessment does not itself prove that reassessment was omitted. Traces support review of observable conduct, not access to private reasoning or exact token consumption; usage claims need actual telemetry whose scope supports them.
 
-The scenario module owns the rubric text; `review.md` preserves the rubric used for that run. Historical conclusions remain associated with their captured contract and rubric. Updating current criteria does not establish a new verdict for an earlier run. The [case explanations](../deliverables/cases-and-requirements.md#cases-and-interpretation) identify each rubric's purpose and interpretation limits without replacing it.
+The scenario module owns the rubric text; `review.md` preserves the rubric used for that run. Historical conclusions remain associated with their captured contract and rubric. Updating current criteria does not establish a new verdict for an earlier run. The [case specifications](../README.md#case-specifications) identify each rubric's purpose and interpretation limits without replacing it.
 
 ### Retained evidence
 
@@ -140,7 +140,7 @@ Each case prints its name and a distinct git-ignored `04-evaluations/.eval-runs/
 | `prompt.txt`, `AGENTS.md`, `message.txt` | Submitted prompt, initial contract snapshot, and initial message fixture when present. |
 | `execution.json` | `contract_sha256` identifies the initial `AGENTS.md` snapshot saved by [codex.py](../deliverables/runtime/codex.py). Also records CLI version when available, command/settings, paths, status, errors, duration, and exit status when available. |
 | `events.jsonl`, `stderr.txt` | Raw CLI events and diagnostics once execution starts. |
-| `final-response.txt` | Cases marked for human review in the catalogue (or programmatic capture): the CLI's final response, including empty text. The raw file remains available if text decoding fails. |
+| `final-response.txt` | The CLI's final response, including empty text, for human-review cases or programmatic capture. The raw file remains available if text decoding fails. |
 | `initial-workspace.json`, `final-workspace.json` | With observation (all behavioral cases): successful snapshots keyed by relative path, with `kind`, integer `mode`, `contents_base64` (exact regular-file bytes, otherwise null), and `link_target` (otherwise null). These include all observed entries. |
 | `initial-workspace/`, `workspace/` | With observation: exact regular-file bytes below the initial and final workspace roots, including nested files. Copies use captured bytes, without reopening agent-controlled paths. Original permissions remain in manifests; copies are for inspection. Links, special files, and empty directories are described in manifests, not recreated. Without observation, smoke retains its final `workspace/AGENTS.md` and `workspace/message.txt` copies. |
 | `workspace-changes.txt` | With observation: differences in sorted path order, including creation/deletion, types, modes, link targets, and content diffs. Text lines are JSON-quoted to expose exact whitespace and line endings; binary contents use base64. Incomplete inspection is labeled unavailable, never unchanged. These are observations, not an authorization verdict. |

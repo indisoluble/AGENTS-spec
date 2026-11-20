@@ -116,7 +116,7 @@ For a substantial rewrite, keep a temporary old-to-new content map with reasons 
 
 ### Finding an owner and checking a change
 
-Start with the [stage that owns the proposed change](architecture.md#current-bdd-first-organization). Use Behavior's [rationale map](../01-behavior/deliverables/objectives-and-rationale.md#rationale-map) and [proposed examples](../01-behavior/deliverables/discovery.md#requirement-to-scenario-coverage) to trace intent, and Design's [clause index](../02-design/deliverables/contract-design.md#contract-clause-index) to trace realization. For a run, compare the [case's intended coverage](../04-evaluations/deliverables/cases-and-requirements.md#cases-and-interpretation) with its [retained evidence](../04-evaluations/docs/running-and-reviewing.md#results-evidence-and-failure-investigation).
+Start with the [stage that owns the proposed change](architecture.md#current-bdd-first-organization). Use Behavior's [rationale map](../01-behavior/deliverables/objectives-and-rationale.md#rationale-map) and [proposed examples](../01-behavior/deliverables/discovery.md#requirement-to-scenario-coverage) to trace intent, and Design's [clause index](../02-design/deliverables/contract-design.md#contract-clause-index) to trace realization. For a run, compare the selected [case specification](../04-evaluations/README.md#case-specifications) with its [retained evidence](../04-evaluations/docs/running-and-reviewing.md#results-evidence-and-failure-investigation).
 
 Before changing an owner, identify affected direct dependents, applicable decision authority, and evidence that would verify the change, using the distinctions above. For PR1, follow [R5's artifact-inspection route](../01-behavior/deliverables/objectives-and-rationale.md#r5).
 
@@ -130,8 +130,8 @@ Design documents, design-review guidance, and consumer guides also link contract
 
 Compare changed clauses with the conditions each case exercises and its assertions and rubric, without treating a contract edit as authority to redefine expected behavior:
 
-- **Exercised behavior changes:** inspect the scenario and catalogue when rule strength, trigger, condition, exception, or scope affects them. Check that the fixture still presents the intended condition and assessment still matches. E1–E40 change only through authorized requirement work when the evaluator's own required behavior changes.
-- **References change without behavior:** correct section numbers, headings, and moved-clause links in rubrics, catalogue, and linking documents; preserve rubric meaning.
+- **Exercised behavior changes:** inspect the scenario and its case specification when rule strength, trigger, condition, exception, or scope affects them. Check that the fixture still presents the intended condition and assessment still matches. E1–E40 change only through authorized requirement work when the evaluator's own required behavior changes.
+- **References change without behavior:** correct section numbers, headings, and moved-clause links in rubrics, case specifications, and linking documents while preserving rubric meaning.
 - **No demonstrated case impact:** no case edit is required for behavior no case exercises. New coverage is a separate decision, not an obligation created by the edit.
 
 Editing a case or rubric changes assessment, not the contract's instructions.

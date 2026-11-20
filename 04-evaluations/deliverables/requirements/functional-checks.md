@@ -1,6 +1,6 @@
 # Functional checks
 
-These requirements cover the sandbox, results, failures, cleanup, and evidence for evaluator-owned checks. [E33](#e33) and [E34](#e34) govern both [independent-execution](../cases-and-requirements.md#independent-execution) and [contract-change-followthrough](../cases-and-requirements.md#contract-change-followthrough). The [functional-check design](../../docs/framework-design.md#functional-check-execution) explains how the runner and scenarios divide this work.
+These requirements cover the sandbox, results, failures, cleanup, and evidence for evaluator-owned checks. [E33](#e33) and [E34](#e34) govern both [independent-execution](../cases/independent-execution.md) and [contract-change-followthrough](../cases-and-requirements.md#contract-change-followthrough). The [functional-check design](../../docs/framework-design.md#functional-check-execution) explains how the runner and scenarios divide this work.
 
 These requirements govern evaluator behavior. The [product baseline](../../../01-behavior/deliverables/baseline.md) owns AGENTS-spec product requirements. Checks identify verification methods. Evidence of agent compliance depends on what an individual run and its assessment establish.
 

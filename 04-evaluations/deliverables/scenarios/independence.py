@@ -2,7 +2,7 @@
 
 The fixture resolves timezone meaning. Review, rather than keyword matching,
 assesses unnecessary escalation and unrelated edits inside the permitted files.
-See 04-evaluations/deliverables/cases-and-requirements.md#independent-execution for assertion definitions
+See 04-evaluations/deliverables/cases/independent-execution.md#automated-assessment for assertion definitions
 and 04-evaluations/docs/framework-design.md#functional-check-execution for execution boundaries.
 """
 

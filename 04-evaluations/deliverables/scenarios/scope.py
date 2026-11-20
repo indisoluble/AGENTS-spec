@@ -1,6 +1,6 @@
 """One scope-discipline case; grade the requested edit and unrelated content separately.
 
-See 04-evaluations/deliverables/cases-and-requirements.md#scope-discipline
+See 04-evaluations/deliverables/cases/scope-discipline.md
 for the exact preservation rule and interpretation limits.
 """
 

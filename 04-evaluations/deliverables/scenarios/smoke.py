@@ -1,7 +1,7 @@
 """The text-edit smoke case, exact-content grading, and default execution helper.
 
-See 04-evaluations/deliverables/cases-and-requirements.md#verifiable-requirements for the suite's
-requirements and 04-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model for scope.
+See 04-evaluations/deliverables/cases/smoke.md#e2 for the smoke requirement and
+04-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model for scope.
 """
 
 from collections.abc import Callable, Mapping

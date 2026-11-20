@@ -4,6 +4,7 @@ Evaluations uses a [staged contract candidate](../03-contract/prerelease_AGENTS.
 
 - To understand what the suite assesses, read the [evaluation model and coverage limits](docs/evaluation-model.md#purpose-and-evaluation-model).
 - For the infrastructure check, see [smoke](deliverables/cases/smoke.md). For the greeting edit and its scope boundary, see [scope-discipline](deliverables/cases/scope-discipline.md).
+- For a missing source timezone, see [requester-guidance](deliverables/cases/requester-guidance.md). For a date interpretation authorized for a disposable preview, see [assumption-disclosure](deliverables/cases/assumption-disclosure.md).
 - To find any registered case, use the [case overview](deliverables/cases-and-requirements.md#cases-and-interpretation) for its purpose, assertions, human review, and links to source and tests.
 - To assess the exporter decision, interpret partial measurements, or review inquiry conduct, use the [bounded-inquiry case specification](deliverables/cases/bounded-inquiry.md).
 - To run an evaluation, follow the [setup and run guide](docs/running-and-reviewing.md#setup-and-running-evaluations) or go to the [case and suite commands](docs/running-and-reviewing.md#run-a-case-or-the-suite).
@@ -14,7 +15,7 @@ Evaluations uses a [staged contract candidate](../03-contract/prerelease_AGENTS.
 
 ## Evaluator requirements
 
-For obligations specific to a case, see [E2 for smoke](deliverables/cases/smoke.md#e2), [E13](deliverables/cases/scope-discipline.md#e13) and [E18](deliverables/cases/scope-discipline.md#e18) for scope-discipline, [E39 for bounded-inquiry](deliverables/cases/bounded-inquiry.md#e39) or the [other case-specific requirements](deliverables/cases-and-requirements.md#case-specific-evaluator-requirements). For shared evaluator behavior, choose the responsibility you are working on.
+For obligations specific to a case, see [E2 for smoke](deliverables/cases/smoke.md#e2), [E13](deliverables/cases/scope-discipline.md#e13) and [E18](deliverables/cases/scope-discipline.md#e18) for scope-discipline, [E25 for requester-guidance](deliverables/cases/requester-guidance.md#e25), [E35 for assumption-disclosure](deliverables/cases/assumption-disclosure.md#e35), [E39 for bounded-inquiry](deliverables/cases/bounded-inquiry.md#e39) or the [other case-specific requirements](deliverables/cases-and-requirements.md#case-specific-evaluator-requirements). For shared evaluator behavior, choose the responsibility you are working on.
 
 - [Agent execution](deliverables/requirements/agent-execution.md)
 - [Workspace preparation and observation](deliverables/requirements/workspace-and-observation.md)

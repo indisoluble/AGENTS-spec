@@ -1,7 +1,7 @@
 """Command-line entry point for selected live evaluations, run sequentially.
 
 See 04-evaluations/docs/running-and-reviewing.md for commands and exit codes, and
-04-evaluations/deliverables/cases-and-requirements.md#verifiable-requirements for requirements.
+04-evaluations/deliverables/requirements/suite-execution-and-results.md for requirements.
 """
 
 import argparse

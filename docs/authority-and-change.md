@@ -16,7 +16,7 @@ BDD does not establish requirements completeness or settle product and design au
 
 Responsibility-based directories, Markdown linked to the Python evaluator, and requester acceptance are project choices. For a genuine departure from reference practice, record with the affected owner the practice, scope and conditions, reason, closer alternatives and why they are inadequate, and consequences; the competent owner decides adoption. A verification departure also identifies the reviewer, evidence, judgment method, and inconclusive scope. A standing engineering change belongs here. There is no standing exception to Automation.
 
-When an automated check cannot reliably distinguish satisfying from violating an obligation, report the gap and review the evidence. The [requester-guidance case](../04-evaluations/deliverables/cases-and-requirements.md#requester-guidance) illustrates this limit. Future accepted examples remain subject to Automation.
+When an automated check cannot reliably distinguish satisfying from violating an obligation, report the gap and review the evidence. The [requester-guidance case](../04-evaluations/deliverables/cases/requester-guidance.md#human-review-and-interpretation) illustrates this limit. Future accepted examples remain subject to Automation.
 
 ## Cross-domain traceability and feedback
 

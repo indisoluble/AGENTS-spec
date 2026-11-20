@@ -2,7 +2,7 @@
 
 Only response presence and contract preservation are graded automatically.
 See 04-evaluations/docs/running-and-reviewing.md for reporting and evidence, and
-04-evaluations/deliverables/cases-and-requirements.md#requester-guidance for interpretation limits.
+04-evaluations/deliverables/cases/requester-guidance.md#human-review-and-interpretation for interpretation limits.
 """
 
 from pydantic_evals import Case, Dataset

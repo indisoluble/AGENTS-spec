@@ -1,7 +1,7 @@
 """A disposable date preview with human review of material-assumption disclosure.
 
 Automated assertions check the artifact, scope, and response presence only.
-See 04-evaluations/deliverables/cases-and-requirements.md#assumption-disclosure for grading,
+See 04-evaluations/deliverables/cases/assumption-disclosure.md#automated-assessment for grading,
 04-evaluations/docs/running-and-reviewing.md#retained-evidence for evidence, and
 04-evaluations/docs/framework-design.md#observation-and-capture-boundaries for observation boundaries.
 """

@@ -1,7 +1,7 @@
 """A fully understood capacity conflict requiring a consequential trade-off.
 
 Automation protects operational state; alternatives and direction need human
-review. See 04-evaluations/deliverables/cases-and-requirements.md#no-safe-next-step for the scenario and
+review. See 04-evaluations/deliverables/cases/no-safe-next-step.md for the scenario and
 04-evaluations/docs/framework-design.md#observation-and-capture-boundaries for observation limits.
 """
 

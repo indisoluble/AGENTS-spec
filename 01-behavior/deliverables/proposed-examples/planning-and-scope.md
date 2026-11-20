@@ -4,7 +4,7 @@ All examples remain **proposed and unaccepted**. See [classifications and shared
 
 ## BR1 — Focused, proportionate, authorized work
 
-Requirement: [BR1](../baseline.md#br1--focused-proportionate-authorized-work). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/work-cycle-and-inquiry.md#small-commitments-with-sufficient-depth), [contract](../../../03-contract/prerelease_AGENTS.md) §§1.1, 2.3, 2.5.
+Requirement: [BR1](../baseline.md#br1--focused-proportionate-authorized-work). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/work-cycle.md#small-commitments-with-sufficient-depth), [contract](../../../03-contract/prerelease_AGENTS.md) §§1.1, 2.3, 2.5.
 
 ### BR1.1 — Fix the defect and its necessary dependents
 

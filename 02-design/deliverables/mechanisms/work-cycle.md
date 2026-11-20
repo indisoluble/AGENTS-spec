@@ -1,6 +1,6 @@
-# Work cycle and inquiry
+# Work cycle
 
-[Contract architecture](../contract-design.md) supplies status, vocabulary, and clause-to-intent traceability. This document explains contract §§1.1, 1.3–1.4, and 2.4, with the planning and quality constraints of §§2.2–2.3.
+The [work cycle](../../../03-contract/prerelease_AGENTS.md#1-work-cycle) governs how the agent plans an authorized increment (§1.1), assesses completion (§1.3), and uses findings to choose the next step (§1.4). The decision factors and quality constraints of §§2.2–2.3 guide the size and depth of the commitment. This supports [focused, authorized work](../../../01-behavior/deliverables/baseline.md#br1--focused-proportionate-authorized-work), [evidence-based planning](../../../01-behavior/deliverables/baseline.md#br2--evidence-based-planning-and-knowledge-ownership), [validated completion](../../../01-behavior/deliverables/baseline.md#br5--completion-supported-by-validation), and [learning from results](../../../01-behavior/deliverables/baseline.md#br6--learning-from-observed-results). [Contract architecture](../contract-design.md) supplies status, vocabulary, and clause-to-intent traceability.
 
 ## Small commitments with sufficient depth
 
@@ -35,7 +35,7 @@ The agent MUST apply PDSA proportionally to implementation, investigation, and d
 
 Methods appear near their principal contribution but apply whenever relevant. Tests can be planned before implementation, and records maintained as facts emerge. Phases may overlap or repeat; methods alone require no deliverable. Routine work needs no worksheet, formal experiment, special mode, or phase reports. PDSA's Plan organizes reasoning; a tool's Plan mode has its own procedures. Neither widens authorization.
 
-## Completion, predictions, and bounded investigation
+## Requirements, acceptance conditions, and predictions
 
 The contract separates three questions:
 
@@ -48,16 +48,6 @@ The contract separates three questions:
 Study compares results with acceptance conditions for completion and observations with predictions for learning. Learning cannot replace required in-scope behavior; an implementation may meet its conditions through a different approach from the one predicted. An approach can fail while an investigation succeeds: evidence that a reader splits a quoted comma can answer the investigation, while required intact-field behavior remains unimplemented. A successful sample supports only conclusions justified by that sample. See [validation](engineering-and-validation.md#validation-and-test-evidence) for check availability, evidence sufficiency, and revision authority.
 
 Authorized work establishing or changing behavior required beyond the task's execution creates a new/revised system requirement, whatever its source. It needs a canonical owner and [EARS form](knowledge-and-documentation.md#ears-making-required-behavior-explicit). Task objectives, acceptance conditions, and requester statements do not become requirements merely by being stated; restating an owned requirement MUST NOT create a duplicate. Analysis/review alone cannot create or change requirements.
-
-**Context versus inquiry.** Inspecting relevant code, callers, tests, configuration, and directly related dependencies to establish context, and *all reading of existing project documentation*, are context gathering—even for a material blocking question. No inspection-by-inspection announcement is needed. Scope, limits, proportionality, and cumulative reassessment still apply.
-
-Beyond context gathering, [§2.4 inquiry](../../../03-contract/prerelease_AGENTS.md#24-context-gathering-and-bounded-inquiry) means investigating material uncertainty about how to proceed that blocks the next decision. Purpose distinguishes inquiry from settled execution and validation: unknown output alone does not trigger inquiry, and using a prescribed procedure does not exempt an investigation. The same measurement or test can serve any of these purposes.
-
-The agent MUST promptly make the blocking uncertainty and its significance clear unless already communicated in the request or task framing. Notification requires no advance estimate or declared allowance. It neither grants authority nor creates an approval checkpoint. [Initial framing and reporting](requester-decisions-and-reporting.md#reporting-and-continued-execution) retain their separate timings.
-
-Inquiry MUST focus on the blocking question through small, bounded, proportionate increments and end when evidence is sufficient. Sufficiency and bounds prevent different failures: treating any output as an answer, and continuing simply because the answer is unknown. At increment bounds with insufficient evidence, the agent MUST reassess before further investigation. Further attempts MUST be justified by preceding findings and remain within authorization, limits, and checkpoints. No numeric budget is required; announced bounds cannot substitute for disciplined conduct. The [practical example's](../../../03-contract/prerelease_README-powerusers.md#when-an-investigation-is-needed) single sample illustrates a bounded experiment; its optional one-attempt checkpoint is a separate requester control. An inconclusive result alone establishes neither completion nor additional authority.
-
-Narrow authorized investigation MAY establish facts for consultation. If it exposes a decision requiring requester direction, consultation MUST precede adoption or implementation. Without evidence justifying the next increment, the agent MUST seek direction. Inquiry outcomes are reported at completion, handoff, or input requests; there is no automatic inquiry-end report or new announcement per attempt.
 
 ## Runtime View
 
@@ -74,4 +64,4 @@ The [practical CSV walkthrough](../../../03-contract/prerelease_README-poweruser
 3. **Study:** run relevant available acceptance checks before completing the increment, including continuation after rejection. Separately assess whether the predicted local approach sufficed. Disclose failed, unavailable, or omitted checks under the reporting rules.
 4. **Act:** use findings to retain, revise, or discard the approach within authority. Record material durable findings; transient attempt facts follow reporting rules. Then complete, hand off, seek required direction, or plan another already-authorized increment under the [composition rules](../contract-design.md#three-interacting-layers).
 
-Different evidence changes the path. Unsettled consequential requirements require requester input; uncertainty about the reader may require inquiry. A routine local correction can proceed within established direction and limits; changing the shared parser's error contract requires prior direction unless specifically authorized. Findings can inform another validation increment without a routine report. Consolidate unreported work at completion, handoff, or input requests. A requested operator guide could be a later increment shaped by its reader's need; neither a completed step nor a named method automatically creates a guide, ADR, or approval requirement.
+Different evidence changes the path. Unsettled consequential requirements require requester input; uncertainty about the reader may require [inquiry](bounded-inquiry.md#when-inquiry-applies). A routine local correction can proceed within established direction and limits; changing the shared parser's error contract requires prior direction unless specifically authorized. Findings can inform another validation increment without a routine report. Consolidate unreported work at completion, handoff, or input requests. A requested operator guide could be a later increment shaped by its reader's need; neither a completed step nor a named method automatically creates a guide, ADR, or approval requirement.

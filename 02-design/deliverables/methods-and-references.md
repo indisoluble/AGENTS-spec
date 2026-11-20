@@ -6,7 +6,7 @@
 
 [Method-selection qualifications](../../01-behavior/deliverables/baseline.md#method-selection-qualifications) constrain additions/replacements: recognized practices, freely accessible interpretive material sufficient for the assigned role, and distinct responsibilities unless explicitly revised. They permit authorized replacement without making current prescriptions optional.
 
-[PDSA](mechanisms/work-cycle-and-inquiry.md#learning-throughout-the-work) and [Simple Design](mechanisms/engineering-and-validation.md#simple-design-choosing-what-the-current-solution-needs) were judged sufficient for the agreed design alongside the [focused engineering references](mechanisms/engineering-and-validation.md#focused-techniques-and-how-they-work-together), [documentation conventions](mechanisms/knowledge-and-documentation.md#documentation-choices), and [explicit collaboration rules](mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions). Additional umbrella frameworks were not needed to supply those responsibilities.
+[PDSA](mechanisms/work-cycle.md#learning-throughout-the-work) and [Simple Design](mechanisms/engineering-and-validation.md#simple-design-choosing-what-the-current-solution-needs) were judged sufficient for the agreed design alongside the [focused engineering references](mechanisms/engineering-and-validation.md#focused-techniques-and-how-they-work-together), [documentation conventions](mechanisms/knowledge-and-documentation.md#documentation-choices), and [explicit collaboration rules](mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions). Additional umbrella frameworks were not needed to supply those responsibilities.
 
 ## Principles and reference boundaries
 

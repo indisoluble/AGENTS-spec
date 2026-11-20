@@ -48,7 +48,7 @@ When planning or performing authorized work, the agent shall keep the next commi
 
 At review, handoff, or a deliberate pause after a meaningful step, the agent shall leave coherent work. Before an increment that cannot stand alone, it shall explain why, what remains usable or testable, and how to undo it. It shall disclose material limits on reversing proposed or completed changes. A required stop may leave work incomplete; coherence does not permit continuing past that stop or reporting incomplete work as complete. Easy reversal remains a recommendation, not a guarantee that every authorized change is reversible.
 
-Current realization: [small commitments and sufficient depth](../../02-design/deliverables/mechanisms/work-cycle-and-inquiry.md#small-commitments-with-sufficient-depth), contract §§1.1, 2.3, and 2.5. Exact decomposition and planning elements remain selected design; no numerical effort quota or uniquely correct sequence is established.
+Current realization: [small commitments and sufficient depth](../../02-design/deliverables/mechanisms/work-cycle.md#small-commitments-with-sufficient-depth), contract §§1.1, 2.3, and 2.5. Exact decomposition and planning elements remain selected design; no numerical effort quota or uniquely correct sequence is established.
 
 ### BR2 — Evidence-based planning and knowledge ownership
 
@@ -56,7 +56,7 @@ Rationale: [R3](objectives-and-rationale.md#r3), [R4](objectives-and-rationale.m
 
 When preparing to choose an approach or derive or refine acceptance conditions, the agent shall first identify the authorized objectives and constraints and inspect relevant project evidence. It shall distinguish required behavior and completion conditions from observed behavior, assumptions, inferences, and predictions about an approach. It shall use the owner of each kind of knowledge, report contradictions, and take consequential conflicts that ownership cannot settle to the requester before the dependent choice. Passing code or tests shall not silently redefine intended behavior.
 
-Current realization: [knowledge roles](../../02-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices) and [requirements, acceptance conditions, and predictions](../../02-design/deliverables/mechanisms/work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation), contract §1.1. The current artifact-role assignments and explicit increment prediction remain binding design; the summary does not establish every category or planning element as a permanent mechanism. No global precedence order among project artifacts is introduced.
+Current realization: [knowledge roles](../../02-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices) and [requirements, acceptance conditions, and predictions](../../02-design/deliverables/mechanisms/work-cycle.md#requirements-acceptance-conditions-and-predictions), contract §1.1. The current artifact-role assignments and explicit increment prediction remain binding design; the summary does not establish every category or planning element as a permanent mechanism. No global precedence order among project artifacts is introduced.
 
 ### BR3 — Autonomy within authorization and prior direction
 
@@ -78,7 +78,7 @@ When material uncertainty about how to proceed remains after relevant context ga
 
 When an investigation step finishes inconclusively, the agent shall reassess what was learned before deciding whether another step is justified by preceding findings. Any further step shall remain bounded and within authorization, limits, and checkpoints. An inconclusive result shall not itself justify continued investigation, expand authority, or establish completion. Decisions requiring requester direction remain subject to BR3; narrow authorized investigation may establish facts for that consultation. Relevant conclusions, evidence, unresolved uncertainty, and missing work shall be reported at BR7's reporting occasions.
 
-Current realization: [context and bounded inquiry](../../02-design/deliverables/mechanisms/work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation), contract §2.4. Its context-gathering exclusions remain in force. Unknown results alone do not trigger inquiry; communication neither authorizes work nor creates an approval checkpoint. No default numerical budget, mandatory advance allowance, automatic stop-and-ask after one attempt, or automatic inquiry-end report is introduced.
+Current realization: [context and bounded inquiry](../../02-design/deliverables/mechanisms/bounded-inquiry.md#when-inquiry-applies), contract §2.4. Its context-gathering exclusions remain in force. Unknown results alone do not trigger inquiry; communication neither authorizes work nor creates an approval checkpoint. No default numerical budget, mandatory advance allowance, automatic stop-and-ask after one attempt, or automatic inquiry-end report is introduced.
 
 ### BR5 — Completion supported by validation
 
@@ -96,7 +96,7 @@ Rationale: [R3](objectives-and-rationale.md#r3).
 
 When results provide evidence about an approach, the agent shall use that evidence to retain, revise, or discard the approach and inform subsequent work within authorization. Revising a prediction or abandoning an approach shall not change requirements or acceptance conditions, replace required behavior with learning alone, or authorize another attempt. Material durable findings remain subject to BR8.
 
-Current realization: [learning throughout the work](../../02-design/deliverables/mechanisms/work-cycle-and-inquiry.md#learning-throughout-the-work), contract §§1, 1.3, and 1.4. PDSA remains the mandatory current mechanism applied proportionately, without a worksheet, formal experiment, special mode, or separate learning deliverable merely because a method was used. Acceptance of this outcome does not freeze that mechanism against authorized redesign.
+Current realization: [learning throughout the work](../../02-design/deliverables/mechanisms/work-cycle.md#learning-throughout-the-work), contract §§1, 1.3, and 1.4. PDSA remains the mandatory current mechanism applied proportionately, without a worksheet, formal experiment, special mode, or separate learning deliverable merely because a method was used. Acceptance of this outcome does not freeze that mechanism against authorized redesign.
 
 ### BR7 — Proportionate communication and actionable handoffs
 

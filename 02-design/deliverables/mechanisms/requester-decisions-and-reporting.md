@@ -50,7 +50,7 @@ PDSA assessment and use of findings occur even when no chat report follows. Repo
 | --- | --- |
 | Task completion, handoff, or seeking requester input | MUST consolidate unreported work into a report. |
 | Before substantial work, after proportionate preliminary context | MUST briefly state the task outline and first increment's objective and bounds in chat. |
-| Material inquiry uncertainty blocking the next decision | MUST promptly make the uncertainty and its significance clear unless already communicated in the request or task framing; see [inquiry](work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation). |
+| Material inquiry uncertainty blocking the next decision | MUST promptly make the uncertainty and its significance clear unless already communicated in the request or task framing; see [inquiry](bounded-inquiry.md#when-inquiry-applies). |
 | Disclosure affecting authorization or a decision requiring input | MUST precede affected work. |
 | Intermediate communication | SHOULD minimize routine progress reports and keep updates concise and useful. Other information SHOULD normally join the next consolidated report. |
 

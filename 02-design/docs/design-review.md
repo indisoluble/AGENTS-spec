@@ -24,7 +24,7 @@ Neither guide nor Design documentation has a numeric length target or limit. Det
 
 Guides and design can explain the same subject at different depths for distinct reader needs under the [summary boundary](../../docs/authority-and-change.md#documentation-ownership-boundaries). Link to canonical detail rather than copying complete procedures, reference-assignment tables, or lifecycles; necessary copies retain owners/update relationships. The practical guide owns requester-facing explanations; mechanism documents own design rationale.
 
-The [practical CSV walkthrough](../../03-contract/prerelease_README-powerusers.md#from-a-request-to-a-result) owns shared scenario facts; the [technical walkthrough](../deliverables/mechanisms/work-cycle-and-inquiry.md#how-the-design-works-in-a-task) uses them to explain design choices and stays aligned. Alternative paths state their assumptions. Illustrative choices and editorial checks cannot become policy.
+The [practical CSV walkthrough](../../03-contract/prerelease_README-powerusers.md#from-a-request-to-a-result) owns shared scenario facts; the [technical walkthrough](../deliverables/mechanisms/work-cycle.md#how-the-design-works-in-a-task) uses them to explain design choices and stays aligned. Alternative paths state their assumptions. Illustrative choices and editorial checks cannot become policy.
 
 Match claims to their sources:
 

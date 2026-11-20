@@ -72,7 +72,7 @@ The pattern exposes behavior to implement/check; it cannot decide row versus fil
 | Optional feature | `Where <feature is included>,` |
 | Unwanted condition | `If <unwanted condition>, then` |
 
-Conditions MAY combine, state before event: `While <state>, when <event>, the <system> shall <response>.` The [requirement boundary](work-cycle-and-inquiry.md#completion-predictions-and-bounded-investigation) and [revision authority](engineering-and-validation.md#validation-and-test-evidence) determine applicability and permitted change. EARS adds no mandatory rationale field; significant choices retain their reasons under the decision rule.
+Conditions MAY combine, state before event: `While <state>, when <event>, the <system> shall <response>.` The [requirement boundary](work-cycle.md#requirements-acceptance-conditions-and-predictions) and [revision authority](engineering-and-validation.md#validation-and-test-evidence) determine applicability and permitted change. EARS adds no mandatory rationale field; significant choices retain their reasons under the decision rule.
 
 ## ADRs: preserving the reasons for lasting choices
 

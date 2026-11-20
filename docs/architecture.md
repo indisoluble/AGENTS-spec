@@ -39,7 +39,7 @@ Engineering links target the staged sources. Display names and adopting-project 
 | `prerelease_README.md` | `README.md` |
 | `prerelease_README-powerusers.md` | `README-powerusers.md` |
 
-References to standard instruction and documentation filenames describe adopting projects. A bridge reference that fails from a staged file can resolve correctly at its installed location. The consumer README's license link targets the repository-root `LICENSE`. Check links against their intended locations. Design explains [bridge behavior](../02-design/deliverables/delivery-and-portability.md#why-the-bridges-differ) and the [recorded check of staged instruction filenames](../02-design/deliverables/delivery-and-portability.md#discovery-of-staged-instruction-files).
+References to standard instruction and documentation filenames describe adopting projects. A bridge reference that fails from a staged file can resolve correctly at its installed location. The consumer README's license link targets the repository-root `LICENSE`. Check links against their intended locations. Design explains [bridge behavior](../02-design/deliverables/delivery-and-portability.md#why-the-bridges-differ) and [provider-specific instruction discovery](../02-design/deliverables/delivery-and-portability.md#discovery-of-staged-instruction-files).
 
 ## Architecture decisions
 

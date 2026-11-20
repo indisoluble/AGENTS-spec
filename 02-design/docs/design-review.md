@@ -32,7 +32,7 @@ Match claims to their sources:
 - Current operating rules: [delivered contract](../../03-contract/prerelease_AGENTS.md), with the [clause index](../deliverables/contract-design.md#contract-clause-index) for detail/rationale. Current design remains binding without detailed product acceptance, and authorized redesign may replace it.
 - Methods: operational contract meaning and [reference assignments/consultation boundaries](../deliverables/methods-and-references.md#principles-and-reference-boundaries), without importing whole frameworks or stronger source rhetoric. Clear rules need no routine method research.
 - Evaluator claims: [E1–E40](../../04-evaluations/deliverables/cases-and-requirements.md#verifiable-requirements), applicable case interpretation, and captured contract/rubric.
-- Provider discovery/application: official provider documentation and actual environment. Preserve [provider evidence dates](../../03-contract/prerelease_README-powerusers.md#evidence-dates) and the separate [staging check date](../../docs/architecture.md#staged-sources-and-release-relative-references); new dates require newly verified/changed claims. Editorial work refreshes none.
+- When a change depends on how a provider [discovers instruction files](../deliverables/delivery-and-portability.md#discovery-of-staged-instruction-files) or loads them, assess those claims against the applicable official documentation and the behavior observed in the target environment.
 
 Do not imply that contract text overrides higher-priority instructions, grants permissions, bypasses approvals, or technically guarantees compliance.
 

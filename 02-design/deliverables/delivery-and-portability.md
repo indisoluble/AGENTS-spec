@@ -8,9 +8,15 @@ These are consumer-contract loading and instruction rules (§3.8). [Development 
 
 Provider claims retain their [recorded evidence dates](../../03-contract/prerelease_README-powerusers.md#evidence-dates); editorial work does not refresh them. Actual support depends on the provider and adopting environment.
 
+### Discovery of staged instruction files
+
+The `prerelease_*` filenames in `03-contract/` are engineering staging names. Install each instruction file using the consumer filename and location in the [staged-to-installed mapping](../../docs/architecture.md#staged-sources-and-release-relative-references).
+
+Automatic discovery depends on the provider, interface, and configuration. See the discovery rules for [Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md), [Claude Code](https://code.claude.com/docs/en/memory), and [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions).
+
 ### Why the bridges differ
 
-Both bridges apply the same local contract. [CLAUDE.md](../../03-contract/prerelease_CLAUDE.md) uses Claude Code's [native `@AGENTS.md` import](https://code.claude.com/docs/en/memory#import-additional-files), so one line can perform its loading role. [Copilot support](https://docs.github.com/en/copilot/reference/custom-instructions-support) varies by interface; a Markdown link identifies a file without universally importing it. Its bridge therefore explicitly directs reading/following the contract within the actual hierarchy and permissions.
+Both bridges apply the same local contract. [CLAUDE.md](../../03-contract/prerelease_CLAUDE.md) uses Claude Code's [native `@AGENTS.md` import](https://code.claude.com/docs/en/memory#import-additional-files), so one line can perform its loading role. [Copilot support](https://docs.github.com/en/copilot/reference/custom-instructions-support) varies by interface; a Markdown link identifies a file without universally importing it. Its bridge therefore explicitly directs reading/following the contract within the actual hierarchy and permissions. Claude's import and Copilot's `../AGENTS.md` link resolve from their installed locations.
 
 Neither bridge adds a failure-to-load policy: an unloaded contract cannot govern the failure. The package defines no common bootstrap stop/report/resume protocol; actual tool and requester instructions apply. [Compatibility guidance](../../03-contract/prerelease_README-powerusers.md#tool-compatibility) supplies diagnostics without adding fallback policy.
 

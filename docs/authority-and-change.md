@@ -1,6 +1,6 @@
 # Engineering authority and change propagation
 
-This document defines shared BDD responsibilities, authority and status distinctions, traceability, and change guidance. Use [architecture](architecture.md) for the current layout and detailed owners, and [system-wide engineering decisions](decisions.md) for lasting decision rationale and provenance.
+This document defines shared BDD responsibilities, authority and status distinctions, traceability, and change guidance. Use [architecture](architecture.md) for the stage layout and responsibilities, and [system-wide engineering decisions](decisions.md) for lasting decision rationale and provenance.
 
 ## BDD activities and complementary responsibilities
 
@@ -16,7 +16,7 @@ BDD does not establish requirements completeness or settle product and design au
 
 Responsibility-based directories, Markdown linked to the Python evaluator, and requester acceptance are project choices. For a genuine departure from reference practice, record with the affected owner the practice, scope and conditions, reason, closer alternatives and why they are inadequate, and consequences; the competent owner decides adoption. A verification departure also identifies the reviewer, evidence, judgment method, and inconclusive scope. A standing engineering change belongs here. There is no standing exception to Automation.
 
-The [requester-guidance case](../04-evaluations/deliverables/cases-and-requirements.md#requester-guidance) illustrates an automation limit: both asking for a missing timezone and guessing one can produce a nonempty response. Its human rubric assesses that distinction. An unreliable automated distinction leaves a gap to report and review, not a general exemption for future accepted examples.
+When an automated check cannot reliably distinguish satisfying from violating an obligation, report the gap and review the evidence. The [requester-guidance case](../04-evaluations/deliverables/cases-and-requirements.md#requester-guidance) illustrates this limit. Future accepted examples remain subject to Automation.
 
 ## Cross-domain traceability and feedback
 
@@ -60,7 +60,7 @@ Behavior records the [established objectives](../01-behavior/deliverables/object
 
 **Runtime authority.** Delivered `AGENTS.md` is the complete normative operating contract within the consuming tool's instruction hierarchy and permissions. Internal requirements and rationale add no operating duties. A mismatch requires human review and authorized correction, not an implicit rule change. Runs retain their captured contract and rubric interpretation; revised criteria neither rewrite historical conclusions nor carry them over to revised text. Requirements and contract wording grant no additional permission to edit protected files or make consequential decisions.
 
-**Instruction loading.** `03-contract/prerelease_AGENTS.md` is staged source, not a standard automatic development instruction entry point. There is no root `AGENTS.md`, root `CLAUDE.md`, or active `.github/copilot-instructions.md` importing it. Agents may explicitly read the source; isolated evaluations inject its unchanged bytes as workspace-root `AGENTS.md`. See the [staged-source mapping and recorded provider check](architecture.md#staged-sources-and-release-relative-references). Development instructions require an actual supported instruction or task mechanism; documentation neither configures loading nor unloads instructions already present in a session.
+**Instruction loading.** `03-contract/prerelease_AGENTS.md` is staged source, not a standard automatic development instruction entry point. There is no root `AGENTS.md`, root `CLAUDE.md`, or active `.github/copilot-instructions.md` importing it. Agents may explicitly read the source, and Evaluations supplies it to the evaluated agent. Neither use activates it for repository development. See the [staged-source mapping](architecture.md#staged-sources-and-release-relative-references). Development instructions require an actual supported instruction or task mechanism; documentation neither configures loading nor unloads instructions already present in a session.
 
 Authorized redesign can reconsider PDSA, the three-layer organization, or another selected mechanism. It does not suspend applicable loaded instructions: a necessary engineering-process change must be explicitly authorized and technically effective. The contract prescribes conduct without guaranteeing compliance; enforcement depends on actual tool controls, and behavior needs observational evidence.
 
@@ -88,21 +88,17 @@ E1–E40 specify evaluator behavior, while fictional application requirements in
 | Behavioral evaluation | What agents receiving the identified contract did in the cases run, assessed against assertions and human rubrics. |
 | Evaluator tests | Specified machinery behavior within the checks run: execution, observation, grading, reporting, and failures; neither agent compliance nor semantic validity of expectations. |
 
-Offline tests use substitutes for configuration and orchestration. The functional-check sandbox probe covers only evaluator-owned checks; agent-command enforcement and authenticated integration need separate environment-specific validation. [Framework design](../04-evaluations/docs/framework-design.md#agent-execution) defines these verification scopes.
-
-The current suite runs only Codex with direct `AGENTS.md` injection; it exercises neither provider bridge nor other tools.
-
-The [evaluation model](../04-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) owns finite-case, nondeterminism, human-review, and causal-attribution limits. Missing evidence remains unverified. Claims about O1/O2 benefits require suitable comparative evidence, representative tasks, and requester feedback where relevant; textual alignment or evaluator success alone cannot establish them. Human review distinguishes evaluator faults, unsuitable expectations or scenarios, contract defects, agent behavior, and unresolved intent before proposing a change.
+Limit claims to the tools, environments, and behavior actually exercised. The [evaluation model](../04-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) explains the suite's coverage, variability between runs, human-review limits, and the evidence needed for causal attribution. Missing evidence remains unverified. Claims about O1/O2 benefits require suitable comparative evidence, representative tasks, and requester feedback where relevant; textual alignment or evaluator success alone cannot establish them. Human review distinguishes evaluator faults, unsuitable expectations or scenarios, contract defects, agent behavior, and unresolved intent before proposing a change.
 
 ## Documentation ownership boundaries
 
 Choose the owner by responsibility and scope before choosing a filename. Give each detailed fact, requirement, interface, procedure, explanation, or decision one canonical owner. Other documents may summarize for their readers and link directly to that owner, retaining qualifications needed to avoid misleading them. A copy that readers could treat as authoritative, or that needs independent maintenance to stay correct, creates a second owner. If navigation disagrees with its owner, correct navigation.
 
-Accepted requirements, selected design, runtime instructions, evaluation definitions, and observations are distinct representations with their own status and owners; related content across them is not automatically duplication. The [architecture](architecture.md#current-bdd-first-organization) defines placement. Root and stage READMEs orient and navigate without adding specifications or procedures.
+Accepted requirements, selected design, runtime instructions, evaluation definitions, and observations are distinct representations with their own status and owners; related content across them is not automatically duplication. [Root architecture](architecture.md#current-bdd-first-organization) defines stage responsibilities and shared interfaces. Each stage owns its implementation, procedures, and maintenance guidance. Root and stage READMEs orient and navigate without adding specifications or procedures.
 
 The consumer guides may overlap at different depths while remaining independently useful. Summaries preserve contract strengths, conditions, and exceptions without competing rules. Keep essential practical explanations self-contained or link to product documentation, the contract, or external sources; removing engineering navigation must not remove useful consumer knowledge. [Contract explanation review](../02-design/docs/design-review.md#reviewing-contract-explanations) owns audience and comprehension checks.
 
-Follow known direct dependents within authorized scope. Inspect what each reference is for before changing it. When a document moves or its structure changes, update affected incoming links, labels, fragments, and plain-text references. Link directly to the new destination without duplicate documents or forwarding anchors. This does not authorize searches for unknown dependents, audits, or backfills. Report out-of-scope gaps for separate work. Evaluator-specific maintenance remains with [framework design](../04-evaluations/docs/framework-design.md#modify-or-extend-an-evaluation); no central editorial approval is added.
+Follow known direct dependents within authorized scope. Inspect what each reference is for before changing it. When a document moves or its structure changes, update affected incoming links, labels, fragments, and plain-text references. Link directly to the new destination without duplicate documents or forwarding anchors. This does not authorize searches for unknown dependents, audits, or backfills. Report out-of-scope gaps for separate work. These conventions add no central editorial approval.
 
 ### Engineering documentation convention
 
@@ -120,26 +116,15 @@ For a substantial rewrite, keep a temporary old-to-new content map with reasons 
 
 ### Finding an owner and checking a change
 
-| Starting question | Route |
-| --- | --- |
-| Why is an outcome required? | Follow the [rationale map](../01-behavior/deliverables/objectives-and-rationale.md#rationale-map) to the objectives or the relevant requirement and its current-realization links. The baseline also lists the [established constraints](../01-behavior/deliverables/baseline.md#established-constraints). |
-| What distinguishes the requirement in concrete cases? | [Proposed-example coverage](../01-behavior/deliverables/discovery.md#requirement-to-scenario-coverage) and unresolved formulation questions. |
-| Why does a contract clause use this mechanism? | [Clause index](../02-design/deliverables/contract-design.md#contract-clause-index), linked design reasons, and accepted-intent backlinks. |
-| What does an evaluation result show? | [Case catalogue](../04-evaluations/deliverables/cases-and-requirements.md#cases-and-interpretation), then the run's [captured contract, rubric, and evidence](../04-evaluations/docs/running-and-reviewing.md#results-evidence-and-failure-investigation). Clause references locate active cases. Tracing a clause to a case does not establish requirements-derived coverage. |
+Start with the [stage that owns the proposed change](architecture.md#current-bdd-first-organization). Use Behavior's [rationale map](../01-behavior/deliverables/objectives-and-rationale.md#rationale-map) and [proposed examples](../01-behavior/deliverables/discovery.md#requirement-to-scenario-coverage) to trace intent, and Design's [clause index](../02-design/deliverables/contract-design.md#contract-clause-index) to trace realization. For a run, compare the [case's intended coverage](../04-evaluations/deliverables/cases-and-requirements.md#cases-and-interpretation) with its [retained evidence](../04-evaluations/docs/running-and-reviewing.md#results-evidence-and-failure-investigation).
 
 Before changing an owner, identify affected direct dependents, applicable decision authority, and evidence that would verify the change, using the distinctions above. For PR1, follow [R5's artifact-inspection route](../01-behavior/deliverables/objectives-and-rationale.md#r5).
 
 ## Specification-to-evaluation dependencies
 
-These are the known direct dependencies of the current clause-based evaluator:
+A change to the staged contract reaches the next evaluation even if its expectations have not been reviewed. Clause edits can invalidate a case's expectations even when its assertions still pass. Renumbering or moving a clause can break the references that connect a rubric or case to its intended rule. Review affected expectations against their authority and interpret earlier evidence against the candidate and criteria used at the time.
 
-| Dependency | Mechanism and change consequence |
-| --- | --- |
-| Contract injection | `CONTRACT_PATH` in [workspace.py](../04-evaluations/deliverables/runtime/workspace.py) resolves to `03-contract/prerelease_AGENTS.md`. Preparation copies current bytes to root `AGENTS.md`; fixtures cannot override it (E1, E22). No version is pinned: a contract edit reaches the next run even if cases were not reviewed. Offline tests compare with the same current source and do not detect wording changes. |
-| Clause references and expectations | The [catalogue](../04-evaluations/deliverables/cases-and-requirements.md#cases-and-interpretation) links contract sections. Rubrics in [assumptions.py](../04-evaluations/deliverables/scenarios/assumptions.py), [inquiry.py](../04-evaluations/deliverables/scenarios/inquiry.py), and [findings.py](../04-evaluations/deliverables/scenarios/findings.py) cite section numbers and strengths; others refer to retained rules without numbering. Assertions also encode behavior, such as `ScopePreserved` for §1.2. Renumbering, heading changes, or semantic changes can leave these stale; no repository check detects that staleness. |
-| Captured identity | [codex.py](../04-evaluations/deliverables/runtime/codex.py) records `contract_sha256` in `execution.json` and saves injected `AGENTS.md`; human-review runs retain `review.md`. Results remain tied to that contract and rubric. |
-
-Design documents, design-review guidance, and consumer guides also link contract headings; inspect them under the ownership boundary above.
+Design documents, design-review guidance, and consumer guides also link contract headings. Inspect affected references in those owners.
 
 ### Change impact
 

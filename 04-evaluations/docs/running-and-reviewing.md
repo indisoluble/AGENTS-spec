@@ -138,7 +138,7 @@ Each case prints its name and a distinct git-ignored `04-evaluations/.eval-runs/
 | File | Contents |
 | --- | --- |
 | `prompt.txt`, `AGENTS.md`, `message.txt` | Submitted prompt, initial contract snapshot, and initial message fixture when present. |
-| `execution.json` | Contract SHA-256, CLI version when available, command/settings, paths, status, errors, duration, and exit status when available. |
+| `execution.json` | `contract_sha256` identifies the initial `AGENTS.md` snapshot saved by [codex.py](../deliverables/runtime/codex.py). Also records CLI version when available, command/settings, paths, status, errors, duration, and exit status when available. |
 | `events.jsonl`, `stderr.txt` | Raw CLI events and diagnostics once execution starts. |
 | `final-response.txt` | Cases marked for human review in the catalogue (or programmatic capture): the CLI's final response, including empty text. The raw file remains available if text decoding fails. |
 | `initial-workspace.json`, `final-workspace.json` | With observation (all behavioral cases): successful snapshots keyed by relative path, with `kind`, integer `mode`, `contents_base64` (exact regular-file bytes, otherwise null), and `link_target` (otherwise null). These include all observed entries. |

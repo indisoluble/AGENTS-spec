@@ -2,7 +2,7 @@
 
 This document owns installation, authentication, case execution, retained evidence, report interpretation, failure investigation, and human review. Start with the [evaluation model](evaluation-model.md#purpose-and-evaluation-model) for the suite's scope and interpretation limits.
 
-Use the [case catalogue and acceptance definitions](../deliverables/cases-and-requirements.md#cases-and-interpretation) to find the selected case's source module and exact rubric, and [E1–E40](../deliverables/cases-and-requirements.md#verifiable-requirements) for evaluator requirements. [Framework design](framework-design.md) owns execution, observation, cleanup, and functional-check boundaries; the links below connect operational results to those mechanisms. A historical run is interpreted using its captured contract and rubric, as the [review procedure](#response-presence-and-human-review) explains.
+Use the [case catalogue and acceptance definitions](../deliverables/cases-and-requirements.md#cases-and-interpretation) to find the selected case's source module and exact rubric. The [stage README](../README.md#evaluator-requirements) links the case-specific and shared evaluator requirements. [Framework design](framework-design.md) owns execution, observation, cleanup, and functional-check boundaries; the links below connect operational results to those mechanisms. A historical run is interpreted using its captured contract and rubric, as the [review procedure](#response-presence-and-human-review) explains.
 
 ## Setup and running evaluations
 
@@ -121,7 +121,7 @@ Three kinds of failure reach these outcomes differently; the [evaluation lifecyc
 
 All cases marked for human review in the catalogue use `FinalResponsePresent`: a captured final response must contain non-whitespace text. Empty or whitespace-only text fails that assertion. Missing capture is an infrastructure error. Presence alone grades no meaning, regardless of how plausible the response sounds.
 
-For these cases, `review_required: true` remains in the report after an assertion failure or infrastructure error. Human assessment happens outside the CLI; there is no keyword classifier, model judge, verdict-ingestion step, or automatic answer to an agent's question.
+Under [E26](../deliverables/requirements/suite-execution-and-results.md#e26), `review_required: true` remains in the report for these cases after an assertion failure or infrastructure error. Human assessment happens outside the CLI; there is no keyword classifier, model judge, verdict-ingestion step, or automatic answer to an agent's question.
 
 Use the run's `review.md` to assess its criteria separately. Read the final reply, requester-facing progress messages and commands in `events.jsonl`, and all workspace changes together. Cite relevant passages, commands, and paths; check that claims agree with actions. Information already communicated need not be repeated in the final reply. Resolve infrastructure errors before treating live verification as complete.
 

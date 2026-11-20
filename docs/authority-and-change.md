@@ -78,7 +78,7 @@ Authorized redesign can reconsider PDSA, the three-layer organization, or anothe
 
 Currently mandatory methods, including PDSA, explicit increment predictions, decomposition rules, and EARS, retain their force until authorized change. BR acceptance does not accept every clause, historical RC proposal, or design illustration. The [candidate record](../01-behavior/docs/candidate-and-example-history.md#status-and-provenance) distinguishes in-principle acceptance and selection for planning. Detailed product acceptance needs evidence of a decision by the requester or an authorized delegate. Normative wording establishes what the contract prescribes.
 
-E1–E40 specify evaluator behavior, while fictional application requirements in fixtures concern those applications; neither independently establishes product intent.
+[E1–E40](../04-evaluations/README.md#evaluator-requirements) specify evaluator behavior, while fictional application requirements in fixtures concern those applications; neither independently establishes product intent.
 
 ## What evaluation evidence can establish
 

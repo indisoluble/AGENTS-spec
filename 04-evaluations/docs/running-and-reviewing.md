@@ -77,9 +77,9 @@ python -m deliverables --case durable-finding-review --model gpt-6.1-sol --reaso
 python -m deliverables --case all --model gpt-6.1-sol --reasoning-effort medium
 ```
 
-For another individual case, use its name from the [catalogue](../deliverables/cases-and-requirements.md#cases-and-interpretation) with `--case`. Omitting that option is equivalent to `--case smoke`.
+For another individual case, use its name from the [accepted case selections](../deliverables/requirements/suite-execution-and-results.md#e12) with `--case`. Omitting that option is equivalent to `--case smoke`.
 
-`all` follows the catalogue order, waiting for each case and its cleanup to finish. Each has an independent workspace, Codex session, report, and evidence directory. Ordinary failures do not skip later cases; Ctrl-C or SIGTERM stops the sequence. There are no automatic retries or concurrent cases.
+`all` follows the [order defined by E15](../deliverables/requirements/suite-execution-and-results.md#e15), waiting for each case and its cleanup to finish. Each has an independent workspace, Codex session, report, and evidence directory. Ordinary failures do not skip later cases; Ctrl-C or SIGTERM stops the sequence. There are no automatic retries or concurrent cases.
 
 | Option | Use |
 | --- | --- |

@@ -3,7 +3,8 @@
 Evaluations uses a [staged contract candidate](../03-contract/prerelease_AGENTS.md) and defined cases to assess how agents behave. Runs produce observations and automated assertion results, with human review for criteria that require judgment. The current behavioral cases exercise contract clauses. Requirements-derived acceptance testing remains future work. Behavioral verification is limited to what the evidence supports for the candidate and cases run. Offline tests verify evaluator machinery.
 
 - To understand what the suite assesses, read the [evaluation model and coverage limits](docs/evaluation-model.md#purpose-and-evaluation-model).
-- To find a case, use the [case catalogue](deliverables/cases-and-requirements.md#cases-and-interpretation) for its purpose, assertions, human review, and links to source and tests.
+- For the infrastructure check, see [smoke](deliverables/cases/smoke.md). For the greeting edit and its scope boundary, see [scope-discipline](deliverables/cases/scope-discipline.md).
+- To find any registered case, use the [case overview](deliverables/cases-and-requirements.md#cases-and-interpretation) for its purpose, assertions, human review, and links to source and tests.
 - To assess the exporter decision, interpret partial measurements, or review inquiry conduct, use the [bounded-inquiry case specification](deliverables/cases/bounded-inquiry.md).
 - To run an evaluation, follow the [setup and run guide](docs/running-and-reviewing.md#setup-and-running-evaluations) or go to the [case and suite commands](docs/running-and-reviewing.md#run-a-case-or-the-suite).
 - To interpret a result, read the [outcomes and exit codes](docs/running-and-reviewing.md#outcomes-and-exit-codes) and inspect the [retained evidence](docs/running-and-reviewing.md#retained-evidence). Use the [human review guidance](docs/running-and-reviewing.md#response-presence-and-human-review) or the [failure investigation guide](docs/running-and-reviewing.md#investigate-a-failure-or-incomplete-result) as applicable.
@@ -13,7 +14,7 @@ Evaluations uses a [staged contract candidate](../03-contract/prerelease_AGENTS.
 
 ## Evaluator requirements
 
-For obligations specific to a case, see [E39 for bounded-inquiry](deliverables/cases/bounded-inquiry.md#e39) or the [other case-specific requirements](deliverables/cases-and-requirements.md#case-specific-evaluator-requirements). For shared evaluator behavior, choose the responsibility you are working on.
+For obligations specific to a case, see [E2 for smoke](deliverables/cases/smoke.md#e2), [E13](deliverables/cases/scope-discipline.md#e13) and [E18](deliverables/cases/scope-discipline.md#e18) for scope-discipline, [E39 for bounded-inquiry](deliverables/cases/bounded-inquiry.md#e39) or the [other case-specific requirements](deliverables/cases-and-requirements.md#case-specific-evaluator-requirements). For shared evaluator behavior, choose the responsibility you are working on.
 
 - [Agent execution](deliverables/requirements/agent-execution.md)
 - [Workspace preparation and observation](deliverables/requirements/workspace-and-observation.md)

@@ -4,7 +4,7 @@ Behavior-driven development (BDD) uses concrete examples and short feedback cycl
 
 ## Applying the three practices
 
-- **Discovery.** Explore examples, counterexamples, assumptions, and material unknowns from requester, implementation, and evaluation perspectives. One person may represent several perspectives. Consider the affected actors, normal and exceptional conditions, conflicts, feasibility, and missing evidence. The [Discovery deliverable](../01-discovery/deliverables/discovery.md) and its example suites keep sources, proposal coverage, and unresolved questions visible.
+- **Discovery.** Explore examples, counterexamples, assumptions, and material unknowns from requester, implementation, and evaluation perspectives. One person may represent several perspectives. Consider the affected actors, normal and exceptional conditions, conflicts, feasibility, and missing evidence. Discovery links [proposed examples and their sources](../01-discovery/deliverables/example-coverage.md) to the [questions they help distinguish](../01-discovery/deliverables/open-questions.md).
 - **Formulation.** Express agreed behavior as precise rules and distinguishing examples suitable for automation. Proposals remain open until the requester or authorized delegate accepts them. The [Formulation baseline](../02-formulation/deliverables/baseline.md) identifies accepted wording and any examples expressly accepted as defining.
 - **Automation.** In reference BDD, agreed examples become executable tests that guide implementation. Here Evaluations defines and runs checks, Design selects mechanisms, and Candidate realizes them as operational instructions.
 

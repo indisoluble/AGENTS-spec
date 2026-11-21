@@ -1,30 +1,29 @@
-# Behavioral discovery and coverage
+# Proposed example coverage
 
-The [baseline](../../02-formulation/deliverables/baseline.md) defines accepted requirements; this document tracks proposed examples, classifications, coverage, and remaining formulation work.
+Use the matrix to find a proposed example for an accepted requirement. Use the [suite list](#proposed-example-suites) to read related cases together. Each suite owns its scenarios and identifies the requirements, contract clauses, and design explanations used to qualify them.
 
-## Status and provenance
+## Reading a proposed example
 
-All linked examples remain proposed for owner review, including Direct examples. None is an accepted defining example, executable test, observed result, evaluator rubric, or additional runtime instruction. Current [contract](../../04-candidate/pre_AGENTS.md) and [design](../../03-design/deliverables/contract-design.md#contract-clause-index) qualifications supply implementation evidence, not independent product acceptance.
+All examples here await requester review. Given/When/Then makes the starting conditions, action, and expected outcome easy to compare. Writing a case this way neither makes it executable nor completes Formulation.
 
-[Baseline provenance](../../02-formulation/deliverables/baseline.md#behavioral-acceptance-and-editorial-provenance) records what the owner accepted and the limits of formalizing a summary of the approval. [Proposal sources](../docs/proposal-sources.md) identify the status of the source proposals and examples. [Formulation’s disposition table](../../02-formulation/docs/candidate-disposition.md#disposition-of-the-earlier-candidates) links provisional candidates to the outcomes accepted in the baseline.
+| Classification | How to read the proposed outcome |
+| --- | --- |
+| **Direct** | The example illustrates an accepted requirement with its source-supported qualifications. A separate design note can describe binding mechanics outside the example’s proposed outcome. |
+| **Detail review** | Part of the outcome depends on a current design prescription whose enduring product status is unsettled. The case identifies the detail. The [open questions](open-questions.md) explain what deciding it would mean. |
 
-## Formulation questions and evidence limits
+Both labels describe proposals. Current prescriptions retain their force, including when a case omits a mechanism. Read permissions as choices, recommendations with their justified exceptions, and mandatory duties at their stated strength. For example, compare the disclosure timing in [BR3.5](proposed-examples/authorization-and-communication.md#br35--disclose-a-material-assumption-at-the-applicable-reporting-occasion) with the prior-direction violation in [BR3.6](proposed-examples/authorization-and-communication.md#br36--disclose-a-consequential-choice-made-without-prior-direction). For inquiry and reporting qualifications, see the contract sections on [requester limits](../../04-candidate/pre_AGENTS.md#23-effort-estimates-and-requester-limits), [notification and reassessment](../../04-candidate/pre_AGENTS.md#24-context-gathering-and-bounded-inquiry), and [report timing](../../04-candidate/pre_AGENTS.md#37-reporting).
 
-Example review must distinguish accepted outcomes from details that would constrain a future equivalent contract: for example, classifying *all* reading of existing project documentation as context gathering (BR4.7), or retaining detailed debt and dead-code rules (BR8.3/BR8.7/BR9.5). The acceptance summary does not independently settle those details' enduring product status. Established decisions are not submitted for reconfirmation, and no provider-policy requirement or BR11 is inferred from RC10.
+The cases use illustrative project facts. Terms such as material, sufficient, proportionate, significant, and available take their meaning from the circumstances of each case. Automation needs fixtures and evidence that distinguish the relevant outcomes. A number in a fixture sets no universal threshold.
 
-**Direct** means the example demonstrates an accepted requirement with its source-supported qualifications. **Detail review** means some detailed expectation relies on a current design prescription whose enduring product status is not established by the supplied summary; each such case states why. **Both labels describe proposed examples, not acceptance status.** Neither omission of a mechanism nor a Detail review label suspends its current contractual force. Permission cases distinguish allowed outcomes without requiring the agent to exercise every permission; recommendations retain justified exceptions and mandatory rules remain mandatory.
+## Sources and decision scope
 
-Separate design notes beside Direct examples retain mechanism traceability without adding those details to the proposed Given/When/Then outcome or promoting them to accepted product requirements. Those current design prescriptions keep their existing force.
+The requester supplied an unaccepted example draft. The suites relate proposed outcomes to the [Formulation baseline](../../02-formulation/deliverables/baseline.md#behavioral-acceptance-and-editorial-provenance) and cite current implementation detail where it qualifies them. The earlier record reports in-principle acceptance for some proposals without identifying which ones. Alternatives selected for planning lacked both implementation detail and authorization. Neither establishes detailed product acceptance or authorizes a redesign. The [candidate disposition](../../02-formulation/docs/candidate-disposition.md#disposition-of-the-earlier-candidates) identifies the accepted outcomes and the residual inferred detail.
 
-Scenario project facts are illustrative. Terms such as material, sufficient, proportionate, significant, and available remain contextual; automation needs distinguishing fixtures and evidence without invented universal numeric thresholds. This inventory is not exhaustive and establishes neither agent adherence nor evaluator coverage. Existing E1–E40, rubrics, and captured runs retain their interpretation.
-
-### Remaining requirements work
-
-Owner review of the proposed formulations and examples, requirements-derived automation, and any separately authorized contract redesign remain future work under the [shared BDD responsibilities](../../docs/pipeline.md#applying-the-three-practices), with no standing exception to Automation. The 28 non-normative [design illustrations](../../03-design/docs/design-review.md#assessing-design-changes) and existing evaluations are not retroactively accepted as product criteria.
+An expressly accepted defining example belongs in Formulation. [Design illustrations](../../03-design/docs/design-review.md#assessing-design-changes) help review the explanation of a mechanism. [Executable evaluation cases](../../05-evaluations/README.md#case-specifications) exercise a candidate, and [run evidence](../../docs/traceability.md#what-evidence-can-establish) records what was observed. The proposed cases add no runtime instructions, evaluator criteria, or verdicts. Existing E1–E40, rubrics, and captured results retain their scope.
 
 ## Requirement-to-scenario coverage
 
-All 60 examples remain proposed: 51 Direct and 9 Detail review. Each ID links to one Given/When/Then example; the last column identifies cross-requirement interactions, not extra obligations. Scenario-group source links identify current design and contract support.
+The matrix indexes 60 proposed examples, 51 Direct and 9 Detail review. The first two example columns give each case its primary requirement. “Also exercised by” records a cross-requirement interaction without adding an obligation. An indexed relationship alone establishes neither complete specification, product acceptance, behavioral compliance, nor evaluator coverage.
 
 | Accepted requirement | Direct examples | Detail review examples | Also exercised by |
 | --- | --- | --- | --- |
@@ -44,7 +43,7 @@ The proposed examples illustrating accepted clarifications are BR1.3/BR1.5 (cohe
 
 ## Proposed example suites
 
-Suites link accepted requirements and current design/contract support. [Example sources](../docs/proposal-sources.md#scenario-qualification-provenance) retains shared qualification sources and draft provenance.
+Open a suite to read the cases and their source notes. To add or change a case, follow the [example maintenance procedure](../docs/maintaining-discovery.md#add-or-revise-a-proposed-example).
 
 | Suite | Example groups | Count |
 | --- | --- | ---: |

@@ -20,7 +20,7 @@ The agent is the subject of operating rules unless another actor is explicit. Up
 
 ## Contract clause index
 
-This index relates contract clauses, canonical mechanism explanations, and accepted intent. It does not establish acceptance of every prescription, complete realization, or evaluation coverage. All rows retain their own conditions and remain subject to requester/tool authority and progression guards. [Proposed-example coverage](../../01-discovery/deliverables/discovery.md#requirement-to-scenario-coverage) remains separate.
+This index relates contract clauses, canonical mechanism explanations, and accepted intent. It does not establish acceptance of every prescription, complete realization, or evaluation coverage. All rows retain their own conditions and remain subject to requester/tool authority and progression guards. [Proposed-example coverage](../../01-discovery/deliverables/example-coverage.md#requirement-to-scenario-coverage) remains separate.
 
 | Contract clauses | Engineering specification locations | Accepted intent supported |
 | --- | --- | --- |

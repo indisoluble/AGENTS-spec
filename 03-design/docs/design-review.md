@@ -1,6 +1,6 @@
 # Contract design review
 
-Use these editorial checks and [28 non-normative illustrations](#assessing-design-changes) to review how the current design is explained. They add no runtime duties, accepted requirements, evaluator criteria, or approval step. [Proposed BDD examples](../../01-discovery/deliverables/discovery.md#proposed-example-suites) remain separate. [Shared authority](../../docs/authority.md#status-of-engineering-records) governs those distinctions.
+Use these editorial checks and [28 non-normative illustrations](#assessing-design-changes) to review how the current design is explained. They add no runtime duties, accepted requirements, evaluator criteria, or approval step. [Proposed BDD examples](../../01-discovery/deliverables/example-coverage.md#proposed-example-suites) remain separate. [Shared authority](../../docs/authority.md#status-of-engineering-records) governs those distinctions.
 
 ## Reviewing contract explanations
 
@@ -60,7 +60,7 @@ For reader testing, ask members of the reference audience to perform/explain the
 
 ## Assessing design changes
 
-**Non-normative illustrations of the current implementation, pending requirements-led review.** All 28 distinctions below are retained separately from accepted requirements, proposed BDD defining examples, executable checks, and behavioral results. They establish neither comprehensive coverage nor an evaluation procedure. Future review must decide each illustration's role in requirement clarification, evaluation expectations, design explanation, or history; no promotion is performed here. [Candidate disposition](../../02-formulation/docs/candidate-disposition.md#disposition-of-the-earlier-candidates) and [formulation limits](../../01-discovery/deliverables/discovery.md#formulation-questions-and-evidence-limits) retain acceptance boundaries; the [evaluation model](../../05-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) owns behavioral evidence limits.
+**Non-normative illustrations of the current implementation, pending requirements-led review.** All 28 distinctions below are retained separately from accepted requirements, proposed BDD defining examples, executable checks, and behavioral results. They establish neither comprehensive coverage nor an evaluation procedure. Future review must decide each illustration's role in requirement clarification, evaluation expectations, design explanation, or history; no promotion is performed here. [Candidate disposition](../../02-formulation/docs/candidate-disposition.md#disposition-of-the-earlier-candidates) and [formulation limits](../../01-discovery/deliverables/open-questions.md) retain acceptance boundaries; the [evaluation model](../../05-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) owns behavioral evidence limits.
 
 Assess self-containment by standalone reading, and preservation or deliberate change of clause meaning by comparing strength, trigger, scope, conditions, and exceptions. The [clause index](../deliverables/contract-design.md#contract-clause-index) locates detailed mechanisms; the delivered contract remains runtime authority.
 

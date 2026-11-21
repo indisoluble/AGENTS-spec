@@ -8,7 +8,7 @@ Design-specific decisions remain in [decisions and alternatives](../03-design/do
 
 ### Shared guidance for writing and maintaining documentation
 
-**Authorized for local implementation. The completed guidance awaits requester review.** The [shared documentation ownership decision](#focused-owners-for-shared-engineering-documentation) established a conventions reference. It answered where a specification belongs, but gave a contributor little help deciding what was missing or whether a revision was sufficient.
+**The requester authorized local implementation and accepted the completed shared guidance.** The [shared documentation ownership decision](#focused-owners-for-shared-engineering-documentation) established a conventions reference. It answered where a specification belongs, but gave a contributor little help deciding what was missing or whether a revision was sufficient.
 
 Keep placement, rationale, naming, and retention in [the conventions reference](documentation.md). The [writing guide](writing-documentation.md) helps authors decide what a reader needs. The [maintenance guide](maintaining-documentation.md) helps a contributor trace change impact and verify the result. One expanded reference would keep the guidance in a single file but make a local correction harder to look up. Organizing by methodology would scatter one task across several guides. The task split costs a link when a contributor moves from drafting to review. It allows both guides to use the same conventions and stage owners.
 
@@ -52,7 +52,7 @@ The evaluator lifecycle belongs with the cases, requirements, and evidence neede
 
 ### Requirements-led engineering and product/internal separation
 
-**Accepted.** The requester established product requirements as the basis for development and intended evaluation expectations. Inferring accepted intent from implemented clauses or their rubrics would bypass review of the individual requirements. [Formulation](../02-formulation/README.md) owns accepted outcomes, [Discovery](../01-discovery/deliverables/discovery.md) keeps proposals explicit, and [Design](../03-design/deliverables/contract-design.md) owns selected mechanisms. The requester authorized separate ownership of established requirements and provisional candidates without changing their decision status. Observations of agent behavior and checks of evaluator correctness answer different questions.
+**Accepted.** The requester established product requirements as the basis for development and intended evaluation expectations. Inferring accepted intent from implemented clauses or their rubrics would bypass review of the individual requirements. [Formulation](../02-formulation/README.md) owns accepted outcomes, [Discovery](../01-discovery/deliverables/example-coverage.md) keeps proposals explicit, and [Design](../03-design/deliverables/contract-design.md) owns selected mechanisms. The requester authorized separate ownership of established requirements and provisional candidates without changing their decision status. Observations of agent behavior and checks of evaluator correctness answer different questions.
 
 Consumer artifacts must remain independently usable, with no references or dependencies into engineering documentation, including optional navigation. Internal requirements cannot supply hidden runtime policy. Under contract §3.6, consumer READMEs locate product documentation and engineering entry points locate engineering knowledge. Each audience can find its own material without a common root entry point or additional consumer duties.
 

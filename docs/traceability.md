@@ -47,7 +47,7 @@ Store each relationship once at its dependent or the clause index. Use exact IDs
 
 ### Current traceability gaps
 
-No existing proposed example has been accepted as defining. Explicit requirement-to-evaluation traceability remains incomplete. Existing behavioral cases exercise contract clauses and support regression or design-conformance review. The clause index connects accepted outcomes to current mechanisms. Neither those links nor passing cases establish complete realization or requirements-derived acceptance. [Discovery](../01-discovery/deliverables/discovery.md#formulation-questions-and-evidence-limits) records open formulation questions. The [evaluation model](../05-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) identifies suite coverage and limits.
+No existing proposed example has been accepted as defining. Explicit requirement-to-evaluation traceability remains incomplete. Existing behavioral cases exercise contract clauses and support regression or design-conformance review. The clause index connects accepted outcomes to current mechanisms. Neither those links nor passing cases establish complete realization or requirements-derived acceptance. [Discovery](../01-discovery/deliverables/open-questions.md) records open formulation questions. The [evaluation model](../05-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) identifies suite coverage and limits.
 
 ## What evidence can establish
 

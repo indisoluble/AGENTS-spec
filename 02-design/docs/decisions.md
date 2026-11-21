@@ -53,4 +53,4 @@ Narrow consultation to clarify material method ambiguity was exempt from inquiry
 
 The owner authorized separate specifications for the [work cycle](../deliverables/mechanisms/work-cycle.md) and [bounded inquiry](../deliverables/mechanisms/bounded-inquiry.md) within the approved structure. The former explains how an authorized increment progresses. The latter explains when a blocking question calls for investigation and what evidence justifies stopping or continuing. This amendment concerns documentation ownership only. The selected mechanisms and product requirements retain their existing meaning and status.
 
-The [stage architecture](../../docs/architecture.md#current-bdd-first-organization) locates these owners within Design. Product requirements, runtime instructions, and evaluation criteria each retain their own authority.
+The [implemented stage architecture](../../docs/architecture.md#implemented-four-stage-architecture) locates these owners within Design. Product requirements, runtime instructions, and evaluation criteria each retain their own authority.

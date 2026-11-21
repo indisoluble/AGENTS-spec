@@ -4,17 +4,39 @@ This document defines shared BDD responsibilities, authority and status distinct
 
 ## BDD activities and complementary responsibilities
 
-BDD is the methodological foundation for future behavioral development through iterative Discovery, Formulation, and Automation, following [Cucumber's reference practice](https://cucumber.io/docs/bdd/). Feedback can reopen an earlier question.
+BDD is the methodological foundation of the engineering pipeline. [Cucumber's reference practice](https://cucumber.io/docs/bdd/) describes three iterative practices, summarized here with their use in AGENTS-spec. See the [implemented interfaces](architecture.md#stage-interfaces) for today's owners and the [approved target interfaces](architecture.md#target-stage-interfaces) for the boundaries planned after migration.
 
 | Activity | Work and durable result |
 | --- | --- |
-| **Discovery** | Bring requester, implementation, and evaluation perspectives to examples, counterexamples, assumptions, and material unknowns; one person may represent several perspectives. Keep questions, proposal coverage, and source links in [Discovery](../01-behavior/deliverables/discovery.md) and its proposed example suites. |
-| **Formulation** | Express agreed behavior as precise rules and distinguishing examples. Proposals stay in discovery until product acceptance; the [baseline](../01-behavior/deliverables/baseline.md) owns accepted wording and only examples expressly accepted as defining. |
-| **Automation** | Connect agreed examples to repeatable checks in `04-evaluations/`, starting with the check to guide authorized implementation. Exercise the identified candidate and inspect outcomes. Before claiming coverage, establish that the check distinguishes satisfying from violating the accepted condition. Existing satisfying behavior needs no implementation edit solely to create a change. |
+| **Discovery** | Bring requester, implementation, and evaluation perspectives to examples, counterexamples, assumptions, and material unknowns. One person may represent several perspectives. The current [Discovery deliverable](../01-behavior/deliverables/discovery.md) and its example suites record questions, proposal coverage, and source links. |
+| **Formulation** | Capture agreed behavior as precise rules and distinguishing examples that can guide automation. Proposals remain open for review until product acceptance. The current [baseline](../01-behavior/deliverables/baseline.md) owns accepted wording and any examples expressly accepted as defining. |
+| **Automation** | Reference BDD connects agreed examples to the system as executable tests and starts with those tests to guide implementation. In AGENTS-spec, the same practice spans defining and executing checks, selecting mechanisms, and realizing them in the operational contract. |
 
 BDD does not establish requirements completeness or settle product and design authority. Review the affected topic's actors, normal and exceptional conditions, conflicts, feasibility, and missing evidence; keep unresolved scope explicit in its behavior owner. Design owners retain consequential choices, reasons, alternatives, trade-offs, status, and successors. Use existing documents, IDs or headings, links, and version control proportionately.
 
-Responsibility-based directories, Markdown linked to the Python evaluator, and requester acceptance are project choices. For a genuine departure from reference practice, record with the affected owner the practice, scope and conditions, reason, closer alternatives and why they are inadequate, and consequences; the competent owner decides adoption. A verification departure also identifies the reviewer, evidence, judgment method, and inconclusive scope. A standing engineering change belongs here. There is no standing exception to Automation.
+Stage boundaries, repository layout, decision authority, documentation conventions, and tooling are project choices. Apply reference BDD guidance where the project has left a methodological question open. For a genuine departure from reference practice, record with the affected owner the practice, scope and conditions, reason, closer alternatives and why they are inadequate, and consequences. The competent owner decides adoption. A verification departure also identifies the reviewer, evidence, judgment method, and inconclusive scope. A standing engineering change belongs here. There is no standing exception to Automation.
+
+### Test-first iteration
+
+One requirements-led iteration can proceed as follows.
+
+```text
+Discovery
+    ↓
+Formulation
+    ↓
+Evaluations — establish independent expectations and checks
+    ↓
+Design — select or refine mechanisms
+    ↓
+Candidate — realize mechanisms through instructions
+    ↓
+Evaluations — execute checks and assess evidence
+```
+
+Derive expectations from accepted intent or expressly accepted defining examples through the [independent evaluation trace](#cross-domain-traceability-and-feedback). Applicable checks guide authorized implementation and are then run against the identified candidate. Before claiming coverage, establish that a check distinguishes satisfying from violating the accepted condition. Existing satisfactory behavior can pass without an implementation edit.
+
+Evaluations owns both participation points and uses a single framework. The example follows the dependencies for one change. Activities can overlap or iterate where their dependencies allow, and [existing decision authority](#development-time-and-runtime-authority) applies throughout. Feedback can reopen any relevant stage. Technical feasibility findings can inform Discovery and Formulation. The [current traceability gaps](#current-traceability-gaps) limit how far today's evaluations implement this model.
 
 When an automated check cannot reliably distinguish satisfying from violating an obligation, report the gap and review the evidence. The [requester-guidance case](../04-evaluations/deliverables/cases/requester-guidance.md#human-review-and-interpretation) illustrates this limit. Future accepted examples remain subject to Automation.
 
@@ -32,8 +54,9 @@ Maintain separate design and evaluation paths. For requirements-led evaluation, 
 
 ```mermaid
 flowchart TD
-    O["Objectives and constraints"] --> D["Discovery and proposed formulation"]
-    D --> H["Requester or authorized delegate accepts a version"]
+    O["Objectives and constraints"] --> D["Discovery"]
+    D --> P["Proposed formulation"]
+    P --> H["Requester or authorized delegate accepts a version"]
     H --> R["Accepted behavior and defining examples"]
     R --> M["Selected mechanism and design rationale"]
     R --> E["Independent evaluation expectation"]
@@ -42,6 +65,7 @@ flowchart TD
     X --> V["Review: finding, uncertainty, and applicable authority"]
     E --> V
     V -.-> D
+    V -.-> P
     V -.-> M
     V -.-> C
     V -.-> E
@@ -59,13 +83,15 @@ The diagram shows the intended trace for requirements-led work. Follow the dashe
 
 Store each relationship once at its dependent or the clause index, using exact IDs, targets, and versions for reverse lookup. Inspect direct dependents and each link's role. A fixture change raises observation and comparability questions; a changed expected verdict under unchanged accepted conditions raises an interpretation or authority question. Shared terminology alone proves no trace link.
 
-**Current gaps:** no proposed example is accepted as defining, and explicit requirement-to-evaluation traceability remains later work. Existing cases retain their clause-based regression or design-conformance interpretation; they are not retroactively requirements-derived acceptance tests. The clause index links accepted outcomes to current mechanisms without proving complete realization. [Discovery](../01-behavior/deliverables/discovery.md#formulation-questions-and-evidence-limits) and the [evaluation model](../04-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) identify formulation and coverage limits.
+### Current traceability gaps
+
+No proposed example is accepted as defining, and explicit requirement-to-evaluation traceability remains later work. Existing cases retain their clause-based regression or design-conformance interpretation; they are not retroactively requirements-derived acceptance tests. The clause index links accepted outcomes to current mechanisms without proving complete realization. [Discovery](../01-behavior/deliverables/discovery.md#formulation-questions-and-evidence-limits) and the [evaluation model](../04-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) identify formulation and coverage limits.
 
 ## Development-time and runtime authority
 
-**Engineering decisions.** Product objectives, established requirements and constraints, accepted engineering decisions, and requester direction govern contract evolution and intended evaluation expectations. The requester or explicitly authorized delegate decides outcomes, priorities, and product acceptance. Record the authorized scope, version, and decision authority; requirement acceptance, design selection, implementation permission, and release permission are distinct. BDD agreement, documentation edits, and evaluation results grant none automatically.
+**Engineering decisions.** Product objectives, established requirements and constraints, accepted engineering decisions, and requester direction govern contract evolution and intended evaluation expectations. The requester or explicitly authorized delegate decides outcomes, priorities, and product acceptance. Record the authorized scope, version, and decision authority; requirement acceptance, design selection, implementation permission, and release permission are distinct. BDD agreement, documentation edits, and evaluation results grant none automatically. The [five-stage decision](decisions.md#five-stage-bdd-aligned-engineering-pipeline) records target approval and documentation authorization. Migration requires separate implementation authorization and acceptance of the verified result.
 
-Behavior records the [established objectives](../01-behavior/deliverables/objectives-and-rationale.md#established-objectives) and the [accepted requirements and constraints](../01-behavior/deliverables/baseline.md). [Contract design](../02-design/deliverables/contract-design.md) specifies their selected realization. See [status and evidence boundaries](#status-and-evidence-boundaries) for their authority and provenance.
+In the implemented layout, Behavior records the [established objectives](../01-behavior/deliverables/objectives-and-rationale.md#established-objectives) and the [accepted requirements and constraints](../01-behavior/deliverables/baseline.md). [Contract design](../02-design/deliverables/contract-design.md) specifies their selected realization. See [status and evidence boundaries](#status-and-evidence-boundaries) for their authority and provenance.
 
 **Repository applicability.** Established engineering direction adopts [bounded work with sufficient depth](../02-design/deliverables/mechanisms/work-cycle.md#small-commitments-with-sufficient-depth), [adequate validation](../02-design/deliverables/mechanisms/engineering-and-validation.md#validation-and-test-evidence), [behavior preservation](../02-design/deliverables/mechanisms/engineering-and-validation.md#component-boundaries-refactoring-and-validation), [canonical knowledge ownership](../02-design/deliverables/mechanisms/knowledge-and-documentation.md#dry-keeping-knowledge-consistent-as-work-progresses), and appropriate [documentation](../02-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices) and [decision records](../02-design/deliverables/mechanisms/knowledge-and-documentation.md#adrs-preserving-the-reasons-for-lasting-choices). This scoped adoption is subject to developer direction, higher-priority instructions, and actual permissions; it does not adopt the entire candidate or automatically apply consumer-specific loading or protected-file rules to this repository.
 
@@ -105,7 +131,7 @@ Limit claims to the tools, environments, and behavior actually exercised. The [e
 
 Choose the owner by responsibility and scope before choosing a filename. Give each detailed fact, requirement, interface, procedure, explanation, or decision one canonical owner. Other documents may summarize for their readers and link directly to that owner, retaining qualifications needed to avoid misleading them. A copy that readers could treat as authoritative, or that needs independent maintenance to stay correct, creates a second owner. If navigation disagrees with its owner, correct navigation.
 
-Accepted requirements, selected design, runtime instructions, evaluation definitions, and observations each have their own status and owner. [Root architecture](architecture.md#stage-interfaces) defines the stage interfaces. Each stage owns its implementation, procedures, and maintenance guidance. Root and stage READMEs orient and navigate. Place rationale where a reader needs it to interpret the deliverable. Link to the relevant stage or system-wide decision record for the history of a lasting choice.
+Accepted requirements, selected design, runtime instructions, evaluation definitions, and observations each have their own status and owner. Root architecture defines the [implemented interfaces](architecture.md#stage-interfaces) and the [target documentation layout](architecture.md#target-documentation-layout). Each stage owns its implementation, procedures, and maintenance guidance. Root and engineering stage READMEs orient and navigate. Place rationale where a reader needs it to interpret the deliverable. Link to the relevant stage or system-wide decision record for the history of a lasting choice.
 
 The consumer guides may overlap at different depths while remaining independently useful. Summaries preserve contract strengths, conditions, and exceptions without competing rules. Keep essential practical explanations self-contained or link to product documentation, the contract, or external sources; removing engineering navigation must not remove useful consumer knowledge. [Contract explanation review](../02-design/docs/design-review.md#reviewing-contract-explanations) owns audience and comprehension checks.
 

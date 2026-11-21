@@ -20,7 +20,15 @@ When an automated check cannot reliably distinguish satisfying from violating an
 
 ## Cross-domain traceability and feedback
 
-Maintain separate design and evaluation paths. Evaluation expectations derive from accepted intent or expressly defining examples and are fixed before judging the candidate; candidate wording alone cannot authorize the expected result.
+Read a cross-stage reference according to the question it answers. A link can serve more than one purpose.
+
+| Relationship | Question it answers | Example |
+| --- | --- | --- |
+| Authority dependency | Which source governs this decision, and within what scope? | An accepted requirement constrains mechanism selection. Its conditions and exceptions apply to the design choice. |
+| Traceability relationship | Which items are connected, and what does the connection establish? | A clause-index entry connects a contract clause to its mechanism and supported intent. The link records that correspondence without granting product acceptance to the mechanism. |
+| Navigation reference | Where should the reader go next? | A stage README points to a case or a specification. A moved destination calls for a link correction. |
+
+Maintain separate design and evaluation paths. For requirements-led evaluation, derive the expectation from accepted intent or an expressly accepted defining example and fix it before judging the candidate. Candidate wording alone cannot authorize the expected result.
 
 ```mermaid
 flowchart TD
@@ -31,12 +39,15 @@ flowchart TD
     R --> E["Independent evaluation expectation"]
     M --> C["Versioned contract candidate"]
     C --> X["Observed behavior and retained evidence"]
-    E --> X
     X --> V["Review: finding, uncertainty, and applicable authority"]
+    E --> V
     V -.-> D
+    V -.-> M
+    V -.-> C
+    V -.-> E
 ```
 
-This is the model for future accepted changes, not a claim of completed coverage. The dashed feedback path returns questions to Discovery without granting authority.
+The diagram shows the intended trace for requirements-led work. Follow the dashed feedback path relevant to a finding. Review can reopen a question in any stage within the existing decision authority.
 
 | Relationship | What to retain |
 | --- | --- |
@@ -94,7 +105,7 @@ Limit claims to the tools, environments, and behavior actually exercised. The [e
 
 Choose the owner by responsibility and scope before choosing a filename. Give each detailed fact, requirement, interface, procedure, explanation, or decision one canonical owner. Other documents may summarize for their readers and link directly to that owner, retaining qualifications needed to avoid misleading them. A copy that readers could treat as authoritative, or that needs independent maintenance to stay correct, creates a second owner. If navigation disagrees with its owner, correct navigation.
 
-Accepted requirements, selected design, runtime instructions, evaluation definitions, and observations are distinct representations with their own status and owners; related content across them is not automatically duplication. [Root architecture](architecture.md#current-bdd-first-organization) defines stage responsibilities and shared interfaces. Each stage owns its implementation, procedures, and maintenance guidance. Root and stage READMEs orient and navigate without adding specifications or procedures.
+Accepted requirements, selected design, runtime instructions, evaluation definitions, and observations each have their own status and owner. [Root architecture](architecture.md#stage-interfaces) defines the stage interfaces. Each stage owns its implementation, procedures, and maintenance guidance. Root and stage READMEs orient and navigate. Place rationale where a reader needs it to interpret the deliverable. Link to the relevant stage or system-wide decision record for the history of a lasting choice.
 
 The consumer guides may overlap at different depths while remaining independently useful. Summaries preserve contract strengths, conditions, and exceptions without competing rules. Keep essential practical explanations self-contained or link to product documentation, the contract, or external sources; removing engineering navigation must not remove useful consumer knowledge. [Contract explanation review](../02-design/docs/design-review.md#reviewing-contract-explanations) owns audience and comprehension checks.
 
@@ -116,9 +127,13 @@ For a substantial rewrite, keep a temporary old-to-new content map with reasons 
 
 ### Finding an owner and checking a change
 
-Start with the [stage that owns the proposed change](architecture.md#current-bdd-first-organization). Use Behavior's [rationale map](../01-behavior/deliverables/objectives-and-rationale.md#rationale-map) and [proposed examples](../01-behavior/deliverables/discovery.md#requirement-to-scenario-coverage) to trace intent, and Design's [clause index](../02-design/deliverables/contract-design.md#contract-clause-index) to trace realization. For a run, compare the selected [case specification](../04-evaluations/README.md#case-specifications) with its [retained evidence](../04-evaluations/docs/running-and-reviewing.md#results-evidence-and-failure-investigation).
+A contributor, optionally working with an agent, uses judgment to turn existing intent, design, or findings into a new or revised deliverable.
 
-Before changing an owner, identify affected direct dependents, applicable decision authority, and evidence that would verify the change, using the distinctions above. For PR1, follow [R5's artifact-inspection route](../01-behavior/deliverables/objectives-and-rationale.md#r5).
+1. Start with the question and its [responsible stage](architecture.md#stage-interfaces). Read its current deliverable alongside the assumptions, constraints, and decisions that explain it. For a run, start with the [case specification](../04-evaluations/README.md#case-specifications) and [retained evidence](../04-evaluations/docs/running-and-reviewing.md#results-evidence-and-failure-investigation).
+2. Decide what the deliverable needs to express and which choices are settled. Use Behavior's [rationale map](../01-behavior/deliverables/objectives-and-rationale.md#rationale-map) to understand an outcome and Design's [clause index](../02-design/deliverables/contract-design.md#contract-clause-index) to find its current realization. Where several formulations or mechanisms fit, weigh them against the stage's purpose and constraints. Keep unresolved intent in [Discovery](../01-behavior/deliverables/discovery.md#formulation-questions-and-evidence-limits) and apply the [existing decision authority](#development-time-and-runtime-authority) to the choice.
+3. Identify the direct dependents and the evidence that would verify the change. PR1, for instance, has a [direct artifact-inspection route](../01-behavior/deliverables/objectives-and-rationale.md#r5). Make the authorized change at its owner, check the result, and follow affected references according to their [relationship](#cross-domain-traceability-and-feedback). Continue along a trace when the change affects what the next owner relies on.
+
+For example, in the [requester-guidance case](../04-evaluations/deliverables/cases/requester-guidance.md#human-review-and-interpretation), an agent can pass the response-presence check while guessing the missing timezone. A reviewer reads the response and workspace evidence against the rubric. If the fixture supplied the timezone by mistake, the correction belongs in Evaluations. If review instead exposes an unsettled question about when the agent may assume a value, take that question to Behavior. A passing assertion settles neither question.
 
 ## Specification-to-evaluation dependencies
 

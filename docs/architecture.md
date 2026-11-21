@@ -1,31 +1,29 @@
 # AGENTS-spec engineering architecture
 
-AGENTS-spec develops a reusable, self-contained [operating contract](../03-candidate/pre_AGENTS.md) for coding agents. Behavior establishes product intent, Design selects its realization, Candidate stages the consumer files, and Evaluations assess the candidate. This overview maps stage boundaries and owners. See [authority and change](authority-and-change.md) for change guidance and [system-wide engineering decisions](decisions.md) for rationale.
+AGENTS-spec develops a reusable, self-contained [operating contract](../03-candidate/pre_AGENTS.md) for coding agents. This overview defines the pipeline and the interfaces between its stages. Each stage maintains the substance of its own deliverables. See [authority and change](authority-and-change.md) for change guidance and [system-wide engineering decisions](decisions.md) for rationale.
 
 ## Purpose and scope
 
 Engineering documentation supports understanding, changing, and verifying the product. Consumer artifacts contain no references or dependencies back into it. The delivered `AGENTS.md` contains the complete runtime instructions; the bridges load or direct tools to it, and the two consumer guides explain adoption and use.
 
-### Current BDD-first organization
+## Current BDD-first organization
 
-**Objectives → Requirements → Mechanisms → AGENTS.md → Evaluations** spans four stages. Use the stage entry points for their deliverables and supporting documentation.
+**Objectives → Requirements → Mechanisms → Candidate AGENTS.md → Evaluations** spans four stages. Behavior owns the first two steps. Contributors can start at any stage and revisit another when a finding calls its premises into question. Knowledge maintenance spans all four.
 
-| Stage | Responsibility |
-| --- | --- |
-| [01 — Behavior](../01-behavior/README.md) | Owns objectives and their rationale, accepted requirements and constraints, and discovery of proposed examples. |
-| [02 — Design](../02-design/README.md) | Selects mechanisms that realize accepted intent and records their rationale and relationship to contract clauses. |
-| [03 — Candidate](../03-candidate/pre_AGENTS.md) | Stages the self-contained runtime instructions, two bridges, and two consumer guides. The [adoption guide](../03-candidate/pre_README.md) explains installation. |
-| [04 — Evaluations](../04-evaluations/README.md) | Owns cases, evaluator requirements, and the framework that exercises a staged candidate and produces observations and evidence for review. |
+Behavior, Design, and Evaluations place their outputs in `deliverables/`. Their READMEs locate those outputs and the supporting knowledge in each stage's `docs/`. Candidate contains only the five [staged consumer artifacts](#staged-sources-and-release-relative-references). The [stage layout decision](decisions.md#stage-deliverables-and-the-candidate-staging-exception) explains why.
 
-Behavior, Design, and Evaluations each have three immediate entries: `README.md` for orientation, `docs/` for supporting explanations and maintenance knowledge, and `deliverables/` for substantive artifacts. Candidate is the exception: exactly five consumer files at its root, with no engineering README or container directories. Design prescriptions stay with their necessary rationale rather than being split by normative status.
+### Stage interfaces
 
-Numbers show conceptual progression, not mandatory sequential gates. BDD Discovery, Formulation, and Automation iterate across these responsibility owners; knowledge maintenance spans them all. Directory ownership identifies where knowledge is maintained, not who can accept or authorize a change.
+Use the row for the stage you are working in. Its inputs can constrain a decision or supply evidence for one. The [authority and status of each source](authority-and-change.md#development-time-and-runtime-authority) determine which choices are open.
 
-## Principal boundaries
+| Stage | Inputs used | Outputs owned here | What others use |
+| --- | --- | --- | --- |
+| [Behavior](../01-behavior/README.md) | Requester direction, established constraints, proposals, and feedback about unclear or unmet intent | [Objectives and rationale](../01-behavior/deliverables/objectives-and-rationale.md), [requirements baseline](../01-behavior/deliverables/baseline.md), and [Discovery proposals and questions](../01-behavior/deliverables/discovery.md) | Design and Evaluations use accepted intent and applicable constraints. Discovery exposes open questions and examples for review with their proposal status. |
+| [Design](../02-design/README.md) | Accepted intent, applicable constraints, and existing design decisions | Mechanism specifications with their rationale and limits, and [records of decisions and alternatives](../02-design/docs/decisions.md) | Candidate uses the selected mechanisms. The [contract clause index](../02-design/deliverables/contract-design.md#contract-clause-index) connects clauses to their specifications and supported intent. |
+| [Candidate](../03-candidate/) | Selected design, delivery constraints, and the existing staged text | The [staged contract](../03-candidate/pre_AGENTS.md), two bridges, and two consumer guides | Consumers use the delivered package. The evaluator exercises an identified version of the contract. Engineering trace links stay outside the package. |
+| [Evaluations](../04-evaluations/README.md) | The candidate under test, case conditions, and the basis for the expected result | [Case specifications and evaluator requirements](../04-evaluations/README.md#case-specifications), the framework, and the evidence it produces | Reviewers compare [observations and results](../04-evaluations/docs/running-and-reviewing.md#results-evidence-and-failure-investigation) with the case criteria to identify what was exercised and which owner can address a finding. |
 
-Accepted intent guides both design and evaluation expectations. Design relates selected mechanisms to the staged contract; evaluations exercise an identified candidate and return findings for review. These are separate paths: implementation wording alone cannot establish intended behavior or an independent expected result. The [traceability model](authority-and-change.md#cross-domain-traceability-and-feedback) explains their links, feedback, and remaining coverage gaps.
-
-The dependency runs from Evaluations to Candidate. Consumers can use the contract independently of the evaluator. A contract edit can affect both what the next run exercises and how its results should be assessed. See the shared [authority model](authority-and-change.md#development-time-and-runtime-authority) and [change-impact guidance](authority-and-change.md#change-impact).
+In requirements-led evaluation, Behavior supplies accepted intent for the independent expectation. Candidate supplies the instructions given to the agent under observation. The [traceability and feedback model](authority-and-change.md#cross-domain-traceability-and-feedback) explains how to retain both paths and how to interpret the current clause-based cases. Consumers can use the contract independently of the evaluator.
 
 ### Staged sources and release-relative references
 

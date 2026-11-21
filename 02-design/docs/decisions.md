@@ -19,7 +19,7 @@ The index points to canonical reasons and consequences without turning every exp
 
 ### Historical source and interpretation
 
-The PDSA-era maintainer guide (`README-maintainers.md`) explains how effort baselines, inquiry declarations, and reporting restrictions were intended to bound work and keep it visible. The four records below concern superseded operating mechanisms. The guide supplies no independent evidence of product acceptance of each detail, agent adherence, or token savings. The [staged contract](../../03-contract/prerelease_AGENTS.md) contains the current operating rules.
+The PDSA-era maintainer guide (`README-maintainers.md`) explains how effort baselines, inquiry declarations, and reporting restrictions were intended to bound work and keep it visible. The four records below concern superseded operating mechanisms. The guide supplies no independent evidence of product acceptance of each detail, agent adherence, or token savings. The [staged contract](../../03-candidate/pre_AGENTS.md) contains the current operating rules.
 
 ### Superseded effort-baseline checkpoint
 

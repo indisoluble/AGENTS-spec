@@ -44,15 +44,15 @@ The dedicated `automation/` stage was a rejected alternative. Moving the evaluat
 
 **The requester accepted the structure and authorized local implementation of stage placement and documentation ownership.** Independent acceptance of the finished implementation is unverified.
 
-Behavior owns accepted intent, discovery, and proposed examples. Design selects mechanisms and explains their rationale. Contract stages the five consumer files. Evaluations exercise an identified candidate and supply observations, assessments, and evidence. Numbering makes that progression visible while allowing findings to reopen questions in any stage.
+Behavior owns accepted intent, discovery, and proposed examples. Design selects mechanisms and explains their rationale. Candidate stages the five consumer files. Evaluations exercise an identified candidate and supply observations, assessments, and evidence. Numbering makes that progression visible while allowing findings to reopen questions in any stage.
 
 Root and engineering stage READMEs orient readers. A flat structure would save navigation steps but obscure which artifacts are deliverables and which support their maintenance. Editing guidance that affects multiple stages belongs with shared change authority.
 
-### Stage deliverables and the Contract staging exception
+### Stage deliverables and the Candidate staging exception
 
 **The requester accepted the structure and authorized local implementation, including the evaluation package rename.** Separate acceptance of the completed implementation is unverified.
 
-Behavior, Design, and Evaluations each have a README for orientation, `docs/` for supporting explanations, and `deliverables/` for substantive artifacts. Prescriptions stay with the rationale needed to apply them. Contract stages exactly five consumer files at its root. Engineering navigation or an extra container there would obscure the delivery boundary. See the [stage layout](architecture.md#current-bdd-first-organization).
+Behavior, Design, and Evaluations each have a README for orientation, `docs/` for supporting explanations, and `deliverables/` for substantive artifacts. Prescriptions stay with the rationale needed to apply them. Candidate stages exactly five consumer files at its root. Engineering navigation or an extra container there would obscure the delivery boundary. See the [stage layout](architecture.md#current-bdd-first-organization).
 
 The evaluation package itself is `deliverables`. Wrapping a package named `evaluations` in a `deliverables/` directory would add a level with no distinct responsibility. The requester explicitly authorized the import-interface change from `evaluations.*` to `deliverables.*` without compatibility packages, launchers, aliases, or symlinks. Callers must use the current name. Keeping package depth stable preserves relative lookups for the contract, subprocess working directories, and evidence. The operations guide documents the [invocation](../04-evaluations/docs/running-and-reviewing.md#setup-and-running-evaluations) and [retained evidence locations](../04-evaluations/docs/running-and-reviewing.md#retained-evidence).
 

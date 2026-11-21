@@ -4,7 +4,7 @@ All examples remain **proposed and unaccepted**. See [classifications and shared
 
 ## PR1 — Self-contained operating contract
 
-Requirement: [PR1](../baseline.md#established-product-requirement). Current qualification evidence: [design explanation](../../../02-design/deliverables/contract-design.md#design-goals-and-boundaries), [contract](../../../03-contract/prerelease_AGENTS.md) Complete contract; §§3.8–3.9.
+Requirement: [PR1](../baseline.md#established-product-requirement). Current qualification evidence: [design explanation](../../../02-design/deliverables/contract-design.md#design-goals-and-boundaries), [contract](../../../03-candidate/pre_AGENTS.md) Complete contract; §§3.8–3.9.
 
 ### PR1.1 — Check the delivered file against the full duty set
 

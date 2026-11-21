@@ -12,7 +12,7 @@ Before exceeding requester-imposed effort/scope limits or passing checkpoints, t
 
 Before expanding planned work or starting another increment/attempt, the agent MUST reassess cumulative progress, remaining work, established direction, and applicable limits, and justify the next increment's contribution to the task objective from evidence; otherwise it MUST seek direction. Assessing increments cumulatively prevents small additions from concealing unrelated work or a material departure. Small increments and bounded inquiry do not guarantee low total consumption.
 
-The [decision guard](../../../03-contract/prerelease_AGENTS.md#22-decisions-and-requester-interaction) preserves distinct strengths:
+The [decision guard](../../../03-candidate/pre_AGENTS.md#22-decisions-and-requester-interaction) preserves distinct strengths:
 
 | Situation | Current prescription |
 | --- | --- |
@@ -40,7 +40,7 @@ Material findings that are also durable project knowledge MUST be recorded with 
 
 A permanent record is the canonical project document owning the topic; chat and working notes do not suffice. If none is suitable, the agent MUST create the minimum record holding only the findings and evidence, without placeholders, empty sections, or backfill. Other gaps remain improvement proposals. A finding alone triggers no ADR. If writing is prohibited, the unmet duty MUST be reported as unfinished work; chat disclosure cannot satisfy it.
 
-Record triggers grant no authority. Permission does not turn optional [debt recording](knowledge-and-documentation.md#recording-technical-debt) into a duty; a required record cannot authorize implementation or decision acceptance. The [practical review examples](../../../03-contract/prerelease_README-powerusers.md#records-during-review-and-exploration) distinguish these cases and no-edit restrictions.
+Record triggers grant no authority. Permission does not turn optional [debt recording](knowledge-and-documentation.md#recording-technical-debt) into a duty; a required record cannot authorize implementation or decision acceptance. The [practical review examples](../../../03-candidate/pre_README-powerusers.md#records-during-review-and-exploration) distinguish these cases and no-edit restrictions.
 
 ## Reporting and continued execution
 
@@ -58,7 +58,7 @@ The recommendations avoid narration for every increment while permitting useful 
 
 Later increments need no mandatory planning message; further inquiry attempts require evidence and reassessment without an automatic new announcement or inquiry-end report. Record and documentation maintenance retain their own triggers rather than waiting for chat. Nonblocking debt disclosures SHOULD normally join the next consolidated report. No reporting log, worksheet, or per-increment record is required. Requester and tool reporting instructions remain applicable.
 
-The [reporting rule](../../../03-contract/prerelease_AGENTS.md#37-reporting) also specifies content and delivery:
+The [reporting rule](../../../03-candidate/pre_AGENTS.md#37-reporting) also specifies content and delivery:
 
 | Concern | Current prescription |
 | --- | --- |
@@ -70,4 +70,4 @@ The [reporting rule](../../../03-contract/prerelease_AGENTS.md#37-reporting) als
 
 A handoff report MUST transfer the task objective and established direction; applicable limits/checkpoints and consumed allowances; the next/unfinished increment's objective, bounds, and acceptance conditions; and relevant inquiry conclusions, evidence, and unresolved uncertainty. Meaningful results and continuation state preserve authorization and evidence across contexts; an activity log cannot substitute. On resumption, the agent MUST use that state, recovering missing authorization/limit information or obtaining requester direction before dependent work. A handoff grants no fresh allowance.
 
-This design permits less routine visibility while authorized work continues, with useful updates and requester-selected reporting available. Limits, reassessment, inquiry bounds, and consequential consultation still control progress. Message counts alone establish neither compliance nor token savings. The [usage guide](../../../03-contract/prerelease_README-powerusers.md#when-the-agent-pauses-or-continues) explains the requester-facing interaction.
+This design permits less routine visibility while authorized work continues, with useful updates and requester-selected reporting available. Limits, reassessment, inquiry bounds, and consequential consultation still control progress. Message counts alone establish neither compliance nor token savings. The [usage guide](../../../03-candidate/pre_README-powerusers.md#when-the-agent-pauses-or-continues) explains the requester-facing interaction.

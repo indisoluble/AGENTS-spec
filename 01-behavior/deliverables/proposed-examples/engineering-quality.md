@@ -4,7 +4,7 @@ All examples remain **proposed and unaccepted**. See [classifications and shared
 
 ## BR9 — Engineering quality and preservation
 
-Requirement: [BR9](../baseline.md#br9--engineering-quality-and-preservation). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/engineering-and-validation.md#component-boundaries-refactoring-and-validation), [contract](../../../03-contract/prerelease_AGENTS.md) §§1.2–1.3.
+Requirement: [BR9](../baseline.md#br9--engineering-quality-and-preservation). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/engineering-and-validation.md#component-boundaries-refactoring-and-validation), [contract](../../../03-candidate/pre_AGENTS.md) §§1.2–1.3.
 
 ### BR9.1 — Refactor without changing observable behavior
 

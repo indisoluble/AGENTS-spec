@@ -62,7 +62,7 @@ Topic 11 includes known risks beyond internal-quality compromises: external depe
 
 > If an input row has a different number of fields from the header, then the importer shall reject that row and report its line number.
 
-The pattern exposes behavior to implement/check; it cannot decide row versus file rejection or the line-number convention. Those remain project decisions. Under [§3.1](../../../03-contract/prerelease_AGENTS.md#31-new-or-revised-system-requirements), new/revised in-scope system requirements MUST have canonical owners and consistently express verifiable behavior as `<prefix> the <system> shall <response>.` Unchanged requirements need no automatic conversion; restating a canonical requirement MUST NOT duplicate it.
+The pattern exposes behavior to implement/check; it cannot decide row versus file rejection or the line-number convention. Those remain project decisions. Under [§3.1](../../../03-candidate/pre_AGENTS.md#31-new-or-revised-system-requirements), new/revised in-scope system requirements MUST have canonical owners and consistently express verifiable behavior as `<prefix> the <system> shall <response>.` Unchanged requirements need no automatic conversion; restating a canonical requirement MUST NOT duplicate it.
 
 | Pattern | Prefix |
 | --- | --- |

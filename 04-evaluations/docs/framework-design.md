@@ -76,7 +76,7 @@ The probe runs trusted local code through the actual helper, checking readable f
 
 ### Directory layout and ownership
 
-Paths below are relative to `04-evaluations/`, where evaluator commands run. `deliverables/` is the Python package; generated evidence stays outside it in `.eval-runs/`. The [hierarchy decision](#evaluation-framework-package-and-verification-hierarchy) explains code and test ownership. The [stage layout decision](../../docs/decisions.md#stage-deliverables-and-the-contract-staging-exception) records the package name, placement, and import compatibility boundary.
+Paths below are relative to `04-evaluations/`, where evaluator commands run. `deliverables/` is the Python package; generated evidence stays outside it in `.eval-runs/`. The [hierarchy decision](#evaluation-framework-package-and-verification-hierarchy) explains code and test ownership. The [stage layout decision](../../docs/decisions.md#stage-deliverables-and-the-candidate-staging-exception) records the package name, placement, and import compatibility boundary.
 
 | Path | Owns |
 | --- | --- |
@@ -161,7 +161,7 @@ Internal module locations and imports are implementation details unless a docume
 
 ### Contract injection and fixture inputs
 
-`CONTRACT_PATH` in [workspace.py](../deliverables/runtime/workspace.py) resolves to `03-contract/prerelease_AGENTS.md`. Each workspace receives its current bytes as root `AGENTS.md` under [E1](../deliverables/requirements/workspace-and-observation.md#e1) and [E22](../deliverables/requirements/workspace-and-observation.md#e22). The candidate is unpinned. The [offline copy check](../deliverables/tests/scenarios/test_smoke.py) compares the injected bytes with the same current source, so a wording change alone does not fail that check.
+`CONTRACT_PATH` in [workspace.py](../deliverables/runtime/workspace.py) resolves to `03-candidate/pre_AGENTS.md`. Each workspace receives its current bytes as root `AGENTS.md` under [E1](../deliverables/requirements/workspace-and-observation.md#e1) and [E22](../deliverables/requirements/workspace-and-observation.md#e22). The candidate is unpinned. The [offline copy check](../deliverables/tests/scenarios/test_smoke.py) compares the injected bytes with the same current source, so a wording change alone does not fail that check.
 
 Fixture mappings use relative paths and exact bytes. Workspace preparation creates their parent directories and rejects absolute paths, parent traversal, and root-contract overrides. An explicit mapping replaces the default fixture, and an empty mapping adds no files beyond the contract. The documented [smoke convenience](../deliverables/scenarios/smoke.py), `smoke.evaluate`, retains its optional dataset, `initial_contents`, and `fixture_files` arguments: without a mapping it supplies `message.txt` using the selected initial contents; shared workspace preparation itself requires an explicit mapping.
 
@@ -181,7 +181,7 @@ These records explain the evaluation-specific decisions and their scope. The [sy
 
 ### Evaluation framework package and verification hierarchy
 
-**The requester accepted the code and test hierarchy** on the basis of the alternatives and incremental implementation plan. The [stage layout decision](../../docs/decisions.md#stage-deliverables-and-the-contract-staging-exception) separately authorizes the `deliverables` package name and placement.
+**The requester accepted the code and test hierarchy** on the basis of the alternatives and incremental implementation plan. The [stage layout decision](../../docs/decisions.md#stage-deliverables-and-the-candidate-staging-exception) separately authorizes the `deliverables` package name and placement.
 
 The CLI composes cases. Shared runtime machinery imports no scenario. Each scenario owns its prompt, fixture, assessment policy, and any functional checks or rubric. Reuse between scenarios is explicit, as when independent-execution uses the requester-guidance fixture. The [directory layout](#directory-layout-and-ownership) gives each scenario one module and a corresponding offline test module. Runtime tests cover shared guarantees, including cross-scenario CLI behavior. Test substitutes have their own owner outside production code.
 

@@ -4,7 +4,7 @@ All examples remain **proposed and unaccepted**. See [classifications and shared
 
 ## BR8 — Durable knowledge without expanded editing authority
 
-Requirement: [BR8](../baseline.md#br8--durable-knowledge-without-expanded-editing-authority). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [contract](../../../03-contract/prerelease_AGENTS.md) §§2.1, 3.2–3.4, 3.8.
+Requirement: [BR8](../baseline.md#br8--durable-knowledge-without-expanded-editing-authority). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [contract](../../../03-candidate/pre_AGENTS.md) §§2.1, 3.2–3.4, 3.8.
 Decision and debt detail: [ADRs](../../../02-design/deliverables/mechanisms/knowledge-and-documentation.md#adrs-preserving-the-reasons-for-lasting-choices), [technical debt](../../../02-design/deliverables/mechanisms/knowledge-and-documentation.md#recording-technical-debt).
 
 ### BR8.1 — Record a lasting finding where it belongs
@@ -65,7 +65,7 @@ Decision and debt detail: [ADRs](../../../02-design/deliverables/mechanisms/know
 
 ## BR10 — Affected requirements and documentation
 
-Requirement: [BR10](../baseline.md#br10--affected-requirements-and-documentation). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices), [contract](../../../03-contract/prerelease_AGENTS.md) §§3.1, 3.5–3.6.
+Requirement: [BR10](../baseline.md#br10--affected-requirements-and-documentation). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices), [contract](../../../03-candidate/pre_AGENTS.md) §§3.1, 3.5–3.6.
 
 ### BR10.1 — Separate lasting behavior from task-only checks
 

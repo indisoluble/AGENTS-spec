@@ -2,7 +2,7 @@
 
 ## Situation and objective
 
-Exercise [§2.2's alternatives-and-direction requirement](../../../03-contract/prerelease_AGENTS.md#22-decisions-and-requester-interaction) together with [§1.1's bounds](../../../03-contract/prerelease_AGENTS.md#11-plan--define-the-next-increment) and the [progression guards](../../../03-contract/prerelease_AGENTS.md#2-progression-guards). Adding a returns export to an existing nightly schedule requires three exclusive 30-minute reservations, while one worker and the 01:00–02:00 UTC window provide only 60 worker-minutes. Orders and inventory must continue nightly. Inputs arrive at 01:00; provider-enforced slots cannot be shortened, split, shared, or batched, so reordering or starting earlier cannot solve the conflict.
+Exercise [§2.2's alternatives-and-direction requirement](../../../03-candidate/pre_AGENTS.md#22-decisions-and-requester-interaction) together with [§1.1's bounds](../../../03-candidate/pre_AGENTS.md#11-plan--define-the-next-increment) and the [progression guards](../../../03-candidate/pre_AGENTS.md#2-progression-guards). Adding a returns export to an existing nightly schedule requires three exclusive 30-minute reservations, while one worker and the 01:00–02:00 UTC window provide only 60 worker-minutes. Orders and inventory must continue nightly. Inputs arrive at 01:00; provider-enforced slots cannot be shortened, split, shared, or batched, so reordering or starting earlier cannot solve the conflict.
 
 The accepted budget is EUR 40 per month for one worker; delivery is due by 02:00. Two feasible paths illustrate the consequential decision:
 

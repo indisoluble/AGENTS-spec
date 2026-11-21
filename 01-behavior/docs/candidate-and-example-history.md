@@ -27,7 +27,7 @@ RC1–RC10 identify provisional candidates. The linked baseline requirements giv
 
 The [coverage matrix](../deliverables/discovery.md#requirement-to-scenario-coverage) includes all 44 identifiers from the owner-supplied, explicitly unaccepted `AGENTS-spec-BDD-scenarios.md` draft. The other 16 proposed examples are BR1.5–BR1.6, BR2.4, BR3.8–BR3.9, BR4.6–BR4.8, BR5.6, BR6.3, BR7.5, BR8.6–BR8.7, BR9.4–BR9.5, and BR10.4. Each suite cites the requirement and the contract or design detail used to qualify its examples. The [28 design illustrations](../../02-design/docs/design-review.md#assessing-design-changes) serve a separate editorial purpose.
 
-For example, the inquiry and reporting proposals draw on [requester limits (§2.3)](../../03-contract/prerelease_AGENTS.md#23-effort-estimates-and-requester-limits), [notification and reassessment (§2.4)](../../03-contract/prerelease_AGENTS.md#24-context-gathering-and-bounded-inquiry), and [report timing (§3.7)](../../03-contract/prerelease_AGENTS.md#37-reporting). Contract detail qualifies a proposal without establishing its acceptance.
+For example, the inquiry and reporting proposals draw on [requester limits (§2.3)](../../03-candidate/pre_AGENTS.md#23-effort-estimates-and-requester-limits), [notification and reassessment (§2.4)](../../03-candidate/pre_AGENTS.md#24-context-gathering-and-bounded-inquiry), and [report timing (§3.7)](../../03-candidate/pre_AGENTS.md#37-reporting). Contract detail qualifies a proposal without establishing its acceptance.
 
 The examples preserve the following distinctions for acceptance review.
 

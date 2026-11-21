@@ -2,7 +2,7 @@
 
 Paths beginning with `deliverables/` are relative to `04-evaluations/`. For both scenario and shared evaluator changes, use ordinary functions and existing typed result records for composition, `Path` for filesystem boundaries, and bytes where exact fixture or evidence preservation matters.
 
-When applied in a consuming project, the candidate contract's [engineering rules](../../03-contract/prerelease_AGENTS.md#12-do--perform-the-authorized-work) and [validation rules](../../03-contract/prerelease_AGENTS.md#13-study--assess-completion-and-learning) cover production modules, tests, fixtures, and testing utilities alike. In this repository the staged candidate serves only as source material.
+When applied in a consuming project, the candidate contract's [engineering rules](../../03-candidate/pre_AGENTS.md#12-do--perform-the-authorized-work) and [validation rules](../../03-candidate/pre_AGENTS.md#13-study--assess-completion-and-learning) cover production modules, tests, fixtures, and testing utilities alike. In this repository the staged candidate serves only as source material.
 
 ## Change a scenario
 

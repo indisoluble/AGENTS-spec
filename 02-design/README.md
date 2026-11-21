@@ -1,6 +1,6 @@
 # 02 — Design
 
-Design takes [accepted requirements and constraints](../01-behavior/deliverables/baseline.md) and specifies the mechanisms for the [staged contract](../03-contract/prerelease_AGENTS.md), including how they fit together and why they were selected. Accepting a selected mechanism as an enduring product requirement requires a separate decision under the [shared authority rules](../docs/authority-and-change.md#status-and-evidence-boundaries).
+Design takes [accepted requirements and constraints](../01-behavior/deliverables/baseline.md) and specifies the mechanisms for the [staged contract](../03-candidate/pre_AGENTS.md), including how they fit together and why they were selected. Accepting a selected mechanism as an enduring product requirement requires a separate decision under the [shared authority rules](../docs/authority-and-change.md#status-and-evidence-boundaries).
 
 - To investigate a mechanism, find the clause in the [contract clause index](deliverables/contract-design.md#contract-clause-index) and follow the links to its specification, rationale, and the accepted intent it supports.
 - For ordinary increment planning, completion, and learning, see the [work cycle](deliverables/mechanisms/work-cycle.md). For investigation of uncertainty blocking the next decision, see [bounded inquiry](deliverables/mechanisms/bounded-inquiry.md).

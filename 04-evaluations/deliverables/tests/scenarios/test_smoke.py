@@ -80,7 +80,7 @@ class SmokeEvaluationTests(unittest.TestCase):
 
     def test_each_run_gets_fresh_fixture_and_unchanged_contract(self):
         repository = Path(__file__).resolve().parents[4]
-        self.assertEqual(CONTRACT_PATH, repository / "03-contract" / "prerelease_AGENTS.md")
+        self.assertEqual(CONTRACT_PATH, repository / "03-candidate" / "pre_AGENTS.md")
         original_contract = CONTRACT_PATH.read_bytes()
         observations = []
 

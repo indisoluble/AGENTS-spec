@@ -4,7 +4,7 @@ All examples remain **proposed and unaccepted**. See [classifications and shared
 
 ## BR1 — Focused, proportionate, authorized work
 
-Requirement: [BR1](../baseline.md#br1--focused-proportionate-authorized-work). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/work-cycle.md#small-commitments-with-sufficient-depth), [contract](../../../03-contract/prerelease_AGENTS.md) §§1.1, 2.3, 2.5.
+Requirement: [BR1](../baseline.md#br1--focused-proportionate-authorized-work). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/work-cycle.md#small-commitments-with-sufficient-depth), [contract](../../../03-candidate/pre_AGENTS.md) §§1.1, 2.3, 2.5.
 
 ### BR1.1 — Fix the defect and its necessary dependents
 
@@ -56,7 +56,7 @@ Requirement: [BR1](../baseline.md#br1--focused-proportionate-authorized-work). C
 
 ## BR2 — Evidence-based planning and knowledge ownership
 
-Requirement: [BR2](../baseline.md#br2--evidence-based-planning-and-knowledge-ownership). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices), [contract](../../../03-contract/prerelease_AGENTS.md) §1.1.
+Requirement: [BR2](../baseline.md#br2--evidence-based-planning-and-knowledge-ownership). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices), [contract](../../../03-candidate/pre_AGENTS.md) §1.1.
 
 ### BR2.1 — Inspect what matters before choosing the fix
 

@@ -4,7 +4,7 @@ All examples remain **proposed and unaccepted**. See [classifications and shared
 
 ## BR4 — Bounded investigation and timely reassessment
 
-Requirement: [BR4](../baseline.md#br4--bounded-investigation-and-timely-reassessment). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/bounded-inquiry.md), [contract](../../../03-contract/prerelease_AGENTS.md) §2.4; §§1.1, 2.3.
+Requirement: [BR4](../baseline.md#br4--bounded-investigation-and-timely-reassessment). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/bounded-inquiry.md), [contract](../../../03-candidate/pre_AGENTS.md) §2.4; §§1.1, 2.3.
 
 ### BR4.1 — Tell the requester what is blocking progress
 

@@ -4,7 +4,7 @@ All examples remain **proposed and unaccepted**. See [classifications and shared
 
 ## BR5 — Completion supported by validation
 
-Requirement: [BR5](../baseline.md#br5--completion-supported-by-validation). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/engineering-and-validation.md#validation-and-test-evidence), [contract](../../../03-contract/prerelease_AGENTS.md) §1.3.
+Requirement: [BR5](../baseline.md#br5--completion-supported-by-validation). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/engineering-and-validation.md#validation-and-test-evidence), [contract](../../../03-candidate/pre_AGENTS.md) §1.3.
 
 ### BR5.1 — Run relevant checks that are available
 
@@ -58,7 +58,7 @@ Requirement: [BR5](../baseline.md#br5--completion-supported-by-validation). Curr
 
 ## BR6 — Learning from observed results
 
-Requirement: [BR6](../baseline.md#br6--learning-from-observed-results). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/work-cycle.md#learning-throughout-the-work), [contract](../../../03-contract/prerelease_AGENTS.md) §§1, 1.3–1.4.
+Requirement: [BR6](../baseline.md#br6--learning-from-observed-results). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/work-cycle.md#learning-throughout-the-work), [contract](../../../03-candidate/pre_AGENTS.md) §§1, 1.3–1.4.
 
 ### BR6.1 — Change the approach without changing the goal
 

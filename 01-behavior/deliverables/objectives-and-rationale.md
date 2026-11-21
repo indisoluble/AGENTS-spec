@@ -12,7 +12,7 @@ This document records what AGENTS-spec aims to achieve and why its [accepted req
 
 These are intended effects. Textual consistency, file size, message counts, and selected methods do not establish measured token savings, comprehension, or agent adherence. Quantitative thresholds and comprehensive behavioral acceptance criteria have not been independently established here.
 
-The [contract design](../../02-design/deliverables/contract-design.md#design-goals-and-boundaries) identifies token control as the first objective and requester awareness and consequential control as the second. The documentation-maintenance guide independently specified the same priority for the [adoption guide](../../03-contract/prerelease_README.md), as reflected in the [reader guidance](../../02-design/docs/design-review.md#reader-paths).
+The [contract design](../../02-design/deliverables/contract-design.md#design-goals-and-boundaries) identifies token control as the first objective and requester awareness and consequential control as the second. The documentation-maintenance guide independently specified the same priority for the [adoption guide](../../03-candidate/pre_README.md), as reflected in the [reader guidance](../../02-design/docs/design-review.md#reader-paths).
 
 ## Rationale map
 
@@ -44,6 +44,6 @@ Accepted requirements: [BR2](baseline.md#br2--evidence-based-planning-and-knowle
 
 ### R5
 
-**Established self-contained delivery boundary:** the delivered contract contains all generic operating duties; guides, bridges, and internal records supply no hidden policy. Verify the [delivered contract](../../03-contract/prerelease_AGENTS.md) by standalone inspection, using the [proposed PR1 inspection examples](proposed-examples/self-contained-delivery.md#pr1--self-contained-operating-contract); provider loading and agent behavior require separate evidence.
+**Established self-contained delivery boundary:** the delivered contract contains all generic operating duties; guides, bridges, and internal records supply no hidden policy. Verify the [delivered contract](../../03-candidate/pre_AGENTS.md) by standalone inspection, using the [proposed PR1 inspection examples](proposed-examples/self-contained-delivery.md#pr1--self-contained-operating-contract); provider loading and agent behavior require separate evidence.
 
 Accepted requirements: [PR1](baseline.md#established-product-requirement).

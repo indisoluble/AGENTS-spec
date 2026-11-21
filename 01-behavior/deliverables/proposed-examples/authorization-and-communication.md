@@ -4,7 +4,7 @@ All examples remain **proposed and unaccepted**. See [classifications and shared
 
 ## BR3 — Autonomy within authorization and prior direction
 
-Requirement: [BR3](../baseline.md#br3--autonomy-within-authorization-and-prior-direction). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [contract](../../../03-contract/prerelease_AGENTS.md) §§2.1–2.3, 2.5, 3.8.
+Requirement: [BR3](../baseline.md#br3--autonomy-within-authorization-and-prior-direction). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [contract](../../../03-candidate/pre_AGENTS.md) §§2.1–2.3, 2.5, 3.8.
 
 ### BR3.1 — A routine local choice needs no new requester decision
 
@@ -46,7 +46,7 @@ Requirement: [BR3](../baseline.md#br3--autonomy-within-authorization-and-prior-d
 - **When** the agent creates the preview using the day-first assumption and completes the task without an intermediate report or approval request.
 - **Then** the work is permitted within that authorization, and its completion report identifies the day-first interpretation as a material assumption. The assumption supplies no authority to change source data or the public interface.
 
-Under [BR3](../baseline.md#br3--autonomy-within-authorization-and-prior-direction), material unresolved intent or permission still requires consultation before dependent work, even when safe fact-finding is available; if no safe step is possible, the agent presents alternatives and seeks direction. Under [BR7](../baseline.md#br7--proportionate-communication-and-actionable-handoffs) and [contract §3.7](../../../03-contract/prerelease_AGENTS.md#37-reporting), disclosures affecting authorization or a decision requiring requester input precede affected work; other information should normally join the next consolidated report, while useful earlier communication remains permitted.
+Under [BR3](../baseline.md#br3--autonomy-within-authorization-and-prior-direction), material unresolved intent or permission still requires consultation before dependent work, even when safe fact-finding is available; if no safe step is possible, the agent presents alternatives and seeks direction. Under [BR7](../baseline.md#br7--proportionate-communication-and-actionable-handoffs) and [contract §3.7](../../../03-candidate/pre_AGENTS.md#37-reporting), disclosures affecting authorization or a decision requiring requester input precede affected work; other information should normally join the next consolidated report, while useful earlier communication remains permitted.
 
 ### BR3.6 — Disclose a consequential choice made without prior direction
 
@@ -84,7 +84,7 @@ Under [BR3](../baseline.md#br3--autonomy-within-authorization-and-prior-directio
 
 ## BR7 — Proportionate communication and actionable handoffs
 
-Requirement: [BR7](../baseline.md#br7--proportionate-communication-and-actionable-handoffs). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution), [contract](../../../03-contract/prerelease_AGENTS.md) §§1.1, 2.3–2.4, 3.7.
+Requirement: [BR7](../baseline.md#br7--proportionate-communication-and-actionable-handoffs). Current qualification evidence: [design explanation](../../../02-design/deliverables/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution), [contract](../../../03-candidate/pre_AGENTS.md) §§1.1, 2.3–2.4, 3.7.
 
 ### BR7.1 — Frame substantial work without creating an approval gate
 

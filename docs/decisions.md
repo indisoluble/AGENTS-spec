@@ -6,13 +6,21 @@ These records explain the rationale and scope of choices that affect multiple st
 
 Design-specific decisions remain in [decisions and alternatives](../03-design/docs/decisions.md#architecture-decisions). Evaluator decisions remain in [framework design](../05-evaluations/docs/framework-design.md#architecture-decisions).
 
+### Shared guidance for writing and maintaining documentation
+
+**Authorized for local implementation. The completed guidance awaits requester review.** The [shared documentation ownership decision](#focused-owners-for-shared-engineering-documentation) established a conventions reference. It answered where a specification belongs, but gave a contributor little help deciding what was missing or whether a revision was sufficient.
+
+Keep placement, rationale, naming, and retention in [the conventions reference](documentation.md). The [writing guide](writing-documentation.md) helps authors decide what a reader needs. The [maintenance guide](maintaining-documentation.md) helps a contributor trace change impact and verify the result. One expanded reference would keep the guidance in a single file but make a local correction harder to look up. Organizing by methodology would scatter one task across several guides. The task split costs a link when a contributor moves from drafting to review. It allows both guides to use the same conventions and stage owners.
+
+For questions the project leaves open, direct contributors to the relevant primary practice. This preserves the distinction between selecting architectural concerns, shaping material for a reader, recording a choice, and defining behavior. The shared guidance applies those practices within the established five stages and their decision authority.
+
 ### Focused owners for shared engineering documentation
 
-**Authorized for local implementation. Acceptance of the completed refactoring is pending requester review.** This decision refines the earlier [separation of architecture, authority, and decision rationale](#separate-owners-for-architecture-authority-and-decision-rationale). A contributor tracing the impact of a requirement and one checking who can accept it previously had to navigate the same combined document. Its single entry point saved links but obscured which parts each task needed.
+**The requester authorized local implementation and accepted the completed shared documentation refactoring.** This decision refines the earlier [separation of architecture, authority, and decision rationale](#separate-owners-for-architecture-authority-and-decision-rationale). A contributor tracing the impact of a requirement and one checking who can accept it previously had to navigate the same combined document. Its single entry point saved links but obscured which parts each task needed.
 
 The [shared documentation index](README.md) provides separate routes to structural interfaces, BDD execution, authority, traceability and evidence, documentation conventions, contributor guidance, and system-wide decisions. Changes to a shared rule have one owner. Readers crossing concerns follow direct links, and stage-specific detail stays with its deliverable or local guide. The index is navigation only.
 
-The requester clarified historical retention. Keep ADRs and their supersession links so a contributor can recover the reasoning behind a choice. Ordinary accounts of past development states are available in Git. The [documentation convention](documentation.md#maintaining-documentation-after-a-change) preserves the current knowledge, decision scope, and essential rationale those accounts may contain.
+The requester clarified historical retention. Keep ADRs and their supersession links so a contributor can recover the reasoning behind a choice. Ordinary accounts of past development states are available in Git. The [retention convention](documentation.md#retaining-decisions-and-current-knowledge) preserves the current knowledge, decision scope, and essential rationale those accounts may contain.
 
 ### Five-stage BDD-aligned engineering pipeline
 

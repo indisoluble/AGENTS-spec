@@ -2,7 +2,7 @@
 
 This document explains the selected architecture of the [AGENTS.md operating contract](../../04-candidate/pre_AGENTS.md): boundaries, vocabulary, clause traceability, and layer composition. [Detailed mechanisms](#crosscutting-concepts) keep prescriptions with their rationale.
 
-**Status: current binding design, distinct from enduring product requirements.** The [baseline](../../02-formulation/deliverables/baseline.md) owns accepted requirements and constraints. [Authority and change](../../docs/authority-and-change.md#status-and-evidence-boundaries) defines status, revision authority, and evidence limits. Design explanations add no runtime duties beyond the delivered contract. [Design review](../docs/design-review.md) supplies editorial checks and non-normative illustrations.
+**Status: current binding design, distinct from enduring product requirements.** The [baseline](../../02-formulation/deliverables/baseline.md) owns accepted requirements and constraints. [Shared authority](../../docs/authority.md#status-of-engineering-records) explains what the records establish about status and revision authority. Design explanations add no runtime duties beyond the delivered contract. [Design review](../docs/design-review.md) supplies editorial checks and non-normative illustrations.
 
 ## Glossary
 
@@ -44,7 +44,7 @@ This index relates contract clauses, canonical mechanism explanations, and accep
 
 ## Context and Scope
 
-The contract governs agent conduct in adopting projects. [Delivery and portability](delivery-and-portability.md#context-and-scope) explains provider integration; [shared authority](../../docs/authority-and-change.md#development-time-and-runtime-authority) defines applicability to AGENTS-spec development.
+The contract governs agent conduct in adopting projects. [Delivery and portability](delivery-and-portability.md#context-and-scope) explains provider integration; [shared authority](../../docs/authority.md#repository-development-and-instruction-loading) defines applicability to AGENTS-spec development.
 
 ## Solution Strategy
 

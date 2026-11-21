@@ -20,7 +20,7 @@ Scenario project facts are illustrative. Terms such as material, sufficient, pro
 
 ### Remaining requirements work
 
-Owner review of the proposed formulations and examples, requirements-derived automation, and any separately authorized contract redesign remain future work under the [shared BDD responsibilities](../../docs/authority-and-change.md#bdd-activities-and-complementary-responsibilities), with no standing exception to Automation. The 28 non-normative [design illustrations](../../03-design/docs/design-review.md#assessing-design-changes) and existing evaluations are not retroactively accepted as product criteria.
+Owner review of the proposed formulations and examples, requirements-derived automation, and any separately authorized contract redesign remain future work under the [shared BDD responsibilities](../../docs/pipeline.md#applying-the-three-practices), with no standing exception to Automation. The 28 non-normative [design illustrations](../../03-design/docs/design-review.md#assessing-design-changes) and existing evaluations are not retroactively accepted as product criteria.
 
 ## Requirement-to-scenario coverage
 

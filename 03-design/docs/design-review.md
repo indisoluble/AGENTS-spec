@@ -1,10 +1,10 @@
 # Contract design review
 
-Use these editorial checks and [28 non-normative illustrations](#assessing-design-changes) to review how the current design is explained. They add no runtime duties, accepted requirements, evaluator criteria, or approval step. [Proposed BDD examples](../../01-discovery/deliverables/discovery.md#proposed-example-suites) remain separate. [Shared authority](../../docs/authority-and-change.md#status-and-evidence-boundaries) governs those distinctions.
+Use these editorial checks and [28 non-normative illustrations](#assessing-design-changes) to review how the current design is explained. They add no runtime duties, accepted requirements, evaluator criteria, or approval step. [Proposed BDD examples](../../01-discovery/deliverables/discovery.md#proposed-example-suites) remain separate. [Shared authority](../../docs/authority.md#status-of-engineering-records) governs those distinctions.
 
 ## Reviewing contract explanations
 
-Use the [shared editing and ownership guidance](../../docs/authority-and-change.md#working-with-requirements-and-design-documentation) for maintenance boundaries and [contract design](../deliverables/contract-design.md) for mechanisms and rationale. The checks below concern explanation and comprehension, not behavioral evidence.
+Use the [cross-stage change guide](../../docs/changing-the-contract.md#change-the-owner-and-verify-its-dependents) for maintenance boundaries and [contract design](../deliverables/contract-design.md) for mechanisms and rationale. The checks below concern explanation and comprehension, not behavioral evidence.
 
 ### Reader paths
 
@@ -22,7 +22,7 @@ Neither guide nor Design documentation has a numeric length target or limit. Det
 
 ### Explanatory ownership and evidence
 
-Guides and design can explain the same subject at different depths for distinct reader needs under the [summary boundary](../../docs/authority-and-change.md#documentation-ownership-boundaries). Link to canonical detail rather than copying complete procedures, reference-assignment tables, or lifecycles; necessary copies retain owners/update relationships. The practical guide owns requester-facing explanations; mechanism documents own design rationale.
+Guides and design can explain the same subject at different depths for distinct reader needs under the [summary boundary](../../docs/documentation.md#choosing-the-owner). Link to canonical detail rather than copying complete procedures, reference-assignment tables, or lifecycles; necessary copies retain owners/update relationships. The practical guide owns requester-facing explanations; mechanism documents own design rationale.
 
 The [practical CSV walkthrough](../../04-candidate/pre_README-powerusers.md#from-a-request-to-a-result) owns shared scenario facts; the [technical walkthrough](../deliverables/mechanisms/work-cycle.md#how-the-design-works-in-a-task) uses them to explain design choices and stays aligned. Alternative paths state their assumptions. Illustrative choices and editorial checks cannot become policy.
 

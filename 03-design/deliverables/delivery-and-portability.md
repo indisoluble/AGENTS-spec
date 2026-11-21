@@ -4,7 +4,7 @@
 
 ## Context and Scope
 
-These are consumer-contract loading and instruction rules (§3.8). [Development authority](../../docs/authority-and-change.md#development-time-and-runtime-authority) determines their applicability to this repository. Engineering links use [staged sources](../../docs/architecture.md#staged-sources-and-release-relative-references); consumer paths below describe installed files.
+These are consumer-contract loading and instruction rules (§3.8). [Development authority](../../docs/authority.md#repository-development-and-instruction-loading) determines their applicability to this repository. Engineering links use [staged sources](../../docs/architecture.md#staged-sources-and-release-relative-references); consumer paths below describe installed files.
 
 Provider claims retain their [recorded evidence dates](../../04-candidate/pre_README-powerusers.md#evidence-dates); editorial work does not refresh them. Actual support depends on the provider and adopting environment.
 

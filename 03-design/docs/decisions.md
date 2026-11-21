@@ -1,6 +1,6 @@
 # Contract design decisions and alternatives
 
-Current choices and superseded controls are distinguished below. [Shared authority](../../docs/authority-and-change.md#status-and-evidence-boundaries) defines their status; the [clause index](../deliverables/contract-design.md#contract-clause-index) relates mechanisms to accepted intent. Engineering-system and evaluator decisions remain in [system-wide engineering decisions](../../docs/decisions.md#architecture-decisions) and [framework design](../../05-evaluations/docs/framework-design.md#architecture-decisions).
+Current choices and superseded controls are distinguished below. [Shared authority](../../docs/authority.md#status-of-engineering-records) defines their status; the [clause index](../deliverables/contract-design.md#contract-clause-index) relates mechanisms to accepted intent. Engineering-system and evaluator decisions remain in [system-wide engineering decisions](../../docs/decisions.md#architecture-decisions) and [framework design](../../05-evaluations/docs/framework-design.md#architecture-decisions).
 
 ## Architecture decisions
 

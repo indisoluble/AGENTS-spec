@@ -60,7 +60,7 @@ The owner authorized separate documentation for objectives and their rationale a
 
 ### Responsibility-based BDD organization
 
-**The owner approved the original responsibility-based organization, authorized local implementation, and recorded that reorganization as accepted.** Product acceptance has its own [owner-reported scope](../02-formulation/deliverables/baseline.md#behavioral-acceptance-and-editorial-provenance).
+**The owner approved the original responsibility-based organization, authorized local implementation, and recorded that reorganization as accepted.** Product acceptance has its own [owner-reported scope](../02-formulation/docs/acceptance-record.md#behavioral-acceptance-and-editorial-provenance).
 
 The [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) retains grouping by durable responsibility while giving Discovery and Formulation distinct owners. Discovery, Formulation, and Automation iterate across those owners. One directory per activity would scatter each subject across handoffs and invite competing definitions. A tree organized solely by subject would leave readers without a clear starting point for a behavioral question. The [BDD entry path](pipeline.md#applying-the-three-practices) provides that starting point. Passing checks does not confer acceptance, and consumers have no obligation to adopt BDD.
 

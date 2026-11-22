@@ -1,50 +1,20 @@
 # Established product requirements for AGENTS-spec
 
-This baseline defines accepted product requirements BR1–BR10 and PR1 and established product constraints. [Objectives and rationale](../../01-discovery/deliverables/objectives-and-rationale.md) explains the intended outcomes and why the requirements support them. Discovery owns the [proposed examples](../../01-discovery/deliverables/example-coverage.md) and [open questions](../../01-discovery/deliverables/open-questions.md); [contract design](../../03-design/deliverables/contract-design.md) owns selected mechanisms, rationale, and clause traceability.
+[BR1–BR10](#accepted-behavioral-requirements) specify agent behavior. [PR1](#established-product-requirement) specifies what the delivered instruction file must contain. **All eleven requirements are accepted and have equal authority.** The [established constraints](#established-constraints) apply at their stated strength and with their stated exceptions.
 
-[Shared authority](../../docs/authority.md) distinguishes engineering authority from runtime instructions: internal requirements add no operating duties, and the staged contract does not govern repository development. The delivered `AGENTS.md` is the complete operating contract for consumers and isolated evaluations.
-
-## Status and provenance
-
-Established product requirements are supported by explicit requester direction or accepted project records beyond the implemented clause alone. **BR1–BR10 and PR1 are all accepted product requirements with equal authority in the same baseline.** BR1–BR10 are behavioral product requirements specifying the behavior expected of coding agents. PR1 specifies a property of the delivered `AGENTS.md` artifact: self-contained operating instructions. Their different subjects and verification methods do not imply different authority or acceptance status. Established constraints retain their original strength, exceptions, measurement, and revision conditions; a preferred target is not a hard ceiling. The source [classification and evidence](../../docs/authority.md#status-of-engineering-records) distinguishes these from selected design mechanisms, current binding prescriptions, provisional candidates, and historical reasoning.
-
-PR1 is verified primarily through inspection of the delivered contract. Verifying BR1–BR10 requires behavioral evidence from agents using that contract; inspecting its text alone does not establish that agents exhibit the required behavior. The separate sections below organize requirements by subject without changing any requirement's scope or strength.
-
-The requester established the self-contained product boundary through the [requirements-led engineering decision](../../docs/decisions.md#requirements-led-engineering-and-productinternal-separation) and directed that the existing method-selection and portability constraints be preserved.
-
-Currently prescribed methods retain their contractual force. Treating a mechanism as enduring product intent requires separate acceptance evidence. The [design decision index](../../03-design/docs/decisions.md#selected-design-and-retained-decisions) records selected mechanisms, the limited acceptance of wording compromises, and superseded controls. The [engineering authority decision](../../docs/decisions.md#engineering-authority-and-the-runtime-contract) records the scope of the migration-fidelity review and the requester's authorization. The [proposal source qualifications](../../01-discovery/deliverables/example-coverage.md#sources-and-decision-scope) distinguish proposal decisions from acceptance of behavioral requirements.
-
-### Behavioral acceptance and editorial provenance
-
-The owner reported that **BR1–BR10 and five clarifications were accepted**, PR1 was already established, and no BR11 was needed. That owner-reported summary is the source for behavioral acceptance here. The original verbatim approvals and their dates have not been independently verified.
-
-The formulations below are editorial. They preserve the accepted outcomes and clarifications and use the linked contract and design accounts for precise obligations, qualifications, and exceptions. Where the summary does not independently establish a mechanism as enduring product intent, that mechanism retains its current design status and strength. The [open questions about design detail](../../01-discovery/deliverables/open-questions.md) identify such cases. Changing the behavior requires separate authority.
-
-The five clarifications are incorporated in BR1 (coherence and recovery), BR3 (unauthorized consequential choices), BR7 (handoff and consumed allowances), BR8 (assessment-only writes), and BR10 (out-of-scope documentation gaps). BR4 also incorporates the accepted clarification to reassess learning after an inconclusive step before deciding on another justified step, without a default numerical budget or automatic approval checkpoint. RC1–RC10 identified provisional proposals. Their numbering did not correspond one-to-one to the accepted requirements.
-
-The owner left the example draft unaccepted. All [examples indexed by Discovery](../../01-discovery/deliverables/example-coverage.md#proposed-example-suites) remain proposed. PDSA, EARS, ADR, arc42, Diátaxis, provider integration, the [28 design illustrations](../../03-design/docs/design-illustrations.md), and existing evaluator expectations retain their respective design or evidence status.
-
-For a subsequent decision, see [how to record its scope, source, and any defining example](../docs/maintaining-formulation.md).
+The [acceptance record](../docs/acceptance-record.md) identifies the decisions behind this baseline and the limits of the owner-reported evidence. Discovery explains the [objectives and rationale](../../01-discovery/deliverables/objectives-and-rationale.md). Its [examples](../../01-discovery/deliverables/example-coverage.md) remain proposed. To trace a requirement to a current mechanism and Candidate passage, look up its ID in the [Design clause index](../../03-design/deliverables/contract-design.md#contract-clause-index). Selected mechanisms bind the current Candidate within their scope. Making one an enduring product requirement takes separate acceptance.
 
 ## Established product requirement
 
 **PR1 — Self-contained operating contract.** The delivered `AGENTS.md` contract shall contain its complete operative instructions without depending on guides, bridge-specific policy, or internal engineering documents for additional operating duties.
 
-This restates the accepted product boundary in verifiable EARS form, rather than accepting every current clause as a requirement. Bridges may still be needed for a provider to load the contract. Guides may explain it, and adopting-project artifacts supply that project's facts, requirements, build commands, and architecture. None supplies hidden generic operating policy. A standalone reading can check textual completeness; loading and actual agent behavior require their own evidence.
-
-Design navigation for PR1: [self-containment and design boundaries](../../03-design/deliverables/contract-design.md#design-goals-and-boundaries), [delivery and portability](../../03-design/deliverables/delivery-and-portability.md), and the [contract-clause coverage index](../../03-design/deliverables/contract-design.md#contract-clause-index).
-
-For bridges and references, the accepted outcomes concern self-containment under PR1 and the applicable authorization boundaries in [BR3](#br3--autonomy-within-authorization-and-prior-direction) and [BR8](#br8--durable-knowledge-without-expanded-editing-authority). Design specifies bridge compatibility, provenance, diagnostics, what happens if loading fails, and the limits on consulting references. These details retain their current force. See [provider bridge behavior](../../03-design/deliverables/delivery-and-portability.md#why-the-bridges-differ) and [reference consultation](../../03-design/deliverables/methods-and-references.md#principles-and-reference-boundaries).
-
 ### R5
 
-**Established self-contained delivery boundary:** the delivered contract contains all generic operating duties; guides, bridges, and internal records supply no hidden policy. Verify the [delivered contract](../../04-candidate/pre_AGENTS.md) by standalone inspection, using the [proposed PR1 inspection examples](../../01-discovery/deliverables/proposed-examples/self-contained-delivery.md#pr1--self-contained-operating-contract); provider loading and agent behavior require separate evidence.
+Bridges may load the contract, guides may explain it, and adopting-project artifacts supply local facts, requirements, build commands and architecture. Every generic operating duty must still be recoverable by reading the delivered file on its own. Inspect the [contract](../../04-candidate/pre_AGENTS.md) for that property. The [proposed PR1 examples](../../01-discovery/deliverables/proposed-examples/self-contained-delivery.md#pr1--self-contained-operating-contract) illustrate what to look for. Provider loading and actual agent behavior require separate evidence.
 
 ## Accepted behavioral requirements
 
-These requirements concern the agent receiving the delivered contract, within the actual instruction hierarchy, requester authorization, tool permissions, and approvals. A duty to investigate, validate, report, or record does not enlarge that authority. Mandatory responses use “shall”; permissions and qualified recommendations retain their distinct strength. The linked design accounts retain the full current mechanisms, not additional hidden runtime instructions. The [coverage matrix](../../01-discovery/deliverables/example-coverage.md#requirement-to-scenario-coverage) relates proposed examples to these requirements; it claims neither exhaustive coverage nor observed compliance.
-
-For the reverse route from a current mechanism to its contract clauses and accepted intent, use the [design clause index](../../03-design/deliverables/contract-design.md#contract-clause-index).
+These rules apply to the agent receiving the contract, within the actual instruction hierarchy, requester authorization, tool permissions and approvals. A duty to investigate, validate, report or record grants no additional authority. “Shall” marks a duty. Permissions and qualified recommendations retain their stated strength. Verifying agent behavior requires observations of agents using the contract under the relevant conditions.
 
 ### BR1 — Focused, proportionate, authorized work
 
@@ -54,15 +24,13 @@ When planning or performing authorized work, the agent shall keep the next commi
 
 At review, handoff, or a deliberate pause after a meaningful step, the agent shall leave coherent work. Before an increment that cannot stand alone, it shall explain why, what remains usable or testable, and how to undo it. It shall disclose material limits on reversing proposed or completed changes. A required stop may leave work incomplete; coherence does not permit continuing past that stop or reporting incomplete work as complete. Easy reversal remains a recommendation, not a guarantee that every authorized change is reversible.
 
-Current realization: [small commitments and sufficient depth](../../03-design/deliverables/mechanisms/work-cycle.md#small-commitments-with-sufficient-depth), contract §§1.1, 2.3, and 2.5. Exact decomposition and planning elements remain selected design; no numerical effort quota or uniquely correct sequence is established.
-
 ### BR2 — Evidence-based planning and knowledge ownership
 
 Rationale: [R3](../../01-discovery/deliverables/objectives-and-rationale.md#r3), [R4](../../01-discovery/deliverables/objectives-and-rationale.md#r4).
 
 When preparing to choose an approach or derive or refine acceptance conditions, the agent shall first identify the authorized objectives and constraints and inspect relevant project evidence. It shall distinguish required behavior and completion conditions from observed behavior, assumptions, inferences, and predictions about an approach. It shall use the owner of each kind of knowledge, report contradictions, and take consequential conflicts that ownership cannot settle to the requester before the dependent choice. Passing code or tests shall not silently redefine intended behavior.
 
-Current realization: [knowledge roles](../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices) and [requirements, acceptance conditions, and predictions](../../03-design/deliverables/mechanisms/work-cycle.md#requirements-acceptance-conditions-and-predictions), contract §1.1. The current artifact-role assignments and explicit increment prediction remain binding design; the summary does not establish every category or planning element as a permanent mechanism. No global precedence order among project artifacts is introduced.
+BR2 establishes no global precedence order among artifacts.
 
 ### BR3 — Autonomy within authorization and prior direction
 
@@ -74,8 +42,6 @@ Before adopting or implementing a new consequential architectural or lasting des
 
 If a consequential choice has been made without required prior direction, the agent shall prominently disclose the choice, reasons, effects, uncertainty, and revision or reversal options. Retrospective disclosure shall not count as authorization.
 
-Current realization: [authorization and requester decisions](../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), contract §§2.1–2.3, 2.5, and the [instruction/external-action boundaries](../../03-design/deliverables/delivery-and-portability.md#why-the-bridges-differ) in §3.8. Informal expectations are not automatically binding limits. A change in the agent's own estimate alone creates no checkpoint.
-
 ### BR4 — Bounded investigation and timely reassessment
 
 Rationale: [R1](../../01-discovery/deliverables/objectives-and-rationale.md#r1), [R2](../../01-discovery/deliverables/objectives-and-rationale.md#r2).
@@ -84,7 +50,7 @@ When material uncertainty about how to proceed remains after relevant context ga
 
 When an investigation step finishes inconclusively, the agent shall reassess what was learned before deciding whether another step is justified by preceding findings. Any further step shall remain bounded and within authorization, limits, and checkpoints. An inconclusive result shall not itself justify continued investigation, expand authority, or establish completion. Decisions requiring requester direction remain subject to BR3; narrow authorized investigation may establish facts for that consultation. Relevant conclusions, evidence, unresolved uncertainty, and missing work shall be reported at BR7's reporting occasions.
 
-Current realization: [context and bounded inquiry](../../03-design/deliverables/mechanisms/bounded-inquiry.md#when-inquiry-applies), contract §2.4. Its context-gathering exclusions remain in force. Unknown results alone do not trigger inquiry; communication neither authorizes work nor creates an approval checkpoint. No default numerical budget, mandatory advance allowance, automatic stop-and-ask after one attempt, or automatic inquiry-end report is introduced.
+Notice alone neither authorizes work nor creates a checkpoint. BR4 sets no default numerical budget, mandatory advance allowance, automatic stop-and-ask after one attempt, or automatic inquiry-end report.
 
 ### BR5 — Completion supported by validation
 
@@ -94,15 +60,11 @@ When assessing completion at increment or task level, the agent shall require co
 
 A relevant check runnable with current authority, access, resources, and ordinary expected setup remains available even if an easier alternative exists. Sufficient alternative evidence may replace only an unavailable check that was not specifically required. Missing authority, access, resources, or materially greater work shall be disclosed rather than silently obtained or absorbed. Validation failure or implementation difficulty shall not justify weakening tests, requirements, or acceptance conditions to claim success. Revision authority follows the source of the requirement or condition. Completion of an investigation does not establish completion of an unfixed implementation task.
 
-Current realization: [validation and test evidence](../../03-design/deliverables/mechanisms/engineering-and-validation.md#validation-and-test-evidence), contract §1.3. Appropriate tests for behavior changes, repairs, and clarified edge cases remain a SHOULD; Given/When/Then is the current qualified test-writing technique, not a newly permanent framework requirement. Required stops may leave work incomplete.
-
 ### BR6 — Learning from observed results
 
 Rationale: [R3](../../01-discovery/deliverables/objectives-and-rationale.md#r3).
 
 When results provide evidence about an approach, the agent shall use that evidence to retain, revise, or discard the approach and inform subsequent work within authorization. Revising a prediction or abandoning an approach shall not change requirements or acceptance conditions, replace required behavior with learning alone, or authorize another attempt. Material durable findings remain subject to BR8.
-
-Current realization: [learning throughout the work](../../03-design/deliverables/mechanisms/work-cycle.md#learning-throughout-the-work), contract §§1, 1.3, and 1.4. PDSA remains the mandatory current mechanism applied proportionately, without a worksheet, formal experiment, special mode, or separate learning deliverable merely because a method was used. Acceptance of this outcome does not freeze that mechanism against authorized redesign.
 
 ### BR7 — Proportionate communication and actionable handoffs
 
@@ -114,8 +76,6 @@ At task completion, handoff, or when seeking requester input, the agent shall co
 
 When handing off unfinished work, the agent shall transfer the task objective and established direction; applicable limits and checkpoints, including consumed allowances; the next or unfinished step's objective, bounds, and acceptance conditions; and relevant findings, evidence, and unresolved uncertainty. On resumption, it shall use that state and recover missing authorization or limit information, or obtain requester direction, before dependent work. A handoff shall not create a fresh allowance.
 
-Current realization: [reporting and continued execution](../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution), contract §§1.1, 2.3, 2.4, and 3.7. The contract's more detailed planning and framing elements, including the task outline and first increment's objective and bounds, remain selected design at their current strength. Distinct inquiry notification, exact delivery conventions, and tool-limit disclosures retain their current force. No mandatory report template, routine approval interval, or ban on intermediate communication is introduced.
-
 ### BR8 — Durable knowledge without expanded editing authority
 
 Rationale: [R4](../../01-discovery/deliverables/objectives-and-rationale.md#r4).
@@ -123,8 +83,6 @@ Rationale: [R4](../../01-discovery/deliverables/objectives-and-rationale.md#r4).
 When a finding is both material and durable project knowledge, the agent shall preserve it with substantiating evidence in its appropriate canonical record, including when the approach was discarded. If no suitable record exists, it shall create only the minimum record needed within its authority. Transient attempt facts belong in reporting; a finding alone shall not trigger a decision record. The agent shall preserve significant in-scope decision history with the decision-shaping evidence, constraints, reasons, consequences, and useful alternatives needed to understand lasting choices, distinguishing proposed, accepted, rejected, and superseded status. Recording shall neither accept a proposal nor authorize implementation.
 
 During analysis or review alone, writes shall stay within the existing contract's narrow permission and actual requester restrictions, tool permissions, and approvals: material durable findings, decision/debt maintenance, and verified corrections to existing descriptions of current facts in the assessed scope. That factual-correction permission excludes requirements, decision records, and protected instruction files. Assessment alone shall not authorize implementation, new or changed requirements, accepting or changing decisions beyond existing authority, unrelated repairs, backfills, or protected instruction-file edits. If writing a required record is prohibited, the agent shall report the unmet duty as unfinished work.
-
-Current realization: [assessment writes and durable records](../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [ADRs](../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#adrs-preserving-the-reasons-for-lasting-choices), and [technical debt](../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#recording-technical-debt), contract §§2.1, 3.2–3.4, and 3.8. Debt recording remains optional, with its own evidence, classification, reporting, and maintenance conditions; a separate material-and-durable finding can still require a record. The current ADR duty is triggered when a concrete significant in-scope proposal is ready for decision or review; routine choices and exploratory ideas do not acquire new record duties. ADR form, fields, timing, and arc42 placement remain selected design. No general documentation-write permission is created.
 
 ### BR9 — Engineering quality and preservation
 
@@ -134,8 +92,6 @@ When making authorized changes, the agent shall preserve unaffected public contr
 
 Current requirements may justify complexity; speculation alone shall not justify abstractions, parallel implementations, configuration, or optimization. Optimization should have requirements or evidence and explain material complexity and trade-offs. Clarity, maintainability, suitable reuse, canonical ownership, and reversibility remain qualified quality recommendations rather than minimizing line or file counts. Applicable recommendations retain their conditions and justified exceptions.
 
-Current realization: [engineering scope boundaries](../../03-design/deliverables/mechanisms/engineering-and-validation.md#engineering-scope-boundaries), [Simple Design](../../03-design/deliverables/mechanisms/engineering-and-validation.md#simple-design-choosing-what-the-current-solution-needs), [preservation](../../03-design/deliverables/mechanisms/engineering-and-validation.md#component-boundaries-refactoring-and-validation), and [focused techniques](../../03-design/deliverables/mechanisms/engineering-and-validation.md#focused-techniques-and-how-they-work-together), contract §§1.2–1.3. Acceptance does not make every named technique, design pattern, or recommendation a mandatory enduring mechanism.
-
 ### BR10 — Affected requirements and documentation
 
 Rationale: [R4](../../01-discovery/deliverables/objectives-and-rationale.md#r4).
@@ -144,34 +100,20 @@ When authorized work establishes or changes behavior required beyond the current
 
 When knowledge changes, the agent shall maintain its canonical owner and known direct documentation dependents, checking links and changing them only when affected. At review boundaries, it shall resolve stale, conflicting, duplicated, misplaced content and links within authorized editing scope; current-system descriptions shall distinguish existing, proposed, and unfinished work. Affected-document duties shall not authorize searches for unknown dependents, unrelated audits, backfill, or reorganization. Documentation gaps outside authorized editing scope shall be reported or proposed for separate work, not silently repaired. Analysis/review writes remain subject to BR8.
 
-Current realization: [documentation choices](../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices), [EARS](../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#ears-making-required-behavior-explicit), [arc42](../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#arc42-shared-architectural-context-as-the-project-grows), and [Diátaxis](../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#diátaxis-choosing-content-for-the-readers-need), contract §§3.1, 3.5–3.6. Known-gap proposals, qualified in-scope improvements, requester deferral, and the agreed-need condition for new guides retain their current strength. These methods are selected design, not newly permanent product requirements.
-
 ## Established constraints
 
-| Constraint | Retained scope, strength, and authoritative detail |
-| --- | --- |
-| **Authority and capability boundaries** | Reuse operates within the actual tool hierarchy, permissions, and native approvals. The contract supplies neither capabilities nor technical enforcement, and cannot invent requester authority or missing project requirements. The [authority model](../../docs/authority.md#runtime-authority) owns engineering/runtime relationships; [design boundaries](../../03-design/deliverables/contract-design.md#design-goals-and-boundaries) explain the product consequences. BR3 and BR8 establish accepted authorization boundaries; [Discovery](../../01-discovery/deliverables/open-questions.md) identifies remaining example detail without suspending current prescriptions. |
-| **Method selection** | Recognized practices, freely accessible material sufficient for the assigned role, and distinct responsibilities constrain additions and replacements unless explicitly revised. The [qualifications below](#method-selection-qualifications) retain the full criteria and their consequences; [Choosing or replacing methods](../../03-design/deliverables/methods-and-references.md#choosing-or-replacing-methods) explains their design application. These criteria do not freeze PDSA, Simple Design, or another named mechanism. |
-| **Portability and standing context** | A strongly preferred target of about 24,000 LF-normalized UTF-8 bytes applies to the whole contract, with qualified excess, deliberate compression review, fidelity/comprehensibility priority, and headroom under applicable combined loading limits. It is not a task-effort allowance or a universal hard ceiling. The [qualifications below](#portability-and-standing-context-qualifications) define the exact measurement, exceptions, and provider-evidence qualifications; [Keeping the contract portable](../../03-design/deliverables/delivery-and-portability.md#keeping-the-contract-portable) explains their design rationale and application. |
-
-The product/engineering separation and document ownership are accepted engineering boundaries owned by the [requirements-led engineering decision](../../docs/decisions.md#requirements-led-engineering-and-productinternal-separation), rather than additional operating requirements for adopting projects. Evaluator requirements [E1–E40](../../05-evaluations/README.md#evaluator-requirements) govern the evaluation machinery in `05-evaluations/`. Fictional application requirements in examples or fixtures govern only those illustrated applications; none is an AGENTS-spec product requirement.
+**Authority and capability.** The contract operates within the actual tool hierarchy, permissions and native approvals. It supplies no capabilities or technical enforcement and cannot invent requester authority or missing project requirements. BR3 and BR8 apply. Internal engineering records govern development. The delivered contract contains the operating instructions for consumers and isolated evaluations. [Engineering and runtime authority](../../docs/authority.md)
 
 ### Method-selection qualifications
 
-These selection criteria remain constraints on future additions or replacements unless explicitly revised. A proposed method change should explain the need it addresses, the accessibility of its required interpretive material, and any overlap or expansion of obligations. Changing a selection criterion is itself a design decision to identify explicitly; these constraints on the contract's evolution add no operating duties to ordinary project tasks.
-
-The design document retains the [selection rationale](../../03-design/deliverables/methods-and-references.md#choosing-or-replacing-methods): why PDSA, Simple Design, the focused references, documentation conventions, and explicit collaboration rules were judged sufficient for the agreed design, without additional umbrella frameworks. That selection does not freeze those mechanisms as product requirements.
+Method additions and replacements must use recognized practices, with freely accessible interpretive material sufficient for the assigned role and distinct responsibilities, unless the criteria are explicitly revised. A proposal should explain the need, accessibility of the material and any overlap or expansion of obligations. Revising a criterion is itself a design decision to identify explicitly. These constraints govern contract evolution. Design records the [selection reasons and alternatives](../../03-design/deliverables/methods-and-references.md#choosing-or-replacing-methods).
 
 ### Portability and standing-context qualifications
 
-Applicable instruction-loading limits depend on the provider and environment. The [design rationale](../../03-design/deliverables/delivery-and-portability.md#keeping-the-contract-portable) identifies the dated provider evidence for the approximate project target. Those sources do not establish a universal provider limit or automatically revise project policy.
+The whole delivered `AGENTS.md` has a **strongly preferred target of about 24,000 LF-normalized UTF-8 bytes**. After editing, replace each CRLF pair and each remaining CR with LF for measurement, then count the UTF-8 bytes without trimming or reformatting anything else. Automated enforcement is optional. The target concerns standing instructions. It imposes no allowance on an individual task.
 
-The entire `AGENTS.md` has a **strongly preferred target of about 24,000 UTF-8 bytes after normalizing line endings to LF**. Replace each CRLF pair and any remaining CR with LF before counting the whole file's UTF-8 bytes; do not otherwise trim or reformat its contents. LF and CRLF copies of the same content therefore have the same count. Normalized UTF-8 bytes remain the project's canonical measurement.
+Excess is exceptional and acceptable when further reduction would materially compromise normative fidelity or human comprehensibility. Before accepting excess, review the wording for compression. Remove genuine redundancy and low-value explanation before compressing core controls such as authorization, limits, cumulative reassessment, consultation, inquiry and continuation. Preserve useful spacing, headings and every operative duty in the contract itself.
 
-Exceeding the target is exceptional but acceptable when further reduction would materially compromise normative fidelity or human comprehensibility. Before such excess is accepted, the contract receives a deliberate compression review. That review removes genuine redundancy and low-value explanatory detail before it compresses core control semantics, such as authorization, requester limits, cumulative reassessment, consultation, inquiry, and continuation. Even over target, the contract keeps meaningful headroom below applicable provider and project combined instruction-loading limits, such as the Codex default documented in the [design explanation](../../03-design/deliverables/delivery-and-portability.md#keeping-the-contract-portable), so directory instructions and other context can coexist. The project defines no separate provider-independent ceiling; those applicable combined limits bound the acceptable excess.
+Even above target, keep meaningful headroom under the applicable combined provider and project instruction-loading limits for directory instructions and other context. Those limits bound the acceptable excess. The project defines no separate provider-independent ceiling. Actual compatibility depends on the delivered files, other loaded instructions and tool configuration. The [dated provider evidence](../../03-design/deliverables/delivery-and-portability.md#keeping-the-contract-portable) explains the target. Vendor changes can prompt review without automatically changing project policy.
 
-Check the normalized byte count after edits. Automated counts can help; automated enforcement is not required. Normalization defines this project's measurement; provider compatibility still depends on the actual delivered files, other loaded instructions, and tool configuration. Preserve useful spacing and headings. Meeting the target does not establish clarity, compatibility, equivalent behavior, agent adherence, or token savings. Vendor changes can prompt a review but do not automatically change the project policy.
-
-The size target concerns the standing contract itself, not the reasoning or work allowed for a task. Operational meaning remains self-contained in `AGENTS.md`; necessary operating semantics must not move into a README to satisfy the target, because that would undermine portability even if the resulting file were smaller. Compactness is therefore subordinate to normative fidelity and usable comprehension, while standing instruction context remains a constrained resource.
-
-The design document retains the [current wording trade-offs](../../03-design/deliverables/delivery-and-portability.md#current-wording-trade-offs) and their limited acceptance: the identified compromises authorize no further loss of precision. New trade-offs, including reduced explicitness without an intended rule change, remain design decisions to identify for requester review, with the rationale specified there. Previous acceptance and matching counts establish neither losslessness nor behavioral equivalence for a further reduction.
+Acceptance of [existing wording trade-offs](../../03-design/deliverables/delivery-and-portability.md#current-wording-trade-offs) covers only the identified compromises. Identify new trade-offs, including reduced explicitness without an intended rule change, for requester review with the rationale specified there. Meeting the target alone establishes neither clarity, compatibility, behavioral equivalence, agent adherence nor token savings.

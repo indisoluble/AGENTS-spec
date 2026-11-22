@@ -1,13 +1,13 @@
 # Established objectives and rationale for AGENTS-spec
 
-This document records what AGENTS-spec aims to achieve and why its [accepted requirements](../../02-formulation/deliverables/baseline.md) support those aims. Established objectives state desired outcomes and are supported by explicit requester direction or accepted project records beyond the implemented clause alone.
+These objectives come from requester direction or accepted project records. Two have an established priority order. Preserving project knowledge supports both. The rationale map below explains how particular kinds of agent behavior serve those aims.
 
 ## Established objectives
 
 | Objective | Intended outcome and qualifications |
 | --- | --- |
-| **[O1 — Control token consumption, first](#r1)** | Bound the next commitment and keep work proportionate. The current design uses small, meaningful increments and progressive detail. O1 leaves the choice of mechanism open to authorized redesign within the accepted requirements and constraints. Necessary reasoning, completeness, consistency, and validation remain part of the work; a smaller commitment is not permission for insufficient depth. This is a qualitative objective, with no token quota or guarantee of savings. |
-| **[O2 — Requester awareness and consequential control, second](#r2)** | Keep the requester informed and in control of consequential direction without constant supervision. Routine execution can remain autonomous within authorization. The exact consultation, notification, reporting, and limit mechanisms are explained in the [authorization and requester decisions](../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [inquiry design](../../03-design/deliverables/mechanisms/bounded-inquiry.md), and [reporting design](../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution); this objective alone does not establish each mechanism's permanent trigger or strength. |
+| **[O1 — Control token consumption, first](#r1)** | Bound the next commitment and keep work proportionate. The agent still needs enough reasoning and evidence for correct, complete, consistent and validated work. The objective sets no token quota and promises no measured savings. |
+| **[O2 — Requester awareness and consequential control, second](#r2)** | Keep the requester informed and in control of consequential direction without constant supervision. Leave room for routine decisions within the authority the requester has given. |
 | **Knowledge continuity** | Preserve project facts and reasons for maintainers, users, and future agents through reliable canonical documentation. This supports both ordered objectives without making every discussion a permanent record or every method a deliverable. |
 
 These are intended effects. Textual consistency, contract size, message counts, selected methods, and passing evaluator tests cannot establish measured token savings, comprehension, or agent adherence. Assessing the benefits calls for [comparative evidence and requester feedback where relevant](../../docs/traceability.md#what-evidence-can-establish). Quantitative thresholds and comprehensive behavioral acceptance criteria have not been independently established here.
@@ -16,7 +16,7 @@ The priority order follows established requester direction. No comparative reaso
 
 ## Rationale map
 
-R1–R4 link accepted behavioral requirements to the [objectives](#established-objectives) and supporting reasons. Direct contributions describe intended effects. Supporting reasons need not correspond one-to-one to the objectives. Each BR links back to its rationale and separately to Design for its current realization. [R5](../../02-formulation/deliverables/baseline.md#r5) explains PR1’s delivery boundary alongside the requirement in Formulation. R1–R5 are navigation IDs and add no requirements.
+R1–R4 explain why the behaviors below matter. The BR links trace them to accepted agent behavior requirements. R5 accompanies the [self-contained delivery requirement, PR1](../../02-formulation/deliverables/baseline.md#r5). These rationale IDs let contributors trace a decision without giving the rationale the force of a requirement.
 
 ### R1
 

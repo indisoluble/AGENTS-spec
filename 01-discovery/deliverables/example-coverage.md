@@ -1,25 +1,42 @@
 # Proposed example coverage
 
-Use the matrix to find a proposed example for an accepted requirement. Use the [suite list](#proposed-example-suites) to read related cases together. Each suite owns its scenarios and identifies the requirements, contract clauses, and design explanations used to qualify them.
+Start with the [suites by subject](#proposed-example-suites) to explore a situation, such as an agent facing a blocked decision. Each case describes a situation and proposes what the agent or reviewer would do. If you already have a requirement ID, use the [matrix](#requirement-to-scenario-coverage). BR numbers identify accepted requirements about agent behavior. PR1 concerns the delivered instruction file. BR4.7, for example, identifies the seventh proposed example for BR4.
 
 ## Reading a proposed example
 
-All examples here await requester review. Given/When/Then makes the starting conditions, action, and expected outcome easy to compare. Writing a case this way neither makes it executable nor completes Formulation.
+All examples here await requester review. Given/When/Then makes the starting conditions, action, and expected outcome easy to compare. Acceptance of an example as defining requires an explicit decision on that example.
 
 | Classification | How to read the proposed outcome |
 | --- | --- |
 | **Direct** | The example illustrates an accepted requirement with its source-supported qualifications. A separate design note can describe binding mechanics outside the example’s proposed outcome. |
-| **Detail review** | Part of the outcome depends on a current design prescription whose enduring product status is unsettled. The case identifies the detail. The [open questions](open-questions.md) explain what deciding it would mean. |
+| **Detail review** | Part of the proposed outcome relies on how the contract currently works. The case identifies the detail. Some cases also illustrate an [open product question](open-questions.md). |
 
-Both labels describe proposals. Current prescriptions retain their force, including when a case omits a mechanism. Read permissions as choices, recommendations with their justified exceptions, and mandatory duties at their stated strength. For example, compare the disclosure timing in [BR3.5](proposed-examples/authorization-and-communication.md#br35--disclose-a-material-assumption-at-the-applicable-reporting-occasion) with the prior-direction violation in [BR3.6](proposed-examples/authorization-and-communication.md#br36--disclose-a-consequential-choice-made-without-prior-direction). For inquiry and reporting qualifications, see the contract sections on [requester limits](../../04-candidate/pre_AGENTS.md#23-effort-estimates-and-requester-limits), [notification and reassessment](../../04-candidate/pre_AGENTS.md#24-context-gathering-and-bounded-inquiry), and [report timing](../../04-candidate/pre_AGENTS.md#37-reporting).
+Both labels describe proposals. Current prescriptions retain their force, including when a case omits a mechanism. Read permissions as choices, recommendations with their justified exceptions, and mandatory duties at their stated strength. For example, compare the disclosure timing in [BR3.5](proposed-examples/authorization-and-communication.md#br35--disclose-a-material-assumption-at-the-applicable-reporting-occasion) with the prior-direction violation in [BR3.6](proposed-examples/authorization-and-communication.md#br36--disclose-a-consequential-choice-made-without-prior-direction).
 
 The cases use illustrative project facts. Terms such as material, sufficient, proportionate, significant, and available take their meaning from the circumstances of each case. Automation needs fixtures and evidence that distinguish the relevant outcomes. A number in a fixture sets no universal threshold.
 
 ## Sources and decision scope
 
-The requester supplied an unaccepted example draft. The suites relate proposed outcomes to the [Formulation baseline](../../02-formulation/deliverables/baseline.md#behavioral-acceptance-and-editorial-provenance) and cite current implementation detail where it qualifies them. The earlier record reports in-principle acceptance for some proposals without identifying which ones. Alternatives selected for planning lacked both implementation detail and authorization. Neither establishes detailed product acceptance or authorizes a redesign. See the [open questions](open-questions.md) for details whose status as enduring product behavior is unsettled.
+The requester supplied an unaccepted example draft. Each suite cites the sources for the agreed behavior and the details of the current contract illustrated by its cases. Formulation records the [scope of the acceptance decision](../../02-formulation/docs/acceptance-record.md). The earlier record reports in-principle acceptance for some proposals without identifying which ones. Alternatives selected for planning lacked both implementation detail and authorization. Neither establishes detailed product acceptance or authorizes a redesign.
 
-An expressly accepted defining example belongs in Formulation. [Design illustrations](../../03-design/docs/design-illustrations.md) help review the explanation of a mechanism. [Executable evaluation cases](../../05-evaluations/README.md#case-specifications) exercise a candidate, and [run evidence](../../docs/traceability.md#what-evidence-can-establish) records what was observed. The proposed cases add no runtime instructions, evaluator criteria, or verdicts. Existing E1–E40, rubrics, and captured results retain their scope.
+Some Detail review examples trace a design choice without identifying a separate decision for the requester. These cover source roles in [BR2.4](proposed-examples/planning-and-scope.md#br24--use-instruction-files-for-conduct-not-proof-of-project-facts), debt recording and upkeep in [BR8.3](proposed-examples/knowledge-and-documentation.md#br83--optional-debt-recording-does-not-authorize-a-fix) and [BR8.7](proposed-examples/knowledge-and-documentation.md#br87--update-recorded-debt-when-authorized-work-resolves-it), evidence for removing code in [BR9.5](proposed-examples/engineering-quality.md#br95--no-textual-caller-is-not-proof-of-dead-code), and responses to a documentation gap in [BR10.4](proposed-examples/knowledge-and-documentation.md#br104--a-documentation-gap-does-not-require-a-new-guide). Keep the detail with the example. If two plausible outcomes would affect the requester differently, describe the distinguishing condition in [open questions](open-questions.md).
+
+For downstream traceability, an expressly accepted defining example belongs in Formulation. [Design illustrations](../../03-design/docs/design-illustrations.md) help review the explanation of a mechanism. [Executable evaluation cases](../../05-evaluations/README.md#case-specifications) exercise a candidate, and [run evidence](../../docs/traceability.md#what-evidence-can-establish) records what was observed. The proposed cases add no runtime instructions, evaluator criteria, or verdicts.
+
+## Proposed example suites
+
+Open a suite to read the cases and their source notes. To add or change a case, follow the [example maintenance procedure](../docs/maintaining-discovery.md#add-or-revise-a-proposed-example).
+
+| Suite | Example groups | Count |
+| --- | --- | ---: |
+| [Planning and scope](proposed-examples/planning-and-scope.md) | BR1.1–BR1.6; BR2.1–BR2.4 | 10 |
+| [Authorization and communication](proposed-examples/authorization-and-communication.md) | BR3.1–BR3.9; BR7.1–BR7.5 | 14 |
+| [Bounded inquiry](proposed-examples/bounded-inquiry.md) | BR4.1–BR4.8 | 8 |
+| [Validation and learning](proposed-examples/validation-and-learning.md) | BR5.1–BR5.6; BR6.1–BR6.3 | 9 |
+| [Knowledge and documentation](proposed-examples/knowledge-and-documentation.md) | BR8.1–BR8.7; BR10.1–BR10.4 | 11 |
+| [Engineering quality](proposed-examples/engineering-quality.md) | BR9.1–BR9.5 | 5 |
+| [Self-contained delivery](proposed-examples/self-contained-delivery.md) | PR1.1–PR1.3 | 3 |
+| **Total** | | **60** |
 
 ## Requirement-to-scenario coverage
 
@@ -40,18 +57,3 @@ The matrix indexes 60 proposed examples, 51 Direct and 9 Detail review. The firs
 | [PR1](../../02-formulation/deliverables/baseline.md#established-product-requirement) | [PR1.1](proposed-examples/self-contained-delivery.md#pr11--check-the-delivered-file-against-the-full-duty-set), [PR1.2](proposed-examples/self-contained-delivery.md#pr12--fail-when-a-companion-supplies-missing-policy), [PR1.3](proposed-examples/self-contained-delivery.md#pr13--allow-loading-aids-and-adopting-project-facts) | — | — |
 
 The proposed examples illustrating accepted clarifications are BR1.3/BR1.5 (coherence and recovery), BR3.6 (unauthorized consequential choice), BR7.3/BR7.4 (limits, consumed allowances, and resumption), BR8.4/BR8.5 (assessment-write boundaries), and BR10.3 (out-of-scope gaps). BR4.3/BR4.8 distinguish justified continuation after an inconclusive step from repetition without supporting findings. Limits of two attempts in particular fixtures are requester-imposed examples, not a default investigation budget.
-
-## Proposed example suites
-
-Open a suite to read the cases and their source notes. To add or change a case, follow the [example maintenance procedure](../docs/maintaining-discovery.md#add-or-revise-a-proposed-example).
-
-| Suite | Example groups | Count |
-| --- | --- | ---: |
-| [Planning and scope](proposed-examples/planning-and-scope.md) | BR1.1–BR1.6; BR2.1–BR2.4 | 10 |
-| [Authorization and communication](proposed-examples/authorization-and-communication.md) | BR3.1–BR3.9; BR7.1–BR7.5 | 14 |
-| [Bounded inquiry](proposed-examples/bounded-inquiry.md) | BR4.1–BR4.8 | 8 |
-| [Validation and learning](proposed-examples/validation-and-learning.md) | BR5.1–BR5.6; BR6.1–BR6.3 | 9 |
-| [Knowledge and documentation](proposed-examples/knowledge-and-documentation.md) | BR8.1–BR8.7; BR10.1–BR10.4 | 11 |
-| [Engineering quality](proposed-examples/engineering-quality.md) | BR9.1–BR9.5 | 5 |
-| [Self-contained delivery](proposed-examples/self-contained-delivery.md) | PR1.1–PR1.3 | 3 |
-| **Total** | | **60** |

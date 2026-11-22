@@ -20,7 +20,7 @@ The mapping uses [Cucumber's three BDD practices](https://cucumber.io/docs/bdd/#
 
 Keep each interface limited to what the stage needs from its direct dependencies. A deliverable's location confers no [acceptance status](authority.md#status-of-engineering-records). Formulation supplies accepted intent to both Design and Evaluations. Design selects the mechanism that Candidate expresses as operational instructions. For requirements-led work, Evaluations derives the expectation from accepted intent and compares observed behavior against it. The [traceability model](traceability.md#tracing-a-requirement-and-its-evaluation) connects these paths.
 
-Stage numbers express conceptual progression. The [test-first iteration](pipeline.md#test-first-iteration) shows how work moves among the stages. Each engineering stage owns its procedures and supporting knowledge under the [documentation conventions](documentation.md#choosing-the-owner).
+Read stages in numerical order to learn the pipeline. Explain each stage’s work using its own terms, shared definitions and earlier outputs. Links to later stages can trace a realization or a finding. Feedback can reopen an earlier question. The [test-first iteration](pipeline.md#test-first-iteration) shows how work moves among the stages. Each engineering stage owns its procedures and supporting knowledge under the [documentation conventions](documentation.md#choosing-the-owner).
 
 ## Staged sources and release-relative references
 

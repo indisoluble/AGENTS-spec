@@ -1,12 +1,13 @@
 # 01 — Discovery
 
-Discovery explores what the operating contract should help the requester achieve. Start with a need, feedback, an observation, or a question about existing behavior. A feasibility finding from Design or an unexpected result from Evaluations can expose a missing condition. Check the [Formulation baseline and its constraints](../02-formulation/deliverables/baseline.md) to see what is already settled.
+Discovery asks what a requester needs from a coding agent working under the operating contract. Start with a need, feedback or an observation. Describe a situation where it matters, then vary one condition. Would the requester expect the agent to act differently? A finding from trying to implement or evaluate the contract can start the same conversation.
 
-| If you want to… | Start here |
+| Read in this order | What you will find |
 | --- | --- |
-| Understand the ordered objectives and why a requirement supports them | [`deliverables/objectives-and-rationale.md`](deliverables/objectives-and-rationale.md) |
-| Investigate an unsettled choice, such as when reading counts as inquiry | [`deliverables/open-questions.md`](deliverables/open-questions.md) |
-| Find a proposed example by requirement or subject and interpret its status | [`deliverables/example-coverage.md`](deliverables/example-coverage.md) links to the seven subject suites in [`deliverables/proposed-examples/`](deliverables/proposed-examples/) |
-| Explore a new question, revise a deliverable, or pass a decision to Formulation | [`docs/maintaining-discovery.md`](docs/maintaining-discovery.md) |
+| [Objectives and rationale](deliverables/objectives-and-rationale.md) | The outcomes the requester values, their priority and the reasons behind them. |
+| [Open questions](deliverables/open-questions.md) | Situations where the desired outcome still needs a requester decision. |
+| [Proposed examples](deliverables/example-coverage.md#proposed-example-suites) | Cases grouped by subject. Each describes starting conditions, an action and an observable outcome for discussion. |
 
-The requester or an authorized delegate decides product outcomes, priorities, and acceptance. Formulation uses that direction and Discovery’s proposals, rationale, and examples to specify agreed behavior. If formulation exposes an ambiguity, bring the distinguishing case back here. The [shared stage interfaces](../docs/architecture.md#stage-interfaces) define the handoff, and the [decision authority rules](../docs/authority.md#development-decisions) define what a decision covers.
+Discovery owns these objectives, reasons, proposals and questions. The requester or an explicitly authorized delegate decides product outcomes and priorities. An example remains proposed until a decision expressly accepts it as defining. When a decision settles part of a question, pass on the agreed outcome and keep the rest open. The [Discovery procedure](docs/maintaining-discovery.md) explains how to do both.
+
+To trace existing decisions, Formulation's [baseline](../02-formulation/deliverables/baseline.md) owns the accepted rules and constraints. References in the examples identify the source of a rule or the origin of a proposed detail. Later work can bring new evidence or an ambiguity back here. [Stage interfaces](../docs/architecture.md#stage-interfaces) · [Decision authority](../docs/authority.md#development-decisions)

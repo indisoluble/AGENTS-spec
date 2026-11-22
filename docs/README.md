@@ -4,6 +4,7 @@
 
 The [cross-stage change guide](changing-the-contract.md) follows an issue from its owner to the affected dependents. Choose the example that matches your task.
 
+- [Clarify Candidate wording and check its dependents](changing-the-contract.md#clarify-candidate-wording)
 - [Explore whether reading a project document counts as inquiry](changing-the-contract.md#explore-a-question-about-bounded-inquiry)
 - [Apply an authorized change to accepted behavior](changing-the-contract.md#apply-an-authorized-behavior-change)
 - [Compare a replacement for PDSA under BR6](changing-the-contract.md#compare-a-replacement-for-pdsa)

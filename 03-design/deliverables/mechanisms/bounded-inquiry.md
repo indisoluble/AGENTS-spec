@@ -6,7 +6,7 @@
 
 [Contract §1.1](../../../04-candidate/pre_AGENTS.md#11-plan--define-the-next-increment) classifies inspection of relevant code, callers, tests, configuration, and directly related dependencies to establish context as context gathering. It includes *all reading of existing project documentation*, even for a material blocking question. No inspection-by-inspection announcement is needed. Scope, limits, proportionality, and cumulative reassessment still apply.
 
-Discovery’s proposed example [BR4.7](../../../01-discovery/deliverables/proposed-examples/bounded-inquiry.md#br47--reading-existing-project-documents-remains-context-gathering) illustrates the distinction using an architecture record. Whether every future contract must preserve this exclusion is an [open product question](../../../01-discovery/deliverables/open-questions.md#which-activities-count-as-inquiry).
+Discovery’s proposed example [BR4.7](../../../01-discovery/deliverables/proposed-examples/bounded-inquiry.md#br47--reading-existing-project-documents-remains-context-gathering) illustrates the distinction using an architecture record. When that situation should trigger notice and bounded investigation remains an [open product question](../../../01-discovery/deliverables/open-questions.md#which-activities-count-as-inquiry).
 
 Beyond context gathering, inquiry means investigating material uncertainty about how to proceed that blocks the next decision. Purpose distinguishes inquiry from settled execution and validation: unknown output alone does not trigger inquiry, and using a prescribed procedure does not exempt an investigation. The same measurement or test can serve any of these purposes.
 

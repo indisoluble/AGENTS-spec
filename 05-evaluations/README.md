@@ -1,17 +1,19 @@
 # 05 — Evaluations
 
-Evaluations uses a [staged contract candidate](../04-candidate/pre_AGENTS.md) and defined cases to assess how agents behave. Runs produce observations and automated assertion results, with human review for criteria that require judgment. The current behavioral cases exercise contract clauses. Requirements-derived acceptance tests would draw independent expectations from [Formulation’s baseline](../02-formulation/deliverables/baseline.md). [Discovery’s example suites](../01-discovery/deliverables/example-coverage.md#proposed-example-suites) remain proposed. Behavioral verification is limited to what the evidence supports for the candidate and cases run. Offline tests verify evaluator machinery.
+Evaluations defines what a check will look for and assesses what happened when an agent received the [staged contract](../04-candidate/pre_AGENTS.md). In requirements-led work the expectation comes from accepted intent in Formulation, before it guides authorized Design and Candidate work. The current behavioral cases instead exercise selected contract clauses. The [shared stage interfaces](../docs/architecture.md#stage-interfaces) and [Design clause index](../03-design/deliverables/contract-design.md#contract-clause-index) identify the upstream owners.
+
+Start with the [case catalog](#case-specifications) for a fixture and its assessment, or the [evaluator requirements](#evaluator-requirements) for what the suite itself must do.
 
 - To understand what the suite assesses, read the [evaluation model and coverage limits](docs/evaluation-model.md#purpose-and-evaluation-model).
-- To run an evaluation, follow the [setup and run guide](docs/running-and-reviewing.md#setup-and-running-evaluations) or go to the [case and suite commands](docs/running-and-reviewing.md#run-a-case-or-the-suite).
+- For a first run, start with [setup](docs/running-and-reviewing.md#setup-and-running-evaluations). Use the [offline checks](docs/running-and-reviewing.md#run-offline-checks) to test the evaluator, or the [case and suite commands](docs/running-and-reviewing.md#run-a-case-or-the-suite) for a live agent evaluation.
 - To interpret a result, read the [outcomes and exit codes](docs/running-and-reviewing.md#outcomes-and-exit-codes) and inspect the [retained evidence](docs/running-and-reviewing.md#retained-evidence). Use the [human review guidance](docs/running-and-reviewing.md#response-presence-and-human-review) or the [failure investigation guide](docs/running-and-reviewing.md#investigate-a-failure-or-incomplete-result) as applicable.
-- To understand the framework, see its [component responsibilities](docs/framework-design.md#responsibilities-and-dependency-direction), [interfaces](docs/framework-design.md#interfaces-used-by-scenarios-and-substitutes), and [architecture decisions](docs/framework-design.md#architecture-decisions).
-- To maintain a case, follow [Change a scenario](docs/maintaining-evaluations.md#change-a-scenario) or [Add a scenario](docs/maintaining-evaluations.md#add-a-scenario).
+- To understand the framework, follow a [case through its components](docs/framework-design.md#walkthrough-scope-discipline), look up the [shared interfaces](docs/framework-design.md#interfaces-used-by-scenarios-and-substitutes), or trace the [agent permissions and their validation](docs/framework-design.md#agent-execution) to the [architecture decisions](docs/framework-design.md#architecture-decisions).
+- To define or revise an expectation, first [identify its source](docs/maintaining-evaluations.md#establish-the-expectation). Then follow [Change a scenario](docs/maintaining-evaluations.md#change-a-scenario) or [Add a scenario](docs/maintaining-evaluations.md#add-a-scenario).
 - To maintain shared evaluator code, follow [Change shared evaluator functionality](docs/maintaining-evaluations.md#change-shared-evaluator-functionality). Both workflows use [Verify a behavior change](docs/maintaining-evaluations.md#verify-a-behavior-change).
 
 ## Case specifications
 
-Each specification gives the case's assessment criteria, interpretation limits, case-specific evaluator requirements, and links to source and tests. The suite requirements define [accepted case selections](deliverables/requirements/suite-execution-and-results.md#e12) and [execution order](deliverables/requirements/suite-execution-and-results.md#e15).
+Each specification explains the task, assessment and limits, with links to the scenario that owns the exact inputs and grading and to its offline tests. Of the ten registered cases, smoke checks the evaluator path and the other nine exercise contract clauses. The groupings below tell you who grades the case. [E12](deliverables/requirements/suite-execution-and-results.md#e12) defines the accepted selections and [E15](deliverables/requirements/suite-execution-and-results.md#e15) defines suite order.
 
 **Fully automated**
 
@@ -31,10 +33,12 @@ Each specification gives the case's assessment criteria, interpretation limits, 
 
 ## Evaluator requirements
 
-The [case specifications](#case-specifications) own the case-specific requirements. Five shared specifications cover the following evaluator responsibilities.
+E1–E40 specify what the evaluator must do. Eleven belong to the [individual cases above](#case-specifications). The other 29 are grouped below. Under each requirement, **Checks** identifies ways to verify it. A listed live check or human review requires corresponding run evidence before anyone can claim it succeeded.
 
-- [Agent execution](deliverables/requirements/agent-execution.md)
-- [Workspace preparation and observation](deliverables/requirements/workspace-and-observation.md)
-- [Evidence retention and capture](deliverables/requirements/evidence-and-capture.md)
-- [Suite execution and results](deliverables/requirements/suite-execution-and-results.md)
-- [Functional checks](deliverables/requirements/functional-checks.md)
+| Shared specification | IDs | What the requirements protect |
+| --- | --- | --- |
+| [Agent execution](deliverables/requirements/agent-execution.md) | E3, E4, E6, E7, E10 | Run within the selected authentication and command boundaries, stop launched work, clean up the workspace and distinguish execution errors from grades. [Execution boundaries](docs/framework-design.md#execution-and-security-boundaries) |
+| [Workspace preparation and observation](deliverables/requirements/workspace-and-observation.md) | E1, E5, E16, E17, E19, E20, E22 | Give each case its intended starting state and obtain comparable observations, including when a file is missing or inspection fails. [Workspace implementation](deliverables/runtime/workspace.py) |
+| [Evidence retention and capture](deliverables/requirements/evidence-and-capture.md) | E8, E9, E21, E23, E24, E27 | Let a reviewer reconstruct what was observed and why an assertion passed or failed after the workspace is gone. [Retained evidence](docs/running-and-reviewing.md#retained-evidence) |
+| [Suite execution and results](deliverables/requirements/suite-execution-and-results.md) | E11, E12, E14, E15, E26 | Attribute each result to its case and keep errors, false assertions and pending human review distinguishable across a suite run. [CLI and reporting](deliverables/__main__.py) |
+| [Functional checks](deliverables/requirements/functional-checks.md) | E28–E31, E33, E34 | Run evaluator-owned scripts on eligible fixture files within a separate sandbox and retain enough evidence to distinguish a failed check from a launcher error. [Functional-check execution](docs/framework-design.md#functional-check-execution) |

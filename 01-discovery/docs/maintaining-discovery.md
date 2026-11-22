@@ -18,10 +18,12 @@ In [objectives and rationale](../deliverables/objectives-and-rationale.md), stat
 
 ## Add or revise a proposed example
 
-1. Choose a [subject file](../deliverables/example-coverage.md#proposed-example-suites) or start one if the situation introduces a new subject. A concrete proposal about an undecided outcome is enough to add a case.
-2. For a new example, add one to the highest EX number already assigned in any subject file. Write it with at least three digits, as in `EX-001`, followed by a descriptive title in the heading. Keep the ID when revising or moving a case. Retain retired IDs with their history so they cannot be reused.
+1. Choose a [subject file](../deliverables/example-coverage.md#proposed-example-suites) or start one if the situation introduces a new subject. A concrete proposal about an undecided outcome is enough to add a case. Give a new subject a short namespace that has never been used in Discovery and record it in the file and catalog. Keep the namespace when renaming the file and keep it listed in the catalog if the subject is retired.
+2. For a new example, use `EX-<SUBJECT>-<NNN>` followed by a descriptive title in the heading. Take the namespace and highest issued ID from the subject file. Start at `001` for a new namespace or add one to the highest issued number, including active, moved and retired examples. Write the sequence with three digits and update the highest issued ID in the originating file. Resolve any collision between concurrent additions before merging.
 3. State the starting facts, action and proposed observable result in Given/When/Then form. Explain any assumed project terms or permissions the reader needs. Keep conditions and exceptions with the outcome. If the [decision record](../deliverables/open-questions.md) contains a relevant conclusion or open question, link the case and that entry in both directions.
-4. Update the subject’s IDs and count and the catalog total. Extend a range only for a consecutive ID. List a nonconsecutive ID separately. Check that the ID appears on exactly one case heading and that links reach any moved or retitled case.
+4. Update the catalog’s IDs and counts for the affected files and the total. Extend a range only for a consecutive ID. List a nonconsecutive ID separately. Check that each active ID appears on exactly one case heading and that links reach any moved or retitled case.
+
+An ID records the example’s originating namespace and stays with the example through edits, renames, moves and reclassification. Keep retired or removed IDs in the originating subject’s sequence history and never reuse them.
 
 ## Record a requester decision
 

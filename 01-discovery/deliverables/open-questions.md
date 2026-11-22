@@ -27,6 +27,6 @@ Which of these detailed exclusions and purpose distinctions must every equivalen
 
 ## What can proceed to Formulation?
 
-The requester or an authorized delegate can settle the enduring rule and separately decide whether a particular example defines it. Existing approvals stand. In particular, [RC10’s disposition](../../02-formulation/docs/candidate-disposition.md#disposition-of-the-earlier-candidates) supports PR1 and the applicable authorization boundaries and supplies no separate provider-policy requirement or BR11.
+The requester or an authorized delegate can settle the enduring rule and separately decide whether a particular example defines it. Existing approvals stand. For bridges and references, [PR1 and its qualifications](../../02-formulation/deliverables/baseline.md#established-product-requirement) identify the accepted delivery and authorization boundaries. No separate provider-policy requirement or BR11 was established.
 
 Review of proposed formulations and examples, requirements-derived automation, and any separately authorized redesign remain future work. For a partial or complete decision, follow the [Discovery handoff](../docs/maintaining-discovery.md#pass-a-decision-to-formulation) and the [shared BDD iteration](../../docs/pipeline.md#test-first-iteration).

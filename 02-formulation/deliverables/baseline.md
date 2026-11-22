@@ -16,13 +16,15 @@ Currently prescribed methods retain their contractual force. Treating a mechanis
 
 ### Behavioral acceptance and editorial provenance
 
-The repository preserves the owner's report that **BR1–BR10 and five clarifications were accepted**, PR1 was already established, and no BR11 was needed. That summary is the source for behavioral acceptance here. The original verbatim approvals and their dates have not been independently verified.
+The repository preserves the [account of the owner's report](https://github.com/indisoluble/AGENTS-spec/blob/dac2127492b5ec9815773779b2900cc0db29fee5/behavior/baseline.md#phase-2-acceptance-and-editorial-provenance) that **BR1–BR10 and five clarifications were accepted**, PR1 was already established, and no BR11 was needed. That summary is the source for behavioral acceptance here. The original verbatim approvals and their dates have not been independently verified.
 
 The formulations below are editorial. They preserve the accepted outcomes and clarifications and use the linked contract and design accounts for precise obligations, qualifications, and exceptions. Where the summary does not independently establish a mechanism as enduring product intent, that mechanism retains its current design status and strength. The [open questions about design detail](../../01-discovery/deliverables/open-questions.md) identify such cases. Changing the behavior requires separate authority.
 
-The five clarifications are incorporated in BR1 (coherence and recovery), BR3 (unauthorized consequential choices), BR7 (handoff and consumed allowances), BR8 (assessment-only writes), and BR10 (out-of-scope documentation gaps). BR4 also incorporates the accepted clarification to reassess learning after an inconclusive step before deciding on another justified step, without a default numerical budget or automatic approval checkpoint. The [RC disposition](../docs/candidate-disposition.md#disposition-of-the-earlier-candidates) maps candidate identifiers to accepted outcomes.
+The five clarifications are incorporated in BR1 (coherence and recovery), BR3 (unauthorized consequential choices), BR7 (handoff and consumed allowances), BR8 (assessment-only writes), and BR10 (out-of-scope documentation gaps). BR4 also incorporates the accepted clarification to reassess learning after an inconclusive step before deciding on another justified step, without a default numerical budget or automatic approval checkpoint. RC1–RC10 identified provisional proposals. Their numbering did not correspond one-to-one to the accepted requirements.
 
 The owner left the example draft unaccepted. All [examples indexed by Discovery](../../01-discovery/deliverables/example-coverage.md#proposed-example-suites) remain proposed. PDSA, EARS, ADR, arc42, Diátaxis, provider integration, the [28 design illustrations](../../03-design/docs/design-review.md#assessing-design-changes), and existing evaluator expectations retain their respective design or evidence status.
+
+For a subsequent decision, see [how to record its scope, source, and any defining example](../docs/maintaining-formulation.md).
 
 ## Established product requirement
 
@@ -31,6 +33,8 @@ The owner left the example draft unaccepted. All [examples indexed by Discovery]
 This restates the accepted product boundary in verifiable EARS form, rather than accepting every current clause as a requirement. Bridges may still be needed for a provider to load the contract. Guides may explain it, and adopting-project artifacts supply that project's facts, requirements, build commands, and architecture. None supplies hidden generic operating policy. A standalone reading can check textual completeness; loading and actual agent behavior require their own evidence.
 
 Design navigation for PR1: [self-containment and design boundaries](../../03-design/deliverables/contract-design.md#design-goals-and-boundaries), [delivery and portability](../../03-design/deliverables/delivery-and-portability.md), and the [contract-clause coverage index](../../03-design/deliverables/contract-design.md#contract-clause-index).
+
+For bridges and references, the accepted outcomes concern self-containment under PR1 and the applicable authorization boundaries in [BR3](#br3--autonomy-within-authorization-and-prior-direction) and [BR8](#br8--durable-knowledge-without-expanded-editing-authority). Design specifies bridge compatibility, provenance, diagnostics, what happens if loading fails, and the limits on consulting references. These details retain their current force. See [provider bridge behavior](../../03-design/deliverables/delivery-and-portability.md#why-the-bridges-differ) and [reference consultation](../../03-design/deliverables/methods-and-references.md#principles-and-reference-boundaries).
 
 ### R5
 

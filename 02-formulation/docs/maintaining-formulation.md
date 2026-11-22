@@ -24,11 +24,13 @@ A useful example gives the relevant starting facts, an event or action, and a vi
 
 | What you have | How to use it |
 | --- | --- |
-| An exploratory Discovery example | Follow its ID to the proposed facts and outcome. Both Direct and Detail review are proposal classifications. |
+| An exploratory Discovery example | Follow its EX identifier to the proposed facts, outcome and any requester clarification. Agreement on the general outcome leaves the individual case open for review. |
 | An expressly accepted defining example | Record the agreed version and its conditions beside the requirement in Formulation. Cite the decision that accepted that example as defining. Link the resulting entry back to the Discovery ID so its origin and any outstanding parts remain traceable. Acceptance of the rule alone leaves the example proposed. |
 
 ## Verify the rule and its coverage
 
 Compare the baseline with the decision and the previous version, including adjacent qualifications, interacting rules and constraints. Check that a reader can distinguish permitted outcomes from violations using the baseline alone. Report a missing decision or an ambiguity with the conditions that expose it.
 
-Use the [coverage matrix](../deliverables/example-coverage.md) to connect a requirement to the Discovery cases that illustrate it. Index each case once under its primary requirement in the column matching its Discovery classification. Record a secondary interaction only when the case exercises it. Reconcile IDs, links, classifications and totals with the [subject suites](../../01-discovery/deliverables/example-coverage.md#proposed-example-suites). A matrix entry does not accept a case as defining.
+Use the [coverage matrix](../deliverables/example-coverage.md) when an accepted requirement relates to a Discovery case. Compare the proposed outcome with the requirement and its qualifications. Index the EX identifier once under its primary requirement in the appropriate coverage column. For a Detail review entry, name the procedure or interpretation that needs separate consideration. List the same identifier under each other requirement the case exercises.
+
+If a requirement changes name, splits, or no longer applies, revise its associations here. Keep the Discovery ID and the [historical lookup](../deliverables/example-coverage.md#historical-example-ids) stable. Check each mapped ID against its [Discovery subject file](../../01-discovery/deliverables/example-coverage.md#proposed-example-suites) and reconcile both column totals with the mapped cases. A new Discovery proposal can remain unmapped until an accepted requirement relates to it.

@@ -1,28 +1,22 @@
 # Proposed examples: self-contained delivery
 
-All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example).
+All examples remain **proposed and unaccepted**. See [how to read a proposed example](../example-coverage.md#reading-a-proposed-example).
 
-## PR1 — Self-contained operating contract
+In these cases, `AGENTS.md` is the file of instructions delivered to a project. A provider bridge is a tool-specific file that directs a coding agent to those instructions. The reviewer asks what the agent could learn by reading the delivered file alone.
 
-### PR1.1 — Check the delivered file against the full duty set
-
-**Direct — proposed.**
+## EX-058 — Check the delivered file against the full duty set
 
 - **Given** the delivered `AGENTS.md` and an inventory of all generic operating duties intended for that release, including all binding procedures as well as general behavioral duties.
 - **When** a reviewer checks the delivered file without relying on the companion guides, provider bridge, or internal engineering docs to supply instructions.
 - **Then** every operative duty, including its applicable trigger, force, and exceptions, can be recovered from the delivered file. The result establishes textual self-containment only, not provider loading or agent adherence.
 
-### PR1.2 — Fail when a companion supplies missing policy
-
-**Direct — proposed.**
+## EX-059 — Fail when a companion supplies missing policy
 
 - **Given** a mandatory consultation trigger is defined only in an internal guide or provider bridge, and the delivered file omits it or points elsewhere for the operative rule.
 - **When** a reviewer checks the delivered file for self-containment.
 - **Then** the file lacks a required operating instruction even if a provider loads both files and an agent could follow their combined instructions.
 
-### PR1.3 — Allow loading aids and adopting-project facts
-
-**Direct — proposed.**
+## EX-060 — Allow loading aids and adopting-project facts
 
 - **Given** a provider bridge only locates and loads `AGENTS.md`, a guide explains a method without adding duties, and an adopting project supplies its own build commands and requirements.
 - **When** a reviewer checks the delivered contract for generic operating duties.

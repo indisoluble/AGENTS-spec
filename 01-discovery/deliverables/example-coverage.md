@@ -1,37 +1,32 @@
 # Proposed example catalog
 
-Start with the [suites by subject](#proposed-example-suites). IDs are stable labels for discussion. For example, BR4.7 is the seventh case in the bounded-inquiry group.
+Find a situation in the [suites by subject](#proposed-example-suites). An EX identifier names one example across the whole catalog. It stays with the example if its title, subject or review status changes.
 
 ## Reading a proposed example
 
-All examples here await requester review as defining examples. Given/When/Then distinguishes starting conditions, the action, and the proposed observable outcome.
+All examples are **proposed**. The requester has yet to accept any of them as defining correct behavior. **Given** describes the starting facts in an illustrative project, **When** describes the action, and **Then** describes the outcome proposed for discussion.
 
-| Classification | How to read the proposed outcome |
-| --- | --- |
-| **Direct** | The proposal illustrates an agreed outcome with its applicable qualifications. Its observable result can be described without specifying how to achieve it. |
-| **Detail review** | The proposed result depends on a particular procedure or interpretation, such as the evidence used to classify code as dead. The note beside the case identifies that detail. |
+A project requirement, tool permission or requester limit in **Given** is a fact of that situation. In the proposed outcome, “must” expresses a duty, “should” a recommendation allowing justified exceptions, and “may” a choice. Compare disclosing the date assumption used in an authorized preview in [EX-015](proposed-examples/authorization-and-communication.md#ex-015--disclose-a-material-assumption-at-the-applicable-reporting-occasion) with reporting a choice that needed prior permission in [EX-016](proposed-examples/authorization-and-communication.md#ex-016--disclose-a-consequential-choice-made-without-prior-direction).
 
-Read permissions as choices, recommendations with their justified exceptions, and duties at their stated strength. For example, compare the disclosure timing in [BR3.5](proposed-examples/authorization-and-communication.md#br35--disclose-a-material-assumption-at-the-applicable-reporting-occasion) with the prior-direction violation in [BR3.6](proposed-examples/authorization-and-communication.md#br36--disclose-a-consequential-choice-made-without-prior-direction).
-
-The cases use illustrative project facts. Terms such as material, sufficient, proportionate, significant, and available take their meaning from those circumstances. A number in one case sets no universal threshold.
+Terms such as material, sufficient, proportionate, significant, and available take their meaning from the facts of the case. A number in one case sets no universal threshold.
 
 ## Sources and decision scope
 
-The requester supplied an unaccepted example draft. The earlier record reports in-principle acceptance for some proposals without identifying which ones. Alternatives selected for planning lacked both implementation detail and authorization. Neither establishes detailed product acceptance or authorizes a redesign.
+The requester supplied an unaccepted example draft. An earlier record reports agreement in principle on some proposals without identifying them. Some alternatives were selected for planning only. Their implementation details and authorization were still outstanding. These records establish neither acceptance of a particular example as defining nor authorization for a redesign.
 
-A detail can be worth retaining even when there is no outstanding product question. A requester conclusion can settle the desired outcome while the example itself remains proposed. See the [question and decision record](open-questions.md).
+A requester conclusion can settle the desired outcome while the example itself remains proposed. The [question and decision record](open-questions.md) distinguishes those conclusions from questions that still need an answer.
 
 ## Proposed example suites
 
 Open a suite to read the cases. To add or change a case, follow the [example maintenance procedure](../docs/maintaining-discovery.md#add-or-revise-a-proposed-example).
 
-| Suite | Example groups | Count |
+| Subject | Example IDs | Count |
 | --- | --- | ---: |
-| [Planning and scope](proposed-examples/planning-and-scope.md) | BR1.1–BR1.6; BR2.1–BR2.4 | 10 |
-| [Authorization and communication](proposed-examples/authorization-and-communication.md) | BR3.1–BR3.9; BR7.1–BR7.5 | 14 |
-| [Bounded inquiry](proposed-examples/bounded-inquiry.md) | BR4.1–BR4.8 | 8 |
-| [Validation and learning](proposed-examples/validation-and-learning.md) | BR5.1–BR5.6; BR6.1–BR6.3 | 9 |
-| [Knowledge and documentation](proposed-examples/knowledge-and-documentation.md) | BR8.1–BR8.7; BR10.1–BR10.4 | 11 |
-| [Engineering quality](proposed-examples/engineering-quality.md) | BR9.1–BR9.5 | 5 |
-| [Self-contained delivery](proposed-examples/self-contained-delivery.md) | PR1.1–PR1.3 | 3 |
+| [Planning and scope](proposed-examples/planning-and-scope.md) | EX-001–EX-010 | 10 |
+| [Authorization and communication](proposed-examples/authorization-and-communication.md) | EX-011–EX-024 | 14 |
+| [Bounded inquiry](proposed-examples/bounded-inquiry.md) | EX-025–EX-032 | 8 |
+| [Validation and learning](proposed-examples/validation-and-learning.md) | EX-033–EX-041 | 9 |
+| [Knowledge and documentation](proposed-examples/knowledge-and-documentation.md) | EX-042–EX-052 | 11 |
+| [Engineering quality](proposed-examples/engineering-quality.md) | EX-053–EX-057 | 5 |
+| [Self-contained delivery](proposed-examples/self-contained-delivery.md) | EX-058–EX-060 | 3 |
 | **Total** | | **60** |

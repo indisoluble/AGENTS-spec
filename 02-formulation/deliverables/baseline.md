@@ -10,7 +10,7 @@ The [acceptance record](../docs/acceptance-record.md) identifies the decisions b
 
 ### R5
 
-Bridges may load the contract, guides may explain it, and adopting-project artifacts supply local facts, requirements, build commands and architecture. Every generic operating duty must still be recoverable by reading the delivered file on its own. This property can be checked by standalone inspection. The [proposed PR1 examples](../../01-discovery/deliverables/proposed-examples/self-contained-delivery.md#pr1--self-contained-operating-contract) illustrate what to look for. Provider loading and actual agent behavior require separate evidence.
+Bridges may load the contract, guides may explain it, and adopting-project artifacts supply local facts, requirements, build commands and architecture. Every generic operating duty must still be recoverable by reading the delivered file on its own. This property can be checked by standalone inspection. The [proposed examples of self-contained delivery](../../01-discovery/deliverables/proposed-examples/self-contained-delivery.md) illustrate what to look for. Provider loading and actual agent behavior require separate evidence.
 
 ## Accepted behavioral requirements
 

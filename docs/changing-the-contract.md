@@ -32,7 +32,7 @@ If the decision and your authorization already cover the change, edit the author
 
 Follow a dependency further only when the next owner relies on something that changed. For affected guides and [illustrations](../03-design/docs/design-illustrations.md), use the [consumer guide review](consumer-documentation-review.md) and [Design explanation checks](../03-design/docs/design-review.md#meaning-and-evidence-checks). Text review establishes what the instructions say. Behavioral claims require [observed evidence](traceability.md#what-evidence-can-establish).
 
-For a mechanism change, check the [example source references](contract-traces.md#sources-for-the-proposed-examples). A change to the chat channel for BR7.1’s initial framing can affect the source note while leaving the proposed outcome intact. If the case itself assumes the changed detail, review its conditions, classification and any question it illustrates. Keep the subject catalog, requirement matrix and known summaries of their totals consistent.
+For a mechanism change, check the [example source references](contract-traces.md#sources-for-the-proposed-examples). A change to the chat channel for EX-020’s initial explanation can affect the source note while leaving the proposed outcome intact. If an assumption in the case is affected, examine the proposed outcome and any open question in Discovery. Review the [Formulation classification](../02-formulation/deliverables/example-coverage.md) if the example’s relationship to the accepted requirement changes. When adding or retiring examples, check totals in the subject catalog, the mapped coverage and any summaries that cite them.
 
 ### Apply an authorized behavior change
 

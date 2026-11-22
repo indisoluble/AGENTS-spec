@@ -18,9 +18,10 @@ In [objectives and rationale](../deliverables/objectives-and-rationale.md), stat
 
 ## Add or revise a proposed example
 
-- Find the [subject suite](../deliverables/example-coverage.md#proposed-example-suites). State the starting facts, action and observable result. Preserve the scope of each permission and exception.
-- Use the [classification definitions](../deliverables/example-coverage.md#reading-a-proposed-example). Identify the particular detail in a Detail review case. Link a relevant requester conclusion or unresolved question beside the case.
-- Preserve existing IDs. For a new case in an existing group, use its next unused suffix. Update the catalog’s group ranges and counts and check each changed heading and incoming local link. A proposal about a new subject can start in the question record without a BR or PR identifier.
+1. Choose a [subject file](../deliverables/example-coverage.md#proposed-example-suites) or start one if the situation introduces a new subject. A concrete proposal about an undecided outcome is enough to add a case.
+2. For a new example, add one to the highest EX number already assigned in any subject file. Write it with at least three digits, as in `EX-001`, followed by a descriptive title in the heading. Keep the ID when revising or moving a case. Retain retired IDs with their history so they cannot be reused.
+3. State the starting facts, action and proposed observable result in Given/When/Then form. Explain any assumed project terms or permissions the reader needs. Keep conditions and exceptions with the outcome. If the [decision record](../deliverables/open-questions.md) contains a relevant conclusion or open question, link the case and that entry in both directions.
+4. Update the subject’s IDs and count and the catalog total. Extend a range only for a consecutive ID. List a nonconsecutive ID separately. Check that the ID appears on exactly one case heading and that links reach any moved or retitled case.
 
 ## Record a requester decision
 

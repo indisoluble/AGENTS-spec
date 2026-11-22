@@ -27,6 +27,8 @@ Start where the intended reader would start. Follow the affected path and see wh
 | Learn by doing | Try the exercise from the learner's starting knowledge. Check that instructions introduce what each step needs and yield a recognizable result. |
 | Understand a design or decision | Trace the explanation to the upstream intent, selected mechanism, and reasons. Can the reader explain why it applies here, where it stops applying, and where to find any decision that replaced it? |
 
-Check affected links and anchors as well as the names a reader would copy or search for. Interpret consumer references at their [intended locations](architecture.md#staged-sources-and-release-relative-references). Where two accounts cover the same fact, verify that only one needs to maintain its definition.
+Check affected links and anchors as well as the names a reader would copy or search for. Where two accounts cover the same fact, verify that only one needs to maintain its definition.
+
+For a consumer link, first resolve the path and heading from the staged source. To check installation, copy the five files into an empty temporary directory using the [installed paths](architecture.md#staged-sources-and-release-relative-references). Keep their contents intact and follow the same reference from its installed file. For a failure, record the layout, referring file, literal target, and whether the path is missing, leaves the package, or reaches a file without the requested heading.
 
 Limit conclusions to the evidence the check supplies. Text comparison can establish agreement with a specification. Claims about agent behavior require observations of the identified candidate, evaluator correctness needs corresponding machinery checks, and causal claims need comparative evidence. See [what evidence can establish](traceability.md#what-evidence-can-establish).

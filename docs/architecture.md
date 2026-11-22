@@ -4,7 +4,7 @@ AGENTS-spec develops a reusable, self-contained [operating contract](../04-candi
 
 ## Purpose and scope
 
-Engineering documentation supports understanding, changing, and verifying the product. The consumer package is independently usable. Delivered `AGENTS.md` contains the complete runtime instructions, the bridges load or direct tools to it, and the two consumer guides explain adoption and use. Consumer artifacts have no references or dependencies back into engineering documentation.
+Engineering documentation supports understanding, changing, and verifying the product. The consumer package is designed for use without the engineering tree. Delivered `AGENTS.md` contains the complete runtime instructions, the bridges load or direct tools to it, and the two consumer guides explain adoption and use. Consumer artifacts have no references or dependencies back into engineering documentation.
 
 ## Stage interfaces
 
@@ -34,7 +34,7 @@ Stage numbers express conceptual progression. The [test-first iteration](pipelin
 | `pre_README.md` | `README.md` |
 | `pre_README-powerusers.md` | `README-powerusers.md` |
 
-References to standard instruction and documentation filenames describe adopting projects. A bridge reference that fails from a staged file can resolve correctly at its installed location. The consumer README's license link targets the repository-root `LICENSE`. Check links against their intended locations. Design explains [bridge behavior](../03-design/deliverables/delivery-and-portability.md#why-the-bridges-differ) and [provider-specific instruction discovery](../03-design/deliverables/delivery-and-portability.md#installed-paths-and-provider-discovery).
+References to standard instruction and documentation filenames describe adopting projects. Copilot’s `../AGENTS.md` resolves from the installed `.github/` directory. Both guides contain links to `pre_*` files that resolve in staging and break after installation. The adoption guide’s `../LICENSE` reaches the [repository license](../LICENSE) in staging and points outside the installed package. Design explains [bridge behavior](../03-design/deliverables/delivery-and-portability.md#why-the-bridges-differ) and [provider-specific instruction discovery](../03-design/deliverables/delivery-and-portability.md#installed-paths-and-provider-discovery).
 
 ## Architecture decisions
 

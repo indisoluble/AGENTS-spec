@@ -1,6 +1,6 @@
 # Knowledge and documentation
 
-[Contract architecture](../contract-design.md) supplies status, vocabulary, and clause-to-intent traceability. This document explains knowledge ownership (§§1.1, 3.5) and documentation methods (§§3.1, 3.3–3.4, 3.6). [Authorization](requester-decisions-and-reporting.md#authorization-and-requester-decisions) determines assessment-write permissions and durable-finding duties; [reporting](requester-decisions-and-reporting.md#reporting-and-continued-execution) determines disclosure timing.
+[Contract architecture](../contract-design.md) supplies status and vocabulary. This document explains knowledge ownership and documentation methods. [Authorization](requester-decisions-and-reporting.md#authorization-and-requester-decisions) determines assessment-write permissions and durable-finding duties; [reporting](requester-decisions-and-reporting.md#reporting-and-continued-execution) determines disclosure timing.
 
 ## DRY: keeping knowledge consistent as work progresses
 
@@ -62,7 +62,7 @@ Topic 11 includes known risks beyond internal-quality compromises: external depe
 
 > If an input row has a different number of fields from the header, then the importer shall reject that row and report its line number.
 
-The pattern exposes behavior to implement/check; it cannot decide row versus file rejection or the line-number convention. Those remain project decisions. Under [§3.1](../../../04-candidate/pre_AGENTS.md#31-new-or-revised-system-requirements), new/revised in-scope system requirements MUST have canonical owners and consistently express verifiable behavior as `<prefix> the <system> shall <response>.` Unchanged requirements need no automatic conversion; restating a canonical requirement MUST NOT duplicate it.
+The pattern exposes behavior to implement/check; it cannot decide row versus file rejection or the line-number convention. Those remain project decisions. New/revised in-scope system requirements MUST have canonical owners and consistently express verifiable behavior as `<prefix> the <system> shall <response>.` Unchanged requirements need no automatic conversion; restating a canonical requirement MUST NOT duplicate it.
 
 | Pattern | Prefix |
 | --- | --- |

@@ -1,6 +1,6 @@
 # 05 — Evaluations
 
-Evaluations defines what a check will look for and assesses what happened when an agent received the [staged contract](../04-candidate/pre_AGENTS.md). In requirements-led work the expectation comes from accepted intent in Formulation, before it guides authorized Design and Candidate work. The current behavioral cases instead exercise selected contract clauses. The [shared stage interfaces](../docs/architecture.md#stage-interfaces) and [Design clause index](../03-design/deliverables/contract-design.md#contract-clause-index) identify the upstream owners.
+Evaluations defines what a check will look for and assesses what happened when an agent received the [staged contract](../04-candidate/pre_AGENTS.md). In requirements-led work the expectation comes from accepted intent in Formulation, before it guides authorized Design and Candidate work. The current behavioral cases instead exercise selected contract clauses. The [shared stage interfaces](../docs/architecture.md#stage-interfaces) and [shared clause index](../docs/contract-traces.md#contract-clause-index) identify the upstream owners.
 
 Start with the [case catalog](#case-specifications) for a fixture and its assessment, or the [evaluator requirements](#evaluator-requirements) for what the suite itself must do.
 

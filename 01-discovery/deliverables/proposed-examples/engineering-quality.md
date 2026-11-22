@@ -1,10 +1,8 @@
 # Proposed examples: engineering quality
 
-All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example) and the [coverage matrix](../example-coverage.md#requirement-to-scenario-coverage).
+All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example).
 
 ## BR9 — Engineering quality and preservation
-
-Requirement: [BR9](../../../02-formulation/deliverables/baseline.md#br9--engineering-quality-and-preservation). Current qualification evidence: [design explanation](../../../03-design/deliverables/mechanisms/engineering-and-validation.md#component-boundaries-refactoring-and-validation), [contract](../../../04-candidate/pre_AGENTS.md) §§1.2–1.3.
 
 ### BR9.1 — Refactor without changing observable behavior
 
@@ -40,7 +38,7 @@ Requirement: [BR9](../../../02-formulation/deliverables/baseline.md#br9--enginee
 
 ### BR9.5 — No textual caller is not proof of dead code
 
-**Detail review — proposed.** The exact dead-code evidence test remains current design under the accepted focused-change and preservation outcomes.
+**Detail review — proposed.** The detail is what evidence justifies treating code as dead.
 
 - **Given** a cleanup adjacent to an authorized fix finds no textual calls to a handler, but dynamic registration may still reach it; removal of live functionality is not authorized.
 - **When** the agent considers deleting the handler as dead code.

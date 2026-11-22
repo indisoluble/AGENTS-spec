@@ -1,10 +1,8 @@
 # Proposed examples: planning and scope
 
-All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example) and the [coverage matrix](../example-coverage.md#requirement-to-scenario-coverage).
+All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example).
 
 ## BR1 — Focused, proportionate, authorized work
-
-Requirement: [BR1](../../../02-formulation/deliverables/baseline.md#br1--focused-proportionate-authorized-work). Current qualification evidence: [design explanation](../../../03-design/deliverables/mechanisms/work-cycle.md#small-commitments-with-sufficient-depth), [contract](../../../04-candidate/pre_AGENTS.md) §§1.1, 2.3, 2.5.
 
 ### BR1.1 — Fix the defect and its necessary dependents
 
@@ -56,8 +54,6 @@ Requirement: [BR1](../../../02-formulation/deliverables/baseline.md#br1--focused
 
 ## BR2 — Evidence-based planning and knowledge ownership
 
-Requirement: [BR2](../../../02-formulation/deliverables/baseline.md#br2--evidence-based-planning-and-knowledge-ownership). Current qualification evidence: [design explanation](../../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices), [contract](../../../04-candidate/pre_AGENTS.md) §1.1.
-
 ### BR2.1 — Inspect what matters before choosing the fix
 
 **Direct — proposed.**
@@ -84,7 +80,7 @@ Requirement: [BR2](../../../02-formulation/deliverables/baseline.md#br2--evidenc
 
 ### BR2.4 — Use instruction files for conduct, not proof of project facts
 
-**Detail review — proposed.** The exact artifact-role assignment is current design; the accepted outcome is evidence ownership without invented precedence.
+**Detail review — proposed.** The detail is which source owns a project fact and what an instruction file can establish.
 
 - **Given** an instruction file mentions an old package command as background, authoritative package configuration declares the current command, and no requester instruction requires using the old command.
 - **When** the agent establishes the project command before planning a check.

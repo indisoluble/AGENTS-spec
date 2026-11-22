@@ -1,11 +1,8 @@
 # Proposed examples: knowledge and documentation
 
-All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example) and the [coverage matrix](../example-coverage.md#requirement-to-scenario-coverage).
+All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example).
 
 ## BR8 — Durable knowledge without expanded editing authority
-
-Requirement: [BR8](../../../02-formulation/deliverables/baseline.md#br8--durable-knowledge-without-expanded-editing-authority). Current qualification evidence: [design explanation](../../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [contract](../../../04-candidate/pre_AGENTS.md) §§2.1, 3.2–3.4, 3.8.
-Decision and debt detail: [ADRs](../../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#adrs-preserving-the-reasons-for-lasting-choices), [technical debt](../../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#recording-technical-debt).
 
 ### BR8.1 — Record a lasting finding where it belongs
 
@@ -25,11 +22,11 @@ Decision and debt detail: [ADRs](../../../03-design/deliverables/mechanisms/know
 
 ### BR8.3 — Optional debt recording does not authorize a fix
 
-**Detail review — proposed.** Technical-debt classification and its optional-record conditions are current design; the durable-finding duty and authority boundary are accepted.
+**Detail review — proposed.** The detail is when recording a compromise as technical debt is optional.
 
 - **Given** a review uncovers a current, task-relevant implementation compromise evidenced to increase maintenance cost, and a separate feature intentionally deferred; accepted requirements and trade-offs are available and record writes are permitted.
 - **When** the agent considers whether to record technical debt.
-- **Then** it considers those accepted requirements and trade-offs and may record the evidenced compromise as debt. If it does, it flags any classification uncertainty and reports what was recorded, why, and where. Deferral alone does not make the feature debt, and recording does not authorize repair. Independently, a finding that is both material and durable must be recorded under BR8 even if the agent does not choose a debt classification.
+- **Then** it considers those accepted requirements and trade-offs and may record the evidenced compromise as debt. If it does, it flags any classification uncertainty and reports what was recorded, why, and where. Deferral alone does not make the feature debt, and recording does not authorize repair. Independently, a finding that is both material and durable must be recorded with its supporting evidence even if the agent does not choose a debt classification.
 
 ### BR8.4 — Keep review-only edits inside the narrow permission
 
@@ -57,15 +54,13 @@ Decision and debt detail: [ADRs](../../../03-design/deliverables/mechanisms/know
 
 ### BR8.7 — Update recorded debt when authorized work resolves it
 
-**Detail review — proposed.** Maintenance of an existing debt entry is a current conditional duty; accepting the example must not make initial debt recording mandatory.
+**Detail review — proposed.** The detail is the duty to maintain an existing debt entry when the compromise is resolved. Initial debt recording remains optional.
 
 - **Given** an existing debt entry describes a compromise that the current authorized fix resolves, and updating its record is permitted.
 - **When** the agent completes the fix and affected documentation.
 - **Then** it updates the affected debt record and reports the change, preserving any still-relevant uncertainty. The optional choice to create a debt entry does not make maintenance of an affected existing entry optional or authorize additional repairs.
 
 ## BR10 — Affected requirements and documentation
-
-Requirement: [BR10](../../../02-formulation/deliverables/baseline.md#br10--affected-requirements-and-documentation). Current qualification evidence: [design explanation](../../../03-design/deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices), [contract](../../../04-candidate/pre_AGENTS.md) §§3.1, 3.5–3.6.
 
 ### BR10.1 — Separate lasting behavior from task-only checks
 
@@ -89,11 +84,11 @@ Requirement: [BR10](../../../02-formulation/deliverables/baseline.md#br10--affec
 
 - **Given** the agent finds an outdated setup guide for an unrelated service while editing docs for an authorized change.
 - **When** it resolves the affected in-scope docs.
-- **Then** it leaves the unrelated guide untouched and reports or proposes the separate repair. If the task is review-only, any edits must also fit BR8's narrower permission.
+- **Then** it leaves the unrelated guide untouched and reports or proposes the separate repair. If the task is review-only, any edits must also fit the narrow permission illustrated in [BR8.4](#br84--keep-review-only-edits-inside-the-narrow-permission).
 
 ### BR10.4 — A documentation gap does not require a new guide
 
-**Detail review — proposed.** Coverage proposals, requester deferral, and the agreed-need condition for a guide preserve current documentation design without freezing a method.
+**Detail review — proposed.** The detail is how a coverage proposal, requester deferral and an agreed need for a guide affect the response.
 
 - **Given** an in-scope review finds a known architecture coverage gap, the requester postpones that improvement, and no need for a new tutorial has been requested or agreed.
 - **When** the agent reports the gap and maintains the authorized documentation.

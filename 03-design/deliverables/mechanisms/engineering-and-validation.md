@@ -1,6 +1,6 @@
 # Engineering and validation
 
-[Contract architecture](../contract-design.md) supplies status, vocabulary, and clause-to-intent traceability. This document explains engineering practices (§1.2) and validation (§1.3); [reference assignments](../methods-and-references.md#principles-and-reference-boundaries) identify their supporting sources.
+[Contract architecture](../contract-design.md) supplies status and vocabulary. This document explains engineering practices and validation; [reference assignments](../methods-and-references.md#principles-and-reference-boundaries) identify their supporting sources.
 
 ## Engineering scope boundaries
 
@@ -41,7 +41,7 @@ Availability and sufficient evidence are separate questions. A tooling limitatio
 
 Revision authority follows the source: requester-supplied requirements/conditions MAY change only with requester authority; canonical requirements only through authorized requirement work; agent-derived conditions only consistently with requester instructions, project requirements, scope, and decision authority. Failed validation or implementation difficulty MUST NOT justify weakening, replacing, or reinterpreting requirements or conditions, and tests MUST NOT be weakened just to pass. [Completion versus prediction](work-cycle.md#requirements-acceptance-conditions-and-predictions) explains why learning cannot lower the completion bar.
 
-Behavior changes, repairs, and clarified edge cases SHOULD have appropriate tests, including regression checks, whose names, examples, setup, actions, and assertions explain observable behavior. Unit tests SHOULD use [Given/When/Then](https://martinfowler.com/bliki/GivenWhenThen.html): starting conditions, action, expected result; no prescribed labels or framework. For a quoted comma, these are the sample, parser call, and intact-field assertion. Documentation-only work needs its relevant checks rather than code/unit tests for their own sake. The [practical validation examples](../../../04-candidate/pre_README-powerusers.md#assess-the-result) distinguish local alternatives, insufficient mocked evidence, and specifically required CI results.
+Behavior changes, repairs, and clarified edge cases SHOULD have appropriate tests, including regression checks, whose names, examples, setup, actions, and assertions explain observable behavior. Unit tests SHOULD use [Given/When/Then](https://martinfowler.com/bliki/GivenWhenThen.html): starting conditions, action, expected result; no prescribed labels or framework. For a quoted comma, these are the sample, parser call, and intact-field assertion. Documentation-only work needs its relevant checks rather than code/unit tests for their own sake.
 
 ## Focused techniques and how they work together
 

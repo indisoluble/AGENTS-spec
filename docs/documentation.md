@@ -20,7 +20,7 @@ When several stages use a definition, keep it with the stage responsible for cha
 
 Discovery, Formulation, Design, and Evaluations use the stage layout. Candidate contains only its [five consumer files](architecture.md#staged-sources-and-release-relative-references) at the directory root. Its technical rationale belongs primarily in Design, and engineering navigation stays outside the package.
 
-The two consumer guides can explain the same subject at different depths. Preserve each guide's practical value and the contract's strengths, conditions, and exceptions. Keep essential explanations self-contained or refer to product documentation, the contract, or external sources. Design owns the [audience and comprehension checks](../03-design/docs/design-review.md#reviewing-contract-explanations).
+The two consumer guides can explain the same subject at different depths. Preserve each guide's practical value and the contract's strengths, conditions, and exceptions. Keep essential explanations self-contained or refer to product documentation, the contract, or external sources. The shared [consumer documentation review](consumer-documentation-review.md#reviewing-contract-explanations) covers audience and comprehension checks.
 
 ## Where the rationale belongs
 

@@ -12,7 +12,7 @@ The mapping uses [Cucumber's three BDD practices](https://cucumber.io/docs/bdd/#
 
 | BDD practice | Stage | Principal inputs | Principal outputs |
 | --- | --- | --- | --- |
-| Discovery | [`01-discovery/`](../01-discovery/README.md) | Requester needs, feedback, observations, existing knowledge | Objectives, rationale, proposals, exploratory examples, open questions |
+| Discovery | [`01-discovery/`](../01-discovery/README.md) | Requester needs, feedback, observations, existing knowledge | Objectives, rationale, proposals, exploratory examples, unresolved questions and requester conclusions |
 | Formulation | [`02-formulation/`](../02-formulation/README.md) | Discovery deliverables and requester decisions | Precise accepted requirements, applicable constraints, any expressly accepted defining examples |
 | Automation | [`03-design/`](../03-design/README.md) | Accepted requirements and applicable constraints | Selected mechanisms, specifications, decisions and rationale |
 | Automation | [`04-candidate/`](../04-candidate/) | Selected mechanisms and delivery constraints | Staged operational contract and supporting consumer artifacts |
@@ -20,7 +20,13 @@ The mapping uses [Cucumber's three BDD practices](https://cucumber.io/docs/bdd/#
 
 Keep each interface limited to what the stage needs from its direct dependencies. A deliverable's location confers no [acceptance status](authority.md#status-of-engineering-records). Formulation supplies accepted intent to both Design and Evaluations. Design selects the mechanism that Candidate expresses as operational instructions. For requirements-led work, Evaluations derives the expectation from accepted intent and compares observed behavior against it. The [traceability model](traceability.md#tracing-a-requirement-and-its-evaluation) connects these paths.
 
-Read stages in numerical order to learn the pipeline. Explain each stage’s work using its own terms, shared definitions and earlier outputs. Links to later stages can trace a realization or a finding. Feedback can reopen an earlier question. The [test-first iteration](pipeline.md#test-first-iteration) shows how work moves among the stages. Each engineering stage owns its procedures and supporting knowledge under the [documentation conventions](documentation.md#choosing-the-owner).
+### Direction of stage references
+
+Every Markdown file in a numbered stage may refer to its own contents, shared foundational knowledge and lower-numbered stages only. This applies to links, written paths and instructions that assume knowledge of another artifact. A maintainer must be able to understand and revise a stage’s outputs with those sources alone. Routing the reader through a shared page to required material in a higher-numbered stage still creates a forward dependency.
+
+Keep a dependency with the artifact that relies on the source. Root `docs/` owns cross-stage navigation, traceability indexes and change-propagation procedures. Consumer files retain their installed meanings and independence from engineering documentation. See [how to check stage references](maintaining-documentation.md#check-stage-references).
+
+The numbering governs documentation dependencies. In a [test-first iteration](pipeline.md#test-first-iteration), activities may overlap and any finding may reopen an earlier decision. Record the relevant conditions and observation at the earlier owner so its reader can evaluate the question there.
 
 ## Staged sources and release-relative references
 

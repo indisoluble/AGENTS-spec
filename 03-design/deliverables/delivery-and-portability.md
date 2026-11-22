@@ -1,28 +1,26 @@
 # Delivery and portability
 
-[Contract architecture](contract-design.md) supplies design status and clause traceability. The baseline owns [PR1 self-containment](../../02-formulation/deliverables/baseline.md#established-product-requirement) and the [portability constraint](../../02-formulation/deliverables/baseline.md#portability-and-standing-context-qualifications); this document explains their integration and wording trade-offs.
+[Contract architecture](contract-design.md) supplies design status and vocabulary. The baseline owns [PR1 self-containment](../../02-formulation/deliverables/baseline.md#established-product-requirement) and the [portability constraint](../../02-formulation/deliverables/baseline.md#portability-and-standing-context-qualifications); this document explains their integration and wording trade-offs.
 
 ## Context and Scope
 
-These are consumer-contract loading and instruction rules (§3.8). [Development authority](../../docs/authority.md#repository-development-and-instruction-loading) determines their applicability to this repository. Engineering links use [staged sources](../../docs/architecture.md#staged-sources-and-release-relative-references); consumer paths below describe installed files.
+These loading and instruction rules describe installed files in an adopting project. [Development authority](../../docs/authority.md#repository-development-and-instruction-loading) determines their applicability to this repository.
 
-Provider claims retain their [recorded evidence dates](../../04-candidate/pre_README-powerusers.md#evidence-dates); editorial work does not refresh them. Actual support depends on the provider and adopting environment.
+The provider discovery guidance was checked on September 25, 2026, and the Claude import syntax on October 3, 2026. Actual support depends on the provider and adopting environment.
 
 ### Installed paths and provider discovery
 
-The `pre_*` filenames in `04-candidate/` are engineering staging names. Install each instruction file using the consumer filename and location in the [staged-to-installed mapping](../../docs/architecture.md#staged-sources-and-release-relative-references).
-
-The same mapping covers the [adoption README](../../04-candidate/pre_README.md) and the [practical guide](../../04-candidate/pre_README-powerusers.md). They explain setup, checks and use. The contract carries the operating policy, so applying it after loading requires neither guide nor access to the engineering tree. The [editorial guidance](../docs/design-review.md#reader-paths) describes the two guides’ audiences.
+The adoption README explains setup and checks. The practical guide explains use in more depth. Once loaded, the contract supplies all operating policy independently of either guide or the engineering tree.
 
 Automatic discovery depends on the provider, interface, and configuration. See the discovery rules for [Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md), [Claude Code](https://code.claude.com/docs/en/memory), and [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions).
 
 ### Why the bridges differ
 
-Both bridges apply the same local contract. [CLAUDE.md](../../04-candidate/pre_CLAUDE.md) uses Claude Code's [native `@AGENTS.md` import](https://code.claude.com/docs/en/memory#import-additional-files), so one line can perform its loading role. [Copilot support](https://docs.github.com/en/copilot/reference/custom-instructions-support) varies by interface; a Markdown link identifies a file without universally importing it. Its bridge therefore explicitly directs reading/following the contract within the actual hierarchy and permissions. Claude's import and [Copilot's `../AGENTS.md` link](../../04-candidate/pre_copilot-instructions.md) resolve from their installed locations.
+Both bridges apply the same local contract. `CLAUDE.md` uses Claude Code's [native `@AGENTS.md` import](https://code.claude.com/docs/en/memory#import-additional-files), so one line can perform its loading role. [Copilot support](https://docs.github.com/en/copilot/reference/custom-instructions-support) varies by interface; a Markdown link identifies a file without universally importing it. Its bridge therefore explicitly directs reading/following the contract within the actual hierarchy and permissions. Claude's import and Copilot's `../AGENTS.md` link resolve from their installed locations.
 
-Neither bridge adds a failure-to-load policy: an unloaded contract cannot govern the failure. The package defines no common bootstrap stop/report/resume protocol; actual tool and requester instructions apply. [Compatibility guidance](../../04-candidate/pre_README-powerusers.md#tool-compatibility) supplies diagnostics without adding fallback policy.
+Neither bridge adds a failure-to-load policy: an unloaded contract cannot govern the failure. The package defines no common bootstrap stop/report/resume protocol; actual tool and requester instructions apply.
 
-The [instruction rule](../../04-candidate/pre_AGENTS.md#38-instructions-protected-files-and-external-actions) distinguishes canonical ownership, bridge content, and edit protection:
+The instruction rule distinguishes canonical ownership, bridge content, and edit protection:
 
 | Scope | Current prescription |
 | --- | --- |
@@ -30,11 +28,11 @@ The [instruction rule](../../04-candidate/pre_AGENTS.md#38-instructions-protecte
 | Two bridges | Root `CLAUDE.md` and root-relative `.github/copilot-instructions.md` MUST only discover/apply it, optionally with non-policy titles/provenance. `AGENTS.md` is not a bridge. |
 | Three protected files | These three root-relative files MUST be edited only on explicit request for the file/instructions; applying file-specific recommendations counts. Necessary edits to the other two MAY accompany that request. Other affected documents follow ordinary synchronization rules. Instruction-file edits MUST stay separate from unrelated work. |
 
-Directory instructions MAY add subtree rules only if contract-compatible. The tool sets discovery, scope, and precedence; precedence never makes conflicting policy acceptable, and conflicts MUST be reported. Compatibility constrains content rather than inventing precedence. Adoption therefore needs human validation of existing practices/workflows under the [installation precautions](../../04-candidate/pre_README.md#get-started), without adding runtime duties or treating instructions as owners of project facts.
+Directory instructions MAY add subtree rules only if contract-compatible. The tool sets discovery, scope, and precedence; precedence never makes conflicting policy acceptable, and conflicts MUST be reported. Compatibility constrains content rather than inventing precedence. Adoption therefore needs human validation of existing practices/workflows before replacing instruction files, without adding runtime duties or treating instructions as owners of project facts.
 
 If loading/scope/precedence uncertainty could affect the task, the agent SHOULD inspect available diagnostics and relevant instruction files; it MUST report checks and remaining material uncertainty. Tool limits blocking loading require [disclosure](mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution). Diagnostics and demonstrated application are different evidence.
 
-Discovery, inclusion, precedence, and application are distinct: [VS Code conflict guidance](https://code.visualstudio.com/docs/agent-customization/custom-instructions#_resolve-conflicting-instructions), [instruction settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#_custom-instructions-settings), and [GitHub.com precedence](https://docs.github.com/en/copilot/concepts/prompting/response-customization#precedence-of-custom-instructions) address different aspects. File order or a link cannot establish all four; use the [adoption checks](../../04-candidate/pre_README-powerusers.md#check-adoption) for the actual environment.
+Discovery, inclusion, precedence, and application are distinct: [VS Code conflict guidance](https://code.visualstudio.com/docs/agent-customization/custom-instructions#_resolve-conflicting-instructions), [instruction settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#_custom-instructions-settings), and [GitHub.com precedence](https://docs.github.com/en/copilot/concepts/prompting/response-customization#precedence-of-custom-instructions) address different aspects. File order or a link cannot establish all four; assess them in the actual adopting environment.
 
 Copilot's title/header identify the release and upstream origin; its date/source URL match `AGENTS.md`. Metadata adds no policy authority, and optional provenance does not require a Claude header. Minimality preserves each bridge's loading/application role.
 
@@ -55,7 +53,7 @@ Compact instructions reduce standing text but can require inferred relationships
 | Implicit agent subjects, short labels, slash groups | Keep actors, every duty, and relationships between grouped actions clear. |
 | Broad knowledge-ownership and permitted-copy categories | Keep facts, schemas, requirements, rationale, invariants, procedures, conventions, tests, and examples recognizable under their rules. |
 | Concise definitions, architecture topics, record fields, reports | Preserve distinguishing meaning and conditions; keyword matches alone do not suffice. |
-| Layers and section references | Each passage needs enough local meaning; forward references may supply detail, but must not force lookahead just to understand it. Useful brief repetition is acceptable (`permitted work (§2.1)` is one example). Guards/triggers apply across phases; placement must not confine applicability or imply extra phases. |
+| Layers and section references | Each passage needs enough local meaning; forward references may supply detail, but must not force lookahead just to understand it. Useful brief repetition is acceptable. Guards/triggers apply across phases; placement must not confine applicability or imply extra phases. |
 | Initial outline and first increment | Preserve advance visibility of overall direction and next objective/bounds after preliminary context. Later work stays at outline level; framing is not approval. |
 | Requester limits and consequential direction | Keep informal expectations distinct from binding limits, material ambiguity subject to clarification, and new consequential direction/material departures subject to prior consultation unless specifically authorized. Routine corrections remain autonomous. |
 | Purpose-based inquiry and awareness | Keep context, execution, validation, and inquiry distinct; unknown output or a prescribed procedure alone cannot classify them. Prompt uncertainty/significance notification differs from consultation and needs no duplicate when already communicated. No declared allowance is required; announcing one cannot replace bounds, sufficient evidence, or reassessment before justified continuation. |

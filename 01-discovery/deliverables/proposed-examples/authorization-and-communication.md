@@ -1,10 +1,8 @@
 # Proposed examples: authorization and communication
 
-All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example) and the [coverage matrix](../example-coverage.md#requirement-to-scenario-coverage).
+All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example).
 
 ## BR3 — Autonomy within authorization and prior direction
-
-Requirement: [BR3](../../../02-formulation/deliverables/baseline.md#br3--autonomy-within-authorization-and-prior-direction). Current qualification evidence: [design explanation](../../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions), [contract](../../../04-candidate/pre_AGENTS.md) §§2.1–2.3, 2.5, 3.8.
 
 ### BR3.1 — A routine local choice needs no new requester decision
 
@@ -46,7 +44,7 @@ Requirement: [BR3](../../../02-formulation/deliverables/baseline.md#br3--autonom
 - **When** the agent creates the preview using the day-first assumption and completes the task without an intermediate report or approval request.
 - **Then** the work is permitted within that authorization, and its completion report identifies the day-first interpretation as a material assumption. The assumption supplies no authority to change source data or the public interface.
 
-Under [BR3](../../../02-formulation/deliverables/baseline.md#br3--autonomy-within-authorization-and-prior-direction), material unresolved intent or permission still requires consultation before dependent work, even when safe fact-finding is available; if no safe step is possible, the agent presents alternatives and seeks direction. Under [BR7](../../../02-formulation/deliverables/baseline.md#br7--proportionate-communication-and-actionable-handoffs) and [contract §3.7](../../../04-candidate/pre_AGENTS.md#37-reporting), disclosures affecting authorization or a decision requiring requester input precede affected work; other information should normally join the next consolidated report, while useful earlier communication remains permitted.
+Material unresolved intent or permission still requires consultation before dependent work, even when safe fact-finding is available; if no safe step is possible, the agent presents alternatives and seeks direction. Disclosures affecting authorization or a decision requiring requester input precede affected work; other information should normally join the next consolidated report, while useful earlier communication remains permitted.
 
 ### BR3.6 — Disclose a consequential choice made without prior direction
 
@@ -54,7 +52,7 @@ Under [BR3](../../../02-formulation/deliverables/baseline.md#br3--autonomy-withi
 
 - **Given** an agent has already made a consequential architectural choice for which required prior direction was not obtained.
 - **When** it identifies that choice and reports the work.
-- **Then** it prominently identifies the choice, why it made it, the effects and uncertainty, and options for revising or undoing it. The report does not count as authorization or cure the earlier violation. Further work that requires direction waits for that direction; any necessary earlier authorization disclosure still follows BR7.
+- **Then** it prominently identifies the choice, why it made it, the effects and uncertainty, and options for revising or undoing it. The report does not count as authorization or cure the earlier violation. Further work that requires direction waits for that direction; any necessary earlier authorization disclosure precedes the affected work.
 
 ### BR3.7 — Normally ask about other unsettled material choices
 
@@ -64,11 +62,9 @@ Under [BR3](../../../02-formulation/deliverables/baseline.md#br3--autonomy-withi
 - **When** the agent considers that trade-off.
 - **Then** it should seek requester direction before choosing, considering impact and reversibility. A departure from this recommendation needs weighed consequences and justification. This SHOULD does not create a mandatory approval gate or waive any separate requirement for prior direction.
 
-**Current design:** [Reporting and continued execution](../../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution) specifies when and how material SHOULD exceptions are reported. Those reporting mechanics remain selected design, outside this example's proposed defining outcome.
-
 ### BR3.8 — Distinguish an expectation from a binding limit
 
-**Detail review — proposed.** The distinction between an informal expectation and a requester-imposed limit illustrates the current design.
+**Detail review — proposed.** The example contrasts an informal expectation with an explicit limit. See the [requester’s clarification about implementation scope](../open-questions.md#a-request-for-a-small-correction).
 
 - **Given** the requester says they expect a small fix but sets no attempt cap or checkpoint; new evidence supports a second local correction within the same authority, direction, and risk boundaries.
 - **When** the agent reassesses cumulative work before continuing.
@@ -84,8 +80,6 @@ Under [BR3](../../../02-formulation/deliverables/baseline.md#br3--autonomy-withi
 
 ## BR7 — Proportionate communication and actionable handoffs
 
-Requirement: [BR7](../../../02-formulation/deliverables/baseline.md#br7--proportionate-communication-and-actionable-handoffs). Current qualification evidence: [design explanation](../../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution), [contract](../../../04-candidate/pre_AGENTS.md) §§1.1, 2.3–2.4, 3.7.
-
 ### BR7.1 — Frame substantial work without creating an approval gate
 
 **Direct — proposed.**
@@ -93,8 +87,6 @@ Requirement: [BR7](../../../02-formulation/deliverables/baseline.md#br7--proport
 - **Given** a substantial task has a clear goal and an authorized first step.
 - **When** the agent has gathered sufficient initial context and is about to start substantial work.
 - **Then** it briefly explains its intended approach and first step before starting, then proceeds unless another rule requires an approval checkpoint. The explanation itself creates no approval checkpoint.
-
-**Current design:** [Reporting and continued execution](../../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution) specifies the task outline and first increment's objective and bounds in chat. Those more detailed framing elements remain selected design at their current strength, outside this example's proposed defining outcome.
 
 ### BR7.2 — Report results and disclose blockers in time
 

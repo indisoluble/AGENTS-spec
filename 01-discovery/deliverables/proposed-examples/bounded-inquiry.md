@@ -1,10 +1,8 @@
 # Proposed examples: bounded inquiry
 
-All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example) and the [coverage matrix](../example-coverage.md#requirement-to-scenario-coverage).
+All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example).
 
 ## BR4 — Bounded investigation and timely reassessment
-
-Requirement: [BR4](../../../02-formulation/deliverables/baseline.md#br4--bounded-investigation-and-timely-reassessment). Current qualification evidence: [design explanation](../../../03-design/deliverables/mechanisms/bounded-inquiry.md), [contract](../../../04-candidate/pre_AGENTS.md) §2.4; §§1.1, 2.3.
 
 ### BR4.1 — Tell the requester what is blocking progress
 
@@ -32,7 +30,7 @@ Requirement: [BR4](../../../02-formulation/deliverables/baseline.md#br4--bounded
 
 ### BR4.4 — Ordinary checking does not require an inquiry notice
 
-**Detail review — proposed.** The detailed context/validation exclusion is current design, beyond the broad accepted inquiry outcome.
+**Detail review — proposed.** The detail is how to classify routine reading and an ordinary regression check.
 
 - **Given** the next action is to read the affected module or run an ordinary regression check, and no material uncertainty about how to proceed blocks the next decision.
 - **When** the agent does that work within authorization.
@@ -48,7 +46,7 @@ Requirement: [BR4](../../../02-formulation/deliverables/baseline.md#br4--bounded
 
 ### BR4.6 — A prescribed procedure can still be inquiry
 
-**Detail review — proposed.** The purpose-based classification of this prescribed procedure needs review as a defining product example, not as a change to current §2.4.
+**Detail review — proposed.** The detail is whether the purpose of running the benchmark changes the need for inquiry notice.
 
 - **Given** context gathering leaves a material uncertainty about which storage approach is viable, a documented benchmark can resolve it, the bounded benchmark is authorized, and the uncertainty has not been communicated.
 - **When** the agent uses that benchmark to choose how to proceed.
@@ -56,7 +54,7 @@ Requirement: [BR4](../../../02-formulation/deliverables/baseline.md#br4--bounded
 
 ### BR4.7 — Reading existing project documents remains context gathering
 
-**Detail review — proposed.** The blanket exclusion for reading existing project documents is precise current design, not independently spelled out in the acceptance summary.
+**Detail review — proposed.** The requester [settled the classification of reading](../open-questions.md#reading-existing-project-documentation). This particular example remains proposed.
 
 - **Given** a material question blocks the next decision and an existing project architecture record may answer it; reading that record is within scope.
 - **When** the agent reads that record and directly relevant project documentation.

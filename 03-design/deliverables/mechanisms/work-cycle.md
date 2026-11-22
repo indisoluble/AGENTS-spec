@@ -1,6 +1,6 @@
 # Work cycle
 
-The [work cycle](../../../04-candidate/pre_AGENTS.md#1-work-cycle) governs how the agent plans an authorized increment (§1.1), assesses completion (§1.3), and uses findings to choose the next step (§1.4). The decision factors and quality constraints of §§2.2–2.3 guide the size and depth of the commitment. This supports [focused, authorized work](../../../02-formulation/deliverables/baseline.md#br1--focused-proportionate-authorized-work), [evidence-based planning](../../../02-formulation/deliverables/baseline.md#br2--evidence-based-planning-and-knowledge-ownership), [validated completion](../../../02-formulation/deliverables/baseline.md#br5--completion-supported-by-validation), and [learning from results](../../../02-formulation/deliverables/baseline.md#br6--learning-from-observed-results). [Contract architecture](../contract-design.md) supplies status, vocabulary, and clause-to-intent traceability.
+The work cycle governs how the agent plans an authorized increment, assesses completion, and uses findings to choose the next step. The decision factors and quality constraints below guide the size and depth of the commitment. This supports [focused, authorized work](../../../02-formulation/deliverables/baseline.md#br1--focused-proportionate-authorized-work), [evidence-based planning](../../../02-formulation/deliverables/baseline.md#br2--evidence-based-planning-and-knowledge-ownership), [validated completion](../../../02-formulation/deliverables/baseline.md#br5--completion-supported-by-validation), and [learning from results](../../../02-formulation/deliverables/baseline.md#br6--learning-from-observed-results). [Contract architecture](../contract-design.md) supplies status and vocabulary.
 
 ## Small commitments with sufficient depth
 
@@ -53,7 +53,7 @@ Authorized work establishing or changing behavior required beyond the task's exe
 
 ### How the design works in a task
 
-The [practical CSV walkthrough](../../../04-candidate/pre_README-powerusers.md#from-a-request-to-a-result) owns the scenario facts: report invalid rows and continue with valid ones. This technical view explains how evidence selects a step and how the layers interact.
+Suppose a CSV importer must report invalid rows and continue with valid ones. The following steps show how evidence selects an increment and how the layers interact.
 
 1. **Plan:** establish the objective and permitted work, then inspect context. Suppose requirements settle the format, invalid-row rules, and line numbers; existing tests support the reader; and inspection exposes missing field-count validation at a row boundary providing fields, header, and line number.
 

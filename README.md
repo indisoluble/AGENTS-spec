@@ -10,7 +10,7 @@ Read the stages in numerical order for an overview. For a specific edit, the [ch
 | --- | --- |
 | [01 Discovery](01-discovery/README.md) | Product objectives and their rationale, proposed examples and questions for the requester. |
 | [02 Formulation](02-formulation/README.md) | Accepted requirements, their conditions and constraints, and any expressly accepted defining examples. |
-| [03 Design](03-design/README.md) | The selected mechanisms for meeting the requirements, their rationale, and the index linking them to the instructions. |
+| [03 Design](03-design/README.md) | The selected mechanisms for meeting the requirements and the reasons for choosing them. The shared [clause index](docs/contract-traces.md#contract-clause-index) maps these choices to the instructions. |
 | [04 Candidate](04-candidate/) | The five staged consumer files. For an instruction edit, start with [clarifying Candidate wording](docs/changing-the-contract.md#clarify-candidate-wording). For a bridge or guide, check the [installed paths](docs/architecture.md#staged-sources-and-release-relative-references). |
 | [05 Evaluations](05-evaluations/README.md) | Case definitions, executable checks and evidence about what happened with an identified Candidate. |
 

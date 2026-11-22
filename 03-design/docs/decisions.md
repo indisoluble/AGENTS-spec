@@ -1,6 +1,6 @@
 # Contract design decisions and alternatives
 
-Current choices and superseded controls are distinguished below. [Shared authority](../../docs/authority.md#status-of-engineering-records) defines their status; the [clause index](../deliverables/contract-design.md#contract-clause-index) relates mechanisms to accepted intent. Engineering-system and evaluator decisions remain in [system-wide engineering decisions](../../docs/decisions.md#architecture-decisions) and [framework design](../../05-evaluations/docs/framework-design.md#architecture-decisions).
+Current choices and superseded controls are distinguished below. [Shared authority](../../docs/authority.md#status-of-engineering-records) defines their status.
 
 ## Architecture decisions
 
@@ -15,7 +15,7 @@ The index points to canonical reasons and consequences without turning every exp
 | Role-specific knowledge ownership | **Selected current design.** Role-specific ownership supersedes the default ranking of project sources. [Documentation choices](../deliverables/mechanisms/knowledge-and-documentation.md#documentation-choices) explains why different knowledge owners cannot share one precedence ladder and how unresolved conflicts are handled. |
 | Provider-specific bridges | **Selected integration design.** [Bridge rationale](../deliverables/delivery-and-portability.md#why-the-bridges-differ) distinguishes import from read/follow, preserves provenance, and explains provider limits and the absence of common bootstrap policy. |
 | Qualified size target and compact wording | **Retained established constraint; identified wording compromises recorded as accepted.** [Portability qualifications](../../02-formulation/deliverables/baseline.md#portability-and-standing-context-qualifications) and [wording trade-offs](../deliverables/delivery-and-portability.md#current-wording-trade-offs) retain exception/review conditions and acceptance limited to those compromises. |
-| [Effort-baseline checkpoints](#superseded-effort-baseline-checkpoint), [advance inquiry declarations](#superseded-inquiry-announcement-and-stopping-rule), [routine-report suppression and consultation strength](#superseded-report-suppression-and-consultation-strength), [method-reference inquiry exemption](#superseded-method-reference-inquiry-exemption) | **Historical/superseded.** Each record explains the earlier choice and links to its successor in the current design. These reasons establish neither enduring product acceptance nor measured effects on agent adherence or token use. The [staged contract](../../04-candidate/pre_AGENTS.md) gives the current operating rules. |
+| [Effort-baseline checkpoints](#superseded-effort-baseline-checkpoint), [advance inquiry declarations](#superseded-inquiry-announcement-and-stopping-rule), [routine-report suppression and consultation strength](#superseded-report-suppression-and-consultation-strength), [method-reference inquiry exemption](#superseded-method-reference-inquiry-exemption) | **Historical/superseded.** Each record explains the earlier choice and links to its successor in the current design. These reasons establish neither enduring product acceptance nor measured effects on agent adherence or token use. |
 
 ### Superseded effort-baseline checkpoint
 

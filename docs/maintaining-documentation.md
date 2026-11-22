@@ -32,3 +32,9 @@ Check affected links and anchors as well as the names a reader would copy or sea
 For a consumer link, first resolve the path and heading from the staged source. To check installation, copy the five files into an empty temporary directory using the [installed paths](architecture.md#staged-sources-and-release-relative-references). Keep their contents intact and follow the same reference from its installed file. For a failure, record the layout, referring file, literal target, and whether the path is missing, leaves the package, or reaches a file without the requested heading.
 
 Limit conclusions to the evidence the check supplies. Text comparison can establish agreement with a specification. Claims about agent behavior require observations of the identified candidate, evaluator correctness needs corresponding machinery checks, and causal claims need comparative evidence. See [what evidence can establish](traceability.md#what-evidence-can-establish).
+
+## Check stage references
+
+Resolve each changed local Markdown link from the referring file. Check that its destination is in the same stage, an earlier stage or shared foundational documentation. For consumer files, use the intended installation layout.
+
+Also inspect written paths, clause numbers, instructions to consult another artifact, and links through shared pages. Try the maintenance task with just the current stage, earlier stages and shared definitions. Move a relationship needed only for cross-stage review to its dependent or the [shared traceability indexes](contract-traces.md). Validate changed link paths and fragments separately.

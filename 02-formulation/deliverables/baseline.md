@@ -2,7 +2,7 @@
 
 [BR1–BR10](#accepted-behavioral-requirements) specify agent behavior. [PR1](#established-product-requirement) specifies what the delivered instruction file must contain. **All eleven requirements are accepted and have equal authority.** The [established constraints](#established-constraints) apply at their stated strength and with their stated exceptions.
 
-The [acceptance record](../docs/acceptance-record.md) identifies the decisions behind this baseline and the limits of the owner-reported evidence. Discovery explains the [objectives and rationale](../../01-discovery/deliverables/objectives-and-rationale.md). Its [examples](../../01-discovery/deliverables/example-coverage.md) remain proposed. To trace a requirement to a current mechanism and Candidate passage, look up its ID in the [Design clause index](../../03-design/deliverables/contract-design.md#contract-clause-index). Selected mechanisms bind the current Candidate within their scope. Making one an enduring product requirement takes separate acceptance.
+The [acceptance record](../docs/acceptance-record.md) identifies the decisions behind this baseline and the limits of the owner-reported evidence. Discovery explains the [objectives and rationale](../../01-discovery/deliverables/objectives-and-rationale.md). Its examples remain proposed. The [coverage matrix](example-coverage.md) identifies the examples illustrating each accepted rule. Acceptance of a rule covers the outcome and qualifications recorded here. A particular means of achieving it requires separate acceptance to become an enduring product requirement.
 
 ## Established product requirement
 
@@ -10,7 +10,7 @@ The [acceptance record](../docs/acceptance-record.md) identifies the decisions b
 
 ### R5
 
-Bridges may load the contract, guides may explain it, and adopting-project artifacts supply local facts, requirements, build commands and architecture. Every generic operating duty must still be recoverable by reading the delivered file on its own. Inspect the [contract](../../04-candidate/pre_AGENTS.md) for that property. The [proposed PR1 examples](../../01-discovery/deliverables/proposed-examples/self-contained-delivery.md#pr1--self-contained-operating-contract) illustrate what to look for. Provider loading and actual agent behavior require separate evidence.
+Bridges may load the contract, guides may explain it, and adopting-project artifacts supply local facts, requirements, build commands and architecture. Every generic operating duty must still be recoverable by reading the delivered file on its own. This property can be checked by standalone inspection. The [proposed PR1 examples](../../01-discovery/deliverables/proposed-examples/self-contained-delivery.md#pr1--self-contained-operating-contract) illustrate what to look for. Provider loading and actual agent behavior require separate evidence.
 
 ## Accepted behavioral requirements
 
@@ -102,11 +102,11 @@ When knowledge changes, the agent shall maintain its canonical owner and known d
 
 ## Established constraints
 
-**Authority and capability.** The contract operates within the actual tool hierarchy, permissions and native approvals. It supplies no capabilities or technical enforcement and cannot invent requester authority or missing project requirements. BR3 and BR8 apply. Internal engineering records govern development. The delivered contract contains the operating instructions for consumers and isolated evaluations. [Engineering and runtime authority](../../docs/authority.md)
+**Authority and capability.** The contract operates within the actual tool hierarchy, permissions and native approvals. It supplies no capabilities or technical enforcement and cannot invent requester authority or missing project requirements. BR3 and BR8 apply. Internal engineering records govern development. The delivered contract contains the operating instructions for consumers and isolated evaluations.
 
 ### Method-selection qualifications
 
-Method additions and replacements must use recognized practices, with freely accessible interpretive material sufficient for the assigned role and distinct responsibilities, unless the criteria are explicitly revised. A proposal should explain the need, accessibility of the material and any overlap or expansion of obligations. Revising a criterion is itself a design decision to identify explicitly. These constraints govern contract evolution. Design records the [selection reasons and alternatives](../../03-design/deliverables/methods-and-references.md#choosing-or-replacing-methods).
+Method additions and replacements must use recognized practices, with freely accessible interpretive material sufficient for the assigned role and distinct responsibilities, unless the criteria are explicitly revised. A proposal should explain the need, accessibility of the material and any overlap or expansion of obligations. Revising a criterion is itself a design decision to identify explicitly. These constraints govern contract evolution.
 
 ### Portability and standing-context qualifications
 
@@ -114,6 +114,6 @@ The whole delivered `AGENTS.md` has a **strongly preferred target of about 24,00
 
 Excess is exceptional and acceptable when further reduction would materially compromise normative fidelity or human comprehensibility. Before accepting excess, review the wording for compression. Remove genuine redundancy and low-value explanation before compressing core controls such as authorization, limits, cumulative reassessment, consultation, inquiry and continuation. Preserve useful spacing, headings and every operative duty in the contract itself.
 
-Even above target, keep meaningful headroom under the applicable combined provider and project instruction-loading limits for directory instructions and other context. Those limits bound the acceptable excess. The project defines no separate provider-independent ceiling. Actual compatibility depends on the delivered files, other loaded instructions and tool configuration. The [dated provider evidence](../../03-design/deliverables/delivery-and-portability.md#keeping-the-contract-portable) explains the target. Vendor changes can prompt review without automatically changing project policy.
+Even above target, keep meaningful headroom under the applicable combined provider and project instruction-loading limits for directory instructions and other context. Those limits bound the acceptable excess. The project defines no separate provider-independent ceiling. Actual compatibility depends on the delivered files, other loaded instructions and tool configuration. Vendor changes can prompt review without automatically changing project policy.
 
-Acceptance of [existing wording trade-offs](../../03-design/deliverables/delivery-and-portability.md#current-wording-trade-offs) covers only the identified compromises. Identify new trade-offs, including reduced explicitness without an intended rule change, for requester review with the rationale specified there. Meeting the target alone establishes neither clarity, compatibility, behavioral equivalence, agent adherence nor token savings.
+Acceptance of existing wording trade-offs covers only the identified compromises. For requester review of any new trade-off, including reduced explicitness without an intended rule change, identify what becomes less explicit, where the operative meaning remains and the likely consequences for interpretation and effort. Meeting the target alone establishes neither clarity, compatibility, behavioral equivalence, agent adherence nor token savings.

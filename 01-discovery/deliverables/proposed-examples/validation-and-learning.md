@@ -1,10 +1,8 @@
 # Proposed examples: validation and learning
 
-All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example) and the [coverage matrix](../example-coverage.md#requirement-to-scenario-coverage).
+All examples remain **proposed and unaccepted**. See [classifications and shared qualifications](../example-coverage.md#reading-a-proposed-example).
 
 ## BR5 — Completion supported by validation
-
-Requirement: [BR5](../../../02-formulation/deliverables/baseline.md#br5--completion-supported-by-validation). Current qualification evidence: [design explanation](../../../03-design/deliverables/mechanisms/engineering-and-validation.md#validation-and-test-evidence), [contract](../../../04-candidate/pre_AGENTS.md) §1.3.
 
 ### BR5.1 — Run relevant checks that are available
 
@@ -38,8 +36,6 @@ Requirement: [BR5](../../../02-formulation/deliverables/baseline.md#br5--complet
 - **When** the agent reviews the failure.
 - **Then** it fixes the issue within scope or reports the failure and unfinished work. It does not weaken requirements, acceptance conditions, or tests, or reinterpret them merely to claim completion.
 
-**Current design:** [Validation and test evidence](../../../03-design/deliverables/mechanisms/engineering-and-validation.md#validation-and-test-evidence) retains the qualified recommendations for appropriate tests, regression checks, and test-writing conventions. [Reporting and continued execution](../../../03-design/deliverables/mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution) retains the mechanics for reporting material departures from recommendations. These selected design details remain outside this example's proposed defining outcome.
-
 ### BR5.5 — Validate research against its own objective
 
 **Direct — proposed.**
@@ -58,8 +54,6 @@ Requirement: [BR5](../../../02-formulation/deliverables/baseline.md#br5--complet
 
 ## BR6 — Learning from observed results
 
-Requirement: [BR6](../../../02-formulation/deliverables/baseline.md#br6--learning-from-observed-results). Current qualification evidence: [design explanation](../../../03-design/deliverables/mechanisms/work-cycle.md#learning-throughout-the-work), [contract](../../../04-candidate/pre_AGENTS.md) §§1, 1.3–1.4.
-
 ### BR6.1 — Change the approach without changing the goal
 
 **Direct — proposed.**
@@ -74,7 +68,7 @@ Requirement: [BR6](../../../02-formulation/deliverables/baseline.md#br6--learnin
 
 - **Given** a discarded approach reveals both a lasting compatibility constraint and a one-off local setup issue.
 - **When** the agent decides what to retain.
-- **Then** it uses the relevant findings in its next decision and handles the material, durable constraint under BR8. It does not create a separate learning artifact merely because it ran a trial.
+- **Then** it uses the relevant findings in its next decision and records the material, durable constraint with supporting evidence in its canonical record, or reports that duty as unfinished if writing is prohibited. It does not create a separate learning artifact merely because it ran a trial.
 
 ### BR6.3 — Retain an approach that the evidence supports
 

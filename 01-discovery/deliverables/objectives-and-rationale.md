@@ -12,7 +12,7 @@ This document records what AGENTS-spec aims to achieve and why its [accepted req
 
 These are intended effects. Textual consistency, contract size, message counts, selected methods, and passing evaluator tests cannot establish measured token savings, comprehension, or agent adherence. Assessing the benefits calls for [comparative evidence and requester feedback where relevant](../../docs/traceability.md#what-evidence-can-establish). Quantitative thresholds and comprehensive behavioral acceptance criteria have not been independently established here.
 
-The order comes from established project direction. The [documented instructions for the adoption guide](https://github.com/indisoluble/AGENTS-spec/blob/09fc0a68d0122f4c970932e14760f83cb0b4e46a/_internal/docs/documentation-maintenance.md#L118) explicitly specify bounded token use first and informed requester control second. The current [reader guidance](../../03-design/docs/design-review.md#reader-paths), [adoption guide](../../04-candidate/pre_README.md), and [contract design](../../03-design/deliverables/contract-design.md#design-goals-and-boundaries) reflect that direction. These sources state the order without giving a comparative justification for choosing it.
+The priority order follows established requester direction. No comparative reason for ranking O1 ahead of O2 was recorded. The [contract design](../../03-design/deliverables/contract-design.md#design-goals-and-boundaries) explains how the selected mechanisms serve both objectives.
 
 ## Rationale map
 

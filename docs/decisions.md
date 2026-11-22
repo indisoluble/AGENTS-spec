@@ -20,7 +20,7 @@ For questions the project leaves open, direct contributors to the relevant prima
 
 The [shared documentation index](README.md) provides separate routes to structural interfaces, BDD execution, authority, traceability and evidence, documentation conventions, contributor guidance, and system-wide decisions. Changes to a shared rule have one owner. Readers crossing concerns follow direct links, and stage-specific detail stays with its deliverable or local guide. The index is navigation only.
 
-The requester clarified historical retention. Keep ADRs and their supersession links so a contributor can recover the reasoning behind a choice. Ordinary accounts of past development states are available in Git. The [retention convention](documentation.md#retaining-decisions-and-current-knowledge) preserves the current knowledge, decision scope, and essential rationale those accounts may contain.
+The requester clarified historical retention. Keep ADRs and their supersession links so a contributor can recover the reasoning behind a choice. Obsolete development narratives can be retired once their lasting knowledge is documented at its current owner. The [retention convention](documentation.md#retaining-decisions-and-current-knowledge) preserves the current knowledge, decision scope, and essential rationale those accounts may contain.
 
 ### Five-stage BDD-aligned engineering pipeline
 

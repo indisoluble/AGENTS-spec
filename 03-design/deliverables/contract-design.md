@@ -102,7 +102,7 @@ The organization aims to make these relationships understandable. No measurement
 | [Knowledge and documentation](mechanisms/knowledge-and-documentation.md) | Canonical knowledge, documentation roles, EARS, arc42, ADRs, debt, and Diátaxis. |
 | [Delivery and portability](delivery-and-portability.md) | Provider bridges, portability rationale and evidence, standing context, and wording trade-offs. |
 | [Methods and references](methods-and-references.md) | Selection and replacement rationale, exact source assignments and exclusions, and consultation limits. |
-| [Decisions and alternatives](../docs/decisions.md) | Decision status, historical sources, alternatives, superseded mechanisms, and documentation ownership. |
+| [Decisions and alternatives](../docs/decisions.md) | Decision status, rationale, alternatives, superseded mechanisms, and documentation ownership. |
 
 ## Runtime View
 

@@ -16,7 +16,7 @@ Currently prescribed methods retain their contractual force. Treating a mechanis
 
 ### Behavioral acceptance and editorial provenance
 
-The repository preserves the [account of the owner's report](https://github.com/indisoluble/AGENTS-spec/blob/dac2127492b5ec9815773779b2900cc0db29fee5/behavior/baseline.md#phase-2-acceptance-and-editorial-provenance) that **BR1–BR10 and five clarifications were accepted**, PR1 was already established, and no BR11 was needed. That summary is the source for behavioral acceptance here. The original verbatim approvals and their dates have not been independently verified.
+The owner reported that **BR1–BR10 and five clarifications were accepted**, PR1 was already established, and no BR11 was needed. That owner-reported summary is the source for behavioral acceptance here. The original verbatim approvals and their dates have not been independently verified.
 
 The formulations below are editorial. They preserve the accepted outcomes and clarifications and use the linked contract and design accounts for precise obligations, qualifications, and exceptions. Where the summary does not independently establish a mechanism as enduring product intent, that mechanism retains its current design status and strength. The [open questions about design detail](../../01-discovery/deliverables/open-questions.md) identify such cases. Changing the behavior requires separate authority.
 

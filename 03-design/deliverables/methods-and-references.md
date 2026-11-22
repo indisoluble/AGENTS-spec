@@ -8,7 +8,7 @@
 
 [PDSA](mechanisms/work-cycle.md#learning-throughout-the-work) and [Simple Design](mechanisms/engineering-and-validation.md#simple-design-choosing-what-the-current-solution-needs) were judged sufficient for the agreed design alongside the [focused engineering references](mechanisms/engineering-and-validation.md#focused-techniques-and-how-they-work-together), [documentation conventions](mechanisms/knowledge-and-documentation.md#documentation-choices), and [explicit collaboration rules](mechanisms/requester-decisions-and-reporting.md#authorization-and-requester-decisions). Additional umbrella frameworks were not needed to supply those responsibilities.
 
-The [recorded selection rationale](https://github.com/indisoluble/AGENTS-spec/blob/9a078b3833297ca33357391bb60e6d469bceeff4/README-maintainers.md#choosing-or-replacing-methods) gives the reasons for that combination. It names no competing learning cycle. For a prospective replacement, see the [worked comparison against BR6](../docs/maintaining-design.md#compare-mechanisms-in-use).
+In this design, PDSA connects a prediction and the observed result to the next decision. Simple Design guides choices about the solution within the increment. The recorded selection names no competing learning cycle. For a prospective replacement, see the [worked comparison against BR6](../docs/maintaining-design.md#compare-mechanisms-in-use).
 
 ## Principles and reference boundaries
 

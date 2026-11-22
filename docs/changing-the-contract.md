@@ -14,7 +14,7 @@ Make the authorized change at the canonical owner first. For an authorized behav
 
 Follow a reference further when the change affects what the next owner relies on.
 
-- For affected explanations, inspect summaries, examples, references, and bridge guidance in the context of the complete reader task. Use Design's [explanation checks](../03-design/docs/design-review.md#reviewing-contract-explanations) and relevant [non-normative illustrations](../03-design/docs/design-review.md#assessing-design-changes). These checks establish what the text communicates. Behavioral claims need observations.
+- For affected explanations, inspect summaries, examples, references, and bridge guidance in the context of the complete reader task. Use Design's [explanation checks](../03-design/docs/design-review.md#reviewing-contract-explanations) and relevant [non-normative illustrations](../03-design/docs/design-illustrations.md). These checks establish what the text communicates. Behavioral claims need observations.
 - For affected clauses, assess the [impact on evaluation expectations and references](traceability.md#specification-to-evaluation-dependencies). Where a case needs a change, follow [`05-evaluations/docs/maintaining-evaluations.md`](../05-evaluations/docs/maintaining-evaluations.md#change-a-scenario).
 
 ## Route a finding

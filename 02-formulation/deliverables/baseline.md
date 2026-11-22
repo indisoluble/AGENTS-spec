@@ -22,7 +22,7 @@ The formulations below are editorial. They preserve the accepted outcomes and cl
 
 The five clarifications are incorporated in BR1 (coherence and recovery), BR3 (unauthorized consequential choices), BR7 (handoff and consumed allowances), BR8 (assessment-only writes), and BR10 (out-of-scope documentation gaps). BR4 also incorporates the accepted clarification to reassess learning after an inconclusive step before deciding on another justified step, without a default numerical budget or automatic approval checkpoint. RC1–RC10 identified provisional proposals. Their numbering did not correspond one-to-one to the accepted requirements.
 
-The owner left the example draft unaccepted. All [examples indexed by Discovery](../../01-discovery/deliverables/example-coverage.md#proposed-example-suites) remain proposed. PDSA, EARS, ADR, arc42, Diátaxis, provider integration, the [28 design illustrations](../../03-design/docs/design-review.md#assessing-design-changes), and existing evaluator expectations retain their respective design or evidence status.
+The owner left the example draft unaccepted. All [examples indexed by Discovery](../../01-discovery/deliverables/example-coverage.md#proposed-example-suites) remain proposed. PDSA, EARS, ADR, arc42, Diátaxis, provider integration, the [28 design illustrations](../../03-design/docs/design-illustrations.md), and existing evaluator expectations retain their respective design or evidence status.
 
 For a subsequent decision, see [how to record its scope, source, and any defining example](../docs/maintaining-formulation.md).
 

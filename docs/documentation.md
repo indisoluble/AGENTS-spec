@@ -1,6 +1,6 @@
 # Engineering documentation
 
-Use this reference to place engineering knowledge and preserve its rationale. For a new or unclear deliverable, start with [writing engineering documentation](writing-documentation.md). For an existing change or a review, use [maintaining and verifying documentation](maintaining-documentation.md).
+Use this reference to place engineering knowledge and preserve its rationale. For a new or unclear deliverable, start with writing engineering documentation ([`docs/writing-documentation.md`](writing-documentation.md)). For an existing change or a review, use maintaining and verifying documentation ([`docs/maintaining-documentation.md`](maintaining-documentation.md)).
 
 ## Choosing the owner
 
@@ -9,25 +9,33 @@ Give each fact, rule, interface, procedure, explanation, or decision one owner a
 | Location | What belongs there |
 | --- | --- |
 | Repository `README.md` | Project purpose, consumer adoption entry point, the five stages, and a route to shared engineering knowledge. |
-| Root `docs/` | Engineering knowledge shared across stages. The [index](README.md) points to the owner for each question. |
-| Engineering stage `README.md` | The stage's purpose and interfaces, with routes to its deliverables, decisions, and procedures. The shared [stage interfaces](architecture.md#stage-interfaces) define the boundaries. |
+| Root `docs/` | Engineering knowledge shared across stages. The index ([`docs/README.md`](README.md)) points to the owner for each question. |
+| Engineering stage `README.md` | The stage's purpose and interfaces, with routes to its deliverables, decisions, and procedures. The shared [`docs/architecture.md` § Stage interfaces](architecture.md#stage-interfaces) define the boundaries. |
 | Stage `deliverables/` | Substantive stage outputs with their individual status and authority. Keep rationale essential to interpreting a specification with the specification. |
 | Stage `docs/` | Supporting architecture, decisions, rationale, guidance on deriving deliverables, and stage-specific procedures and maintenance knowledge. |
 
-Ask what the stage produces and what someone needs to know to maintain that output. A proposed example is a Discovery output while its status is still open. An accepted rule, its constraints, and any expressly accepted defining example belong in Formulation. A selected mechanism is a Design output. A case definition and the executable checks that exercise it are Evaluations outputs. A maintainer's explanation of how to revise those checks belongs in supporting documentation. The [stage interfaces](architecture.md#stage-interfaces) locate these outputs, and the [authority rules](authority.md#status-of-engineering-records) explain what their records establish.
+Ask what the stage produces and what someone needs to know to maintain that output. A proposed example is a Discovery output while its status is still open. An accepted rule, its constraints, and any expressly accepted defining example belong in Formulation. A selected mechanism is a Design output. A case definition and the executable checks that exercise it are Evaluations outputs. A maintainer's explanation of how to revise those checks belongs in supporting documentation. The stage interfaces ([`docs/architecture.md` § Stage interfaces](architecture.md#stage-interfaces)) locate these outputs, and the authority rules ([`docs/authority.md` § Status of engineering records](authority.md#status-of-engineering-records)) explain what their records establish.
 
-When several stages use a definition, keep it with the stage responsible for changing it. Keep the cross-stage interface in shared architecture. At the dependent, identify the particular rule, decision, or version it relies on using the [traceability relationships](traceability.md#tracing-a-requirement-and-its-evaluation). Link to the detail a reader needs to continue the task.
+When several stages use a definition, keep it with the stage responsible for changing it. Keep the cross-stage interface in shared architecture. At the dependent, identify the particular rule, decision, or version it relies on using the traceability relationships ([`docs/traceability.md` § Tracing a requirement and its evaluation](traceability.md#tracing-a-requirement-and-its-evaluation)). Link to the detail a reader needs to continue the task.
 
-Discovery, Formulation, Design, and Evaluations use the stage layout. Candidate contains only its [five consumer files](architecture.md#staged-sources-and-release-relative-references) at the directory root. Its technical rationale belongs primarily in Design, and engineering navigation stays outside the package.
+Discovery, Formulation, Design, and Evaluations use the stage layout. Candidate contains only its five consumer files ([`docs/architecture.md` § Staged sources and release-relative references](architecture.md#staged-sources-and-release-relative-references)) at the directory root. Its technical rationale belongs primarily in Design, and engineering navigation stays outside the package.
 
-The two consumer guides can explain the same subject at different depths. Preserve each guide's practical value and the contract's strengths, conditions, and exceptions. Keep essential explanations self-contained or refer to product documentation, the contract, or external sources. The shared [consumer documentation review](consumer-documentation-review.md#reviewing-contract-explanations) covers audience and comprehension checks.
+The two consumer guides can explain the same subject at different depths. Preserve each guide's practical value and the contract's strengths, conditions, and exceptions. Keep essential explanations self-contained or refer to product documentation, the contract, or external sources. The shared [`docs/consumer-documentation-review.md` § Reviewing contract explanations](consumer-documentation-review.md#reviewing-contract-explanations) covers audience and comprehension checks.
+
+## Internal references
+
+Keep Markdown link destinations relative to the referring document. In engineering documentation, label a link to another file with its repository-root-relative path in inline code. Label a directory the same way and include the trailing `/`. In delivered consumer documentation, display paths relative to the adopting repository root, using the intended installed locations. Consumer references must remain usable without the engineering tree.
+
+For a section in another document, follow the inline-code path with ` § ` and the section's actual heading text, including its capitalization. Put the path and heading in one clickable label using CommonMark. Keep same-document and external references unchanged.
+
+Keep any distinct purpose, qualification, or identifier that the standard label does not convey in the surrounding prose. The label format applies equally to authority, traceability, and navigation references. Read each link in context to verify what relationship it records.
 
 ## Where the rationale belongs
 
 A maintainer should be able to tell why a significant deliverable has its present form. Start with the upstream intent, the premises and constraints on the choice, and how the author arrived at the result. For a choice with lasting consequences, make the reasons for selection, material alternatives considered, remaining trade-offs or limitations, and decision authority and status discoverable. Use the detail warranted by the consequences. Identify an unresolved premise as such.
 
-- **Alongside the deliverable.** If removing a reason would change how someone interprets or applies a rule, keep it there. For example, Formulation keeps the [standalone inspection boundary for PR1](../02-formulation/deliverables/baseline.md#r5) with the requirement. A Design specification can likewise keep a constraint that explains when its mechanism applies.
-- **With the upstream owner.** If the reader needs the reason for an accepted outcome, link to the relevant entry in [Discovery's rationale map](../01-discovery/deliverables/objectives-and-rationale.md#rationale-map). Explain locally what that outcome implies for this deliverable.
+- **Alongside the deliverable.** If removing a reason would change how someone interprets or applies a rule, keep it there. For example, Formulation keeps the standalone inspection boundary for PR1 ([`02-formulation/deliverables/baseline.md` § R5](../02-formulation/deliverables/baseline.md#r5)) with the requirement. A Design specification can likewise keep a constraint that explains when its mechanism applies.
+- **With the upstream owner.** If the reader needs the reason for an accepted outcome, link to the relevant entry in Discovery's rationale map ([`01-discovery/deliverables/objectives-and-rationale.md` § Rationale map](../01-discovery/deliverables/objectives-and-rationale.md#rationale-map)). Explain locally what that outcome implies for this deliverable.
 - **In supporting documentation.** If a reader can apply the specification but needs to understand its derivation, interactions, or maintenance, place that explanation with the responsible stage and link it from the deliverable. For the choice between consequential alternatives, link to the decision record. Existing prose and links can provide the whole justification.
 
 ## Architecture, decisions, and guides

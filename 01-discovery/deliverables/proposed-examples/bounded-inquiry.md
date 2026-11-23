@@ -1,6 +1,6 @@
 # Proposed examples: bounded inquiry
 
-All examples remain **proposed and unaccepted**. See [how to read a proposed example](../example-coverage.md#reading-a-proposed-example).
+All examples remain **proposed and unaccepted**. See [`01-discovery/deliverables/example-coverage.md` § Reading a proposed example](../example-coverage.md#reading-a-proposed-example).
 
 This subject uses namespace `BI`. Its highest issued ID is `EX-BI-008`.
 
@@ -28,7 +28,7 @@ This subject uses namespace `BI`. Its highest issued ID is `EX-BI-008`.
 - **When** the agent does that work within authorization.
 - **Then** it treats the actions as context gathering and validation respectively. Not knowing the check result does not itself require a separate inquiry notice. A useful update is still permitted under the communication rules.
 
-For an example of a useful update, see [EX-AC-014](authorization-and-communication.md#ex-ac-014--useful-updates-are-permitted-without-a-report-per-increment). The requester separately [clarified the scope of reading existing documentation](../open-questions.md#reading-existing-project-documentation).
+For an example of a useful update, see [`01-discovery/deliverables/proposed-examples/authorization-and-communication.md` § EX-AC-014 — Useful updates are permitted without a report per increment](authorization-and-communication.md#ex-ac-014--useful-updates-are-permitted-without-a-report-per-increment). The requester separately clarified the scope of reading existing documentation ([`01-discovery/deliverables/open-questions.md` § Reading existing project documentation](../open-questions.md#reading-existing-project-documentation)).
 
 ## EX-BI-005 — A notice already given need not be repeated
 
@@ -42,11 +42,11 @@ For an example of a useful update, see [EX-AC-014](authorization-and-communicati
 - **When** the agent uses that benchmark to choose how to proceed.
 - **Then** it promptly explains the uncertainty and its significance and conducts a bounded inquiry subject to evidence sufficiency and reassessment. Being a documented procedure does not exempt it. Running the same benchmark solely to validate a settled limit would not be inquiry merely because its output is unknown.
 
-Whether the benchmark’s purpose should change the need for notice is an [open question for the requester](../open-questions.md#unresolved-outcomes).
+Whether the benchmark’s purpose should change the need for notice is an open question for the requester ([`01-discovery/deliverables/open-questions.md` § Unresolved outcomes](../open-questions.md#unresolved-outcomes)).
 
 ## EX-BI-007 — Reading existing project documents remains context gathering
 
-The requester [clarified how to treat reading](../open-questions.md#reading-existing-project-documentation). This particular example remains proposed.
+The requester clarified how to treat reading ([`01-discovery/deliverables/open-questions.md` § Reading existing project documentation](../open-questions.md#reading-existing-project-documentation)). This particular example remains proposed.
 
 - **Given** a material question blocks the next decision and an existing project architecture record may answer it; reading that record is within scope.
 - **When** the agent reads that record and directly relevant project documentation.

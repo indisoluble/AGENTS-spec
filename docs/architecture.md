@@ -1,6 +1,6 @@
 # AGENTS-spec engineering architecture
 
-AGENTS-spec develops a reusable, self-contained [operating contract](../04-candidate/pre_AGENTS.md) for coding agents. Each engineering stage maintains its own deliverables. The [shared documentation index](README.md) locates knowledge used across stages.
+AGENTS-spec develops a reusable, self-contained operating contract ([`04-candidate/pre_AGENTS.md`](../04-candidate/pre_AGENTS.md)) for coding agents. Each engineering stage maintains its own deliverables. The shared documentation index ([`docs/README.md`](README.md)) locates knowledge used across stages.
 
 ## Purpose and scope
 
@@ -12,25 +12,25 @@ The mapping uses [Cucumber's three BDD practices](https://cucumber.io/docs/bdd/#
 
 | BDD practice | Stage | Principal inputs | Principal outputs |
 | --- | --- | --- | --- |
-| Discovery | [`01-discovery/`](../01-discovery/README.md) | Requester needs, feedback, observations, existing knowledge | Objectives, rationale, proposals, exploratory examples, unresolved questions and requester conclusions |
-| Formulation | [`02-formulation/`](../02-formulation/README.md) | Discovery deliverables and requester decisions | Precise accepted requirements, applicable constraints, any expressly accepted defining examples |
-| Automation | [`03-design/`](../03-design/README.md) | Accepted requirements and applicable constraints | Selected mechanisms, specifications, decisions and rationale |
+| Discovery | [`01-discovery/README.md`](../01-discovery/README.md) | Requester needs, feedback, observations, existing knowledge | Objectives, rationale, proposals, exploratory examples, unresolved questions and requester conclusions |
+| Formulation | [`02-formulation/README.md`](../02-formulation/README.md) | Discovery deliverables and requester decisions | Precise accepted requirements, applicable constraints, any expressly accepted defining examples |
+| Automation | [`03-design/README.md`](../03-design/README.md) | Accepted requirements and applicable constraints | Selected mechanisms, specifications, decisions and rationale |
 | Automation | [`04-candidate/`](../04-candidate/) | Selected mechanisms and delivery constraints | Staged operational contract and supporting consumer artifacts |
-| Automation | [`05-evaluations/`](../05-evaluations/README.md) | Behavioral specifications, evaluation criteria, identified candidate | Evaluation definitions, executable checks, observations, assessments and evidence |
+| Automation | [`05-evaluations/README.md`](../05-evaluations/README.md) | Behavioral specifications, evaluation criteria, identified candidate | Evaluation definitions, executable checks, observations, assessments and evidence |
 
-Keep each interface limited to what the stage needs from its direct dependencies. A deliverable's location confers no [acceptance status](authority.md#status-of-engineering-records). Formulation supplies accepted intent to both Design and Evaluations. Design selects the mechanism that Candidate expresses as operational instructions. For requirements-led work, Evaluations derives the expectation from accepted intent and compares observed behavior against it. The [traceability model](traceability.md#tracing-a-requirement-and-its-evaluation) connects these paths.
+Keep each interface limited to what the stage needs from its direct dependencies. A deliverable's location confers no acceptance status ([`docs/authority.md` § Status of engineering records](authority.md#status-of-engineering-records)). Formulation supplies accepted intent to both Design and Evaluations. Design selects the mechanism that Candidate expresses as operational instructions. For requirements-led work, Evaluations derives the expectation from accepted intent and compares observed behavior against it. The traceability model ([`docs/traceability.md` § Tracing a requirement and its evaluation](traceability.md#tracing-a-requirement-and-its-evaluation)) connects these paths.
 
 ### Direction of stage references
 
 Every Markdown file in a numbered stage may refer to its own contents, shared foundational knowledge and lower-numbered stages only. This applies to links, written paths and instructions that assume knowledge of another artifact. A maintainer must be able to understand and revise a stage’s outputs with those sources alone. Routing the reader through a shared page to required material in a higher-numbered stage still creates a forward dependency.
 
-Keep a dependency with the artifact that relies on the source. Root `docs/` owns cross-stage navigation, traceability indexes and change-propagation procedures. Consumer files retain their installed meanings and independence from engineering documentation. See [how to check stage references](maintaining-documentation.md#check-stage-references).
+Keep a dependency with the artifact that relies on the source. Root `docs/` owns cross-stage navigation, traceability indexes and change-propagation procedures. Consumer files retain their installed meanings and independence from engineering documentation. See how to check stage references ([`docs/maintaining-documentation.md` § Check stage references](maintaining-documentation.md#check-stage-references)).
 
-The numbering governs documentation dependencies. In a [test-first iteration](pipeline.md#test-first-iteration), activities may overlap and any finding may reopen an earlier decision. Record the relevant conditions and observation at the earlier owner so its reader can evaluate the question there.
+The numbering governs documentation dependencies. In a test-first iteration ([`docs/pipeline.md` § Test-first iteration](pipeline.md#test-first-iteration)), activities may overlap and any finding may reopen an earlier decision. Record the relevant conditions and observation at the earlier owner so its reader can evaluate the question there.
 
 ## Staged sources and release-relative references
 
-[`04-candidate/`](../04-candidate/) contains exactly the five files below. Engineering links target their staged sources. Display names and adopting-project examples use their intended consumer locations. Design owns the delivery rationale, and the [runtime authority rules](authority.md#runtime-authority) explain what governs the installed product.
+[`04-candidate/`](../04-candidate/) contains exactly the five files below. Engineering links to these files show their staged paths. Consumer link labels and adopting-project examples use the intended installed locations. Design owns the delivery rationale, and the runtime authority rules ([`docs/authority.md` § Runtime authority](authority.md#runtime-authority)) explain what governs the installed product.
 
 | Staged source in `04-candidate/` | Intended consumer location |
 | --- | --- |
@@ -40,14 +40,14 @@ The numbering governs documentation dependencies. In a [test-first iteration](pi
 | `pre_README.md` | `README.md` |
 | `pre_README-powerusers.md` | `README-powerusers.md` |
 
-References to standard instruction and documentation filenames describe adopting projects. Copilot’s `../AGENTS.md` resolves from the installed `.github/` directory. Both guides contain links to `pre_*` files that resolve in staging and break after installation. The adoption guide’s `../LICENSE` reaches the [repository license](../LICENSE) in staging and points outside the installed package. Design explains [bridge behavior](../03-design/deliverables/delivery-and-portability.md#why-the-bridges-differ) and [provider-specific instruction discovery](../03-design/deliverables/delivery-and-portability.md#installed-paths-and-provider-discovery).
+References to standard instruction and documentation filenames describe adopting projects. Copilot’s `../AGENTS.md` resolves from the installed `.github/` directory. Both guides contain links to `pre_*` files that resolve in staging and break after installation. The adoption guide’s `../LICENSE` reaches the repository license ([`LICENSE`](../LICENSE)) in staging and points outside the installed package. Design explains bridge behavior ([`03-design/deliverables/delivery-and-portability.md` § Why the bridges differ](../03-design/deliverables/delivery-and-portability.md#why-the-bridges-differ)) and provider-specific instruction discovery ([`03-design/deliverables/delivery-and-portability.md` § Installed paths and provider discovery](../03-design/deliverables/delivery-and-portability.md#installed-paths-and-provider-discovery)).
 
 ## Architecture decisions
 
-The [system-wide decision record](decisions.md#architecture-decisions) explains choices affecting multiple stages. [Design decisions and alternatives](../03-design/docs/decisions.md#architecture-decisions) and [evaluation framework decisions](../05-evaluations/docs/framework-design.md#architecture-decisions) retain their domain-specific reasons, alternatives, and successors. The [engineering authority and runtime contract decision](decisions.md#engineering-authority-and-the-runtime-contract) explains the basis for engineering ownership of requirements and design and the scope of the delivered contract's authority.
+The system-wide decision record ([`docs/decisions.md` § Architecture decisions](decisions.md#architecture-decisions)) explains choices affecting multiple stages. Design decisions and alternatives ([`03-design/docs/decisions.md` § Architecture decisions](../03-design/docs/decisions.md#architecture-decisions)) and evaluation framework decisions ([`05-evaluations/docs/framework-design.md` § Architecture decisions](../05-evaluations/docs/framework-design.md#architecture-decisions)) retain their domain-specific reasons, alternatives, and successors. The engineering authority and runtime contract decision ([`docs/decisions.md` § Engineering authority and the runtime contract](decisions.md#engineering-authority-and-the-runtime-contract)) explains the basis for engineering ownership of requirements and design and the scope of the delivered contract's authority.
 
 ## Risks and technical debt
 
-- Design records the [interpretation risks of accepted wording compromises](../03-design/deliverables/delivery-and-portability.md#current-wording-trade-offs).
-- [Traceability gaps](traceability.md#current-traceability-gaps) and [evaluation coverage limits](../05-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model) bound claims about requirements-derived acceptance.
-- Evaluation evidence is specific to the environment exercised. The framework records the [limits of isolation and integration evidence](../05-evaluations/docs/framework-design.md#agent-execution).
+- Design records the interpretation risks of accepted wording compromises ([`03-design/deliverables/delivery-and-portability.md` § Current wording trade-offs](../03-design/deliverables/delivery-and-portability.md#current-wording-trade-offs)).
+- Traceability gaps ([`docs/traceability.md` § Current traceability gaps](traceability.md#current-traceability-gaps)) and evaluation coverage limits ([`05-evaluations/docs/evaluation-model.md` § Purpose and evaluation model](../05-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model)) bound claims about requirements-derived acceptance.
+- Evaluation evidence is specific to the environment exercised. The framework records the limits of isolation and integration evidence ([`05-evaluations/docs/framework-design.md` § Agent execution](../05-evaluations/docs/framework-design.md#agent-execution)).

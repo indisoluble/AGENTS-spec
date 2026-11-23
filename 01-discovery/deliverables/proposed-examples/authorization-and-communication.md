@@ -1,6 +1,6 @@
 # Proposed examples: authorization and communication
 
-All examples remain **proposed and unaccepted**. See [how to read a proposed example](../example-coverage.md#reading-a-proposed-example).
+All examples remain **proposed and unaccepted**. See [`01-discovery/deliverables/example-coverage.md` § Reading a proposed example](../example-coverage.md#reading-a-proposed-example).
 
 This subject uses namespace `AC`. Its highest issued ID is `EX-AC-014`.
 
@@ -30,7 +30,7 @@ This subject uses namespace `AC`. Its highest issued ID is `EX-AC-014`.
 - **When** a third attempt or deployment would otherwise be useful.
 - **Then** the agent reports the state and asks for direction before the affected work. A retry, new increment, or handoff does not reset the count, and silence does not change either constraint.
 
-The requester also described what [asking for a small correction](../open-questions.md#a-request-for-a-small-correction) means when no such limit was set.
+The requester also described what asking for a small correction means when no such limit was set. See [`01-discovery/deliverables/open-questions.md` § A request for a small correction](../open-questions.md#a-request-for-a-small-correction).
 
 ### EX-AC-005 — Disclose a material assumption at the applicable reporting occasion
 
@@ -54,7 +54,7 @@ If material intent or permission were still unresolved, the proposed response wo
 
 ### EX-AC-008 — Distinguish an expectation from a binding limit
 
-See the [requester’s clarification about implementation scope](../open-questions.md#a-request-for-a-small-correction).
+See the requester’s clarification about implementation scope ([`01-discovery/deliverables/open-questions.md` § A request for a small correction](../open-questions.md#a-request-for-a-small-correction)).
 
 - **Given** the requester says they expect a small fix but sets no attempt cap or checkpoint; new evidence supports a second local correction within the same authority, direction, and risk boundaries.
 - **When** the agent reassesses cumulative work before continuing.

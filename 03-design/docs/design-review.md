@@ -1,6 +1,6 @@
 # Reviewing Design explanations
 
-Read the explanation as someone choosing or maintaining a mechanism. Use the [specifications](../deliverables/contract-design.md#crosscutting-concepts) and [decisions](decisions.md) to check what was selected and why. The [design illustrations](design-illustrations.md) supply situations in which to test the explanation.
+Read the explanation as someone choosing or maintaining a mechanism. Use the specifications ([`03-design/deliverables/contract-design.md` § Crosscutting Concepts](../deliverables/contract-design.md#crosscutting-concepts)) and [`03-design/docs/decisions.md`](decisions.md) to check what was selected and why. Use the situations in [`03-design/docs/design-illustrations.md`](design-illustrations.md) to test the explanation.
 
 ## Meaning and evidence checks
 

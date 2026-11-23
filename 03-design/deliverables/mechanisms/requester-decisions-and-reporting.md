@@ -1,6 +1,6 @@
 # Requester decisions and reporting
 
-[Contract architecture](../contract-design.md) supplies status and vocabulary. This document explains authorization and continuation, durable findings, and reporting. [Delivery](../delivery-and-portability.md#why-the-bridges-differ) covers protected instruction files and external actions.
+Contract architecture ([`03-design/deliverables/contract-design.md`](../contract-design.md)) supplies status and vocabulary. This document explains authorization and continuation, durable findings, and reporting. Delivery ([`03-design/deliverables/delivery-and-portability.md` § Why the bridges differ](../delivery-and-portability.md#why-the-bridges-differ)) covers protected instruction files and external actions.
 
 ## Authorization and requester decisions
 
@@ -31,7 +31,7 @@ An ADR or retrospective report cannot replace prior direction. Consequential cho
 Analysis/review can establish useful knowledge before implementation. The design therefore separates **which writes are permitted** from **which record triggers apply**. Assessment alone permits only:
 
 - Material, durable finding records.
-- [ADR](knowledge-and-documentation.md#adrs-preserving-the-reasons-for-lasting-choices) and [debt](knowledge-and-documentation.md#recording-technical-debt) maintenance under their respective rules.
+- ADR ([`03-design/deliverables/mechanisms/knowledge-and-documentation.md` § ADRs: preserving the reasons for lasting choices](knowledge-and-documentation.md#adrs-preserving-the-reasons-for-lasting-choices)) and debt ([`03-design/deliverables/mechanisms/knowledge-and-documentation.md` § Recording technical debt](knowledge-and-documentation.md#recording-technical-debt)) maintenance under their respective rules.
 - Verified corrections aligning existing descriptions of current project facts, such as commands or paths, in the assessed scope with their owner; requirements, decision records, and protected instruction files are excluded from this correction permission.
 
 These permissions remain subject to authorized scope, requester restrictions (including no-edit), instruction-file protection, and tool permissions/approvals. Assessment MUST NOT authorize implementation, new/changed system requirements, accepting/changing decisions beyond existing authority, unrelated documentation repairs, or backfills. Factual correction aligns a description with existing evidence; it cannot alter intended behavior or decision authority. Broader repairs and external actions retain their own authorization requirements.
@@ -40,7 +40,7 @@ Material findings that are also durable project knowledge MUST be recorded with 
 
 A permanent record is the canonical project document owning the topic; chat and working notes do not suffice. If none is suitable, the agent MUST create the minimum record holding only the findings and evidence, without placeholders, empty sections, or backfill. Other gaps remain improvement proposals. A finding alone triggers no ADR. If writing is prohibited, the unmet duty MUST be reported as unfinished work; chat disclosure cannot satisfy it.
 
-Record triggers grant no authority. Permission does not turn optional [debt recording](knowledge-and-documentation.md#recording-technical-debt) into a duty; a required record cannot authorize implementation or decision acceptance.
+Record triggers grant no authority. Permission does not turn optional debt recording ([`03-design/deliverables/mechanisms/knowledge-and-documentation.md` § Recording technical debt](knowledge-and-documentation.md#recording-technical-debt)) into a duty; a required record cannot authorize implementation or decision acceptance.
 
 ## Reporting and continued execution
 
@@ -50,7 +50,7 @@ PDSA assessment and use of findings occur even when no chat report follows. Repo
 | --- | --- |
 | Task completion, handoff, or seeking requester input | MUST consolidate unreported work into a report. |
 | Before substantial work, after proportionate preliminary context | MUST briefly state the task outline and first increment's objective and bounds in chat. |
-| Material inquiry uncertainty blocking the next decision | MUST promptly make the uncertainty and its significance clear unless already communicated in the request or task framing; see [inquiry](bounded-inquiry.md#when-inquiry-applies). |
+| Material inquiry uncertainty blocking the next decision | MUST promptly make the uncertainty and its significance clear unless already communicated in the request or task framing; see inquiry ([`03-design/deliverables/mechanisms/bounded-inquiry.md` § When inquiry applies](bounded-inquiry.md#when-inquiry-applies)). |
 | Disclosure affecting authorization or a decision requiring input | MUST precede affected work. |
 | Intermediate communication | SHOULD minimize routine progress reports and keep updates concise and useful. Other information SHOULD normally join the next consolidated report. |
 

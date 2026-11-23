@@ -1,6 +1,6 @@
 # Proposed examples: validation and learning
 
-All examples remain **proposed and unaccepted**. See [how to read a proposed example](../example-coverage.md#reading-a-proposed-example).
+All examples remain **proposed and unaccepted**. See [`01-discovery/deliverables/example-coverage.md` § Reading a proposed example](../example-coverage.md#reading-a-proposed-example).
 
 This subject uses namespace `VL`. Its highest issued ID is `EX-VL-009`.
 

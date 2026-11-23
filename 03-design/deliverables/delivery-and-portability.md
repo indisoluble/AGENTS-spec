@@ -1,10 +1,10 @@
 # Delivery and portability
 
-[Contract architecture](contract-design.md) supplies design status and vocabulary. The baseline owns [PR1 self-containment](../../02-formulation/deliverables/baseline.md#established-product-requirement) and the [portability constraint](../../02-formulation/deliverables/baseline.md#portability-and-standing-context-qualifications); this document explains their integration and wording trade-offs.
+Contract architecture ([`03-design/deliverables/contract-design.md`](contract-design.md)) supplies design status and vocabulary. The baseline owns PR1 self-containment ([`02-formulation/deliverables/baseline.md` § Established product requirement](../../02-formulation/deliverables/baseline.md#established-product-requirement)) and the portability constraint ([`02-formulation/deliverables/baseline.md` § Portability and standing-context qualifications](../../02-formulation/deliverables/baseline.md#portability-and-standing-context-qualifications)); this document explains their integration and wording trade-offs.
 
 ## Context and Scope
 
-These loading and instruction rules describe installed files in an adopting project. [Development authority](../../docs/authority.md#repository-development-and-instruction-loading) determines their applicability to this repository.
+These loading and instruction rules describe installed files in an adopting project. Development authority ([`docs/authority.md` § Repository development and instruction loading](../../docs/authority.md#repository-development-and-instruction-loading)) determines their applicability to this repository.
 
 The provider discovery guidance was checked on September 25, 2026, and the Claude import syntax on October 3, 2026. Actual support depends on the provider and adopting environment.
 
@@ -30,7 +30,7 @@ The instruction rule distinguishes canonical ownership, bridge content, and edit
 
 Directory instructions MAY add subtree rules only if contract-compatible. The tool sets discovery, scope, and precedence; precedence never makes conflicting policy acceptable, and conflicts MUST be reported. Compatibility constrains content rather than inventing precedence. Adoption therefore needs human validation of existing practices/workflows before replacing instruction files, without adding runtime duties or treating instructions as owners of project facts.
 
-If loading/scope/precedence uncertainty could affect the task, the agent SHOULD inspect available diagnostics and relevant instruction files; it MUST report checks and remaining material uncertainty. Tool limits blocking loading require [disclosure](mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution). Diagnostics and demonstrated application are different evidence.
+If loading/scope/precedence uncertainty could affect the task, the agent SHOULD inspect available diagnostics and relevant instruction files; it MUST report checks and remaining material uncertainty. Tool limits blocking loading require disclosure ([`03-design/deliverables/mechanisms/requester-decisions-and-reporting.md` § Reporting and continued execution](mechanisms/requester-decisions-and-reporting.md#reporting-and-continued-execution)). Diagnostics and demonstrated application are different evidence.
 
 Discovery, inclusion, precedence, and application are distinct: [VS Code conflict guidance](https://code.visualstudio.com/docs/agent-customization/custom-instructions#_resolve-conflicting-instructions), [instruction settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#_custom-instructions-settings), and [GitHub.com precedence](https://docs.github.com/en/copilot/concepts/prompting/response-customization#precedence-of-custom-instructions) address different aspects. File order or a link cannot establish all four; assess them in the actual adopting environment.
 
@@ -40,7 +40,7 @@ External actions—commits, publishing/sending, or remote/shared-state changes�
 
 ### Keeping the contract portable
 
-The [baseline qualifications](../../02-formulation/deliverables/baseline.md#portability-and-standing-context-qualifications) define the strongly preferred target of about 24,000 LF-normalized UTF-8 bytes, its measurement, exceptional excess, compression review, fidelity priority, and required loading headroom.
+The baseline qualifications ([`02-formulation/deliverables/baseline.md` § Portability and standing-context qualifications](../../02-formulation/deliverables/baseline.md#portability-and-standing-context-qualifications)) define the strongly preferred target of about 24,000 LF-normalized UTF-8 bytes, its measurement, exceptional excess, compression review, fidelity priority, and required loading headroom.
 
 The **2026-10-04** provider check covered [Codex's documented default 32 KiB combined instruction limit](https://learn.chatgpt.com/docs/agent-configuration/agents-md#how-codex-discovers-guidance), Anthropic's [guidance on concise, human-readable instruction files](https://code.claude.com/docs/en/best-practices#write-an-effective-claude-md), and the context cost of [loading the contract through a Claude import](https://code.claude.com/docs/en/memory#import-additional-files). The approximate 24,000-byte project target leaves room for directory instructions and other loaded context. These sources explain the choice rather than establishing a universal ceiling or actual compatibility; delivered files, other instructions, and tool configuration still matter.
 
@@ -58,6 +58,6 @@ Compact instructions reduce standing text but can require inferred relationships
 | Requester limits and consequential direction | Keep informal expectations distinct from binding limits, material ambiguity subject to clarification, and new consequential direction/material departures subject to prior consultation unless specifically authorized. Routine corrections remain autonomous. |
 | Purpose-based inquiry and awareness | Keep context, execution, validation, and inquiry distinct; unknown output or a prescribed procedure alone cannot classify them. Prompt uncertainty/significance notification differs from consultation and needs no duplicate when already communicated. No declared allowance is required; announcing one cannot replace bounds, sufficient evidence, or reassessment before justified continuation. |
 | Intermediate communication | Minimizing routine reports and keeping updates concise/useful are recommendations, not a ban or effort-audit duty. Consolidation, framing, inquiry notification, and advance disclosures retain distinct triggers/strengths. |
-| References without per-rule numeric locators | Preserve [exact assignments](methods-and-references.md#principles-and-reference-boundaries) and narrow consultation limits so links do not become open-ended research. |
+| References without per-rule numeric locators | Preserve exact assignments ([`03-design/deliverables/methods-and-references.md` § Principles and reference boundaries](methods-and-references.md#principles-and-reference-boundaries)) and narrow consultation limits so links do not become open-ended research. |
 
 These are interpretation risks rather than added operating rules or measured outcomes. Acceptance covers only the identified wording compromises. Any new trade-off, including reduced explicitness without intended rule change, is a design decision for requester review: record what becomes less explicit, where operative meaning remains, and likely interpretation/effort consequences. Prior acceptance and matching counts establish neither losslessness nor behavioral equivalence for further reductions.

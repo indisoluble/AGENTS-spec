@@ -1,6 +1,6 @@
 # Engineering and validation
 
-[Contract architecture](../contract-design.md) supplies status and vocabulary. This document explains engineering practices and validation; [reference assignments](../methods-and-references.md#principles-and-reference-boundaries) identify their supporting sources.
+Contract architecture ([`03-design/deliverables/contract-design.md`](../contract-design.md)) supplies status and vocabulary. This document explains engineering practices and validation; reference assignments ([`03-design/deliverables/methods-and-references.md` § Principles and reference boundaries](../methods-and-references.md#principles-and-reference-boundaries)) identify their supporting sources.
 
 ## Engineering scope boundaries
 
@@ -14,7 +14,7 @@ Beck's [Simple Design, explained by Fowler](https://martinfowler.com/bliki/BeckD
 
 Code SHOULD be clear and maintainable, reusing suitable code and project patterns. Names and structure SHOULD explain implementation; tests SHOULD explain behavior; comments/docs SHOULD explain reasons or limits code cannot express, with links for detail. These roles avoid comments merely repeating code.
 
-Current requirements MAY justify complexity; speculation alone MUST NOT justify abstractions, parallel implementations, configuration, or optimization. Optimization SHOULD have requirements or evidence and explain material complexity/trade-offs. The documented strategy SHOULD be followed unless the task conflicts with or materially extends it; [consultation rules](requester-decisions-and-reporting.md#authorization-and-requester-decisions) still apply.
+Current requirements MAY justify complexity; speculation alone MUST NOT justify abstractions, parallel implementations, configuration, or optimization. Optimization SHOULD have requirements or evidence and explain material complexity/trade-offs. The documented strategy SHOULD be followed unless the task conflicts with or materially extends it; consultation rules ([`03-design/deliverables/mechanisms/requester-decisions-and-reporting.md` § Authorization and requester decisions](requester-decisions-and-reporting.md#authorization-and-requester-decisions)) still apply.
 
 Hard memory, latency, throughput, concurrency, cost, or scale requirements can justify complexity; imagined extensions supply no equivalent evidence. One agreed input format can be complete without a framework for unspecified formats, provided necessary error handling and checks are included.
 
@@ -30,7 +30,7 @@ The agent SHOULD fix root causes, use descriptive names, and favor independent c
 
 ## Validation and test evidence
 
-Completion MUST require correctness, consistency, and validation across affected artifacts; required stops MAY leave work incomplete. Before completing an increment, the agent MUST run relevant available acceptance checks even when no report is due. Checks MUST cover affected behavior, risk, and hard performance/operational limits. Passing tests MUST NOT replace requirements or necessary checks. Failed, unavailable, or omitted checks MUST be disclosed under [reporting rules](requester-decisions-and-reporting.md#reporting-and-continued-execution).
+Completion MUST require correctness, consistency, and validation across affected artifacts; required stops MAY leave work incomplete. Before completing an increment, the agent MUST run relevant available acceptance checks even when no report is due. Checks MUST cover affected behavior, risk, and hard performance/operational limits. Passing tests MUST NOT replace requirements or necessary checks. Failed, unavailable, or omitted checks MUST be disclosed under reporting rules ([`03-design/deliverables/mechanisms/requester-decisions-and-reporting.md` § Reporting and continued execution](requester-decisions-and-reporting.md#reporting-and-continued-execution)).
 
 Availability and sufficient evidence are separate questions. A tooling limitation cannot count as successful validation, while sufficient alternative evidence can establish a condition under the substitution rule:
 
@@ -39,7 +39,7 @@ Availability and sufficient evidence are separate questions. A tooling limitatio
 - Sufficient alternative evidence MAY substitute only for an unavailable check that was not specifically required.
 - Conditions lacking sufficient evidence MUST be reported unverified, and validation incomplete, unless validly revised. Disclosure alone does not satisfy them. Pre-existing failures are assessed for relevance and disclosed without automatically blocking unrelated work.
 
-Revision authority follows the source: requester-supplied requirements/conditions MAY change only with requester authority; canonical requirements only through authorized requirement work; agent-derived conditions only consistently with requester instructions, project requirements, scope, and decision authority. Failed validation or implementation difficulty MUST NOT justify weakening, replacing, or reinterpreting requirements or conditions, and tests MUST NOT be weakened just to pass. [Completion versus prediction](work-cycle.md#requirements-acceptance-conditions-and-predictions) explains why learning cannot lower the completion bar.
+Revision authority follows the source: requester-supplied requirements/conditions MAY change only with requester authority; canonical requirements only through authorized requirement work; agent-derived conditions only consistently with requester instructions, project requirements, scope, and decision authority. Failed validation or implementation difficulty MUST NOT justify weakening, replacing, or reinterpreting requirements or conditions, and tests MUST NOT be weakened just to pass. Completion versus prediction ([`03-design/deliverables/mechanisms/work-cycle.md` § Requirements, acceptance conditions, and predictions](work-cycle.md#requirements-acceptance-conditions-and-predictions)) explains why learning cannot lower the completion bar.
 
 Behavior changes, repairs, and clarified edge cases SHOULD have appropriate tests, including regression checks, whose names, examples, setup, actions, and assertions explain observable behavior. Unit tests SHOULD use [Given/When/Then](https://martinfowler.com/bliki/GivenWhenThen.html): starting conditions, action, expected result; no prescribed labels or framework. For a quoted comma, these are the sample, parser call, and intact-field assertion. Documentation-only work needs its relevant checks rather than code/unit tests for their own sake.
 

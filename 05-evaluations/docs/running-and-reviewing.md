@@ -1,14 +1,14 @@
 # Running and reviewing evaluations
 
-This document owns installation, authentication, case execution, retained evidence, report interpretation, failure investigation, and human review. Start with the [evaluation model](evaluation-model.md#purpose-and-evaluation-model) for the suite's scope and interpretation limits.
+This document owns installation, authentication, case execution, retained evidence, report interpretation, failure investigation, and human review. Start with [`05-evaluations/docs/evaluation-model.md` § Purpose and evaluation model](evaluation-model.md#purpose-and-evaluation-model) for the suite's scope and interpretation limits.
 
-Use the [case specifications](../README.md#case-specifications) to find the selected case's source module and exact rubric. The [stage README](../README.md#evaluator-requirements) links the case-specific and shared evaluator requirements. [Framework design](framework-design.md) owns execution, observation, cleanup, and functional-check boundaries; the links below connect operational results to those mechanisms. A historical run is interpreted using its captured contract and rubric, as the [review procedure](#response-presence-and-human-review) explains.
+Use [`05-evaluations/README.md` § Case specifications](../README.md#case-specifications) to find the selected case's source module and exact rubric. The stage README ([`05-evaluations/README.md` § Evaluator requirements](../README.md#evaluator-requirements)) links the case-specific and shared evaluator requirements. [`05-evaluations/docs/framework-design.md`](framework-design.md) owns execution, observation, cleanup, and functional-check boundaries; the links below connect operational results to those mechanisms. A historical run is interpreted using its captured contract and rubric, as the [review procedure](#response-presence-and-human-review) explains.
 
 ## Setup and running evaluations
 
 ### Install prerequisites
 
-Run evaluator commands from `05-evaluations/`. Use Python 3.11 or newer and a POSIX system. Windows is not supported by the process-group and file-opening implementation. Runtime compatibility and sandbox enforcement need separate validation in the target environment; see [agent execution](framework-design.md#agent-execution). From the repository root, enter the stage before setup:
+Run evaluator commands from `05-evaluations/`. Use Python 3.11 or newer and a POSIX system. Windows is not supported by the process-group and file-opening implementation. Runtime compatibility and sandbox enforcement need separate validation in the target environment; see [`05-evaluations/docs/framework-design.md` § Agent execution](framework-design.md#agent-execution). From the repository root, enter the stage before setup:
 
 ```sh
 cd 05-evaluations
@@ -18,7 +18,7 @@ python -m pip install --upgrade pip
 python -m pip install --upgrade -r deliverables/requirements.txt
 ```
 
-[requirements.txt](../deliverables/requirements.txt) owns the dependency range. It allows Pydantic Evals minor and patch upgrades within major version 2. Dependencies are not locked, so installations can resolve different versions; rerun the offline checks after upgrading.
+[`05-evaluations/deliverables/requirements.txt`](../deliverables/requirements.txt) owns the dependency range. It allows Pydantic Evals minor and patch upgrades within major version 2. Dependencies are not locked, so installations can resolve different versions; rerun the offline checks after upgrading.
 
 **Codex is a separate prerequisite for live runs and the functional-check sandbox probe.** Installing Python dependencies does not install it. Follow the [official Codex CLI installation instructions](https://learn.chatgpt.com/docs/codex/cli), then check it in the same terminal that will run the suite:
 
@@ -27,7 +27,7 @@ command -v codex
 codex --version
 ```
 
-The runner finds `codex` on `PATH`. An editor can provide its own executable without making it available in your terminal; add that executable's directory to `PATH` or install the CLI separately. `--codex-home` selects credential/configuration storage, not the executable. The selected build must support the flags, features, and permission overrides in [execution_command](../deliverables/runtime/codex.py), including native permission profiles and `skip_host_skill_discovery`. See [agent execution](framework-design.md#agent-execution) for the configured boundary and verification limits.
+The runner finds `codex` on `PATH`. An editor can provide its own executable without making it available in your terminal; add that executable's directory to `PATH` or install the CLI separately. `--codex-home` selects credential/configuration storage, not the executable. The selected build must support the flags, features, and permission overrides in execution_command ([`05-evaluations/deliverables/runtime/codex.py`](../deliverables/runtime/codex.py)), including native permission profiles and `skip_host_skill_discovery`. See [`05-evaluations/docs/framework-design.md` § Agent execution](framework-design.md#agent-execution) for the configured boundary and verification limits.
 
 ### Run offline checks
 
@@ -40,7 +40,7 @@ python -m deliverables.tests.offline_smoke
 
 Discovery uses `-t .` to import tests through the `deliverables.tests` package. To run one module, name it by package from `05-evaluations/`, for example `python -m unittest deliverables.tests.scenarios.test_scope -v`. Each scenario's grading and CLI tests are in `deliverables/tests/scenarios/test_<module>.py`; tests of the shared machinery and cross-scenario CLI guarantees are in `deliverables/tests/runtime/`.
 
-These checks use substitutes or fake CLI processes with dummy credentials in temporary directories. They never launch real Codex or contact OpenAI. Tests inspect their own child processes with `/bin/ps`, create Unix sockets, and verify POSIX special mode bits; an enclosing agent sandbox may require permission for those operations. They do not establish live provider compatibility, actual sandbox enforcement, or coding-agent behavior. The separate [functional sandbox probe](framework-design.md#functional-check-execution) uses the real CLI without a model call.
+These checks use substitutes or fake CLI processes with dummy credentials in temporary directories. They never launch real Codex or contact OpenAI. Tests inspect their own child processes with `/bin/ps`, create Unix sockets, and verify POSIX special mode bits; an enclosing agent sandbox may require permission for those operations. They do not establish live provider compatibility, actual sandbox enforcement, or coding-agent behavior. The separate functional sandbox probe ([`05-evaluations/docs/framework-design.md` § Functional-check execution](framework-design.md#functional-check-execution)) uses the real CLI without a model call.
 
 ### Authentication and credential lifetime
 
@@ -77,15 +77,15 @@ python -m deliverables --case durable-finding-review --model gpt-6.1-sol --reaso
 python -m deliverables --case all --model gpt-6.1-sol --reasoning-effort medium
 ```
 
-For another individual case, use its name from the [accepted case selections](../deliverables/requirements/suite-execution-and-results.md#e12) with `--case`. Omitting that option is equivalent to `--case smoke`.
+For another individual case, use its name from the accepted case selections ([`05-evaluations/deliverables/requirements/suite-execution-and-results.md` § E12](../deliverables/requirements/suite-execution-and-results.md#e12)) with `--case`. Omitting that option is equivalent to `--case smoke`.
 
-`all` follows the [order defined by E15](../deliverables/requirements/suite-execution-and-results.md#e15), waiting for each case and its cleanup to finish. Each has an independent workspace, Codex session, report, and evidence directory. Ordinary failures do not skip later cases; Ctrl-C or SIGTERM stops the sequence. There are no automatic retries or concurrent cases.
+`all` follows the order defined by E15 ([`05-evaluations/deliverables/requirements/suite-execution-and-results.md` § E15](../deliverables/requirements/suite-execution-and-results.md#e15)), waiting for each case and its cleanup to finish. Each has an independent workspace, Codex session, report, and evidence directory. Ordinary failures do not skip later cases; Ctrl-C or SIGTERM stops the sequence. There are no automatic retries or concurrent cases.
 
 | Option | Use |
 | --- | --- |
 | `--case NAME` | A registered case name or `all`. The default is `smoke`. Unknown names are rejected before execution. |
 | `--model ID`, `--reasoning-effort VALUE` | Required for evaluations; the same settings apply to every selected case. |
-| `--timeout SECONDS` | Positive finite agent-execution timeout per case, default 180. Other allowances are separate; see [deadlines and cleanup](framework-design.md#deadlines-and-cleanup). |
+| `--timeout SECONDS` | Positive finite agent-execution timeout per case, default 180. Other allowances are separate; see [`05-evaluations/docs/framework-design.md` § Deadlines and cleanup](framework-design.md#deadlines-and-cleanup). |
 | `--codex-home PATH` | Dedicated profile selection; see [authentication](#authentication-and-credential-lifetime). |
 | `--login`, `--logout` | Mutually exclusive authentication actions; cannot accompany `--case`, `--model`, or `--reasoning-effort`. |
 | `--help` | Display the CLI's option reference. |
@@ -109,10 +109,10 @@ For multiple cases, exit precedence is **2 → 1 → 3 → 0**. Each case keeps 
 
 An assertion failure can be valid evidence about the observed task, such as a wrong edit or missing preview. It is not automatically a verdict on every contract criterion. Likewise, preserving protected state can be correct restraint while the requested operational task remains incomplete; the case definitions explain that distinction.
 
-To locate a failure in the [evaluation lifecycle](framework-design.md#responsibilities-and-dependency-direction), read the fields for the individual case.
+To locate a failure in the evaluation lifecycle ([`05-evaluations/docs/framework-design.md` § Responsibilities and dependency direction](framework-design.md#responsibilities-and-dependency-direction)), read the fields for the individual case.
 
 - **Execution failed before grading.** An execution callback error status or exception becomes a task failure in `execution_errors`. Prerequisite, agent, capture, inspection and functional-check launcher errors can take this path. No assertions were graded for that task.
-- **An evaluator could not grade its criterion.** Look for `evaluator_errors` in the graded case. Other assertions keep their values and reasons. For example, when the capture lacks the root contract's bytes, `RootContractPreserved` has no verdict, but `FinalResponsePresent` can still succeed and review remains pending. The offline [requester-guidance regression test](../deliverables/tests/scenarios/test_guidance.py) exercises this distinction.
+- **An evaluator could not grade its criterion.** Look for `evaluator_errors` in the graded case. Other assertions keep their values and reasons. For example, when the capture lacks the root contract's bytes, `RootContractPreserved` has no verdict, but `FinalResponsePresent` can still succeed and review remains pending. The offline requester-guidance regression test ([`05-evaluations/deliverables/tests/scenarios/test_guidance.py`](../deliverables/tests/scenarios/test_guidance.py)) exercises this distinction.
 - **An assertion returned false.** Read its entry in `assertion_reasons` against the case specification. A completed nonzero functional check can fail a behavioral assertion. Failure to complete the check is an infrastructure error.
 
 Also inspect report-level evaluator and write errors in the [report fields](#retained-evidence). Write failures during execution or functional checks enter the execution error. When available, `execution.json` also lists errors retaining execution evidence. Any recorded error takes precedence when the CLI determines the outcome. Early failures may produce only a short report with an `error` field or a terminal diagnostic.
@@ -121,7 +121,7 @@ Also inspect report-level evaluator and write errors in the [report fields](#ret
 
 Cases requiring human review use `FinalResponsePresent`, which requires a captured final response containing non-whitespace text. Empty or whitespace-only text fails that assertion. Missing capture is an infrastructure error. Presence alone grades no meaning, regardless of how plausible the response sounds.
 
-Under [E26](../deliverables/requirements/suite-execution-and-results.md#e26), `review_required: true` remains in the report for these cases after an assertion failure or infrastructure error. Human assessment happens outside the CLI; there is no keyword classifier, model judge, verdict-ingestion step, or automatic answer to an agent's question.
+Under [`05-evaluations/deliverables/requirements/suite-execution-and-results.md` § E26](../deliverables/requirements/suite-execution-and-results.md#e26), `review_required: true` remains in the report for these cases after an assertion failure or infrastructure error. Human assessment happens outside the CLI; there is no keyword classifier, model judge, verdict-ingestion step, or automatic answer to an agent's question.
 
 Use the run's `review.md` to assess its criteria separately. Its presence means the rubric was supplied. To establish that a person actually reviewed the run, look for their assessment associated with that evidence directory. Read the final reply, requester-facing progress messages and commands in `events.jsonl`, and all workspace changes together. Cite relevant passages, commands, and paths. Check that claims agree with actions. Information already communicated need not be repeated in the final reply. Resolve infrastructure errors before treating live verification as complete.
 
@@ -129,7 +129,7 @@ Apply the captured contract's rule strengths, triggers, and exceptions. Required
 
 Assess technical correctness and completeness separately from compliance with exercised obligations. Unexercised duties receive no compliance pass. Where available evidence cannot support a judgment, record insufficient evidence; preserve infrastructure failures as errors. Missing visible reassessment does not itself prove that reassessment was omitted. Traces support review of observable conduct, not access to private reasoning or exact token consumption; usage claims need actual telemetry whose scope supports them.
 
-The scenario module owns the rubric text; `review.md` preserves the rubric used for that run. Historical conclusions remain associated with their captured contract and rubric. Updating current criteria does not establish a new verdict for an earlier run. The [case specifications](../README.md#case-specifications) identify each rubric's purpose and interpretation limits without replacing it.
+The scenario module owns the rubric text; `review.md` preserves the rubric used for that run. Historical conclusions remain associated with their captured contract and rubric. Updating current criteria does not establish a new verdict for an earlier run. The case specifications ([`05-evaluations/README.md` § Case specifications](../README.md#case-specifications)) identify each rubric's purpose and interpretation limits without replacing it.
 
 ### Retained evidence
 
@@ -138,7 +138,7 @@ Each case prints its name and a distinct git-ignored `05-evaluations/.eval-runs/
 | File | Contents |
 | --- | --- |
 | `prompt.txt`, `AGENTS.md`, `message.txt` | Submitted prompt, initial contract snapshot, and initial message fixture when present. |
-| `execution.json` | `contract_sha256` identifies the initial `AGENTS.md` snapshot saved by [codex.py](../deliverables/runtime/codex.py). Also records CLI version when available, command/settings, paths, status, errors, duration, and exit status when available. |
+| `execution.json` | `contract_sha256` identifies the initial `AGENTS.md` snapshot saved by [`05-evaluations/deliverables/runtime/codex.py`](../deliverables/runtime/codex.py). Also records CLI version when available, command/settings, paths, status, errors, duration, and exit status when available. |
 | `events.jsonl`, `stderr.txt` | Raw CLI events and diagnostics. The launcher opens these files before starting the agent process, so their presence alone cannot establish a completed turn. |
 | `final-response.txt` | The CLI's final response, including empty text, for human-review cases or programmatic capture. The raw file remains available if text decoding fails. |
 | `initial-workspace.json`, `final-workspace.json` | With observation (all behavioral cases): successful snapshots keyed by relative path, with `kind`, integer `mode`, `contents_base64` (exact regular-file bytes, otherwise null), and `link_target` (otherwise null). These include all observed entries. |
@@ -165,15 +165,15 @@ python --version
 python -m pip show pydantic-evals
 ```
 
-If the evaluator has local edits, retain the relevant changes with that reference so the case and grading code can be identified. For an older run, use its own evidence and any contemporaneous review reference. A matching contract hash or case name alone cannot recover the evaluator revision. If its version is unknown, qualify comparisons accordingly. [Run and expectation traceability](../../docs/traceability.md#tracing-a-requirement-and-its-evaluation)
+If the evaluator has local edits, retain the relevant changes with that reference so the case and grading code can be identified. For an older run, use its own evidence and any contemporaneous review reference. A matching contract hash or case name alone cannot recover the evaluator revision. If its version is unknown, qualify comparisons accordingly. Run and expectation traceability ([`docs/traceability.md` § Tracing a requirement and its evaluation](../../docs/traceability.md#tracing-a-requirement-and-its-evaluation))
 
 ### Investigate a failure or incomplete result
 
 1. **Find the case and failure category.** Start with terminal output and `report.json`. If reports could not be written, the terminal retains the primary error and evidence-write diagnostics. A pending-review flag does not disappear because a failure has higher precedence.
 2. **For an infrastructure error, inspect execution evidence.** Read `execution.json` for the primary error, command/settings and evidence errors. A missing CLI, rejected profile or missing ChatGPT login can stop setup before a turn starts. Check the terminal's `PATH` and the selected authentication directory. If the command ran, inspect its return code, `stderr.txt` and `events.jsonl`. The launcher requires exit zero, a `turn.completed` event and no `turn.failed` event. Partial output can survive an incomplete turn.
-3. **Separate failed observation from observed failure.** A missing/incomplete snapshot cannot prove preservation. A successfully observed missing or non-regular file is assessed under the case's rules. Capture failures are errors; a successfully captured empty response is an assertion failure. See [observation and capture boundaries](framework-design.md#observation-and-capture-boundaries).
+3. **Separate failed observation from observed failure.** A missing/incomplete snapshot cannot prove preservation. A successfully observed missing or non-regular file is assessed under the case's rules. Capture failures are errors; a successfully captured empty response is an assertion failure. See [`05-evaluations/docs/framework-design.md` § Observation and capture boundaries](framework-design.md#observation-and-capture-boundaries).
 4. **For assertion failures, inspect the specific reasons.** Compare `assertions` with `assertion_reasons`, the readable differences, and exact bytes/modes in the manifests. File copies are convenient for reading; manifests preserve original metadata. An observation of a change is not itself a judgment that it was unauthorized.
-5. **For independent-execution and contract-change-followthrough, inspect the separate checks.** `functional-checks.json` and `checks/` distinguish completed nonzero checks, launcher/check errors, and skipped checks with reasons. These results are not evidence that the agent ran its own tests. Use the [sandbox probe](framework-design.md#functional-check-execution) when investigating enforcement; there is no unsandboxed fallback.
+5. **For independent-execution and contract-change-followthrough, inspect the separate checks.** `functional-checks.json` and `checks/` distinguish completed nonzero checks, launcher/check errors, and skipped checks with reasons. These results are not evidence that the agent ran its own tests. Use the sandbox probe ([`05-evaluations/docs/framework-design.md` § Functional-check execution](framework-design.md#functional-check-execution)) when investigating enforcement; there is no unsandboxed fallback.
 6. **For pending semantics, follow the retained rubric.** Automated success cannot settle missing authorization, meaningful tests, accurate disclosure, a consequential trade-off, measurement provenance and bounded inquiry conduct, or adequate permanent recording of an established durable finding.
 
 After correcting an infrastructure problem, a new selected-case run gets fresh workspace and evidence directories. Keep the failed run's evidence when comparing results; rerunning does not repair or complete its record.

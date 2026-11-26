@@ -13,7 +13,7 @@ Several approaches can satisfy the same requirement. In AGENTS-spec, BDD’s **A
 The arrows show what the stages share today. Their work can overlap, and a finding can reopen an earlier decision.
 
 ```mermaid
-flowchart TD
+flowchart LR
     D["01 Discovery"] -->|proposals and requester decisions| F["02 Formulation"]
     subgraph Automation
         M["03 Design"] -->|selected mechanisms| C["04 Candidate"]

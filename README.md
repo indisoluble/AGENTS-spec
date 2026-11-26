@@ -8,25 +8,42 @@ Suppose an agent pauses to ask a question when the requester expected it to keep
 
 The project uses behavior-driven development (BDD) to build agreement from concrete examples. **Discovery** explores what should happen in a situation like this and why. **Formulation** records what the requester or their delegate accepts as a requirement.
 
-Several approaches can satisfy the same requirement. In AGENTS-spec, BDD’s **Automation** practice spans three stages. Contributors choose an approach in **Design**, express it in the **Candidate** (the working version of `AGENTS.md`), and check how an agent behaves with those instructions in **Evaluations**.
+Several approaches can satisfy the same requirement. In AGENTS-spec, BDD’s **Automation** practice spans three stages. **Design** selects an approach and **Candidate** expresses it in the working `AGENTS.md`. **Evaluations** defines what to check and assesses how an agent behaves with those instructions.
 
-The arrows show what the stages share today. Their work can overlap, and a finding can reopen an earlier decision.
+The diagram shows what each stage owns and how the work can overlap in the intended model. For a **test-first** change, Evaluations can derive an expectation directly from an accepted requirement before Design selects a mechanism. That expectation guides Design and Candidate (dotted arrows) and still applies if the mechanism changes. [`docs/pipeline.md` § Test-first iteration](docs/pipeline.md#test-first-iteration)
 
 ```mermaid
-flowchart LR
-    D["01 Discovery"] -->|proposals and requester decisions| F["02 Formulation"]
-    subgraph Automation
-        M["03 Design"] -->|selected mechanisms| C["04 Candidate"]
-        M -->|design reference for case authors| E["05 Evaluations"]
-        C -->|contract supplied in each run| E
+---
+config:
+  flowchart:
+    wrappingWidth: 300
+    rankSpacing: 24
+---
+flowchart TD
+    discovery["<b>01 Discovery</b><br/>Objectives and rationale<br/>Proposed examples and open questions"]
+    formulation["<b>02 Formulation</b><br/>Accepted requirements and constraints<br/>Defining examples, if expressly accepted"]
+    discovery --> formulation
+
+    subgraph automation["Automation"]
+        design["<b>03 Design</b><br/>Selected mechanisms and rationale"]
+        candidate["<b>04 Candidate</b><br/>Operational instructions<br/>and companion files"]
+        design --> candidate
+        subgraph evaluations["<b>05 Evaluations</b><br/>Expectations and checks"]
+            outcome["Did the agent achieve<br/>the required outcome?"]
+            mechanism["Did the agent follow<br/>the selected mechanism?"]
+            evidence["Run evidence and assessments<br/>Findings can reopen a decision<br/>in whichever stage owns it"]
+            outcome & mechanism --> evidence
+        end
     end
-    F -->|accepted requirements and constraints| M
-    E -. if review finds unclear intent .-> D
+    formulation -->|behavior to achieve| design
+    formulation -->|behavior to check| outcome
+    design --> mechanism
+    candidate -->|clauses to check| mechanism
+    candidate -->|instructions under test| evaluations
+    outcome -.-> design & candidate
 ```
 
-The **current behavioral tests** ask whether an agent followed a particular Candidate instruction on a task. Case authors use the instruction and the approach selected in Design to decide what behavior to look for. This is the Design input shown in the diagram. [`05-evaluations/docs/maintaining-evaluations.md` § Establish the expectation](05-evaluations/docs/maintaining-evaluations.md#establish-the-expectation)
-
-The suite has yet to include a test whose expected result comes directly from an accepted requirement in Formulation. For a change in required behavior, the documented **test-first** method calls for Evaluations to define that expectation before contributors choose an approach for the change. The expectation would guide Design and Candidate. Evaluations would later check whether the agent achieved the agreed outcome, whichever approach was chosen. [`docs/pipeline.md` § Test-first iteration](docs/pipeline.md#test-first-iteration) · [`05-evaluations/docs/evaluation-model.md` § Purpose and evaluation model](05-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model)
+Today's behavioral cases exercise selected Candidate clauses. The suite has no acceptance check derived directly from a Formulation requirement. [`05-evaluations/docs/maintaining-evaluations.md` § Establish the expectation](05-evaluations/docs/maintaining-evaluations.md#establish-the-expectation) · [`05-evaluations/docs/evaluation-model.md` § Purpose and evaluation model](05-evaluations/docs/evaluation-model.md#purpose-and-evaluation-model)
 
 ## Where to start
 

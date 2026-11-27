@@ -101,7 +101,7 @@ The baseline revision is **39fbcfdd20ec72b9bc9f7a9f6eb805757224fbad**. Every one
 | `05-evaluations/deliverables/tests/scenarios/test_permissions.py` | [05-evaluation/deliverables/evaluation/tests/scenarios/test_permissions.py](../05-evaluation/deliverables/evaluation/tests/scenarios/test_permissions.py) · [03.1-conformance/deliverables/conformance/tests/test_permissions.py](../03.1-conformance/deliverables/conformance/tests/test_permissions.py) | Partition |
 | `05-evaluations/deliverables/tests/scenarios/test_scheduling.py` | [05-evaluation/deliverables/evaluation/tests/scenarios/test_scheduling.py](../05-evaluation/deliverables/evaluation/tests/scenarios/test_scheduling.py) · [03.1-conformance/deliverables/conformance/tests/test_scheduling.py](../03.1-conformance/deliverables/conformance/tests/test_scheduling.py) | Partition |
 | `05-evaluations/deliverables/tests/scenarios/test_scope.py` | [05-evaluation/deliverables/evaluation/tests/scenarios/test_scope.py](../05-evaluation/deliverables/evaluation/tests/scenarios/test_scope.py) · [03.1-conformance/deliverables/conformance/tests/test_scope.py](../03.1-conformance/deliverables/conformance/tests/test_scope.py) | Partition |
-| `05-evaluations/deliverables/tests/scenarios/test_smoke.py` | [engine/tests/test_smoke.py](../engine/tests/test_smoke.py) | Move with edits |
+| `05-evaluations/deliverables/tests/scenarios/test_smoke.py` | [engine/tests/test_smoke.py](../engine/tests/test_smoke.py) · [05-evaluation/deliverables/evaluation/tests/runtime/test_codex.py](../05-evaluation/deliverables/evaluation/tests/runtime/test_codex.py) | Move with edits. The engine successor of `test_each_run_gets_fresh_fixture_and_unchanged_contract` checks fresh workspaces with synthetic content. Its original Candidate-path assertion is restored in Evaluation’s existing `test_cli_saves_evidence_and_grades_file_from_subprocess`. |
 | `05-evaluations/deliverables/tests/support/__init__.py` | [05-evaluation/deliverables/evaluation/tests/support/__init__.py](../05-evaluation/deliverables/evaluation/tests/support/__init__.py) | Move intact |
 | `05-evaluations/deliverables/tests/support/cli_harness.py` | [05-evaluation/deliverables/evaluation/tests/support/cli_harness.py](../05-evaluation/deliverables/evaluation/tests/support/cli_harness.py) | Move with edits |
 | `05-evaluations/deliverables/tests/support/fake_codex.py` | [05-evaluation/deliverables/evaluation/tests/support/fake_codex.py](../05-evaluation/deliverables/evaluation/tests/support/fake_codex.py) | Move intact |
@@ -119,7 +119,7 @@ The baseline revision is **39fbcfdd20ec72b9bc9f7a9f6eb805757224fbad**. Every one
 | `docs/contract-traces.md` | [docs/contract-traces.md](contract-traces.md) | Retain with edits |
 | `docs/decisions.md` | [docs/decisions.md](decisions.md) | Retain with edits |
 | `docs/documentation.md` | [docs/documentation.md](documentation.md) | Retain with edits |
-| `docs/maintaining-documentation.md` | [docs/maintaining-documentation.md](maintaining-documentation.md) | Retain intact |
+| `docs/maintaining-documentation.md` | [docs/maintaining-documentation.md](maintaining-documentation.md) | Retained intact at the structural migration (`9ebbf58`). Documentation alignment (`0512f72`) updated the dependency checks. |
 | `docs/pipeline.md` | [docs/pipeline.md](pipeline.md) | Retain with edits |
 | `docs/traceability.md` | [docs/traceability.md](traceability.md) | Retain with edits |
 | `docs/writing-documentation.md` | [docs/writing-documentation.md](writing-documentation.md) | Retain with edits |

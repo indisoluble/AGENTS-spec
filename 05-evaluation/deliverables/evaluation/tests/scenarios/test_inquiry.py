@@ -26,7 +26,7 @@ from engine.runtime.evaluation import ExecutionResult
 from engine.runtime.workspace import WorkspaceObservation, snapshot_workspace
 from conformance import inquiry
 from conformance import inquiry as case
-from evaluation.tests.support.cli_harness import FakeCodexCLI
+from evaluation.tests.support.cli_harness import EXPECTED_CANDIDATE_PATH, FakeCodexCLI
 
 
 from conformance.tests.inquiry_data import VALID_FEASIBILITY
@@ -34,6 +34,7 @@ from conformance.tests.inquiry_data import VALID_FEASIBILITY
 
 class InquiryCLITests(FakeCodexCLI, unittest.TestCase):
     def test_inquiry_selection_uses_accepted_composition_and_retains_review_evidence(self):
+        contract = EXPECTED_CANDIDATE_PATH.read_bytes()
         selected = next(case for case in cli.registered_cases(CANDIDATE_PATH.read_bytes) if case.name == "bounded-inquiry")
         self.assertIs(selected.dataset_factory, inquiry.inquiry_dataset)
         self.assertIs(selected.fixture_files, inquiry.FIXTURE_FILES)
@@ -59,7 +60,6 @@ class InquiryCLITests(FakeCodexCLI, unittest.TestCase):
         self.assertIn("--output-last-message", metadata["command"])
         self.assertEqual((artifacts / "prompt.txt").read_text(), inquiry.PROMPT)
         self.assertEqual((artifacts / "review.md").read_text(), inquiry.REVIEW_RUBRIC)
-        contract = CANDIDATE_PATH.read_bytes()
         self.assertEqual((artifacts / "AGENTS.md").read_bytes(), contract)
         self.assertEqual(metadata["contract_sha256"], hashlib.sha256(contract).hexdigest())
         initial = json.loads((artifacts / "initial-workspace.json").read_text())

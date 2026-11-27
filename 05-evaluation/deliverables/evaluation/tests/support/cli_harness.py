@@ -14,6 +14,10 @@ from tempfile import TemporaryDirectory
 from engine.runtime.auth import PROFILE_CONFIG
 
 
+# Resolve the staged contract independently of the selector exercised by the CLI tests.
+EXPECTED_CANDIDATE_PATH = Path(__file__).resolve().parents[5] / "04-candidate" / "pre_AGENTS.md"
+
+
 class FakeCodexCLI:
     def setUp(self):
         temporary = TemporaryDirectory()

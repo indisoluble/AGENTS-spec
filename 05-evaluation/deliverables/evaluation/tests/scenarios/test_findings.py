@@ -21,7 +21,7 @@ from evaluation.__main__ import CANDIDATE_PATH
 from engine.runtime.evaluation import ExecutionResult
 from conformance import findings
 from conformance import findings as case
-from evaluation.tests.support.cli_harness import FakeCodexCLI
+from evaluation.tests.support.cli_harness import EXPECTED_CANDIDATE_PATH, FakeCodexCLI
 
 
 class FindingsCLITests(FakeCodexCLI, unittest.TestCase):
@@ -38,6 +38,7 @@ class FindingsCLITests(FakeCodexCLI, unittest.TestCase):
 
 
     def test_findings_selection_retains_case_evidence_without_semantic_verdicts(self):
+        contract = EXPECTED_CANDIDATE_PATH.read_bytes()
         process, profile, runs = self.launch("success", case="durable-finding-review")
         artifacts, metadata, report = self.finish(process, runs, 3)
         self.assertEqual(report["case"], "durable-finding-review")
@@ -62,7 +63,6 @@ class FindingsCLITests(FakeCodexCLI, unittest.TestCase):
                          (artifacts / "final-response.txt").resolve())
         self.assertEqual((artifacts / "prompt.txt").read_text(), findings.PROMPT)
         self.assertEqual((artifacts / "review.md").read_text(), findings.REVIEW_RUBRIC)
-        contract = CANDIDATE_PATH.read_bytes()
         self.assertEqual((artifacts / "AGENTS.md").read_bytes(), contract)
         self.assertEqual(metadata["contract_sha256"], hashlib.sha256(contract).hexdigest())
         initial = json.loads((artifacts / "initial-workspace.json").read_text())

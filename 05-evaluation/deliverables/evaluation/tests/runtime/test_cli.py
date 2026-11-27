@@ -20,7 +20,7 @@ from evaluation import __main__ as cli
 from evaluation.__main__ import main
 from engine.runtime import functional_checks
 from conformance import assumptions, findings, followthrough, independence, inquiry, permissions, scheduling
-from evaluation.tests.support.cli_harness import FakeCodexCLI
+from evaluation.tests.support.cli_harness import EXPECTED_CANDIDATE_PATH, FakeCodexCLI
 
 
 class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
@@ -43,6 +43,8 @@ class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
         self.assertFalse((artifacts / "final-workspace.json").exists())
 
     def test_all_cases_run_in_order_with_independent_evidence_and_combined_exit_code(self):
+        expected_contract = EXPECTED_CANDIDATE_PATH.read_bytes()
+        expected_digest = hashlib.sha256(expected_contract).hexdigest()
         scenarios = (
             ("success", "success", "success", 3, ["passed", "passed", "review_required"]),
             ("unchanged", "success", "success", 1, ["assertion_failed", "passed", "review_required"]),
@@ -89,9 +91,8 @@ class CodexFailureTests(FakeCodexCLI, unittest.TestCase):
                     metadata = json.loads((path / "execution.json").read_text())
                     self.assertEqual(report["outcome"], outcome)
                     self.assertEqual(report["review_required"], name in rubrics)
-                    selected_contract = CANDIDATE_PATH.read_bytes()
-                    self.assertEqual((path / "AGENTS.md").read_bytes(), selected_contract)
-                    self.assertEqual(metadata["contract_sha256"], hashlib.sha256(selected_contract).hexdigest())
+                    self.assertEqual((path / "AGENTS.md").read_bytes(), expected_contract)
+                    self.assertEqual(metadata["contract_sha256"], expected_digest)
                     workspaces.append(metadata["workspace"])
                     self.assertFalse(Path(metadata["workspace"]).exists())
                     if name in rubrics:

@@ -16,8 +16,8 @@ from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
-from evaluation.__main__ import main
-from evaluation.__main__ import CANDIDATE_PATH
+from evaluation.__main__ import CANDIDATE_PATH, main
+from evaluation.tests.support.cli_harness import EXPECTED_CANDIDATE_PATH
 from engine.runtime.auth import PROFILE_CONFIG
 from engine.runtime.codex import execution_command
 from engine.smoke import PROMPT
@@ -25,6 +25,8 @@ from engine.smoke import PROMPT
 
 class CodexIntegrationTests(unittest.TestCase):
     def test_cli_saves_evidence_and_grades_file_from_subprocess(self):
+        self.assertEqual(CANDIDATE_PATH, EXPECTED_CANDIDATE_PATH)
+        expected_contract = EXPECTED_CANDIDATE_PATH.read_bytes()
         # Keep the dummy profile, fake executable, and reports in an auto-cleaned directory.
         with TemporaryDirectory() as directory:
             root = Path(directory)
@@ -99,7 +101,7 @@ else:
             # The execution workspace is gone, but its evidence must still be inspectable.
             self.assertFalse(Path(execution["workspace"]).exists())
             self.assertEqual((artifacts / "prompt.txt").read_text(), PROMPT)
-            self.assertEqual((artifacts / "AGENTS.md").read_bytes(), CANDIDATE_PATH.read_bytes())
+            self.assertEqual((artifacts / "AGENTS.md").read_bytes(), expected_contract)
             self.assertEqual((artifacts / "message.txt").read_bytes(), b"before\n")
             self.assertEqual((artifacts / "workspace" / "message.txt").read_bytes(), b"after\n")
             self.assertIn("replace-message", (artifacts / "report.txt").read_text())

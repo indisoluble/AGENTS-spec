@@ -1,0 +1,11 @@
+# 02.0 — Formulation
+
+Formulation records what the requester or an authorized delegate has accepted about the product. It uses Discovery’s proposals, examples, and open questions to express the agreed behavior in the baseline, alongside applicable constraints and any expressly accepted defining examples.
+
+| Contributor task | Where to look |
+| --- | --- |
+| Look up an agent duty, permission, or recommendation | BR1–BR10 ([`02.0-formulation/deliverables/baseline.md` § Accepted behavioral requirements](deliverables/baseline.md#accepted-behavioral-requirements)) state each rule with its qualifications and a link to its rationale. |
+| Check what must travel in the delivered contract and which constraints apply | PR1 and its R5 rationale ([`02.0-formulation/deliverables/baseline.md` § Established product requirement](deliverables/baseline.md#established-product-requirement)) and the authority, method-selection, and portability constraints ([`02.0-formulation/deliverables/baseline.md` § Established constraints](deliverables/baseline.md#established-constraints)). |
+| Understand why a rule exists and what authorized it | Discovery’s objectives and rationale map ([`01-discovery/deliverables/objectives-and-rationale.md`](../01-discovery/deliverables/objectives-and-rationale.md)) and the acceptance record and its evidence limits ([`02.0-formulation/docs/acceptance-record.md`](docs/acceptance-record.md)). |
+| Trace a requirement or an EX identifier | The coverage matrix ([`02.0-formulation/deliverables/example-coverage.md`](deliverables/example-coverage.md)) classifies each mapped proposal against its primary requirement and lists other requirements it illustrates. For an older reference, use the historical ID lookup ([`02.0-formulation/deliverables/example-coverage.md` § Historical example IDs](deliverables/example-coverage.md#historical-example-ids)). Discovery records requester conclusions and their review status ([`01-discovery/deliverables/open-questions.md`](../01-discovery/deliverables/open-questions.md)). |
+| Formulate or revise an authorized rule or defining example | [`02.0-formulation/docs/maintaining-formulation.md`](docs/maintaining-formulation.md) starts at the Discovery handoff and follows the decision through verification. |

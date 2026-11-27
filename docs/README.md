@@ -1,5 +1,7 @@
 # Shared engineering documentation
 
+For the structural increment, see the [migration inventory, relocation records and outstanding ownership issues](migration-inventory.md).
+
 ## Cross-stage changes
 
 The cross-stage change guide ([`docs/changing-the-contract.md`](changing-the-contract.md)) follows an issue from its owner to the affected dependents. Choose the example that matches your task.
@@ -25,6 +27,6 @@ The cross-stage change guide ([`docs/changing-the-contract.md`](changing-the-con
 | Find the owner for a specification, its rationale, or a decision record. | [`docs/documentation.md`](documentation.md) |
 | Decide what to write, which concerns matter, and whether it needs a separate file. | [`docs/writing-documentation.md`](writing-documentation.md) |
 | Find documentation affected by a change or verify that a reader can use it. | [`docs/maintaining-documentation.md`](maintaining-documentation.md) |
-| Find the rationale, status, or successor of an architectural decision. | [`docs/decisions.md` § Architecture decisions](decisions.md#architecture-decisions) · [`03-design/docs/decisions.md` § Architecture decisions](../03-design/docs/decisions.md#architecture-decisions) · [`05-evaluations/docs/framework-design.md` § Architecture decisions](../05-evaluations/docs/framework-design.md#architecture-decisions) |
+| Find the rationale, status, or successor of an architectural decision. | [`docs/decisions.md` § Architecture decisions](decisions.md#architecture-decisions) · [`03.0-design/docs/decisions.md` § Architecture decisions](../03.0-design/docs/decisions.md#architecture-decisions) · [`05-evaluation/docs/framework-design.md` § Architecture decisions](../05-evaluation/docs/framework-design.md#architecture-decisions) |
 
 The repository README ([`README.md` § Development pipeline](../README.md#development-pipeline)) links to each stage's entry point.

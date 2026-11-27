@@ -1,5 +1,7 @@
 # Engineering documentation
 
+**Structural migration status.** Five-stage descriptions on this page record the prior allocation where they differ from the [current ownership and transition record](migration-inventory.md). Detailed reconciliation is pending. Accepted product intent, design decisions and recorded evidence limits retain their existing authority.
+
 Use this reference to place engineering knowledge and preserve its rationale. For a new or unclear deliverable, start with writing engineering documentation ([`docs/writing-documentation.md`](writing-documentation.md)). For an existing change or a review, use maintaining and verifying documentation ([`docs/maintaining-documentation.md`](maintaining-documentation.md)).
 
 ## Choosing the owner
@@ -34,7 +36,7 @@ Keep any distinct purpose, qualification, or identifier that the standard label 
 
 A maintainer should be able to tell why a significant deliverable has its present form. Start with the upstream intent, the premises and constraints on the choice, and how the author arrived at the result. For a choice with lasting consequences, make the reasons for selection, material alternatives considered, remaining trade-offs or limitations, and decision authority and status discoverable. Use the detail warranted by the consequences. Identify an unresolved premise as such.
 
-- **Alongside the deliverable.** If removing a reason would change how someone interprets or applies a rule, keep it there. For example, Formulation keeps the standalone inspection boundary for PR1 ([`02-formulation/deliverables/baseline.md` § R5](../02-formulation/deliverables/baseline.md#r5)) with the requirement. A Design specification can likewise keep a constraint that explains when its mechanism applies.
+- **Alongside the deliverable.** If removing a reason would change how someone interprets or applies a rule, keep it there. For example, Formulation keeps the standalone inspection boundary for PR1 ([`02.0-formulation/deliverables/baseline.md` § R5](../02.0-formulation/deliverables/baseline.md#r5)) with the requirement. A Design specification can likewise keep a constraint that explains when its mechanism applies.
 - **With the upstream owner.** If the reader needs the reason for an accepted outcome, link to the relevant entry in Discovery's rationale map ([`01-discovery/deliverables/objectives-and-rationale.md` § Rationale map](../01-discovery/deliverables/objectives-and-rationale.md#rationale-map)). Explain locally what that outcome implies for this deliverable.
 - **In supporting documentation.** If a reader can apply the specification but needs to understand its derivation, interactions, or maintenance, place that explanation with the responsible stage and link it from the deliverable. For the choice between consequential alternatives, link to the decision record. Existing prose and links can provide the whole justification.
 

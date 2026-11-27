@@ -6,31 +6,38 @@ Suppose an agent pauses to ask a question when the requester expected it to keep
 
 ## Development pipeline
 
-The structural migration introduces seven stages. The sequence below describes engineering activities that can overlap or reopen. Authoritative requirements come from Formulation and mechanism prescriptions from Design.
+The numbered stages show the conceptual order of work. The arrows show what each owner uses. A requirement can survive a change of mechanism, so checking the required outcome and checking the selected mechanism answer different questions.
 
-1. Discovery explores needs and proposals.
-2. Formulation records accepted intent and constraints.
-3. [Acceptance](02.1-acceptance/README.md) defines how to assess accepted intent.
-4. Design selects mechanisms.
-5. [Conformance](03.1-conformance/README.md) defines complementary mechanism checks.
-6. Candidate supplies the consumer artifacts.
-7. [Evaluation](05-evaluation/README.md) executes the integrated suite and assesses evidence.
+```mermaid
+---
+title: How AGENTS-spec develops AGENTS.md for coding agents
+config:
+  flowchart:
+    wrappingWidth: 280
+    rankSpacing: 32
+    nodeSpacing: 28
+---
+flowchart TD
+    D["<b>01 Discovery</b><br/>Explore needs and questions"] -->|proposals| F["<b>02.0 Formulation</b><br/>Record the requirements<br/>the requester accepts"]
+    F -->|required outcomes| A["<b>02.1 Acceptance</b><br/>How will we tell if a<br/>requirement is met?"]
+    F -->|requirements and constraints| M["<b>03.0 Design</b><br/>Select and specify mechanisms"]
+    M -->|mechanism prescriptions| C["<b>03.1 Conformance</b><br/>What else must we check<br/>about the selected mechanism?"]
+    A -->|coverage to consider| C
+    M -->|mechanisms to realize| K["<b>04 Candidate</b><br/>Stage AGENTS.md<br/>and companion files"]
+    A -->|requirements checks| E["<b>05 Evaluation</b><br/>Run checks, assess evidence<br/>and draw conclusions"]
+    C -->|mechanism checks| E
+    K -->|artifact under evaluation| E
+    X(["<b>Shared engine</b><br/>Reusable evaluation infrastructure"]) -->|execution and evidence capture| E
+```
 
-This project's BDD adaptation maps Discovery and Formulation to the first two activities and Automation to the remaining five. Shared methodology and the overview diagram await the documentation alignment increment. The [migration record](docs/migration-inventory.md) identifies the earlier allocation and preserved rationale.
-
-Today's behavioral cases exercise selected Candidate clauses. The suite has no acceptance check derived directly from a Formulation requirement. [`05-evaluation/docs/maintaining-evaluations.md` § Establish the expectation](05-evaluation/docs/maintaining-evaluations.md#establish-the-expectation) · [`05-evaluation/docs/evaluation-model.md` § Purpose and evaluation model](05-evaluation/docs/evaluation-model.md#purpose-and-evaluation-model)
+**Current coverage.** One registered smoke case checks the infrastructure. Nine behavioral cases exercise existing Candidate clauses, and eight require human judgment. There are zero independently derived requirements-Acceptance cases. The nine cases have provisional Conformance ownership pending review of their basis in Design and their complementary coverage.
 
 ## Where to start
 
 | What are you looking for? | Where to start |
 | --- | --- |
-| The need behind a proposal | [`01-discovery/README.md`](01-discovery/README.md) · [`01-discovery/deliverables/objectives-and-rationale.md` § Established objectives](01-discovery/deliverables/objectives-and-rationale.md#established-objectives) |
-| The behavior people agreed on | [`02.0-formulation/README.md`](02.0-formulation/README.md) |
-| The reason for a design choice | [`03.0-design/README.md`](03.0-design/README.md) |
-| An instruction and the decisions behind it | [`04-candidate/pre_AGENTS.md`](04-candidate/pre_AGENTS.md) · [`docs/contract-traces.md` § Contract clause index](docs/contract-traces.md#contract-clause-index) |
-| How to use the instructions in your project | [`04-candidate/pre_README.md`](04-candidate/pre_README.md) |
-| The companion files and where to install them | [`04-candidate/`](04-candidate) · [`docs/architecture.md` § Staged sources and release-relative references](docs/architecture.md#staged-sources-and-release-relative-references) |
-| What the checks cover and where the gaps are | [`05-evaluation/README.md`](05-evaluation/README.md) · [`docs/traceability.md` § Current traceability gaps](docs/traceability.md#current-traceability-gaps) |
-| How the stages fit together and where to find shared guidance | [`docs/architecture.md` § Stage interfaces](docs/architecture.md#stage-interfaces) · [`docs/README.md`](docs/README.md) |
-| How to clarify an instruction while keeping its meaning | [`docs/changing-the-contract.md` § Clarify Candidate wording](docs/changing-the-contract.md#clarify-candidate-wording) |
-| Who can authorize a change to the expected behavior | [`docs/changing-the-contract.md` § Find the owner and the decision](docs/changing-the-contract.md#find-the-owner-and-the-decision) |
+| Use the instructions and install the companion files | [`04-candidate/pre_README.md`](04-candidate/pre_README.md) · [`docs/architecture.md` § Staged sources and release-relative references](docs/architecture.md#staged-sources-and-release-relative-references) |
+| Find the need, the accepted rule or the design choice | [`01-discovery/README.md`](01-discovery/README.md) · [`02.0-formulation/README.md`](02.0-formulation/README.md) · [`03.0-design/README.md`](03.0-design/README.md) |
+| Trace an instruction to a decision | [`04-candidate/pre_AGENTS.md`](04-candidate/pre_AGENTS.md) · [`docs/contract-traces.md` § Contract clause index](docs/contract-traces.md#contract-clause-index) |
+| See what the checks cover and how results are assessed | [`02.1-acceptance/deliverables/coverage.md`](02.1-acceptance/deliverables/coverage.md) · [`03.1-conformance/deliverables/coverage.md`](03.1-conformance/deliverables/coverage.md) · [`05-evaluation/README.md`](05-evaluation/README.md) |
+| Understand how the stages fit together or change the contract | [`docs/architecture.md` § Stage interfaces](docs/architecture.md#stage-interfaces) · [`docs/pipeline.md` § Test-first iteration](docs/pipeline.md#test-first-iteration) · [`docs/README.md`](docs/README.md) |

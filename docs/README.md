@@ -1,6 +1,6 @@
 # Shared engineering documentation
 
-For the structural increment, see the [migration inventory, relocation records and outstanding ownership issues](migration-inventory.md).
+For the current architecture, start with [`docs/architecture.md` § Stage interfaces](architecture.md#stage-interfaces). The temporary record of preserved exceptions and structural verification is in [`docs/migration-inventory.md`](migration-inventory.md).
 
 ## Cross-stage changes
 
@@ -29,4 +29,4 @@ The cross-stage change guide ([`docs/changing-the-contract.md`](changing-the-con
 | Find documentation affected by a change or verify that a reader can use it. | [`docs/maintaining-documentation.md`](maintaining-documentation.md) |
 | Find the rationale, status, or successor of an architectural decision. | [`docs/decisions.md` § Architecture decisions](decisions.md#architecture-decisions) · [`03.0-design/docs/decisions.md` § Architecture decisions](../03.0-design/docs/decisions.md#architecture-decisions) · [`05-evaluation/docs/framework-design.md` § Architecture decisions](../05-evaluation/docs/framework-design.md#architecture-decisions) |
 
-The repository README ([`README.md` § Development pipeline](../README.md#development-pipeline)) links to each stage's entry point.
+The repository README ([`README.md` § Development pipeline](../README.md#development-pipeline)) introduces the pipeline. The stage interfaces link to all seven owners and the shared engine.

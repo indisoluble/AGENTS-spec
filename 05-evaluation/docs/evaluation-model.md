@@ -13,7 +13,9 @@ A run connects four responsibilities:
 1. **Execution:** Codex receives the case's task and works in the disposable fixture.
 2. **Observation:** the launcher retains execution evidence and, for behavioral cases, initial/final workspace state. Cases requiring human review also capture the final response.
 3. **Automated assessment:** Pydantic Evals applies the case's assertions to the observed result. Independent-execution and contract-change-followthrough first run their evaluator-owned functional checks after agent cleanup and before workspace removal.
-4. **Human assessment:** a reviewer uses the retained rubric, messages, commands, and workspace evidence to assess criteria automation cannot establish.
+4. **Human assessment:** a reviewer uses the retained rubric, messages, commands, and workspace evidence to assess criteria automation cannot establish. The criterion belongs to the definition owner. Evaluation records what the evidence supports, what remains pending and the engineering conclusion across the applicable criteria.
+
+A future evaluation agent could support qualitative assessment within Evaluation. Its implementation is deferred. Replacing any required human judgment would need separate authorization. The eight current human-review cases keep their existing reviewer and decision authority.
 
 The agent's completion claim is one observation to check against its actions. An assertion establishes only the condition it grades. A run can have passing assertions, an incomplete task, and a human judgment still pending. Offline tests exercise the evaluator with controlled inputs. Reading a result ([`05-evaluation/docs/running-and-reviewing.md` § Outcomes and exit codes](running-and-reviewing.md#outcomes-and-exit-codes)) explains how to distinguish a failed assertion from a failure to obtain a verdict.
 

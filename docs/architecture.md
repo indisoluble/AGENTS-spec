@@ -1,7 +1,5 @@
 # AGENTS-spec engineering architecture
 
-**Structural migration status.** Five-stage descriptions on this page record the prior allocation where they differ from the [current ownership and transition record](migration-inventory.md). Detailed reconciliation is pending. Accepted product intent, design decisions and recorded evidence limits retain their existing authority.
-
 AGENTS-spec develops a reusable, self-contained operating contract ([`04-candidate/pre_AGENTS.md`](../04-candidate/pre_AGENTS.md)) for coding agents. Each engineering stage maintains its own deliverables. The shared documentation index ([`docs/README.md`](README.md)) locates knowledge used across stages.
 
 ## Purpose and scope
@@ -10,25 +8,31 @@ Engineering documentation supports understanding, changing, and verifying the pr
 
 ## Stage interfaces
 
-The mapping uses [Cucumber's three BDD practices](https://cucumber.io/docs/bdd/#three-practices). BDD leaves repository layout to the project. AGENTS-spec gives Discovery and Formulation distinct owners and divides Automation into mechanism selection, operational realization, and evaluation. The five stage directories are siblings. The grouping by practice is conceptual.
+AGENTS-spec has seven sibling stages. The numbers express conceptual progression and proximity. Each stage owns its work independently, including Acceptance and Conformance. The project maps these responsibilities to the three BDD practices in [`docs/pipeline.md` § Applying the three practices](pipeline.md#applying-the-three-practices).
 
-| BDD practice | Stage | Principal inputs | Principal outputs |
-| --- | --- | --- | --- |
-| Discovery | [`01-discovery/README.md`](../01-discovery/README.md) | Requester needs, feedback, observations, existing knowledge | Objectives, rationale, proposals, exploratory examples, unresolved questions and requester conclusions |
-| Formulation | [`02.0-formulation/README.md`](../02.0-formulation/README.md) | Discovery deliverables and requester decisions | Precise accepted requirements, applicable constraints, any expressly accepted defining examples |
-| Automation | [`03.0-design/README.md`](../03.0-design/README.md) | Accepted requirements and applicable constraints | Selected mechanisms, specifications, decisions and rationale |
-| Automation | [`04-candidate/`](../04-candidate) | Selected mechanisms and delivery constraints | Staged operational contract and supporting consumer artifacts |
-| Automation | [`05-evaluation/README.md`](../05-evaluation/README.md) | Behavioral specifications, evaluation criteria, identified candidate | Evaluation definitions, executable checks, observations, assessments and evidence |
+| Stage and entry point | Principal inputs | What the stage owns |
+| --- | --- | --- |
+| **01 Discovery** · [`01-discovery/README.md`](../01-discovery/README.md) | Requester needs, feedback, observations and established knowledge | Objectives and rationale, proposals, exploratory examples, open questions and requester conclusions |
+| **02.0 Formulation** · [`02.0-formulation/README.md`](../02.0-formulation/README.md) | Discovery and decisions by the requester or authorized delegate | Accepted product requirements, applicable constraints and expressly accepted defining examples |
+| **02.1 Acceptance** · [`02.1-acceptance/README.md`](../02.1-acceptance/README.md) | Formulation supplies accepted intent. The engine supplies reusable facilities where needed. | Mechanism-independent evaluation definitions, including fixtures, assertions, qualitative criteria, coverage and gaps |
+| **03.0 Design** · [`03.0-design/README.md`](../03.0-design/README.md) | Formulation and authorized design decisions | Selected mechanisms, specifications, decisions and rationale, including qualified or missing requirement traces |
+| **03.1 Conformance** · [`03.1-conformance/README.md`](../03.1-conformance/README.md) | Design, applicable requirements and Acceptance coverage, with engine facilities where needed | Complementary mechanism-specific definitions, fixtures, assertions, qualitative criteria, coverage and reasons for omissions |
+| **04 Candidate** · [`04-candidate/`](../04-candidate/) | Design and applicable delivery constraints | Staged operational instructions and supporting consumer artifacts |
+| **05 Evaluation** · [`05-evaluation/README.md`](../05-evaluation/README.md) | Definition owners supply criteria. Execution uses the selected Candidate and engine. Assessment uses identified definitions and evidence. | Integrated evaluator contract and suite, run evidence and provenance, automated and qualitative assessments, consolidated findings and engineering conclusions |
 
-Keep each interface limited to what the stage needs from its direct dependencies. A deliverable's location confers no acceptance status ([`docs/authority.md` § Status of engineering records](authority.md#status-of-engineering-records)). Formulation supplies accepted intent to both Design and Evaluations. Design selects the mechanism that Candidate expresses as operational instructions. For requirements-led work, Evaluations derives the expectation from accepted intent and compares observed behavior against it. The traceability model ([`docs/traceability.md` § Tracing a requirement and its evaluation](traceability.md#tracing-a-requirement-and-its-evaluation)) connects these paths.
+Formulation supplies the authority for requirements and constraints. Design supplies the authority for a selected mechanism within its approved scope. Test-first work can expose an ambiguity early. Changing either source still requires a decision by its owner. [`docs/authority.md` § Development decisions](authority.md#development-decisions)
+
+The shared engine sits outside the numbered stages. It provides workspace preparation, agent and process execution, observation, evidence capture, functional-check and reporting interfaces, and their verification. Product-specific expectations belong with the definition owners. Evaluation binds those definitions to one Candidate, selects the cases and execution order, retains evidence, and determines the aggregate outcome and pending review. [`engine/README.md`](../engine/README.md) · [`05-evaluation/docs/framework-design.md` § Contract injection and fixture inputs](../05-evaluation/docs/framework-design.md#contract-injection-and-fixture-inputs)
+
+An Acceptance result needs the applicable Acceptance definition, an identified Candidate and execution or inspection evidence. A Conformance result needs the corresponding Conformance definition, Candidate and evidence. The Candidate is the subject of both assessments. Coverage records describe what the definitions can establish before any particular run. Findings from a run can reopen a decision at any stage. [`docs/traceability.md` § Tracing a requirement and its evaluation](traceability.md#tracing-a-requirement-and-its-evaluation)
 
 ### Direction of stage references
 
-Every Markdown file in a numbered stage may refer to its own contents, shared foundational knowledge and lower-numbered stages only. This applies to links, written paths and instructions that assume knowledge of another artifact. A maintainer must be able to understand and revise a stage’s outputs with those sources alone. Routing the reader through a shared page to required material in a higher-numbered stage still creates a forward dependency.
+A numbered stage may depend on its own knowledge, shared foundational knowledge and earlier stages. This applies to Markdown links and displayed paths, executable imports, fixture and resource lookup, subprocess commands and working directories, test helpers and indirect dependencies. A required forward dependency remains a dependency if it is reached through a shared page, helper or launcher. The engine and its documentation and tests must work with all numbered stages absent.
 
-Keep a dependency with the artifact that relies on the source. Root `docs/` owns cross-stage navigation, traceability indexes and change-propagation procedures. Consumer files retain their installed meanings and independence from engineering documentation. See how to check stage references ([`docs/maintaining-documentation.md` § Check stage references](maintaining-documentation.md#check-stage-references)).
+Root `docs/` owns cross-stage navigation, traceability indexes and change-propagation procedures. Keep specific dependencies with the owner that uses them. Earlier owners can receive feedback by recording the relevant conditions and observation locally. Test-first activity creates no additional authoritative input to Design or Candidate. Consumer files retain their installed meanings and independence from engineering documentation. [`docs/maintaining-documentation.md` § Check stage references](maintaining-documentation.md#check-stage-references)
 
-The numbering governs documentation dependencies. In a test-first iteration ([`docs/pipeline.md` § Test-first iteration](pipeline.md#test-first-iteration)), activities may overlap and any finding may reopen an earlier decision. Record the relevant conditions and observation at the earlier owner so its reader can evaluate the question there.
+Some legacy Conformance definitions still rely on Candidate clauses and refer readers forward to integrated review procedures. These preserved exceptions remain open pending authorized owner review. Their provisional placement establishes neither Design derivation nor compliance with the dependency rule. The inventory distinguishes historical citations, operative criteria and documentation dependencies. [`docs/migration-inventory.md` § Case-level exceptions](migration-inventory.md#case-level-exceptions)
 
 ## Staged sources and release-relative references
 

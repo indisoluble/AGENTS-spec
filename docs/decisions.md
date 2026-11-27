@@ -1,12 +1,26 @@
 # System-wide engineering decisions and rationale
 
-**Structural migration status.** Five-stage descriptions on this page record the prior allocation where they differ from the [current ownership and transition record](migration-inventory.md). Detailed reconciliation is pending. Accepted product intent, design decisions and recorded evidence limits retain their existing authority.
-
 These records explain the rationale and scope of choices that affect multiple stages. The current architecture in [`docs/architecture.md`](architecture.md) defines their interfaces. The authority rules ([`docs/authority.md`](authority.md)) identify who may decide changes.
 
 ## Architecture decisions
 
 Design-specific decisions remain in decisions and alternatives ([`03.0-design/docs/decisions.md` § Architecture decisions](../03.0-design/docs/decisions.md#architecture-decisions)). Evaluator decisions remain in [`05-evaluation/docs/framework-design.md` § Architecture decisions](../05-evaluation/docs/framework-design.md#architecture-decisions).
+
+### Seven-stage pipeline and shared evaluation engine
+
+**Status.** The requester approved the seven-stage architecture after independent critical review of the proposal and accepted the implemented structural migration. Documentation alignment is pending requester review. Final independent verification of the migration remains pending. These decisions concern engineering organization. Product and release authority retain their existing scope.
+
+**Context and choice.** The [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) separated intent, design and realization, but assigned definition of checks, execution and assessment to one Evaluations stage. A requirement can outlast its mechanism. To make it clear which source governs a check, the requester chose independent Acceptance and Conformance stages and a separate integrated Evaluation owner. Clear responsibilities take precedence over minimizing stage count. Consolidation and further engine generalization are deferred.
+
+| Earlier provision | Disposition under the approved successor |
+| --- | --- |
+| Stage numbering and BDD grouping | Seven sibling stages preserve conceptual progression and iterative feedback. The decimal numbers express proximity. Discovery and Formulation retain separate owners. Automation spans Acceptance, Design, Conformance, Candidate and Evaluation. |
+| Combined evaluation owner | Acceptance owns requirements-derived definitions and feasible coverage. Conformance owns complementary mechanism definitions and sole responsibility for redundancy decisions. Evaluation owns suite policy, Candidate binding, execution, evidence, assessments and conclusions. Existing clause-based cases retain provisional placement and original provenance. |
+| Evaluator package and shared runtime | The former `deliverables` Python package is superseded. Source-checkout imports use `engine`, `conformance` and `evaluation`. A stage's `deliverables/` remains a location for artifacts. Reusable facilities and their verification live in the root engine. There are no compatibility entry points. |
+| Direction of dependencies | Keep the earlier-stage and shared-foundation rule. Apply it to executable and indirect dependencies as well as documentation. The engine is independent of every numbered stage. Inventoried legacy references retain their temporary status. |
+| Product authority and delivery | Retain requester decisions, accepted intent, selected mechanisms and recorded trace gaps, historical rationale, and the self-contained five-file Candidate staging exception. Preserve evaluator obligations, case semantics, human-review requirements and historical evidence. |
+
+The current interfaces and the limits of this project's BDD adaptation are maintained in [`docs/architecture.md` § Stage interfaces](architecture.md#stage-interfaces) and [`docs/pipeline.md` § Applying the three practices](pipeline.md#applying-the-three-practices).
 
 ### Shared guidance for writing and maintaining documentation
 
@@ -14,7 +28,7 @@ Design-specific decisions remain in decisions and alternatives ([`03.0-design/do
 
 Keep placement, rationale, naming, and retention in the conventions reference ([`docs/documentation.md`](documentation.md)). The writing guide ([`docs/writing-documentation.md`](writing-documentation.md)) helps authors decide what a reader needs. The maintenance guide ([`docs/maintaining-documentation.md`](maintaining-documentation.md)) helps a contributor trace change impact and verify the result. One expanded reference would keep the guidance in a single file but make a local correction harder to look up. Organizing by methodology would scatter one task across several guides. The task split costs a link when a contributor moves from drafting to review. It allows both guides to use the same conventions and stage owners.
 
-For questions the project leaves open, direct contributors to the relevant primary practice. This preserves the distinction between selecting architectural concerns, shaping material for a reader, recording a choice, and defining behavior. The shared guidance applies those practices within the established five stages and their decision authority.
+For questions the project leaves open, direct contributors to the relevant primary practice. This preserves the distinction between selecting architectural concerns, shaping material for a reader, recording a choice, and defining behavior. The shared guidance first applied those practices within the then-established five stages. Its ownership and authority principles continue under the [seven-stage successor](#seven-stage-pipeline-and-shared-evaluation-engine).
 
 ### Focused owners for shared engineering documentation
 
@@ -26,13 +40,13 @@ The requester clarified historical retention. Keep ADRs and their supersession l
 
 ### Five-stage BDD-aligned engineering pipeline
 
-**Placement superseded.** The approved seven-stage structure separates Acceptance and Conformance from integrated Evaluation and assigns shared infrastructure to the engine. The original decision, rationale and scope follow.
+**Historical decision.** The [seven-stage successor](#seven-stage-pipeline-and-shared-evaluation-engine) supersedes this numbering, the combined Evaluations owner and the evaluator package placement. The following rationale and table record what the five-stage decision established at the time.
 
-**The requester approved the five-stage architecture, authorized implementation, and accepted the completed architectural migration.** The decision covers stage ownership and placement ([`docs/architecture.md` § Stage interfaces](architecture.md#stage-interfaces)) and the path changes needed to preserve existing behavior. Product decisions and release authorization retain their separate scope.
+**The requester approved the five-stage architecture, authorized implementation, and accepted that migration.** The decision covered the five-stage allocation and the path changes needed to preserve existing behavior. Product decisions and release authorization retained their separate scope. The current interfaces are maintained in [`docs/architecture.md` § Stage interfaces](architecture.md#stage-interfaces).
 
 The requester chose five stages to make the relationship to [reference BDD](https://cucumber.io/docs/bdd/) explicit and give discovering intent and formulating accepted requirements distinct owners. Clear starting points and limited interfaces make outputs easier to find and reduce what contributors need to know for a local change. Keeping Design, Candidate, and Evaluations distinct preserves the separation of mechanism selection, realization in instructions, and assessment. Sibling directories avoid additional nesting and a new Automation owner or technical handoff. Accepted intent continues to lead development and supply independent evaluation expectations in [`docs/pipeline.md` § Test-first iteration](pipeline.md#test-first-iteration).
 
-The earlier decisions retain their recorded authorization and acceptance status. Their continuing provisions are listed below.
+The earlier decisions retain their recorded authorization and acceptance status. The table describes their disposition at the five-stage transition.
 
 | Earlier decision | Effect of this decision |
 | --- | --- |
@@ -44,7 +58,7 @@ The earlier decisions retain their recorded authorization and acceptance status.
 
 ### Engineering authority and the runtime contract
 
-With responsibilities allocated by the [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline), the authority model ([`docs/authority.md` § Development decisions](authority.md#development-decisions)) assigns Discovery ownership of the established objectives and rationale ([`01-discovery/deliverables/objectives-and-rationale.md`](../01-discovery/deliverables/objectives-and-rationale.md)) and Formulation ownership of the accepted requirements and constraints ([`02.0-formulation/deliverables/baseline.md`](../02.0-formulation/deliverables/baseline.md)). [`03.0-design/deliverables/contract-design.md`](../03.0-design/deliverables/contract-design.md) owns their selected realization. The delivered `AGENTS.md` retains self-contained runtime authority within the consuming tool's instruction hierarchy and permissions.
+Under both the [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) and its [seven-stage successor](#seven-stage-pipeline-and-shared-evaluation-engine), the authority model ([`docs/authority.md` § Development decisions](authority.md#development-decisions)) assigns Discovery ownership of the established objectives and rationale ([`01-discovery/deliverables/objectives-and-rationale.md`](../01-discovery/deliverables/objectives-and-rationale.md)) and Formulation ownership of the accepted requirements and constraints ([`02.0-formulation/deliverables/baseline.md`](../02.0-formulation/deliverables/baseline.md)). [`03.0-design/deliverables/contract-design.md`](../03.0-design/deliverables/contract-design.md) owns their selected realization. The delivered `AGENTS.md` retains self-contained runtime authority within the consuming tool's instruction hierarchy and permissions.
 
 The requester authorized the transfer of engineering authority from the frozen contract to `contract-design.md` after an independent migration-fidelity review. The requester-supplied review checked byte-for-byte preservation of the contract, preservation of its operating semantics in the specification, and consistency across documents, including evaluation relationships. It reported **READY FOR TRANSFER DECISION**, with all eight criteria passing and no corrective findings. The requester's explicit reply, **“Authorized”**, covered the transfer alone. Its scope excluded product redesign, acceptance of provisional requirements, and selection of design alternatives. Live-agent compliance and token savings require evidence beyond either the review or the authorization.
 
@@ -60,13 +74,13 @@ The evaluator lifecycle belongs with the cases, requirements, and evidence neede
 
 Consumer artifacts must remain independently usable, with no references or dependencies into engineering documentation, including optional navigation. Internal requirements cannot supply hidden runtime policy. Under contract §3.6, consumer READMEs locate product documentation and engineering entry points locate engineering knowledge. Each audience can find its own material without a common root entry point or additional consumer duties.
 
-The owner authorized separate documentation for objectives and their rationale and for accepted requirements, constraints, and acceptance provenance. The [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) assigns those responsibilities to Discovery and Formulation while preserving the product decisions.
+The owner authorized separate documentation for objectives and their rationale and for accepted requirements, constraints, and acceptance provenance. The [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) assigned those responsibilities to Discovery and Formulation while preserving the product decisions.
 
 ### Responsibility-based BDD organization
 
 **The owner approved the original responsibility-based organization, authorized local implementation, and recorded that reorganization as accepted.** Product acceptance has its own owner-reported scope ([`02.0-formulation/docs/acceptance-record.md` § Behavioral acceptance and editorial provenance](../02.0-formulation/docs/acceptance-record.md#behavioral-acceptance-and-editorial-provenance)).
 
-The [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) retains grouping by durable responsibility while giving Discovery and Formulation distinct owners. Discovery, Formulation, and Automation iterate across those owners. One directory per activity would scatter each subject across handoffs and invite competing definitions. A tree organized solely by subject would leave readers without a clear starting point for a behavioral question. The BDD entry path ([`docs/pipeline.md` § Applying the three practices](pipeline.md#applying-the-three-practices)) provides that starting point. Passing checks does not confer acceptance, and consumers have no obligation to adopt BDD.
+The [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) retained grouping by durable responsibility while giving Discovery and Formulation distinct owners. Discovery, Formulation, and Automation iterate across those owners. One directory per activity would scatter each subject across handoffs and invite competing definitions. A tree organized solely by subject would leave readers without a clear starting point for a behavioral question. The BDD entry path ([`docs/pipeline.md` § Applying the three practices](pipeline.md#applying-the-three-practices)) provides that starting point. Passing checks does not confer acceptance, and consumers have no obligation to adopt BDD.
 
 The dedicated `automation/` stage was a rejected alternative. Moving the evaluator to mirror one BDD activity would disrupt its package, fixture, and evidence relationships without improving ownership.
 
@@ -78,19 +92,19 @@ In the original allocation, architecture described the structure of the system. 
 
 ### Four numbered stages and their responsibilities
 
-**The requester accepted the structure and authorized local implementation of stage placement and documentation ownership.** Independent acceptance of the finished implementation is unverified.
+**The requester accepted the structure and authorized local implementation of stage placement and documentation ownership.** Independent acceptance of that four-stage implementation is unverified.
 
-The four-stage decision placed intent, discovery, and proposed examples in Behavior. The [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) supersedes that placement and numbering. It retains Design ownership of mechanisms and rationale, Candidate staging of the five consumer files, and Evaluations ownership of observations, assessments, and evidence. Numbering expresses a progression that permits feedback to any stage.
+The four-stage decision placed intent, discovery, and proposed examples in Behavior. The [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) superseded that placement and numbering. At that transition it retained Design ownership of mechanisms and rationale, Candidate staging of the five consumer files, and Evaluations ownership of observations, assessments, and evidence. Numbering expresses a progression that permits feedback to any stage.
 
 Root and engineering stage READMEs orient readers. A flat structure would save navigation steps but obscure which artifacts are deliverables and which support their maintenance. This decision placed editing guidance that affects multiple stages with shared change authority. The cross-stage change guide ([`docs/changing-the-contract.md`](changing-the-contract.md)) now owns that guidance.
 
 ### Stage deliverables and the Candidate staging exception
 
-**The requester accepted the structure and authorized local implementation, including the evaluation package rename.** Separate acceptance of the completed implementation is unverified.
+**The requester accepted the structure and authorized local implementation, including the evaluation package rename.** Separate acceptance of that earlier package and directory change is unverified.
 
-Under the original decision, Behavior, Design, and Evaluations each had a README for orientation, `docs/` for supporting explanations, and `deliverables/` for substantive artifacts. Prescriptions stay with the rationale needed to apply them. Candidate stages exactly five consumer files at its root. Engineering navigation or an extra container there would obscure the delivery boundary. The [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) extends these roles to Discovery and Formulation. See the documentation layout ([`docs/documentation.md` § Choosing the owner](documentation.md#choosing-the-owner)).
+Under the original decision, Behavior, Design, and Evaluations each had a README for orientation, `docs/` for supporting explanations, and `deliverables/` for substantive artifacts. Prescriptions stay with the rationale needed to apply them. Candidate stages exactly five consumer files at its root. Engineering navigation or an extra container there would obscure the delivery boundary. The [five-stage decision](#five-stage-bdd-aligned-engineering-pipeline) extended these roles to Discovery and Formulation. See the documentation layout ([`docs/documentation.md` § Choosing the owner](documentation.md#choosing-the-owner)).
 
-The evaluation package itself is `deliverables`. Wrapping a package named `evaluations` in a `deliverables/` directory would add a level with no distinct responsibility. The requester explicitly authorized the import-interface change from `evaluations.*` to `deliverables.*` without compatibility packages, launchers, aliases, or symlinks. Callers must use the current name. Keeping package depth stable preserves relative lookups for the contract, subprocess working directories, and evidence. The operations guide documents the invocation ([`05-evaluation/docs/running-and-reviewing.md` § Setup and running evaluations](../05-evaluation/docs/running-and-reviewing.md#setup-and-running-evaluations)) and retained evidence locations ([`05-evaluation/docs/running-and-reviewing.md` § Retained evidence](../05-evaluation/docs/running-and-reviewing.md#retained-evidence)).
+Under this earlier decision the evaluation package was named `deliverables`. At the time, wrapping a package named `evaluations` in a `deliverables/` directory would have added a level with no distinct responsibility. The requester explicitly authorized the import-interface change from `evaluations.*` to `deliverables.*` without compatibility packages, launchers, aliases, or symlinks. Callers then used the renamed package. Stable depth preserved relative contract lookups, subprocess working directories and evidence paths. The [seven-stage successor](#seven-stage-pipeline-and-shared-evaluation-engine) replaced that package and its lookup arrangement while retaining the five-file staging exception. The operations guide documents the invocation ([`05-evaluation/docs/running-and-reviewing.md` § Setup and running evaluations](../05-evaluation/docs/running-and-reviewing.md#setup-and-running-evaluations)) and retained evidence locations ([`05-evaluation/docs/running-and-reviewing.md` § Retained evidence](../05-evaluation/docs/running-and-reviewing.md#retained-evidence)).
 
 ### Documentation conventions within existing owners
 

@@ -1,7 +1,5 @@
 # Engineering documentation
 
-**Structural migration status.** Five-stage descriptions on this page record the prior allocation where they differ from the [current ownership and transition record](migration-inventory.md). Detailed reconciliation is pending. Accepted product intent, design decisions and recorded evidence limits retain their existing authority.
-
 Use this reference to place engineering knowledge and preserve its rationale. For a new or unclear deliverable, start with writing engineering documentation ([`docs/writing-documentation.md`](writing-documentation.md)). For an existing change or a review, use maintaining and verifying documentation ([`docs/maintaining-documentation.md`](maintaining-documentation.md)).
 
 ## Choosing the owner
@@ -10,17 +8,18 @@ Give each fact, rule, interface, procedure, explanation, or decision one owner a
 
 | Location | What belongs there |
 | --- | --- |
-| Repository `README.md` | Project purpose, consumer adoption entry point, the five stages, and a route to shared engineering knowledge. |
+| Repository `README.md` | Project purpose, consumer adoption entry point, the seven stages and shared engine, and a route to shared engineering knowledge. |
 | Root `docs/` | Engineering knowledge shared across stages. The index ([`docs/README.md`](README.md)) points to the owner for each question. |
 | Engineering stage `README.md` | The stage's purpose and interfaces, with routes to its deliverables, decisions, and procedures. The shared [`docs/architecture.md` § Stage interfaces](architecture.md#stage-interfaces) define the boundaries. |
 | Stage `deliverables/` | Substantive stage outputs with their individual status and authority. Keep rationale essential to interpreting a specification with the specification. |
+| Root `engine/` | Shared evaluation infrastructure, its requirements, architecture, maintenance guidance and verification. |
 | Stage `docs/` | Supporting architecture, decisions, rationale, guidance on deriving deliverables, and stage-specific procedures and maintenance knowledge. |
 
-Ask what the stage produces and what someone needs to know to maintain that output. A proposed example is a Discovery output while its status is still open. An accepted rule, its constraints, and any expressly accepted defining example belong in Formulation. A selected mechanism is a Design output. A case definition and the executable checks that exercise it are Evaluations outputs. A maintainer's explanation of how to revise those checks belongs in supporting documentation. The stage interfaces ([`docs/architecture.md` § Stage interfaces](architecture.md#stage-interfaces)) locate these outputs, and the authority rules ([`docs/authority.md` § Status of engineering records](authority.md#status-of-engineering-records)) explain what their records establish.
+Ask what the stage produces and what someone needs to know to maintain that output. A proposed example is a Discovery output while its status is still open. An accepted rule, its constraints, and any expressly accepted defining example belong in Formulation. A selected mechanism is a Design output. Acceptance owns requirements-derived criteria and Conformance owns complementary mechanism criteria, including their case definitions, executable checks and coverage. Evaluation owns registration, integrated policy and the evidence and conclusions of actual runs. The engine owns its infrastructure smoke definition. A maintainer's explanation of how to revise those checks belongs in supporting documentation. The stage interfaces ([`docs/architecture.md` § Stage interfaces](architecture.md#stage-interfaces)) locate these outputs, and the authority rules ([`docs/authority.md` § Status of engineering records](authority.md#status-of-engineering-records)) explain what their records establish.
 
 When several stages use a definition, keep it with the stage responsible for changing it. Keep the cross-stage interface in shared architecture. At the dependent, identify the particular rule, decision, or version it relies on using the traceability relationships ([`docs/traceability.md` § Tracing a requirement and its evaluation](traceability.md#tracing-a-requirement-and-its-evaluation)). Link to the detail a reader needs to continue the task.
 
-Discovery, Formulation, Design, and Evaluations use the stage layout. Candidate contains only its five consumer files ([`docs/architecture.md` § Staged sources and release-relative references](architecture.md#staged-sources-and-release-relative-references)) at the directory root. Its technical rationale belongs primarily in Design, and engineering navigation stays outside the package.
+The six stages other than Candidate use the stage layout, with supporting directories where needed. Candidate contains only its five consumer files ([`docs/architecture.md` § Staged sources and release-relative references](architecture.md#staged-sources-and-release-relative-references)) at the directory root. Its technical rationale belongs primarily in Design, and engineering navigation stays outside the package.
 
 The two consumer guides can explain the same subject at different depths. Preserve each guide's practical value and the contract's strengths, conditions, and exceptions. Keep essential explanations self-contained or refer to product documentation, the contract, or external sources. The shared [`docs/consumer-documentation-review.md` § Reviewing contract explanations](consumer-documentation-review.md#reviewing-contract-explanations) covers audience and comprehension checks.
 

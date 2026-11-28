@@ -32,7 +32,9 @@ The owner-reported acceptance account ([`02.0-formulation/docs/acceptance-record
 
 ### Current traceability gaps
 
-No existing proposed example has been accepted as defining. Explicit requirement-to-evaluation traceability remains incomplete. Existing behavioral cases exercise contract clauses and support regression or design-conformance review. The clause index connects accepted outcomes to current mechanisms. Neither those links nor passing cases establish complete realization or requirements-derived acceptance. Discovery ([`01-discovery/deliverables/open-questions.md`](../01-discovery/deliverables/open-questions.md)) records questions and requester conclusions awaiting requirements review. [`05-evaluation/docs/evaluation-model.md` § Purpose and evaluation model](../05-evaluation/docs/evaluation-model.md#purpose-and-evaluation-model) identifies suite coverage and limits.
+Discovery distinguishes open product outcomes from requester conclusions awaiting requirements review. The Formulation baseline contains no expressly accepted defining examples. For an inherited prescription with a missing requirement trace, retain the qualification until the authorized owner substantiates the relationship or explicitly accepts its limits. [`01-discovery/deliverables/open-questions.md`](../01-discovery/deliverables/open-questions.md) · [`docs/contract-traces.md` § Contract clause index](contract-traces.md#contract-clause-index)
+
+Acceptance records the gaps against the product baseline. Conformance traces the disputed legacy criteria to their open product questions and records which dependencies still need adjudication. Evaluation identifies the cases and conditions for which a run can supply evidence. [`02.1-acceptance/deliverables/coverage.md`](../02.1-acceptance/deliverables/coverage.md) · [`03.1-conformance/deliverables/coverage.md` § Criteria awaiting a decision](../03.1-conformance/deliverables/coverage.md#criteria-awaiting-a-decision) · [`05-evaluation/docs/evaluation-model.md` § From a clause to a coverage claim](../05-evaluation/docs/evaluation-model.md#from-a-clause-to-a-coverage-claim)
 
 ## What evidence can establish
 

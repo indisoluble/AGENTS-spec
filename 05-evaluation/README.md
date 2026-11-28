@@ -15,7 +15,7 @@ Start with the [case catalog](#case-specifications) for a fixture and its assess
 
 ## Case specifications
 
-Each specification explains the task, assessment and limits, with links to the scenario that owns the exact inputs and grading and to its offline tests. Of the ten registered cases, smoke checks the evaluator path and the other nine exercise contract clauses. The groupings below tell you who grades the case. [`05-evaluation/deliverables/requirements/suite-execution-and-results.md` § E12](deliverables/requirements/suite-execution-and-results.md#e12) defines the accepted selections and [`05-evaluation/deliverables/requirements/suite-execution-and-results.md` § E15](deliverables/requirements/suite-execution-and-results.md#e15) defines suite order.
+Each specification explains the task, assessment and limits. It identifies the module with the exact inputs and grading, and links to definition-local tests where present. For integrated checks, follow the case's E identifier in [`05-evaluation/docs/evaluator-verification.md`](docs/evaluator-verification.md). Of the ten registered cases, smoke checks the evaluator path and the other nine exercise contract clauses. The groupings below tell you who grades the case. [`05-evaluation/deliverables/requirements/suite-execution-and-results.md` § E12](deliverables/requirements/suite-execution-and-results.md#e12) defines the accepted selections and [`05-evaluation/deliverables/requirements/suite-execution-and-results.md` § E15](deliverables/requirements/suite-execution-and-results.md#e15) defines suite order.
 
 **Fully automated**
 

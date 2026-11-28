@@ -2,7 +2,9 @@
 
 This document owns installation, authentication, case execution, retained evidence, report interpretation, failure investigation, and human review. Start with [`05-evaluation/docs/evaluation-model.md` § Purpose and evaluation model](evaluation-model.md#purpose-and-evaluation-model) for the suite's scope and interpretation limits.
 
-Use [`05-evaluation/README.md` § Case specifications](../README.md#case-specifications) to find the selected case's source module and exact rubric. The stage README ([`05-evaluation/README.md` § Evaluator requirements](../README.md#evaluator-requirements)) links the case-specific and shared evaluator requirements. [`05-evaluation/docs/framework-design.md`](framework-design.md) owns execution, observation, cleanup, and functional-check boundaries; the links below connect operational results to those mechanisms. A historical run is interpreted using its captured contract and rubric, as the [review procedure](#response-presence-and-human-review) explains.
+Use [`05-evaluation/README.md` § Case specifications](../README.md#case-specifications) to find the selected case's source module and exact rubric. The stage README ([`05-evaluation/README.md` § Evaluator requirements](../README.md#evaluator-requirements)) identifies each evaluator requirement and its owner. Evaluation owns case binding, the integrated lifecycle and outcome policy. The engine specifies the reusable execution, observation, cleanup and functional-check boundaries. [`05-evaluation/docs/framework-design.md` § Responsibilities and dependency direction](framework-design.md#responsibilities-and-dependency-direction) · [`engine/docs/framework-design.md` § Execution and security boundaries](../../engine/docs/framework-design.md#execution-and-security-boundaries)
+
+Apply the captured contract and rubric when reviewing a historical run. [Response presence and human review](#response-presence-and-human-review)
 
 ## Setup and running evaluations
 
@@ -171,7 +173,7 @@ python --version
 python -m pip show pydantic-evals
 ```
 
-If the evaluator has local edits, retain the relevant changes with that reference so the case and grading code can be identified. For an older run, use its own evidence and any contemporaneous review reference. A matching contract hash or case name alone cannot recover the evaluator revision. If its version is unknown, qualify comparisons accordingly. Run and expectation traceability ([`docs/traceability.md` § Tracing a requirement and its evaluation](../../docs/traceability.md#tracing-a-requirement-and-its-evaluation))
+If the evaluator has local edits, retain the relevant changes with that reference so the case and grading code can be identified. Preserve an older run in place and associate any contemporaneous review reference with its evidence. A matching contract hash or case name alone cannot recover the evaluator revision. Qualify comparisons when its version is unknown. An evidence gap remains open until the corresponding verification is recorded or its limitation is explicitly accepted. Run and expectation traceability ([`docs/traceability.md` § Tracing a requirement and its evaluation](../../docs/traceability.md#tracing-a-requirement-and-its-evaluation))
 
 ### Investigate a failure or incomplete result
 

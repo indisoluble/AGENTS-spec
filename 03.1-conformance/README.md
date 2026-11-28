@@ -1,6 +1,6 @@
 # 03.1 — Conformance
 
-Conformance defines complementary evaluations of the mechanisms selected in [`03.0-design/README.md`](../03.0-design/README.md), subject to the accepted requirements and constraints in [`02.0-formulation/deliverables/baseline.md`](../02.0-formulation/deliverables/baseline.md). It owns its scenarios, fixtures, assertions, qualitative criteria, executable definitions and coverage. A criterion evaluates the authorized prescription. Refer a missing or ambiguous prescription to Design and an unresolved product requirement to Formulation.
+Conformance defines complementary evaluations of the mechanisms selected in [`03.0-design/README.md`](../03.0-design/README.md), subject to the accepted requirements and constraints in [`02.0-formulation/deliverables/baseline.md`](../02.0-formulation/deliverables/baseline.md). It owns its scenarios, fixtures, assertions, qualitative criteria, executable definitions and coverage. A criterion evaluates the authorized prescription. Refer a missing or ambiguous prescription to Design. Check the accepted baseline for the governing product requirement. If product intent remains unsettled, record the question in Discovery for a requester decision. [`01-discovery/deliverables/open-questions.md`](../01-discovery/deliverables/open-questions.md)
 
 Write the expectation before implementation of the mechanism. Exercise executable checks as early as feasible and identify criteria that require subsequent qualified assessment. A mechanism change can require new or revised checks.
 

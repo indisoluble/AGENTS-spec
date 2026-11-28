@@ -2,7 +2,17 @@
 
 ## Unresolved outcomes
 
+### Prescribed benchmarks
+
 One inquiry question extends beyond reading documents. Suppose a material uncertainty still blocks the choice of an approach and the requester has not been told. Should running a prescribed benchmark to resolve that blocker call for notice when running the same benchmark to validate a settled limit would not? [`01-discovery/deliverables/proposed-examples/bounded-inquiry.md` § EX-BI-006 — A prescribed procedure can still be inquiry](proposed-examples/bounded-inquiry.md#ex-bi-006--a-prescribed-procedure-can-still-be-inquiry) illustrates the proposed boundary. The decision about reading documentation covers neither use of the benchmark.
+
+### Routine local choices
+
+Suppose the requester has settled the consequential choices, and an easily reversible implementation detail falls within the agreed limits. The agent has permission to choose it. Under what conditions, if any, would proceeding without asking also be a recommendation or an obligation? Would asking for approval in those circumstances fall short of the intended behavior even if the agent completes the work correctly?
+
+### When no safe step is possible
+
+Suppose activating a requested change would exceed an agreed limit, but the agent can still investigate safely or prepare a reversible draft. At what point does the duty to present alternatives and seek direction apply? Does it turn on the blocked operational change, the usefulness of the remaining authorized steps, or another condition?
 
 ## Requester conclusions awaiting requirements review
 

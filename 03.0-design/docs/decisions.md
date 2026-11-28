@@ -43,7 +43,7 @@ Current reference rules ([`03.0-design/deliverables/methods-and-references.md` �
 
 ### Ownership of contract-design documentation
 
-**The requester approved the documentation structure and authorized local implementation.** The requester's navigation decision ([`docs/decisions.md` § Separate owners for architecture, authority, and decision rationale](../../docs/decisions.md#separate-owners-for-architecture-authority-and-decision-rationale)) records completion and independent review of the documentation split. That review supplies evidence about organization only. Acceptance of the underlying mechanisms or contract behavior requires separate evidence.
+**The requester approved the documentation structure and authorized local implementation.** The shared decision and its independent review concern documentation ownership. Acceptance of a mechanism or a claim about agent behavior requires its own evidence. [`docs/decisions.md` § Separate owners for architecture, authority, and decision rationale](../../docs/decisions.md#separate-owners-for-architecture-authority-and-decision-rationale)
 
 [`03.0-design/deliverables/contract-design.md`](../deliverables/contract-design.md) explains the architecture and leads to five mechanism owners, delivery and portability, and methods and references. Each keeps prescriptions with the rationale needed to apply them. This record owns decisions and alternatives. A single file would save links but mix these reading and maintenance tasks. Direct references let readers go to the owner of a question and require maintenance when owners move.
 

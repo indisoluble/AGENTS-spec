@@ -42,7 +42,7 @@ For an example of a useful update, see [`01-discovery/deliverables/proposed-exam
 - **When** the agent uses that benchmark to choose how to proceed.
 - **Then** it promptly explains the uncertainty and its significance and conducts a bounded inquiry subject to evidence sufficiency and reassessment. Being a documented procedure does not exempt it. Running the same benchmark solely to validate a settled limit would not be inquiry merely because its output is unknown.
 
-Whether the benchmark’s purpose should change the need for notice is an open question for the requester ([`01-discovery/deliverables/open-questions.md` § Unresolved outcomes](../open-questions.md#unresolved-outcomes)).
+Whether the benchmark’s purpose should change the need for notice is an open question for the requester ([`01-discovery/deliverables/open-questions.md` § Prescribed benchmarks](../open-questions.md#prescribed-benchmarks)).
 
 ## EX-BI-007 — Reading existing project documents remains context gathering
 

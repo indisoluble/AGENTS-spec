@@ -36,6 +36,10 @@ Inspection of an existing tree either produces a complete snapshot or raises an 
 
 Human-review cases capture `final-response.txt` outside the writable fixture, separately from progress messages. UTF-8 text is preserved without stripping whitespace or normalizing newlines, including empty text. Missing, unreadable, non-regular, or invalid UTF-8 capture files cause infrastructure errors; a pre-existing response is rejected to prevent stale evidence reuse. Available response text is retained after execution failure without making that execution successful. When separate capture is disabled, the raw event log is still retained.
 
+### Response-presence assessment
+
+The reusable `FinalResponsePresent` assertion passes when a captured final response contains non-whitespace text. Empty or whitespace-only text fails. Missing capture is an error. The assertion grades presence alone. [`engine/runtime/evaluation.py`](../runtime/evaluation.py)
+
 ### Deadlines and cleanup
 
 | Operation | Bound |

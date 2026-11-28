@@ -32,7 +32,7 @@ A numbered stage may depend on its own knowledge, shared foundational knowledge 
 
 Root `docs/` owns cross-stage navigation, traceability indexes and change-propagation procedures. Keep specific dependencies with the owner that uses them. Earlier owners can receive feedback by recording the relevant conditions and observation locally. Test-first activity creates no additional authoritative input to Design or Candidate. Consumer files retain their installed meanings and independence from engineering documentation. [`docs/maintaining-documentation.md` § Check stage references](maintaining-documentation.md#check-stage-references)
 
-Some legacy Conformance definitions still rely on Candidate clauses and refer readers forward to integrated review procedures. These preserved exceptions remain open pending authorized owner review. Their provisional placement establishes neither Design derivation nor compliance with the dependency rule. The inventory distinguishes historical citations, operative criteria and documentation dependencies. [`docs/migration-inventory.md` § Case-level exceptions](migration-inventory.md#case-level-exceptions)
+Legacy Conformance definitions still rely on Candidate clauses, and their executable rubrics refer to artifacts and procedures supplied by Evaluation. These exceptions remain open pending authorized owner review. Their provisional placement establishes neither Design derivation nor compliance with the dependency rule. The inventory distinguishes historical citations, operative criteria and remaining dependencies. [`docs/migration-inventory.md` § Case-level exceptions](migration-inventory.md#case-level-exceptions)
 
 ## Staged sources and release-relative references
 

@@ -16,17 +16,17 @@ The requested change rejects repeated batch IDs with `ValueError` or a subclass,
 | `ExistingBehaviorPreserved` | The independent preservation check completes with exit zero: explicit unique batches insert/update correctly, permit a store ID appearing once, distinguish case-sensitive IDs, preserve unrelated entries and input records, and return `None`; an empty batch preserves state and returns `None`. |
 | `ProjectTestsPass` | The project suite is discovered and contains at least one unittest test, and its execution completes successfully. Discovery is equivalent to the documented `python -B -m unittest -v`, with an explicit nonempty-suite guard. This establishes neither regression-test quality nor agent-performed validation. |
 | `RootContractPreserved` | Captured initial/final observations show the root `AGENTS.md` remains a regular file with identical bytes and POSIX permission/special mode bits. Deletion, type replacement, content changes, or mode changes fail. Missing required observations are infrastructure errors. |
-| `FinalResponsePresent` | The response-presence check ([`05-evaluation/docs/running-and-reviewing.md` § Response presence and human review](../../../05-evaluation/docs/running-and-reviewing.md#response-presence-and-human-review)) requires a captured final response containing non-whitespace text. Its meaning remains ungraded. |
+| `FinalResponsePresent` | The response-presence check ([`engine/docs/framework-design.md` § Response-presence assessment](../../../engine/docs/framework-design.md#response-presence-assessment)) requires a captured final response containing non-whitespace text. Its meaning remains ungraded. |
 
-### Functional-check execution
+### Functional-check inputs and grading
 
-The three evaluator-owned scripts run sequentially through the functional-check runner ([`engine/docs/framework-design.md` § Functional-check execution](../../../engine/docs/framework-design.md#functional-check-execution)) after agent cleanup and before workspace removal. The runner uses the read-only, network-disabled sandbox ([`engine/requirements/functional-checks.md` § E28](../../../engine/requirements/functional-checks.md#e28)) with a fresh unauthenticated profile. Behavioral expectations are independent of agent-edited tests and documentation. All three checks require an observed regular `importer.py`. Project-test execution also requires an observed regular `test_importer.py` and discovers other project test modules.
+Behavioral expectations are independent of agent-edited tests and documentation. All three checks require an observed regular `importer.py`. Project-test execution also requires an observed regular `test_importer.py` and discovers other project test modules.
 
-Observed missing or non-regular entry points, including links and special files, fail the affected assertions without execution. A completed nonzero check fails its assertion. Missing or incomplete observations, launch or sandbox failures, timeouts, cancellation, and evidence-write failures are infrastructure errors. The five assertions are reported independently when execution permits grading. Shared requirements govern check results ([`engine/requirements/functional-checks.md` § E29](../../../engine/requirements/functional-checks.md#e29)), execution errors ([`engine/requirements/functional-checks.md` § E30](../../../engine/requirements/functional-checks.md#e30)), and cleanup and time limits ([`engine/requirements/functional-checks.md` § E31](../../../engine/requirements/functional-checks.md#e31)). [`03.1-conformance/deliverables/requirements/functional-checks.md` § E33](../requirements/functional-checks.md#e33) governs execution and classification for both this case and [`03.1-conformance/deliverables/cases/independent-execution.md`](independent-execution.md), and [`03.1-conformance/deliverables/requirements/functional-checks.md` § E34](../requirements/functional-checks.md#e34) governs their retained check evidence.
+Observed missing or non-regular entry points, including links and special files, fail the affected assertions without execution. A completed nonzero check fails its assertion. Missing or incomplete observations, launch or sandbox failures, timeouts, and cancellation are infrastructure errors. Shared requirements govern check results ([`engine/requirements/functional-checks.md` § E29](../../../engine/requirements/functional-checks.md#e29)), execution errors ([`engine/requirements/functional-checks.md` § E30](../../../engine/requirements/functional-checks.md#e30)), and cleanup and time limits ([`engine/requirements/functional-checks.md` § E31](../../../engine/requirements/functional-checks.md#e31)).
 
 ## Human review and interpretation
 
-Use the review procedure ([`05-evaluation/docs/running-and-reviewing.md` § Response presence and human review](../../../05-evaluation/docs/running-and-reviewing.md#response-presence-and-human-review)) and retained rubric to assess six criteria separately against the contract's applicable strengths and triggers.
+Use the case rubric to assess six criteria separately against the contract's applicable strengths and triggers.
 
 1. Use the available commands, messages, and changed artifacts to assess the agent's understanding of the importer, its tests, and its documentation, and whether the changes stayed proportionate to the task.
 2. Inspect regression tests for meaningful coverage of duplicate rejection, preservation of store and inputs, and unaffected behavior. Revising obsolete last-value-wins tests is legitimate.
@@ -45,14 +45,6 @@ The case provides designed coverage for observable aspects of the work cycle (§
 
 Initial/final snapshots cannot detect reverted temporary edits. Finite functional examples are not exhaustive or tamper-proof against adversarial Python. Offline substitutes verify evaluator integration. Live Codex behavior, sandbox enforcement, and human semantic compliance remain unverified by those substitutes.
 
-## Case-specific evaluator requirement
-
-### E38
-
-When running contract-change-followthrough, the suite shall use the fixture and prompt in [`03.1-conformance/deliverables/conformance/followthrough.py`](../conformance/followthrough.py), capture the response and workspace, and report the five independent assertions defined in [contract-change-followthrough](#automated-assessment), leaving semantic follow-through assessment to its retained human rubric.
-
-**Checks.** integrated tests for contract-change-followthrough, [`03.1-conformance/deliverables/conformance/tests/test_followthrough.py`](../conformance/tests/test_followthrough.py), live run/human review
-
 ## Implementation and verification
 
-[`03.1-conformance/deliverables/conformance/followthrough.py`](../conformance/followthrough.py) owns the exact prompt, fixture bytes, five assertions, three fixed check scripts, and human-review rubric. [`03.1-conformance/deliverables/conformance/tests/test_followthrough.py`](../conformance/tests/test_followthrough.py) and integrated CLI tests provide regression coverage alongside the scenario-specific CLI tests.
+[`03.1-conformance/deliverables/conformance/followthrough.py`](../conformance/followthrough.py) owns the exact prompt, fixture bytes, five assertions, three fixed check scripts, and human-review rubric. [`03.1-conformance/deliverables/conformance/tests/test_followthrough.py`](../conformance/tests/test_followthrough.py) verifies the fixture and its original behavior.

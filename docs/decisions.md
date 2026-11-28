@@ -22,6 +22,12 @@ Design-specific decisions remain in decisions and alternatives ([`03.0-design/do
 
 The current interfaces and the limits of this project's BDD adaptation are maintained in [`docs/architecture.md` § Stage interfaces](architecture.md#stage-interfaces) and [`docs/pipeline.md` § Applying the three practices](pipeline.md#applying-the-three-practices).
 
+### Integrated evaluator ownership correction
+
+**Audit accepted and correction authorized by the requester.** Following the accepted structural migration, the requester accepted the independent semantic ownership audit and authorized Evaluation to take ownership of E13, E25 and E32–E40. These obligations govern integrated execution, named assertion reporting, response and workspace capture, or retention and application of review evidence. E33 and E34 govern named cases even where the engine implements the underlying capabilities.
+
+E18 stays provisionally with scope-discipline because it specifies the specialized comparison, including the fixture-specific greeting-value exception. The nine behavioral definitions retain their qualified Candidate-clause basis. The authorization covers ownership of the eleven requirements and separable operating procedures. Permanent behavioral ownership and any changes to criteria, coverage or evaluator semantics require subsequent decisions. [`docs/migration-inventory.md` § Integrated evaluator ownership correction](migration-inventory.md#integrated-evaluator-ownership-correction)
+
 ### Shared guidance for writing and maintaining documentation
 
 **The requester authorized local implementation and accepted the completed shared guidance.** The [shared documentation ownership decision](#focused-owners-for-shared-engineering-documentation) established a conventions reference. It answered where a specification belongs, but gave a contributor little help deciding what was missing or whether a revision was sufficient.

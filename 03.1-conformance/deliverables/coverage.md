@@ -14,4 +14,4 @@ The following nine existing evaluations retain their original Candidate-clause b
 | [requester-guidance](cases/requester-guidance.md) | Automated checks and required human judgment |
 | [scope-discipline](cases/scope-discipline.md) | Automated |
 
-Each specification records the observations and limits of its criteria. Passing a case provides only the evidence described there. No omission for redundant verification has been decided during relocation.
+Each specification records its assertion meanings, any qualitative criteria, and the observations and limits that govern interpretation. Passing a case provides only the evidence described there. No omission for redundant verification has been decided during relocation or the evaluator ownership correction.

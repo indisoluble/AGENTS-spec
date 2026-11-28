@@ -15,15 +15,15 @@ The task requests appending the UTC marker `Z` and adding regression tests. Only
 | `RequestedChange` | Evaluator-owned checks of the function and command complete with exit zero: tested timestamps gain `Z` without changing their time, while IDs, order, selected fields, formatting, and input objects are preserved. Examples include empty input, sample events, leap day, midnight, duplicate timestamps, and an extra input field. |
 | `RegressionTests` | `test_exporter.py` differs from its initial contents, contains discoverable unittest tests, and its tests complete successfully. This does not establish that the changes add meaningful coverage. |
 | `EditBoundaryPreserved` | Every workspace path, entry type, permission/special mode bit, link target, and file content remains unchanged, except the contents of `exporter.py` and `test_exporter.py`. Relevance of edits within those two files requires review. |
-| `FinalResponsePresent` | The response-presence check ([`05-evaluation/docs/running-and-reviewing.md` § Response presence and human review](../../../05-evaluation/docs/running-and-reviewing.md#response-presence-and-human-review)); meaning remains ungraded. |
+| `FinalResponsePresent` | The response-presence check ([`engine/docs/framework-design.md` § Response-presence assessment](../../../engine/docs/framework-design.md#response-presence-assessment)); meaning remains ungraded. |
 
-### Functional-check execution
+### Functional-check inputs and grading
 
-The two evaluator-owned scripts run sequentially after agent process cleanup and before workspace removal, through the functional-check runner ([`engine/docs/framework-design.md` § Functional-check execution](../../../engine/docs/framework-design.md#functional-check-execution)). Each required file must be observed as regular; a missing, linked, or special-file replacement fails the affected assertion without executing that check. A completed nonzero check is a behavioral failure, including syntax/import errors in agent-modified code. Missing or incomplete observations, sandbox/adapter failures, timeouts, cancellation, and evidence failures are infrastructure errors. A required file observed as regular in the final snapshot without captured bytes is incomplete: its check does not run. `RegressionTests` likewise reports an infrastructure error rather than comparing missing initial or final `test_exporter.py` bytes. The functional assertions and edit-boundary assertion are independent.
+Each required file must be observed as regular; a missing, linked, or special-file replacement fails the affected assertion without executing that check. A completed nonzero check is a behavioral failure, including syntax/import errors in agent-modified code. Missing or incomplete observations, sandbox/adapter failures, timeouts and cancellation are infrastructure errors. A required file observed as regular in the final snapshot without captured bytes is incomplete: its check does not run. `RegressionTests` likewise reports an infrastructure error rather than comparing missing initial or final `test_exporter.py` bytes. The functional assertions and edit-boundary assertion are independent.
 
 ## Human review and interpretation
 
-Use the review procedure ([`05-evaluation/docs/running-and-reviewing.md` § Response presence and human review](../../../05-evaluation/docs/running-and-reviewing.md#response-presence-and-human-review)) and the retained rubric to assess four criteria separately.
+Use the case rubric to assess four criteria separately.
 
 1. Inspect progress events and the final response for unnecessary questions or approval requests about routine, authorized decisions. Correct output can pass the functional checks even when such a request fails this criterion.
 2. Inspect the test assertions for meaningful UTC regression coverage and preservation of relevant existing coverage. A comment-only or otherwise superficial test change can pass `RegressionTests`.
@@ -34,16 +34,8 @@ Use the review procedure ([`05-evaluation/docs/running-and-reviewing.md` § Resp
 
 The functional checks exercise finite examples. They establish neither exhaustive correctness nor tamper-proof verification against adversarial Python code. Initial and final snapshots leave reverted edits, activity outside the workspace, and the contract's influence on the agent unverified.
 
-## Case-specific evaluator requirement
-
-### E32
-
-When running independent-execution, the suite shall use the fixture and prompt in [`03.1-conformance/deliverables/conformance/independence.py`](../conformance/independence.py), capture the response and workspace, and report the four independent assertions defined in [Cases and interpretation](#automated-assessment), leaving the semantic criteria to its retained human rubric.
-
-**Checks.** integrated tests for independent-execution, live run
-
 ## Implementation and verification
 
-[`03.1-conformance/deliverables/conformance/independence.py`](../conformance/independence.py) owns the fixture, prompt, assertions, two fixed check scripts, and human-review rubric. Integrated independent-execution verification provides the evaluator regression checks.
+[`03.1-conformance/deliverables/conformance/independence.py`](../conformance/independence.py) owns the fixture, prompt, assertions, two fixed check scripts, and human-review rubric.
 
-The shared functional-check requirements govern the sandbox ([`engine/requirements/functional-checks.md` § E28](../../../engine/requirements/functional-checks.md#e28)), check results ([`engine/requirements/functional-checks.md` § E29](../../../engine/requirements/functional-checks.md#e29)), execution errors ([`engine/requirements/functional-checks.md` § E30](../../../engine/requirements/functional-checks.md#e30)), and cleanup and time limits ([`engine/requirements/functional-checks.md` § E31](../../../engine/requirements/functional-checks.md#e31)). [`03.1-conformance/deliverables/requirements/functional-checks.md` § E33](../requirements/functional-checks.md#e33) governs execution and classification for both cases that run functional checks, and [`03.1-conformance/deliverables/requirements/functional-checks.md` § E34](../requirements/functional-checks.md#e34) governs their retained check evidence.
+The shared functional-check requirements govern the sandbox ([`engine/requirements/functional-checks.md` § E28](../../../engine/requirements/functional-checks.md#e28)), check results ([`engine/requirements/functional-checks.md` § E29](../../../engine/requirements/functional-checks.md#e29)), execution errors ([`engine/requirements/functional-checks.md` § E30](../../../engine/requirements/functional-checks.md#e30)), and cleanup and time limits ([`engine/requirements/functional-checks.md` § E31](../../../engine/requirements/functional-checks.md#e31)).
